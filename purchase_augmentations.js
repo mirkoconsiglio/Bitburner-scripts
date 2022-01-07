@@ -4,7 +4,7 @@ export async function main(ns) {
 	let augmentations = [];
 	for (let faction of getFactions()) {
 		for (let aug of ns.getAugmentationsFromFaction(faction)) {
-			if (isUsefulAugmentation(ns, name) && isPurchasableAugmentation(ns, faction, aug, augmentations)) {
+			if (isUsefulAugmentation(ns, aug) && isPurchasableAugmentation(ns, faction, aug, augmentations)) {
 				augmentations.push(
 					{
 						faction: faction,
@@ -73,7 +73,7 @@ export async function main(ns) {
 	}
 
 	// Check if The Red Pill is available
-	if (ns.getFactionRep('Daedalus' >= 2.5e6) && !ns.getOwnedAugmentations(true).includes('The Red Pill')) {
+	if (ns.getFactionRep('Daedalus') >= 2.5e6 && !ns.getOwnedAugmentations(true).includes('The Red Pill')) {
 		if (await ns.prompt(`Purchase The Red Pill?`)) {
 			if (ns.purchaseAugmentation('Daedalus', 'The Red Pill')) {
 				ns.tprint(`Purchased The Red Pill`);
@@ -85,7 +85,7 @@ export async function main(ns) {
 	}
 }
 
-export function purchasable(ns, faction, name, augmentations) {
+export function isPurchasableAugmentation(ns, faction, name, augmentations) {
 	let facRep = ns.getFactionRep(faction);
 	let price = ns.getAugmentationPrice(name);
 	let repReq = ns.getAugmentationRepReq(name);
