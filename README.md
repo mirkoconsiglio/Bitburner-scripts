@@ -1,3 +1,3 @@
 # Bitburner-scripts
 
-Collection of personal Bitburner scripts
+Collection of my personal Bitburner scripts

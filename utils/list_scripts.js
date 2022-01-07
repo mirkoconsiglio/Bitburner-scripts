@@ -13,5 +13,5 @@ function writeToFile(filename, str) {
 	});
 }
 
-writeToFile('files.txt', getFiles(process.cwd()).join('\n'));
+writeToFile('scripts.txt', getFiles(process.cwd()).join('\n'));
 

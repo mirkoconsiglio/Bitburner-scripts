@@ -10,7 +10,6 @@ deploy_daemons.js
 download_files.js
 early_stock_market.js
 favor.js
-files.txt
 get_all_text.js
 grow.js
 hack.js
