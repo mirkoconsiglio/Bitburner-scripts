@@ -22,6 +22,8 @@ monitor.js
 pserv-buyer.js
 purchase_augmentations.js
 reputation.js
+scripts.txt
+script_remover.js
 stock_market.js
 test.js
 utils.js
