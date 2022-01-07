@@ -22,10 +22,8 @@ karma.js
 monitor.js
 pserv-buyer.js
 purchase_augmentations.js
-purchase_neuroflux_governor.js
 reputation.js
 stock_market.js
 test.js
-todo.txt
 utils.js
 weaken.js

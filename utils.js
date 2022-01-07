@@ -187,3 +187,18 @@ function costFn(ns, server) {
 	let weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
 	return hack / (grow * weaken);
 }
+
+export function isUsefulAugmentation(ns, name) {
+	return (name !== 'NeuroFlux Governor' && // Ignore NFG
+	( 	// Looking for hacking, faction rep and special augs.
+		ns.getAugmentationStats(name).hacking_mult ||
+		ns.getAugmentationStats(name).hacking_exp_mult ||
+		ns.getAugmentationStats(name).hacking_chance_mult ||
+		ns.getAugmentationStats(name).hacking_speed_mult ||
+		ns.getAugmentationStats(name).hacking_money_mult ||
+		ns.getAugmentationStats(name).hacking_grow_mult ||
+		ns.getAugmentationStats(name).faction_rep_mult ||
+		name === 'CashRoot Starter Kit' ||
+		name === 'Neuroreceptor Management Implant'
+	));
+}

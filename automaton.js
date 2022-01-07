@@ -1,10 +1,8 @@
-import {copyScriptsToAll, getAccessibleServers, getPrograms, printBoth} from 'utils.js';
+import {copyScriptsToAll, getAccessibleServers, printBoth, isUsefulAugmentation} from 'utils.js';
 import {contractor} from 'contractor.js';
 import {manageAndHack} from 'hack_manager.js';
 
-// TODO: Only join factions if there are still useful augments left to buy
-//  Automate working for Factions
-//  Purchase order of programs
+// TODO: Automate working for Factions
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -14,6 +12,7 @@ export async function main(ns) {
 	
 	let contractorOnline = true;
 	let declinedFactions = [];
+	let usefulPrograms = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
 	
 	while (true) {
 		let player = ns.getPlayer();
@@ -31,9 +30,9 @@ export async function main(ns) {
 		if (ns.purchaseTor()) {
 			printBoth(ns, `Purchased TOR.`);
 		}
-		// Purchase programs
+		// Purchase only useful programs
 		if (player.tor) {
-			for (let program of getPrograms()) {
+			for (let program of usefulPrograms) {
 				if (!ns.fileExists(program)) {
 					if (ns.purchaseProgram(program)) {
 						printBoth(ns, `Purchased ${program}.`);
@@ -68,17 +67,27 @@ export async function main(ns) {
 		let factions = ns.checkFactionInvitations();
 		for (let faction of factions) {
 			if (!declinedFactions.includes(faction)) {
-				ns.print(`Request to join ${faction}.`);
-				if (await ns.prompt(`Join ${faction}?`)) {
-					ns.print(`Accepted to join ${faction}.`);
-					ns.joinFaction(faction);
-					ns.tprint(`Joined ${faction}.`);
+				// Check if there are any useful augmentations to buy
+				let augmentations = ns.getAugmentationsFromFaction(faction);
+				let useful = true;
+				for (let aug of augmentations) {
+					useful = useful && isUsefulAugmentation(ns, name);
 				}
-				// Don't ask again
-				else {
-					ns.print(`Refused to join ${faction}.`);
-					declinedFactions.push(faction);
+
+				if (useful) { // If there is a useful augmentation ask for joining faction
+					ns.print(`Request to join ${faction}.`);
+					if (await ns.prompt(`Join ${faction}?`)) {
+						ns.print(`Accepted to join ${faction}.`);
+						ns.joinFaction(faction);
+						ns.tprint(`Joined ${faction}.`);
+					}
+					// Don't ask again
+					else {
+						ns.print(`Refused to join ${faction}.`);
+						declinedFactions.push(faction);
+					}
 				}
+				else declinedFactions.push(faction); // No need to join factions without any useful augmentations
 			}
 		}
 		
