@@ -38,7 +38,7 @@ async function primeTarget(ns, sec, money, data) {
 	let growth = data.maxMoney / money;
 	let growThreads = Math.ceil(ns.growthAnalyze(data.target, growth !== Infinity ? growth : 10));
 	let weakenThreads = Math.ceil((sec - data.minSec + growThreads * data.growSec) / data.weakenSec);
-	
+
 	let weakenTime = ns.getWeakenTime(data.target);
 
 	let grown = growThreads === 0;
