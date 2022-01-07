@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { scriptsToCopy, getAccessibleServers, getOptimalHackable } from 'utils.js';
 
 export async function main(ns) {

@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { getServers, printBoth } from 'utils.js';
 
 export function contractor(ns) {

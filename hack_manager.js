@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { getAccessibleServers, getOptimalHackable, getFreeRam, findPlaceToRun } from 'utils.js';
 
 export function manageAndHack(ns) {

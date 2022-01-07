@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { printBoth, copyScriptsToAll, getPrograms, getAccessibleServers } from 'utils.js';
 import { contractor } from 'contractor.js';
 import { manageAndHack } from 'hack_manager.js';

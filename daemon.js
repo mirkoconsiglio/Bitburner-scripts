@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { getAccessibleServers, findPlaceToRun, getFreeRam } from 'utils.js';
 
 export async function main(ns) {

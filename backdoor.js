@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { routeFinder, hackServer } from 'utils.js';
 
 export async function main(ns) {

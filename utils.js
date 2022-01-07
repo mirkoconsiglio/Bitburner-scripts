@@ -1,6 +1,3 @@
-/** @param {NS} ns *
- * @param {string} str
- */
 export function printBoth(ns, str) {
     ns.print(str);
     ns.tprint(str);

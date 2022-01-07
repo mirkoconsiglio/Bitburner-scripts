@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 export async function main(ns) {
 	let power = ns.args[0];
 	let cost = ns.getPurchasedServerCost(Math.pow(2, power));

@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 import { routeFinder } from 'utils.js';
 
 export async function main(ns) {

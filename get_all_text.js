@@ -1,17 +1,3 @@
-/** @param {NS} ns *
- * @param {string} host
- * @param {array} servers
- */
-function scanAll(host, servers, ns) {
-    let hosts = ns.scan(host);
-    for (let h of hosts) {
-        if (!servers.has(h)) {
-            servers.add(h);
-            scanAll(h, servers, ns);
-        }
-    }
-}
-
 export async function main(ns) {
     let servers = new Set(["home"]);
     scanAll("home", servers, ns);
@@ -22,6 +8,16 @@ export async function main(ns) {
             if (file.endsWith(".lit") || file.endsWith(".txt")) {
                 await ns.scp(file, server, "home");
             }
+        }
+    }
+}
+
+function scanAll(host, servers, ns) {
+    let hosts = ns.scan(host);
+    for (let h of hosts) {
+        if (!servers.has(h)) {
+            servers.add(h);
+            scanAll(h, servers, ns);
         }
     }
 }
