@@ -2,10 +2,18 @@ const url = 'https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/
 const listOfFiles = 'files.txt';
 
 export async function main(ns) {
-	await ns.wget(`${url}/${listOfFiles}`, listOfFiles);
-	let handle = ns.read(listOfFiles);
-	let files = handle.split("\r\n");
-	for (let file of files) {
-		await ns.wget(`${url}/${file}`, file);
+	ns.tprint('Downloading files.');
+	try {
+		let download = await ns.wget(`${url}/${listOfFiles}`, listOfFiles);
+		if (!download) throw listOfFiles;
+
+		let files = ns.read(listOfFiles).split('\n');
+		for (let file of files) {
+			download = await ns.wget(`${url}/${file}`, file);
+			if (!download) throw file;
+		}
+		ns.tprint('Download complete.');
+	} catch (file) {
+		ns.tprint(`Could not download ${file}`);
 	}
 }
