@@ -5,3 +5,5 @@ Only join factions if there are still useful augments left to buy
 Purchase order of programs
 
 Change daemon to HWGW
+
+wget from github automatically
