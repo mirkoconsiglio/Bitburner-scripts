@@ -2,6 +2,10 @@ import {copyScriptsToAll, getAccessibleServers, getPrograms, printBoth} from 'ut
 import {contractor} from 'contractor.js';
 import {manageAndHack} from 'hack_manager.js';
 
+// TODO: Only join factions if there are still useful augments left to buy
+//  Automate working for Factions
+//  Purchase order of programs
+
 export async function main(ns) {
 	ns.disableLog('ALL');
 	

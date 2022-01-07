@@ -1,5 +1,7 @@
 import {findPlaceToRun, getAccessibleServers, getFreeRam} from 'utils.js';
 
+// TODO: Change daemon to HWGW
+
 export async function main(ns) {
 	ns.disableLog('ALL');
 	let data = packageData(ns);
@@ -23,9 +25,9 @@ export async function main(ns) {
 		while (c < info.cycleCount) {
 			if (info.cycleRAM < info.freeRAM) {
 				ns.print(`Running cycle ${c + 1}.`);
-				if (info.hackThreads > 0 && info.hackThreads < Infinity) ns.exec('hack.js', data.host, info.hackThreads, data.target, info.hackDelay, i);
-				if (info.growThreads > 0 && info.growThreads < Infinity) ns.exec('grow.js', data.host, info.growThreads, data.target, info.growDelay, i);
-				if (info.weakenThreads > 0 && info.weakenThreads < Infinity) ns.exec('weaken.js', data.host, info.weakenThreads, data.target, info.weakenDelay, i);
+				if (info.hackThreads > 0) ns.exec('hack.js', data.host, info.hackThreads, data.target, info.hackDelay, i);
+				if (info.growThreads > 0) ns.exec('grow.js', data.host, info.growThreads, data.target, info.growDelay, i);
+				if (info.weakenThreads > 0) ns.exec('weaken.js', data.host, info.weakenThreads, data.target, info.weakenDelay, i);
 				i++;
 				c++;
 			}
@@ -35,8 +37,8 @@ export async function main(ns) {
 }
 
 async function primeTarget(ns, sec, money, data) {
-	let growThreads = Math.ceil(ns.growthAnalyze(data.target, data.maxMoney / money));
-	if (growThreads === Infinity) growThreads = Math.ceil(ns.growthAnalyze(data.target, 10));
+	let growth = data.maxMoney / money;
+	let growThreads = Math.ceil(ns.growthAnalyze(data.target, growth !== Infinity ? growth : 10));
 	let weakenThreads = Math.ceil((sec - data.minSec + growThreads * data.growSec) / data.weakenSec);
 	
 	let growTime = ns.getGrowTime(data.target);
@@ -100,7 +102,7 @@ function getInfo(ns, data) {
 	let weakenThreads = Math.ceil((hackThreads * data.hackSec + growThreads * data.growSec) / data.weakenSec); // Getting required threads to fully weaken the target
 	
 	let freeRAM = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
-	if (data.host === 'home') freeRAM -= 16;
+	if (data.host === 'home') freeRAM -= 32;
 	let cycleRAM = data.hackscriptRam * hackThreads + data.growscriptRam * growThreads + data.weakenscriptRam * weakenThreads; // Calculating how much RAM is used for a single run
 	let cycleCount = Math.floor(freeRAM / cycleRAM);
 	let cycleDelay = maxTime / cycleCount;
