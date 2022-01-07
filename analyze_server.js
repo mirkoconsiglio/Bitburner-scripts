@@ -1,13 +1,13 @@
 export async function main(ns) {
-    const server = ns.args[0];
-    const usedRam = ns.getServerUsedRam(server);
-    const maxRam = ns.getServerMaxRam(server);
-    const money = ns.getServerMoneyAvailable(server);
-    const maxMoney = ns.getServerMaxMoney(server);
-    const minSec = ns.getServerMinSecurityLevel(server);
-    const sec = ns.getServerSecurityLevel(server);
-
-    ns.tprint(`
+	const server = ns.args[0];
+	const usedRam = ns.getServerUsedRam(server);
+	const maxRam = ns.getServerMaxRam(server);
+	const money = ns.getServerMoneyAvailable(server);
+	const maxMoney = ns.getServerMaxMoney(server);
+	const minSec = ns.getServerMinSecurityLevel(server);
+	const sec = ns.getServerSecurityLevel(server);
+	
+	ns.tprint(`
 ${server}:
     RAM        : ${ns.nFormat(usedRam * 1000 ** 3, "0.00b")} / ${ns.nFormat(maxRam * 1000 ** 3, "0.00b")} (${(usedRam / maxRam * 100).toFixed(2)}%)
     $          : ${ns.nFormat(money, "$0.000a")} / ${ns.nFormat(maxMoney, "$0.000a")} (${(money / maxMoney * 100).toFixed(2)}%)
@@ -27,5 +27,5 @@ ${server}:
 }
 
 export function autocomplete(data) {
-    return data.servers;
+	return data.servers;
 }

@@ -1,4 +1,4 @@
-import { getFactions } from "utils.js";
+import {getFactions} from "utils.js";
 
 export async function main(ns) {
 	let highestRepFaction;
@@ -9,7 +9,7 @@ export async function main(ns) {
 			highestRepFaction = faction;
 		}
 	}
-
+	
 	let counter = 0;
 	while (ns.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) {
 		counter++;

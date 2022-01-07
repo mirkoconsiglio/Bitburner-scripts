@@ -1,4 +1,4 @@
-import { routeFinder } from 'utils.js';
+import {routeFinder} from 'utils.js';
 
 export async function main(ns) {
 	let server = ns.args[0];
