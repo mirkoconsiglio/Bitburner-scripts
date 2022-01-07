@@ -25,6 +25,5 @@ reputation.js
 scripts.txt
 script_remover.js
 stock_market.js
-test.js
 utils.js
 weaken.js
