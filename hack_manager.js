@@ -1,4 +1,12 @@
-import {findPlaceToRun, getAccessibleServers, getFreeRam, getOptimalHackable} from 'utils.js';
+import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getOptimalHackable} from 'utils.js';
+
+export async function main(ns) {
+	await copyScriptsToAll(ns);
+	while (true) {
+		manageAndHack(ns);
+		await ns.sleep(1000);
+	}
+}
 
 export function manageAndHack(ns) {
 	let servers = getAccessibleServers(ns);
