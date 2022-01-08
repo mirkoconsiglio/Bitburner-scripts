@@ -5,6 +5,8 @@ import {manageAndHack} from 'hack_manager.js';
 // TODO: Automate working for Factions
 //  Create program automator
 //  Hacking Exp generator
+//  Crime automator
+//  Gym automator
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -13,7 +15,7 @@ export async function main(ns) {
 	await copyScriptsToAll(ns);
 	
 	let contractorOnline = true;
-	let declinedFactions = [];
+	let askedFactions = [];
 	let usefulPrograms = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
 	
 	while (true) {
@@ -64,21 +66,14 @@ export async function main(ns) {
 		
 		// Simple hack manager
 		manageAndHack(ns);
-		
+
 		// Check faction invites
 		let factions = ns.checkFactionInvitations();
 		for (let faction of factions) {
-			if (!declinedFactions.includes(faction)) {
+			if (!askedFactions.includes(faction)) {
 				ns.print(`Request to join ${faction}.`);
-				if (await ns.prompt(`Join ${faction}?`)) { // Ask to Join Faction
-					ns.print(`Accepted to join ${faction}.`);
-					ns.joinFaction(faction);
-					ns.tprint(`Joined ${faction}.`);
-				}
-				else { // Don't ask again
-					ns.print(`Refused to join ${faction}.`);
-					declinedFactions.push(faction);
-				}
+				ns.exec('join_faction.js', 'home', 1, faction)
+				askedFactions.push(faction); // Don't ask again
 			}
 		}
 		
