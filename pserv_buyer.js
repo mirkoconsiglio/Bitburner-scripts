@@ -3,15 +3,15 @@ import {getAccessibleServers, getOptimalHackable, scriptsToCopy} from 'utils.js'
 export async function main(ns) {
 	let power = ns.args[0];
 	let runOnHome = ns.args[1] ? ns.args[1] : 1;
-	
+
 	if (power < 0 || power > 20) {
 		ns.tprint(`Invalid RAM amount.`);
 		ns.exit();
 	}
-	
+
 	let servers = getAccessibleServers(ns);
 	let hackables = getOptimalHackable(ns, servers);
-	
+
 	let targetRam = Math.pow(2, power);
 	for (let i = 0; i < ns.getPurchasedServerLimit(); i++) {
 		let server = 'pserv-' + i;

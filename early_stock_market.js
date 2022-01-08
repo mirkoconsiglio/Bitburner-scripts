@@ -42,14 +42,14 @@ export async function main(ns) {
 		symLastPrice[sym] = ns.stock.getPrice(sym);
 		symChanges[sym] = []
 	}
-	
+
 	while (true) {
 		await ns.sleep(2000);
-		
+
 		if (symLastPrice['FSIG'] === ns.stock.getPrice('FSIG')) {
 			continue;
 		}
-		
+
 		for (const sym of ns.stock.getSymbols()) {
 			const current = ns.stock.getPrice(sym);
 			symChanges[sym].push(current / symLastPrice[sym]);
@@ -58,10 +58,10 @@ export async function main(ns) {
 				symChanges[sym] = symChanges[sym].slice(symChanges[sym].length - samplingLength);
 			}
 		}
-		
+
 		const prioritizedSymbols = [...ns.stock.getSymbols()];
 		prioritizedSymbols.sort((a, b) => posNegDiff(symChanges[b]) - posNegDiff(symChanges[a]));
-		
+
 		for (const sym of prioritizedSymbols) {
 			const positions = ns.stock.getPosition(sym);
 			const longShares = positions[0];
@@ -75,7 +75,7 @@ export async function main(ns) {
 			if (longShares <= 0 && shortShares <= 0 && ns.stock.getPrice(sym) < 30000) {
 				continue;
 			}
-			
+
 			if (longShares > 0) {
 				const cost = longShares * longPrice;
 				const profit = longShares * (bidPrice - longPrice) - 2 * commission;

@@ -1,7 +1,7 @@
 export async function main(ns) {
 	let servers = new Set(["home"]);
 	scanAll("home", servers, ns);
-	
+
 	for (let server of servers) {
 		let files = ns.ls(server);
 		for (let file of files) {

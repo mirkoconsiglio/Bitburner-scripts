@@ -79,7 +79,7 @@ export function recursiveScan(host, servers, ns) {
 
 export function hackServer(ns, server) {
 	if (ns.hasRootAccess(server)) return true;
-	
+
 	let portOpened = 0;
 	if (ns.fileExists('BruteSSH.exe')) {
 		ns.brutessh(server);
@@ -101,13 +101,13 @@ export function hackServer(ns, server) {
 		ns.sqlinject(server);
 		portOpened++;
 	}
-	
+
 	if (ns.getServerNumPortsRequired(server) <= portOpened
 		&& ns.getServerRequiredHackingLevel(server) <= ns.getHackingLevel()) {
 		ns.nuke(server);
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -136,7 +136,7 @@ export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs) {
 	while (freeRams.length > 0) {
 		let host = freeRams[0].host;
 		let ram = freeRams[0].freeRam;
-		
+
 		if (ram < scriptRam) {
 			freeRams.shift();
 		} else if (ram < scriptRam * remainingThread) {
@@ -203,14 +203,14 @@ export function isUsefulGeneral(ns, name) {
 export function isUsefulHacking(ns, name) {
 	let stats = ns.getAugmentationStats(name);
 	return isUsefulGeneral(ns, name) ||
-	( 	// Useful hacking augmentations
-		stats.hacking_mult ||
-		stats.hacking_exp_mult ||
-		stats.hacking_chance_mult ||
-		stats.hacking_speed_mult ||
-		stats.hacking_money_mult ||
-		stats.hacking_grow_mult
-	)
+		( 	// Useful hacking augmentations
+			stats.hacking_mult ||
+			stats.hacking_exp_mult ||
+			stats.hacking_chance_mult ||
+			stats.hacking_speed_mult ||
+			stats.hacking_money_mult ||
+			stats.hacking_grow_mult
+		)
 }
 
 export function isUsefulCombat(ns, name) {

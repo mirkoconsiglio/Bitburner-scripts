@@ -38,11 +38,11 @@ export async function main(ns) {
 	let stocks = [];
 	let myStocks = [];
 	let corpus = 0;
-	
+
 	for (let sym of ns.stock.getSymbols()) {
 		stocks.push({sym: sym});
 	}
-	
+
 	while (true) {
 		corpus = refresh(ns, stocks, myStocks);
 		// Sell underperforming shares

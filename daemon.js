@@ -125,7 +125,7 @@ function getInfo(ns, data) {
 
 	ns.print(`Running ${cycleCount} cycles in ${(cycleCount * cycleDelay / 1000).toFixed(2)} seconds.`);
 
-	let hackOffset = - 0.25 * cycleDelay;
+	let hackOffset = -0.25 * cycleDelay;
 	let hWeakenOffset = 0
 	let growOffset = 0.25 * cycleDelay;
 	let gWeakenOffset = 0.5 * cycleDelay;

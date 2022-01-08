@@ -78,16 +78,16 @@ function largestPrimeFactor(n) {
 		n = Math.floor(n / 2);
 		maxPrime = 2;
 	}
-	
+
 	for (let i = 3; i <= Math.floor(Math.sqrt(n)) + 1; i = i + 2) {
 		while (n % i === 0) {
 			n = Math.floor(n / i);
 			maxPrime = i;
 		}
 	}
-	
+
 	if (n > 2) maxPrime = n;
-	
+
 	return maxPrime;
 }
 
@@ -101,22 +101,22 @@ function subarrayMaxSum(array) {
 			if (sum > maxSum) maxSum = sum;
 		}
 	}
-	
+
 	return maxSum;
 }
 
 function spiralizeMatrix(matrix) {
 	let rows = matrix.length;
 	let cols = matrix[0].length;
-	
+
 	let maxrow = rows - 1;
 	let maxcol = cols - 1;
 	let minrow = 0;
 	let mincol = 0;
-	
+
 	let row = 0;
 	let col = 0;
-	
+
 	let list = [];
 	while (list.length < rows * cols) {
 		if (maxrow >= minrow) {
@@ -152,7 +152,7 @@ function spiralizeMatrix(matrix) {
 			col++;
 		}
 	}
-	
+
 	return list;
 }
 
@@ -164,7 +164,7 @@ function minPathSum(data) {
 		while (bin.length < data.length - 1) {
 			bin = '0' + bin;
 		}
-		
+
 		let sum = data[0][0];
 		let k = 0;
 		for (let j = 1; j < data.length; j++) {
@@ -172,21 +172,21 @@ function minPathSum(data) {
 			k = k + index;
 			sum = sum + data[j][k];
 		}
-		
+
 		if (sum < minSum) minSum = sum;
 	}
-	
+
 	return minSum;
 }
 
 function uniquePathsI(data) {
 	const [m, n] = data;
-	
+
 	const f = [];
 	const x = factorial(f, m + n - 2);
 	const y = factorial(f, m - 1);
 	const z = factorial(f, n - 1);
-	
+
 	return x / (y * z);
 }
 
@@ -201,7 +201,7 @@ function uniquePathsII(grid) {
 	for (let i of grid) {
 		gridSum.push(i.slice());
 	}
-	
+
 	for (let i = 0; i < gridSum.length; i++) {
 		for (let j = 0; j < gridSum[0].length; j++) {
 			if (gridSum[i][j] === 1) {
@@ -213,7 +213,7 @@ function uniquePathsII(grid) {
 			}
 		}
 	}
-	
+
 	return gridSum[gridSum.length - 1][gridSum[0].length - 1];
 }
 
@@ -228,9 +228,9 @@ function stockTrader(maxTrades, stockPrices) {
 		tempArr += ',' + tempStr;
 	}
 	tempArr += ']';
-	
+
 	let highestProfit = JSON.parse(tempArr);
-	
+
 	for (let i = 0; i < maxTrades; i++) {
 		for (let j = 0; j < stockPrices.length - 1; j++) {
 			for (let k = j + 1; k < stockPrices.length; k++) {
@@ -262,37 +262,37 @@ function genIPAddresses(array) {
 					array.slice(j, k),
 					array.slice(k)
 				];
-				
+
 				let isValid = true;
 				ip.forEach(seg => {
 					isValid = isValid && isValidIpSegment(seg)
 				});
-				
+
 				if (isValid) ips.push(ip.join('.'));
 			}
 		}
 	}
-	
+
 	return ips;
 }
 
 function isValidIpSegment(segment) {
 	return !((segment[0] === 0 && segment !== 0) || segment > 255);
-	
+
 }
 
 function mergeOverlappingIntervals(array) {
 	array.sort((a, b) => a[0] - b[0]);
-	
+
 	let intervals = [array[0].slice()];
 	for (let interval of array) {
 		let [x1, y1] = interval;
 		let [, y2] = intervals[intervals.length - 1];
-		
+
 		if (y2 >= x1) intervals[intervals.length - 1][1] = Math.max(y1, y2);
 		else intervals.push(interval.slice());
 	}
-	
+
 	return intervals;
 }
 
@@ -306,7 +306,7 @@ function arrayJumpingGame(array) {
 			reachable[i + j] = 1;
 		}
 	}
-	
+
 	return reachable.includes(0) ? 0 : 1;
 }
 
@@ -315,13 +315,13 @@ function totalWaysToSum(n) {
 	for (let i = 0; i < n; i++) {
 		table.push(0);
 	}
-	
+
 	for (let i = 1; i < n; i++) {
 		for (let j = i; j <= n; j++) {
 			table[j] += table[j - i];
 		}
 	}
-	
+
 	return table[n];
 }
 
@@ -333,13 +333,13 @@ function validMathExpressions(data) {
 		while (j.length < digits.length - 1) {
 			j = '0' + j;
 		}
-		
+
 		if (digits[0] === '0' && j[0] === '0') continue;
-		
+
 		let expr = digits[0];
 		for (let k = 1; k < digits.length; k++) {
 			if (digits[k] === '0' && j[k] === '0' && j[k - 1] !== '0') break;
-			
+
 			let op;
 			switch (j[k - 1]) {
 				case '0':
@@ -359,7 +359,7 @@ function validMathExpressions(data) {
 		}
 		if (eval(expr) === target) valid.push(expr);
 	}
-	
+
 	return valid;
 }
 
@@ -371,7 +371,7 @@ function sanitizeParentheses(data) {
 		while (j.length < data.length) {
 			j = '0' + j;
 		}
-		
+
 		let str = '';
 		let deletions = 0;
 		for (let k = 0; k < j.length; k++) {
@@ -379,7 +379,7 @@ function sanitizeParentheses(data) {
 			else deletions++;
 		}
 		if (deletions > min) continue;
-		
+
 		let count = 0;
 		let neg = false;
 		for (let k of str) {
@@ -388,7 +388,7 @@ function sanitizeParentheses(data) {
 			if (count < 0) neg = true;
 		}
 		if (count > 0 || neg) continue;
-		
+
 		if (deletions === min) valid.add(str);
 		else if (deletions < min) {
 			min = deletions;
@@ -396,6 +396,6 @@ function sanitizeParentheses(data) {
 			valid.add(str);
 		}
 	}
-	
+
 	return [...valid];
 }

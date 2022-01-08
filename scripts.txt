@@ -1,4 +1,5 @@
 analyze_server.js
+augmentation_lister.js
 automaton.js
 backdoor.js
 bitnode_multipliers.js
@@ -19,7 +20,7 @@ install_augmentations.js
 join_faction.js
 karma.js
 monitor.js
-pserv-buyer.js
+pserv_buyer.js
 purchase_augmentations.js
 reputation.js
 scripts.txt

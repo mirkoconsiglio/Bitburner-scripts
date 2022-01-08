@@ -1,4 +1,6 @@
-import {getFactions, isUsefulGeneral, isUsefulHacking, isUsefulCombat, isUsefulCompany} from 'utils.js';
+import {getFactions, isUsefulCombat, isUsefulCompany, isUsefulGeneral, isUsefulHacking} from 'utils.js';
+
+// TODO: Ask if you want to sell stocks before purchasing augmentations
 
 export async function main(ns) {
 	let args = ns.flags([
@@ -40,7 +42,7 @@ export async function main(ns) {
 		for (let aug of prereqAugs) {
 			let prereq = ns.getAugmentationPrereq(aug.name)[0];
 			let index = noreqAugs.findIndex(aug => aug.name === prereq);
-			noreqAugs.splice(index + 1, 0, aug);
+			if (index >= 0) noreqAugs.splice(index + 1, 0, aug);
 		}
 		augmentations = noreqAugs;
 

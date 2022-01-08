@@ -6,7 +6,7 @@ export async function main(ns) {
 	const maxMoney = ns.getServerMaxMoney(server);
 	const minSec = ns.getServerMinSecurityLevel(server);
 	const sec = ns.getServerSecurityLevel(server);
-	
+
 	ns.tprint(`
 ${server}:
     RAM        : ${ns.nFormat(usedRam * 1000 ** 3, "0.00b")} / ${ns.nFormat(maxRam * 1000 ** 3, "0.00b")} (${(usedRam / maxRam * 100).toFixed(2)}%)

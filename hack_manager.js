@@ -18,7 +18,7 @@ export function manageAndHack(ns) {
 		let maxMoney = ns.getServerMaxMoney(target);
 		let minSec = ns.getServerMinSecurityLevel(target);
 		let sec = ns.getServerSecurityLevel(target);
-		
+
 		let secDiff = sec - minSec;
 		if (secDiff > 0) {
 			let threads = Math.ceil(secDiff * 20) - hackstates.get(target).weaken;
@@ -28,7 +28,7 @@ export function manageAndHack(ns) {
 				}
 			}
 		}
-		
+
 		let moneyPercent = money / maxMoney;
 		if (moneyPercent === 0) moneyPercent = 0.1;
 		if (moneyPercent < 0.9) {
@@ -40,7 +40,7 @@ export function manageAndHack(ns) {
 				}
 			}
 		}
-		
+
 		if (moneyPercent > 0.75 && secDiff < 50) {
 			let threads = Math.floor(ns.hackAnalyzeThreads(target, money - (0.4 * maxMoney)))
 				- hackstates.get(target).hack;
