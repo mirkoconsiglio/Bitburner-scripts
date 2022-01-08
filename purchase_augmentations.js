@@ -1,12 +1,12 @@
-import {getFactions, isUsefulCombat, isUsefulCompany, isUsefulGeneral, isUsefulHacking} from 'utils.js';
-
-// TODO: Ask if you want to sell stocks before purchasing augmentations
+import {getFactions, isUsefulCombat, isUsefulCompany, isUsefulGeneral, isUsefulHacking, isUsefulHacknet, isUsefulBladeburner} from 'utils.js';
 
 export async function main(ns) {
 	let args = ns.flags([
 		['hacking', false],
 		['combat', false],
-		['company', false]
+		['company', false],
+		['hacknet', false],
+		['bladeburner', false]
 	]);
 
 	// Check criterions for determining if augmentations are useful
@@ -14,6 +14,8 @@ export async function main(ns) {
 	if (args.hacking) criterions.push(isUsefulHacking);
 	if (args.combat) criterions.push(isUsefulCombat);
 	if (args.company) criterions.push(isUsefulCompany);
+	if (args.hacknet) criterions.push(isUsefulHacknet);
+	if (args.bladeburner) criterions.push(isUsefulBladeburner);
 
 	let augmentations = [];
 	for (let faction of getFactions()) {
@@ -26,6 +28,30 @@ export async function main(ns) {
 						price: ns.getAugmentationPrice(aug)
 					}
 				);
+			}
+		}
+	}
+
+	if (ns.getPlayer().hasTixApiAccess) { // Check if player has TIX API
+		// Check if player has any stocks
+		let stocks = false;
+		for (let sym of ns.stock.getSymbols()) {
+			let pos = ns.stock.getPosition(sym);
+			if (pos[0] !== 0 || pos[2] !== 0) {
+				stocks = true;
+				break;
+			}
+		}
+		// Ask if player wants to sell stocks
+		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) {
+			// Kill stock script
+			if (ns.isRunning('stock_market.js', 'home')) {
+				ns.kill('stock_market.js', 'home');
+			}
+			// Sell all stocks
+			for (let sym of ns.stock.getSymbols()) {
+				ns.stock.sell(sym, ns.stock.getMaxShares(sym));
+				ns.stock.sellShort(sym, ns.stock.getMaxShares(sym));
 			}
 		}
 	}
@@ -51,15 +77,15 @@ export async function main(ns) {
 		let totalPrice = 0;
 		for (let [i, aug] of augmentations.entries()) {
 			let updatedAugPrice = aug.price * 1.9 ** i;
-			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, "0.000a")} (${ns.nFormat(updatedAugPrice, "0.000a")}). `;
+			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '0.000a')} (${ns.nFormat(updatedAugPrice, '0.000a')}). `;
 			totalPrice += updatedAugPrice;
 		}
 
 		// Prompt user for buying augmentations
-		if (await ns.prompt(`${stringAugs}Buy augmentations for ${ns.nFormat(totalPrice, "0.000a")}?`)) {
+		if (await ns.prompt(`${stringAugs}Buy augmentations for ${ns.nFormat(totalPrice, '0.000a')}?`)) {
 			for (let aug of augmentations) {
 				if (ns.purchaseAugmentation(aug.faction, aug.name)) {
-					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${ns.nFormat(aug.price, "0.000a")}`);
+					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${ns.nFormat(aug.price, '0.000a')}`);
 				} else {
 					ns.tprint(`Could not purchase ${aug.name} from ${aug.faction}`);
 					ns.exit();
