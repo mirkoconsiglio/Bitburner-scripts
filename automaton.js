@@ -1,8 +1,10 @@
-import {copyScriptsToAll, getAccessibleServers, printBoth, isUsefulAugmentation} from 'utils.js';
+import {copyScriptsToAll, getAccessibleServers, printBoth} from 'utils.js';
 import {contractor} from 'contractor.js';
 import {manageAndHack} from 'hack_manager.js';
 
 // TODO: Automate working for Factions
+//  Create program automator
+//  Hacking Exp generator
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -67,27 +69,16 @@ export async function main(ns) {
 		let factions = ns.checkFactionInvitations();
 		for (let faction of factions) {
 			if (!declinedFactions.includes(faction)) {
-				// Check if there are any useful augmentations to buy
-				let augmentations = ns.getAugmentationsFromFaction(faction);
-				let useful = true;
-				for (let aug of augmentations) {
-					useful = useful && isUsefulAugmentation(ns, name);
+				ns.print(`Request to join ${faction}.`);
+				if (await ns.prompt(`Join ${faction}?`)) { // Ask to Join Faction
+					ns.print(`Accepted to join ${faction}.`);
+					ns.joinFaction(faction);
+					ns.tprint(`Joined ${faction}.`);
 				}
-
-				if (useful) { // If there is a useful augmentation ask for joining faction
-					ns.print(`Request to join ${faction}.`);
-					if (await ns.prompt(`Join ${faction}?`)) {
-						ns.print(`Accepted to join ${faction}.`);
-						ns.joinFaction(faction);
-						ns.tprint(`Joined ${faction}.`);
-					}
-					// Don't ask again
-					else {
-						ns.print(`Refused to join ${faction}.`);
-						declinedFactions.push(faction);
-					}
+				else { // Don't ask again
+					ns.print(`Refused to join ${faction}.`);
+					declinedFactions.push(faction);
 				}
-				else declinedFactions.push(faction); // No need to join factions without any useful augmentations
 			}
 		}
 		

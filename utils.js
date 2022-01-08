@@ -188,17 +188,54 @@ function costFn(ns, server) {
 	return hack / (grow * weaken);
 }
 
-export function isUsefulAugmentation(ns, name) {
-	return (name !== 'NeuroFlux Governor' && // Ignore NFG
-	( 	// Looking for hacking, faction rep and special augs.
-		ns.getAugmentationStats(name).hacking_mult ||
-		ns.getAugmentationStats(name).hacking_exp_mult ||
-		ns.getAugmentationStats(name).hacking_chance_mult ||
-		ns.getAugmentationStats(name).hacking_speed_mult ||
-		ns.getAugmentationStats(name).hacking_money_mult ||
-		ns.getAugmentationStats(name).hacking_grow_mult ||
-		ns.getAugmentationStats(name).faction_rep_mult ||
-		name === 'CashRoot Starter Kit' ||
-		name === 'Neuroreceptor Management Implant'
-	));
+export function isUsefulGeneral(ns, name) {
+	let stats = ns.getAugmentationStats(name);
+	return name !== 'NeuroFlux Governor' && // Ignore NFG
+		( 	// Useful general augmentations
+			stats.faction_rep_mult ||
+			name === 'CashRoot Starter Kit' ||
+			name === 'Neurolink' ||
+			name === 'PCMatrix' ||
+			name === 'Neuroreceptor Management Implant'
+		);
+}
+
+export function isUsefulHacking(ns, name) {
+	let stats = ns.getAugmentationStats(name);
+	return isUsefulGeneral(ns, name) ||
+	( 	// Useful hacking augmentations
+		stats.hacking_mult ||
+		stats.hacking_exp_mult ||
+		stats.hacking_chance_mult ||
+		stats.hacking_speed_mult ||
+		stats.hacking_money_mult ||
+		stats.hacking_grow_mult
+	)
+}
+
+export function isUsefulCombat(ns, name) {
+	let stats = ns.getAugmentationStats(name);
+	return isUsefulGeneral(ns, name) ||
+		( 	// Useful combat augmentations
+			stats.agility_exp_mult ||
+			stats.agility_mult ||
+			stats.defense_exp_mult ||
+			stats.defense_mult ||
+			stats.dexterity_exp_mult ||
+			stats.dexterity_mult ||
+			stats.strength_exp_mult ||
+			stats.strength_mult ||
+			stats.crime_money_mult ||
+			stats.crime_success_mult
+		);
+}
+
+export function isUsefulCompany(ns, name) {
+	let stats = ns.getAugmentationStats(name);
+	return isUsefulGeneral(ns, name) ||
+		( 	// Useful company augmentations
+			stats.charisma_exp_mult ||
+			stats.charisma_mult ||
+			stats.company_rep_mult
+		);
 }

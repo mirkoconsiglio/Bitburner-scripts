@@ -1,10 +1,22 @@
-import {getFactions, isUsefulAugmentation} from 'utils.js';
+import {getFactions, isUsefulGeneral, isUsefulHacking, isUsefulCombat, isUsefulCompany} from 'utils.js';
 
 export async function main(ns) {
+	let args = ns.flags([
+		['hacking', false],
+		['combat', false],
+		['company', false]
+	]);
+
+	// Check criterions for determining if augmentations are useful
+	let criterions = [isUsefulGeneral];
+	if (args.hacking) criterions.push(isUsefulHacking);
+	if (args.combat) criterions.push(isUsefulCombat);
+	if (args.company) criterions.push(isUsefulCompany);
+
 	let augmentations = [];
 	for (let faction of getFactions()) {
 		for (let aug of ns.getAugmentationsFromFaction(faction)) {
-			if (isUsefulAugmentation(ns, aug) && isPurchasableAugmentation(ns, faction, aug, augmentations)) {
+			if (isUseful(ns, criterions, aug) && isPurchasable(ns, faction, aug, augmentations)) {
 				augmentations.push(
 					{
 						faction: faction,
@@ -85,7 +97,7 @@ export async function main(ns) {
 	}
 }
 
-export function isPurchasableAugmentation(ns, faction, name, augmentations) {
+export function isPurchasable(ns, faction, name, augmentations) {
 	let facRep = ns.getFactionRep(faction);
 	let price = ns.getAugmentationPrice(name);
 	let repReq = ns.getAugmentationRepReq(name);
@@ -95,6 +107,13 @@ export function isPurchasableAugmentation(ns, faction, name, augmentations) {
 		augmentations.some(aug => aug.name === name) || // Check to see if it can be bought from another faction
 		ns.getOwnedAugmentations(true).includes(name) // Check if already bought
 	);
+}
+
+function isUseful(ns, criterions, name) {
+	for (let criterion of criterions) {
+		if (criterion(ns, name)) return true;
+	}
+	return false;
 }
 
 function splitAugmentations(ns, augmentations) {
