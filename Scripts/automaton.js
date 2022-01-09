@@ -1,6 +1,6 @@
-import {manageAndHack} from '/hacking/hack-manager';
-import {contractor} from '/utils/contractor';
-import {copyScriptsToAll, getAccessibleServers, printBoth} from 'utils';
+import {copyScriptsToAll, getAccessibleServers, printBoth} from './utils/utils';
+import {contractor} from './utils/contractor';
+import {manageAndHack} from './hacking/hack-manager';
 
 // TODO: Automate working for Factions
 // TODO: Create program automator

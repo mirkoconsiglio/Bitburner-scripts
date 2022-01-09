@@ -1,12 +1,4 @@
-import {
-	getFactions,
-	isUsefulBladeburner,
-	isUsefulCombat,
-	isUsefulCompany,
-	isUsefulGeneral,
-	isUsefulHacking,
-	isUsefulHacknet,
-} from 'utils.js';
+import {getFactions, isUsefulCombat, isUsefulCompany, isUsefulGeneral, isUsefulHacking, isUsefulHacknet, isUsefulBladeburner} from '../utils/utils';
 
 export async function main(ns) {
 	let args = ns.flags([
