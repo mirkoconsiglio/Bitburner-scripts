@@ -1,6 +1,19 @@
-export function printBoth(ns, str) {
-	ns.print(str);
-	ns.tprint(str);
+export function scriptsToCopy() {
+	return ['utils.js', '/hacking/daemon.js', '/hacking/hack.js', '/hacking/grow.js', '/hacking/weaken.js'];
+}
+
+export function getFactions() {
+	return [
+		'CyberSec', 'Tian Di Hui', 'Netburners', 'Sector-12', 'Chongqing',
+		'New Tokyo', 'Ishima', 'Aevum', 'Volhaven', 'NiteSec',
+		'The Black Hand', 'BitRunners', 'ECorp', 'MegaCorp',
+		'KuaiGong International', 'Four Sigma', 'NWO', 'Blade Industries',
+		'OmniTek Incorporated', 'Bachman & Associates',
+		'Clarke Incorporated', 'Fulcrum Secret Technologies',
+		'Slum Snakes', 'Tetrads', 'Silhouette', 'Speakers for the Dead',
+		'The Dark Army', 'The Syndicate', 'The Covenant', 'Daedalus',
+		'Illuminati'
+	];
 }
 
 export function routeFinder(ns, server) {
@@ -83,17 +96,16 @@ export function getAccessibleServers(ns) {
 	return getServers(ns).filter(server => hackServer(ns, server));
 }
 
-export async function backdoor(ns, server) {
-	let route = routeFinder(ns, server);
-	if (route && hackServer(ns, server)) {
-		for (let serv of route) {
-			ns.connect(serv);
-		}
-		ns.tprint(`Installing backdoor on ${server}.`);
-		await ns.installBackdoor();
-		ns.tprint(`Backdoor successfully installed.`);
-		for (let serv of route.reverse()) {
-			ns.connect(serv);
-		}
-	}
+export function getOptimalHackable(ns, servers) {
+	return servers.filter(function (server, index, servers) {
+		if (server === 'n00dles' && servers.length > 5) return false;
+		else return ns.getServerMaxMoney(server) > 0;
+	}).sort((a, b) => costFn(ns, b) - costFn(ns, a));
+}
+
+function costFn(ns, server) {
+	let hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
+	let grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
+	let weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
+	return hack / (grow * weaken);
 }

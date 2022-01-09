@@ -1,4 +1,4 @@
-import {backdoor} from './utils';
+import {backdoor} from 'utils.js';
 
 export async function main(ns) {
 	await backdoor(ns, ns.args[0]);

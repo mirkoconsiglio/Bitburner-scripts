@@ -3435,6 +3435,7 @@ interface SkillsFormulas {
      * @returns The calculated skill level.
      */
     calculateSkill(exp: number, skillMult?: number): number;
+
     /**
      * Calculate exp for skill level.
      * @param skill - target skill level
@@ -3456,6 +3457,7 @@ interface HackingFormulas {
      * @returns The calculated hack chance.
      */
     hackChance(server: Server, player: Player): number;
+
     /**
      * Calculate hack exp for one thread.
      * @remarks
@@ -3465,6 +3467,7 @@ interface HackingFormulas {
      * @returns The calculated hack exp.
      */
     hackExp(server: Server, player: Player): number;
+
     /**
      * Calculate hack percent for one thread.
      * @remarks
@@ -3474,6 +3477,7 @@ interface HackingFormulas {
      * @returns The calculated hack percent.
      */
     hackPercent(server: Server, player: Player): number;
+
     /**
      * Calculate the percent a server would grow.
      * @param server - Server info from {@link NS.getServer | getServer}
@@ -3483,6 +3487,7 @@ interface HackingFormulas {
      * @returns The calculated grow percent.
      */
     growPercent(server: Server, threads: number, player: Player, cores?: number): number;
+
     /**
      * Calculate hack time.
      * @param server - Server info from {@link NS.getServer | getServer}
@@ -3490,6 +3495,7 @@ interface HackingFormulas {
      * @returns The calculated hack time.
      */
     hackTime(server: Server, player: Player): number;
+
     /**
      * Calculate grow time.
      * @param server - Server info from {@link NS.getServer | getServer}
@@ -3497,6 +3503,7 @@ interface HackingFormulas {
      * @returns The calculated grow time.
      */
     growTime(server: Server, player: Player): number;
+
     /**
      * Calculate weaken time.
      * @param server - Server info from {@link NS.getServer | getServer}
@@ -3520,6 +3527,7 @@ interface HacknetNodesFormulas {
      * @returns The calculated money gain rate.
      */
     moneyGainRate(level: number, ram: number, cores: number, mult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet node level.
      * @param startingLevel - starting level
@@ -3528,6 +3536,7 @@ interface HacknetNodesFormulas {
      * @returns The calculated cost.
      */
     levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet node ram.
      * @param startingRam - starting ram
@@ -3536,6 +3545,7 @@ interface HacknetNodesFormulas {
      * @returns The calculated cost.
      */
     ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet node cores.
      * @param startingCore - starting cores
@@ -3544,6 +3554,7 @@ interface HacknetNodesFormulas {
      * @returns The calculated cost.
      */
     coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
+
     /**
      * Calculate the cost of a hacknet node.
      * @param n - number of the hacknet node
@@ -3551,6 +3562,7 @@ interface HacknetNodesFormulas {
      * @returns The calculated cost.
      */
     hacknetNodeCost(n: number, mult: number): number;
+
     /**
      * All constants used by the game.
      * @returns An object with all hacknet node constants used by the game.
@@ -3573,6 +3585,7 @@ interface HacknetServersFormulas {
      * @returns The calculated hash gain rate.
      */
     hashGainRate(level: number, ramUsed: number, maxRam: number, cores: number, mult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet server level.
      * @param startingLevel - starting level
@@ -3581,6 +3594,7 @@ interface HacknetServersFormulas {
      * @returns The calculated cost.
      */
     levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet server ram.
      * @param startingRam - starting ram
@@ -3589,6 +3603,7 @@ interface HacknetServersFormulas {
      * @returns The calculated cost.
      */
     ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet server cores.
      * @param startingCore - starting cores
@@ -3597,6 +3612,7 @@ interface HacknetServersFormulas {
      * @returns The calculated cost.
      */
     coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
+
     /**
      * Calculate cost of upgrading hacknet server cache.
      * @param startingCache - starting cache level
@@ -3604,6 +3620,7 @@ interface HacknetServersFormulas {
      * @returns The calculated cost.
      */
     cacheUpgradeCost(startingCache: number, extraCache?: number): number;
+
     /**
      * Calculate hash cost of an upgrade.
      * @param upgName - name of the upgrade
@@ -3611,6 +3628,7 @@ interface HacknetServersFormulas {
      * @returns The calculated hash cost.
      */
     hashUpgradeCost(upgName: number, level: number): number;
+
     /**
      * Calculate the cost of a hacknet server.
      * @param n - number of the hacknet server
@@ -3618,6 +3636,7 @@ interface HacknetServersFormulas {
      * @returns The calculated cost.
      */
     hacknetServerCost(n: number, mult?: number): number;
+
     /**
      * All constants used by the game.
      * @returns An object with all hacknet server constants used by the game.
@@ -3636,6 +3655,7 @@ interface GangFormulas {
      * @returns The calculated wanted penalty.
      */
     wantedPenalty(gang: GangGenInfo): number;
+
     /**
      * Calculate respect gain per tick.
      * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -3644,6 +3664,7 @@ interface GangFormulas {
      * @returns The calculated respect gain.
      */
     respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
+
     /**
      * Calculate wanted gain per tick.
      * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -3652,6 +3673,7 @@ interface GangFormulas {
      * @returns The calculated wanted gain.
      */
     wantedLevelGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
+
     /**
      * Calculate money gain per tick.
      * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -3730,6 +3752,7 @@ interface Stanek {
      * @returns The width of the gift.
      */
     width(): number;
+
     /**
      * Stanek's Gift height.
      * @remarks
@@ -3785,6 +3808,7 @@ interface Stanek {
      * @returns true if the fragment can be placed at that position. false otherwise.
      */
     canPlace(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
+
     /**
      * Place fragment on Stanek's Gift.
      * @remarks
@@ -3797,6 +3821,7 @@ interface Stanek {
      * @returns true if the fragment can be placed at that position. false otherwise.
      */
     place(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
+
     /**
      * Get placed fragment at location.
      * @remarks
@@ -4699,6 +4724,7 @@ export interface NS extends Singularity {
      * @returns True if the script is successfully killed, and false otherwise.
      */
     kill(script: number): boolean;
+
     kill(script: string, host: string, ...args: string[]): boolean;
 
     /**
@@ -5051,6 +5077,7 @@ export interface NS extends Singularity {
      * @returns max ram
      */
     getServerMaxRam(host: string): number;
+
     /**
      * Get the used RAM on a server.
      * @remarks
@@ -5384,6 +5411,7 @@ export interface NS extends Singularity {
      * @returns The data popped off the queue if it was full.
      */
     writePort(port: number, data: string | number): Promise<any>;
+
     /**
      * Read data from a port.
      * @remarks
@@ -5563,6 +5591,7 @@ export interface NS extends Singularity {
      * @returns Amount of income the specified script generates while online.
      */
     getScriptIncome(): [number, number];
+
     getScriptIncome(script: string, host: string, ...args: string[]): number;
 
     /**
@@ -5583,6 +5612,7 @@ export interface NS extends Singularity {
      * @returns Amount of hacking experience the specified script generates while online.
      */
     getScriptExpGain(): number;
+
     getScriptExpGain(script: string, host: string, ...args: string[]): number;
 
     /**
@@ -5848,6 +5878,7 @@ export interface OfficeAPI {
      * @returns A promise that is fulfilled when the assignment is complete.
      */
     assignJob(divisionName: string, cityName: string, employeeName: string, job: string): Promise<void>;
+
     /**
      * Assign an employee to a job.
      * @param divisionName - Name of the division
@@ -5855,6 +5886,7 @@ export interface OfficeAPI {
      * @returns The newly hired employee, if any
      */
     hireEmployee(divisionName: string, cityName: string): Employee | undefined;
+
     /**
      * Upgrade office size.
      * @param divisionName - Name of the division
@@ -5862,6 +5894,7 @@ export interface OfficeAPI {
      * @param size - Amount of positions to open
      */
     upgradeOfficeSize(divisionName: string, cityName: string, size: number): void;
+
     /**
      * Assign an employee to a job.
      * @param divisionName - Name of the division
@@ -5870,6 +5903,7 @@ export interface OfficeAPI {
      * @returns Amount of happiness increased.
      */
     throwParty(divisionName: string, cityName: string, costPerEmployee: number): Promise<number>;
+
     /**
      * Buy coffee for your employees
      * @param divisionName - Name of the division
@@ -5877,17 +5911,20 @@ export interface OfficeAPI {
      * @returns A promise that is fulfilled when the coffee is served.
      */
     buyCoffee(divisionName: string, cityName: string): Promise<void>;
+
     /**
      * Hire AdVert.
      * @param divisionName - Name of the division
      */
     hireAdVert(divisionName: string): void;
+
     /**
      * Hire AdVert.
      * @param divisionName - Name of the division
      * @param researchName - Name of the research
      */
     research(divisionName: string, researchName: string): void;
+
     /**
      * Get data about an office
      * @param divisionName - Name of the division
@@ -5895,6 +5932,7 @@ export interface OfficeAPI {
      * @returns Office data
      */
     getOffice(divisionName: string, cityName: string): Office;
+
     /**
      * Get data about an employee
      * @param divisionName - Name of the division
@@ -5921,6 +5959,7 @@ export interface WarehouseAPI {
      * @param price - Price to sell, can be "MP"
      */
     sellMaterial(divisionName: string, cityName: string, materialName: string, amt: string, price: string): void;
+
     /**
      * Set product sell data.
      * @param divisionName - Name of the division
@@ -5938,12 +5977,14 @@ export interface WarehouseAPI {
         price: string,
         all: boolean,
     ): void;
+
     /**
      * Discontinue a product.
      * @param divisionName - Name of the division
      * @param productName - Name of the product
      */
     discontinueProduct(divisionName: string, productName: string): void;
+
     /**
      * Set smart supply
      * @param divisionName - Name of the division
@@ -5951,6 +5992,7 @@ export interface WarehouseAPI {
      * @param enabled - smart supply enabled
      */
     setSmartSupply(divisionName: string, cityName: string, enabled: boolean): void;
+
     /**
      * Set material buy data
      * @param divisionName - Name of the division
@@ -5959,6 +6001,7 @@ export interface WarehouseAPI {
      * @param amt - Amount of material to buy
      */
     buyMaterial(divisionName: string, cityName: string, materialName: string, amt: number): void;
+
     /**
      * Get warehouse data
      * @param divisionName - Name of the division
@@ -5966,6 +6009,7 @@ export interface WarehouseAPI {
      * @returns warehouse data
      */
     getWarehouse(divisionName: string, cityName: string): Warehouse;
+
     /**
      * Get product data
      * @param divisionName - Name of the division
@@ -5973,6 +6017,7 @@ export interface WarehouseAPI {
      * @returns product data
      */
     getProduct(divisionName: string, productName: string): Product;
+
     /**
      * Get material data
      * @param divisionName - Name of the division
@@ -5980,6 +6025,7 @@ export interface WarehouseAPI {
      * @returns material data
      */
     getMaterial(divisionName: string, cityName: string, materialName: string): Material;
+
     /**
      * Set market TA 1 for a material.
      * @param divisionName - Name of the division
@@ -5988,6 +6034,7 @@ export interface WarehouseAPI {
      * @param on - market ta enabled
      */
     setMaterialMarketTA1(divisionName: string, cityName: string, materialName: string, on: boolean): void;
+
     /**
      * Set market TA 2 for a material.
      * @param divisionName - Name of the division
@@ -5996,6 +6043,7 @@ export interface WarehouseAPI {
      * @param on - market ta enabled
      */
     setMaterialMarketTA2(divisionName: string, cityName: string, materialName: string, on: boolean): void;
+
     /**
      * Set market TA 1 for a product.
      * @param divisionName - Name of the division
@@ -6003,6 +6051,7 @@ export interface WarehouseAPI {
      * @param on - market ta enabled
      */
     setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
+
     /**
      * Set market TA 2 for a product.
      * @param divisionName - Name of the division
@@ -6010,6 +6059,7 @@ export interface WarehouseAPI {
      * @param on - market ta enabled
      */
     setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
+
     /**
      * Set material export data
      * @param sourceDivision - Source division
@@ -6027,6 +6077,7 @@ export interface WarehouseAPI {
         materialName: string,
         amt: number,
     ): void;
+
     /**
      * Cancel material export
      * @param sourceDivision - Source division
@@ -6044,18 +6095,21 @@ export interface WarehouseAPI {
         materialName: string,
         amt: number,
     ): void;
+
     /**
      * Purchase warehouse for a new city
      * @param divisionName - Name of the division
      * @param cityName - Name of the city
      */
     purchaseWarehouse(divisionName: string, cityName: string): void;
+
     /**
      * Upgrade warehouse
      * @param divisionName - Name of the division
      * @param cityName - Name of the city
      */
     upgradeWarehouse(divisionName: string, cityName: string): void;
+
     /**
      * Create a new product
      * @param divisionName - Name of the division
@@ -6083,34 +6137,40 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
      * @returns Corporation data
      */
     getCorporation(): CorporationInfo;
+
     /**
      * Get division data
      * @param divisionName - Name of the division
      * @returns Division data
      */
     getDivision(divisionName: string): Division;
+
     /**
      * Expand to a new industry
      * @param industryType - Name of the industry
      * @param divisionName - Name of the division
      */
     expandIndustry(industryType: string, divisionName: string): void;
+
     /**
      * Expand to a new city
      * @param divisionName - Name of the division
      * @param cityName - Name of the city
      */
     expandCity(divisionName: string, cityName: string): void;
+
     /**
      * Unlock an upgrade.
      * @param upgradeName - Name of the upgrade
      */
     unlockUpgrade(upgradeName: string): void;
+
     /**
      * Level an upgrade.
      * @param upgradeName - Name of the upgrade
      */
     levelUpgrade(upgradeName: string): void;
+
     /**
      * Issue dividends
      * @param percent - Percent of profit to issue as dividends.
@@ -6293,7 +6353,6 @@ interface Division {
  * @internal
  */
 interface UserInterfaceTheme {
-    [key: string]: string | undefined;
     primarylight: string;
     primary: string;
     primarydark: string;
@@ -6327,4 +6386,6 @@ interface UserInterfaceTheme {
     backgroundprimary: string;
     backgroundsecondary: string;
     button: string;
+
+    [key: string]: string | undefined;
 }

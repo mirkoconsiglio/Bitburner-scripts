@@ -1,4 +1,4 @@
-import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getOptimalHackable} from '../utils/utils';
+import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getOptimalHackable} from 'utils.js';
 
 export async function main(ns) {
 	await copyScriptsToAll(ns);

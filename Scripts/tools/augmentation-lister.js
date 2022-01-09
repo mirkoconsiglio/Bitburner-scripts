@@ -1,4 +1,4 @@
-import {getFactions} from '../utils/utils';
+import {getFactions} from 'utils.js';
 
 export async function main(ns) {
 	let factions = getFactions();
