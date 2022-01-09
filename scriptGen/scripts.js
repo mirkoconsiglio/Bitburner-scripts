@@ -5,7 +5,7 @@ function getFilesRecursive(dir, arrayOfFiles) {
 	try {
 		let files = fs.readdirSync(dir);
 		arrayOfFiles = arrayOfFiles || [];
-		files.forEach(function(file) {
+		files.forEach(function (file) {
 			let subfile = path.join(dir, file);
 			if (fs.statSync(subfile).isDirectory()) {
 				arrayOfFiles = getFilesRecursive(subfile, arrayOfFiles);
@@ -14,7 +14,7 @@ function getFilesRecursive(dir, arrayOfFiles) {
 			}
 		});
 		return arrayOfFiles.filter(file => (path.extname(file) === '.txt' || path.extname(file) === '.js'));
-	} catch(err) {
+	} catch (err) {
 		console.log(err);
 		return null;
 	}

@@ -1,4 +1,11 @@
-import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getOptimalHackable} from '/utils/utils.js';
+import {
+	copyScriptsToAll,
+	findPlaceToRun,
+	getAccessibleServers,
+	getFreeRam,
+	getOptimalHackable,
+	getScripts
+} from '/utils/utils.js';
 
 export async function main(ns) {
 	await copyScriptsToAll(ns);
@@ -9,6 +16,7 @@ export async function main(ns) {
 }
 
 export function manageAndHack(ns) {
+	let scripts = getScripts();
 	let servers = getAccessibleServers(ns);
 	let hackables = getOptimalHackable(ns, servers);
 	let [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
@@ -23,7 +31,7 @@ export function manageAndHack(ns) {
 		if (secDiff > 0) {
 			let threads = Math.ceil(secDiff * 20) - hackstates.get(target).weaken;
 			if (threads > 0) {
-				if (!findPlaceToRun(ns, 'weaken.js', threads, freeRams, [target])) {
+				if (!findPlaceToRun(ns, scripts.weaken, threads, freeRams, [target])) {
 					return;
 				}
 			}
@@ -35,7 +43,7 @@ export function manageAndHack(ns) {
 			let threads = Math.ceil(ns.growthAnalyze(target, 1 / moneyPercent));
 			-hackstates.get(target).grow;
 			if (threads > 0) {
-				if (!findPlaceToRun(ns, 'grow.js', threads, freeRams, [target])) {
+				if (!findPlaceToRun(ns, scripts.grow, threads, freeRams, [target])) {
 					return;
 				}
 			}
@@ -45,7 +53,7 @@ export function manageAndHack(ns) {
 			let threads = Math.floor(ns.hackAnalyzeThreads(target, money - (0.4 * maxMoney)))
 				- hackstates.get(target).hack;
 			if (threads > 0) {
-				if (!findPlaceToRun(ns, 'hack.js', threads, freeRams, [target])) {
+				if (!findPlaceToRun(ns, scripts.hack, threads, freeRams, [target])) {
 					return;
 				}
 			}
@@ -54,12 +62,13 @@ export function manageAndHack(ns) {
 }
 
 function getHackStates(ns, servers, hackables) {
+	let scripts = getScripts();
 	let hackstates = new Map();
 	for (let server of servers.values()) {
 		for (let hackable of hackables.values()) {
-			let weakenScript = ns.getRunningScript('weaken.js', server, hackable);
-			let growScript = ns.getRunningScript('grow.js', server, hackable);
-			let hackScript = ns.getRunningScript('hack.js', server, hackable);
+			let weakenScript = ns.getRunningScript(scripts.weaken, server, hackable);
+			let growScript = ns.getRunningScript(scripts.grow, server, hackable);
+			let hackScript = ns.getRunningScript(scripts.hack, server, hackable);
 			if (hackstates.has(hackable)) {
 				hackstates.get(hackable).weaken += !weakenScript ? 0 : weakenScript.threads;
 				hackstates.get(hackable).grow += !growScript ? 0 : growScript.threads;

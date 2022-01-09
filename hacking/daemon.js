@@ -1,10 +1,15 @@
-import {findPlaceToRun, getAccessibleServers, getFreeRam, printBoth} from '/utils/utils.js';
+import {
+	findPlaceToRun,
+	getAccessibleServers,
+	getFreeRam,
+	getScripts,
+	printBoth
+} from '/utils/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const data = packageData(ns);
 
-	let i = 0;
 	while (true) {
 		let sec = ns.getServerSecurityLevel(data.target);
 		let money = ns.getServerMoneyAvailable(data.target);
@@ -18,19 +23,22 @@ export async function main(ns) {
 		let info = getInfo(ns, data);
 		if (!info) continue;
 
-		let c = 0;
-		while (c < info.cycleCount) {
-			if (info.cycleRAM < info.freeRAM) {
-				ns.print(`Running cycle ${c + 1}.`);
-				if (info.hackThreads > 0) ns.exec('hack.js', data.host, info.hackThreads, data.target, info.hackDelay, i);
-				if (info.hWeakenThreads > 0) ns.exec('weaken.js', data.host, info.hWeakenThreads, data.target, info.hWeakenDelay, i);
-				if (info.growThreads > 0) ns.exec('grow.js', data.host, info.growThreads, data.target, info.growDelay, i);
-				if (info.gWeakenThreads > 0) ns.exec('weaken.js', data.host, info.gWeakenThreads, data.target, info.gWeakenDelay, i);
-				i++;
-				c++;
-			}
-			await ns.sleep(info.cycleDelay);
+		await hackTarget(ns);
+	}
+}
+
+async function hackTarget(ns, info, data) {
+	let c = 0;
+	while (c < info.cycleCount) {
+		if (info.cycleRAM < info.freeRAM) {
+			ns.print(`Running cycle ${c + 1}.`);
+			if (info.hackThreads > 0) ns.exec(data.scripts.hack, data.host, info.hackThreads, data.target, info.hackDelay, c);
+			if (info.hWeakenThreads > 0) ns.exec(data.scripts.weaken, data.host, info.hWeakenThreads, data.target, info.hWeakenDelay, c);
+			if (info.growThreads > 0) ns.exec(data.scripts.grow, data.host, info.growThreads, data.target, info.growDelay, c);
+			if (info.gWeakenThreads > 0) ns.exec(data.scripts.weaken, data.host, info.gWeakenThreads, data.target, info.gWeakenDelay, c);
+			c++;
 		}
+		await ns.sleep(info.cycleDelay);
 	}
 }
 
@@ -58,13 +66,13 @@ async function primeTarget(ns, sec, money, data) {
 
 		let growFound = true;
 		if (!grown) {
-			growFound = findPlaceToRun(ns, 'grow.js', growThreads, freeRams, [data.target]);
+			growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, [data.target]);
 		}
 		if (growFound) grown = true;
 
 		let weakenFound = true;
 		if (!weakened) {
-			weakenFound = findPlaceToRun(ns, 'weaken.js', weakenThreads, freeRams, [data.target]);
+			weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, [data.target]);
 		}
 		if (weakenFound) weakened = true;
 
@@ -75,11 +83,11 @@ async function primeTarget(ns, sec, money, data) {
 		return grown && weakened;
 	} else {
 		if (!grown) {
-			ns.exec('grow.js', data.host, growThreads, data.target);
+			ns.exec(data.scripts.grow, data.host, growThreads, data.target);
 			grown = true;
 		}
 		if (!weakened) {
-			ns.exec('weaken.js', data.host, weakenThreads, data.target);
+			ns.exec(data.scripts.weaken, data.host, weakenThreads, data.target);
 			weakened = true;
 		}
 		await ns.sleep(weakenTime + 1000);
@@ -166,9 +174,10 @@ function packageData(ns) {
 	const growSec = 0.004;
 	const weakenSec = 0.05;
 
-	const hackscriptRam = ns.getScriptRam('hack.js');
-	const growscriptRam = ns.getScriptRam('grow.js');
-	const weakenscriptRam = ns.getScriptRam('weaken.js');
+	const scripts = getScripts();
+	const hackscriptRam = ns.getScriptRam(scripts.hack);
+	const growscriptRam = ns.getScriptRam(scripts.grow);
+	const weakenscriptRam = ns.getScriptRam(scripts.weaken);
 
 	return {
 		target,
@@ -181,6 +190,7 @@ function packageData(ns) {
 		hackSec,
 		growSec,
 		weakenSec,
+		scripts,
 		hackscriptRam,
 		growscriptRam,
 		weakenscriptRam

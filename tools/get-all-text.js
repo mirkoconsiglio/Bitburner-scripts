@@ -1,4 +1,4 @@
-import {getServers} from '/utils/utils.js';;
+import {getServers} from '/utils/utils.js';
 
 export async function main(ns) {
 	let servers = getServers(ns);

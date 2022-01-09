@@ -1,4 +1,9 @@
-import {getAccessibleServers, getOptimalHackable, scriptsToCopy} from '/utils/utils.js';
+import {
+	getAccessibleServers,
+	getOptimalHackable,
+	getScripts,
+	scriptsToCopy
+} from '/utils/utils.js';
 
 export async function main(ns) {
 	let power = ns.args[0];
@@ -28,6 +33,6 @@ export async function main(ns) {
 		ns.tprint(`Buying server: ${server}, target RAM: ${targetRam}`);
 		ns.purchaseServer(server, targetRam);
 		await ns.scp(scriptsToCopy(), 'home', server);
-		ns.exec('daemon.js', server, 1, hackables[i + runOnHome]);
+		ns.exec(getScripts().daemon, server, 1, hackables[i + runOnHome]);
 	}
 }

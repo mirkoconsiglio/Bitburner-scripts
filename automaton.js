@@ -1,6 +1,6 @@
-import {copyScriptsToAll, getAccessibleServers, printBoth} from './utils/utils';
-import {contractor} from './utils/contractor';
-import {manageAndHack} from './hacking/hack-manager';
+import {manageAndHack} from '/hacking/hack-manager.js';
+import {contractor} from '/utils/contractor.js';
+import {copyScriptsToAll, getAccessibleServers, printBoth} from '/utils/utils.js';
 
 // TODO: Automate working for Factions
 // TODO: Create program automator
@@ -60,9 +60,9 @@ export async function main(ns) {
 		for (let server of getAccessibleServers(ns)) {
 			if (!(ns.getServer(server).backdoorInstalled ||
 				server === 'home' ||
-				ns.isRunning('backdoor.js', 'home', server))) {
+				ns.isRunning('/utils/backdoor.js', 'home', server))) {
 				printBoth(ns, `Installing backdoor on ${server}.`);
-				ns.exec('backdoor.js', 'home', 1, server);
+				ns.exec('/utils/backdoor.js', 'home', 1, server);
 			}
 		}
 
@@ -74,7 +74,7 @@ export async function main(ns) {
 		for (let faction of factions) {
 			if (!askedFactions.includes(faction)) {
 				ns.print(`Request to join ${faction}.`);
-				ns.exec('join_faction.js', 'home', 1, faction)
+				ns.exec('/utils/join_faction.js', 'home', 1, faction)
 				askedFactions.push(faction); // Don't ask again
 			}
 		}

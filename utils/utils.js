@@ -3,15 +3,25 @@ export function printBoth(ns, str) {
 	ns.tprint(str);
 }
 
-export function scriptsToCopy() {
-	return ['/utils/utils.js', '/hacking/daemon.js', '/hacking/hack.js', '/hacking/grow.js', '/hacking/weaken.js'];
-}
-
 export async function copyScriptsToAll(ns) {
 	for (let server of getServers(ns)) {
 		if (server !== 'home') {
 			await ns.scp(scriptsToCopy(), 'home', server);
 		}
+	}
+}
+
+export function scriptsToCopy() {
+	return getScripts().values();
+}
+
+export function getScripts() {
+	return {
+		hack: '/hacking/hack.js',
+		grow: '/hacking/grow.js',
+		weaken: '/hacking/weaken.js',
+		daemon: '/hacking/daemon.js',
+		utils: '/utils/utils.js'
 	}
 }
 
