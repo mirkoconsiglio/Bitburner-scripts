@@ -10,7 +10,7 @@ import {
 
 export async function main(ns) {
 	let args = ns.flags([
-		['hacking', false],
+		['hacking', true],
 		['combat', false],
 		['company', false],
 		['hacknet', false],
@@ -66,19 +66,22 @@ export async function main(ns) {
 
 	// Check if there are any purchasable augmentations
 	if (augmentations.length !== 0) {
-		// Split augs according to their prerequisites
-		let [prereqAugs, noreqAugs] = splitAugmentations(ns, augmentations);
-
-		// Sort Augs without prerequisites according to their price
-		noreqAugs.sort((a, b) => b.price - a.price);
-
-		// Fit in prereq augs after buying their prerequisites
-		for (let aug of prereqAugs) {
-			let prereq = ns.getAugmentationPrereq(aug.name)[0];
-			let index = noreqAugs.findIndex(aug => aug.name === prereq);
-			if (index >= 0) noreqAugs.splice(index + 1, 0, aug);
+		// Fit in augs before their prereqs
+		let tempAugs = [];
+		let coveredIndices = [];
+		for (let [i, aug] of augmentations.entries()) {
+			if (coveredIndices.includes(i)) continue;
+			let prereq = ns.getAugmentationPrereq(aug.name);
+			if (prereq.length > 0) {
+				let index = augmentations.findIndex(aug => aug.name === prereq[0]);
+				if (index >= 0) { // Fit in aug before their prereq
+					tempAugs.splice(i, 0, augmentations[index]);
+					coveredIndices.push(index);
+				}
+			}
+			tempAugs.push(aug);
 		}
-		augmentations = noreqAugs;
+		augmentations = tempAugs;
 
 		// Calculate price of augs
 		let stringAugs = '';
@@ -121,7 +124,9 @@ export async function main(ns) {
 	}
 
 	// Check if The Red Pill is available
-	if (ns.getFactionRep('Daedalus') >= 2.5e6 && !ns.getOwnedAugmentations(true).includes('The Red Pill')) {
+	if (ns.getPlayer().factions.includes('Daedalus') &&
+		ns.getFactionRep('Daedalus') >= 2.5e6 &&
+		!ns.getOwnedAugmentations(true).includes('The Red Pill')) {
 		if (await ns.prompt(`Purchase The Red Pill?`)) {
 			if (ns.purchaseAugmentation('Daedalus', 'The Red Pill')) {
 				ns.tprint(`Purchased The Red Pill`);
@@ -150,19 +155,4 @@ function isUseful(ns, criterions, name) {
 		if (criterion(ns, name)) return true;
 	}
 	return false;
-}
-
-function splitAugmentations(ns, augmentations) {
-	function condition(aug) {
-		let prereq = ns.getAugmentationPrereq(aug.name)[0];
-		if (prereq) {
-			if (ns.getOwnedAugmentations(true).includes(prereq)) return 1;
-			else return 0;
-		} else return 1;
-	}
-
-	return augmentations.reduce((augs, aug) => {
-		augs[condition(aug)].push(aug);
-		return augs;
-	}, [[], []]);
 }
