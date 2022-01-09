@@ -2,7 +2,7 @@ const url = 'https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/
 const listOfScripts = 'scripts.txt';
 
 export async function main(ns) {
-	ns.tprint('--- Downloading scripts ---');
+	ns.tprint('----- Downloading scripts -----');
 	try {
 		let download = await ns.wget(`${url}/scripts/${listOfScripts}`, listOfScripts);
 		if (!download) throw listOfScripts;
@@ -14,7 +14,7 @@ export async function main(ns) {
 			download = await ns.wget(`${url}/${script}`, script);
 			if (!download) throw script;
 		}
-		ns.tprint('--- Download complete ---');
+		ns.tprint('----- Download complete -----');
 	} catch (script) {
 		ns.tprint(`Could not download ${script}`);
 	}

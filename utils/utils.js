@@ -12,7 +12,7 @@ export async function copyScriptsToAll(ns) {
 }
 
 export function scriptsToCopy() {
-	return getScripts().values();
+	return Object.values(getScripts());
 }
 
 export function getScripts() {
