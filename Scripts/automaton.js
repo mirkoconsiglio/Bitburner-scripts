@@ -1,12 +1,12 @@
-import {copyScriptsToAll, getAccessibleServers, printBoth} from 'utils.js';
-import {contractor} from 'contractor.js';
-import {manageAndHack} from 'hack_manager.js';
+import {copyScriptsToAll, getAccessibleServers, printBoth} from './utils/utils';
+import {contractor} from './utils/contractor';
+import {manageAndHack} from './hacking/hack-manager';
 
 // TODO: Automate working for Factions
-//  Create program automator
-//  Hacking Exp generator
-//  Crime automator
-//  Gym automator
+// TODO: Create program automator
+// TODO: Hacking Exp generator
+// TODO: Crime automator
+// TODO: Gym automator
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -16,7 +16,13 @@ export async function main(ns) {
 
 	let contractorOnline = true;
 	const askedFactions = [];
-	const usefulPrograms = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'HTTPWorm.exe', 'SQLInject.exe'];
+	const usefulPrograms = [
+		['BruteSSH.exe', 50],
+		['FTPCrack.exe', 100],
+		['relaySMTP.exe', 300],
+		['HTTPWorm.exe', 400],
+		['SQLInject.exe', 800]
+	];
 
 	while (true) {
 		let player = ns.getPlayer();
@@ -34,11 +40,9 @@ export async function main(ns) {
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR.`);
 		// Purchase only useful programs
 		if (player.tor) {
-			for (let program of usefulPrograms) {
-				if (!ns.fileExists(program)) {
-					if (ns.purchaseProgram(program)) {
-						printBoth(ns, `Purchased ${program}.`);
-					}
+			for (let [program, hackingLevel] of usefulPrograms) {
+				if (!ns.fileExists(program) && player.hacking >= hackingLevel) {
+					if (ns.purchaseProgram(program)) printBoth(ns, `Purchased ${program}.`);
 				}
 			}
 		}

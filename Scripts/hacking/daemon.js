@@ -1,4 +1,4 @@
-import {findPlaceToRun, getAccessibleServers, getFreeRam, printBoth} from 'utils.js';
+import {findPlaceToRun, getAccessibleServers, getFreeRam, printBoth} from '../utils/utils';
 
 export async function main(ns) {
 	ns.disableLog('ALL');

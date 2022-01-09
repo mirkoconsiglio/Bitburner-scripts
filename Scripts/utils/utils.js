@@ -4,12 +4,14 @@ export function printBoth(ns, str) {
 }
 
 export function scriptsToCopy() {
-	return ['utils.js', 'daemon.js', 'hack.js', 'grow.js', 'weaken.js'];
+	return ['./utils', '../hacking/daemon', '../hacking/hack', '../hacking/grow', '../hacking/weaken'];
 }
 
 export async function copyScriptsToAll(ns) {
 	for (let server of getServers(ns)) {
-		if (server !== 'home') await ns.scp(scriptsToCopy(), 'home', server);
+		if (server !== 'home') {
+			await ns.scp(scriptsToCopy(), 'home', server);
+		}
 	}
 }
 

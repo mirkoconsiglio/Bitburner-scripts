@@ -4,13 +4,13 @@ const listOfScripts = 'scripts.txt';
 export async function main(ns) {
 	ns.tprint('--- Downloading scripts ---');
 	try {
-		let download = await ns.wget(`${url}/${listOfScripts}`, listOfScripts);
+		let download = await ns.wget(`${url}/utils/${listOfScripts}`, listOfScripts);
 		if (!download) throw listOfScripts;
 
 		let scripts = ns.read(listOfScripts).split('\n');
 		for (let script of scripts) {
 			ns.tprint(`Downloading ${script}`);
-			download = await ns.wget(`${url}/${script}`, script);
+			download = await ns.wget(`${url}/Scripts/${script}`, script);
 			if (!download) throw script;
 		}
 		ns.tprint('--- Download complete ---');
