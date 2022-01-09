@@ -1,6 +1,5 @@
 augmentations/install-augmentations.js
 augmentations/purchase-augmentations.js
-augmentations/utils.js
 automaton.js
 exploits/dev-menu.js
 hacking/daemon.js
@@ -8,7 +7,6 @@ hacking/deploy-daemons.js
 hacking/grow.js
 hacking/hack-manager.js
 hacking/hack.js
-hacking/utils.js
 hacking/weaken.js
 stock-market/early-stock-market.js
 stock-market/stock-market.js
@@ -23,10 +21,8 @@ tools/karma.js
 tools/monitor.js
 tools/pserv-buyer.js
 tools/reputation.js
-tools/utils.js
 utils/backdoor.js
 utils/connect.js
 utils/contractor.js
 utils/join-faction.js
 utils/utils.js
-utils.js

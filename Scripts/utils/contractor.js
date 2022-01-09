@@ -1,4 +1,4 @@
-import {getServers, printBoth} from './utils';
+import {getServers, printBoth} from '/utils/utils.js';
 
 export function contractor(ns) {
 	for (let server of getServers(ns)) {

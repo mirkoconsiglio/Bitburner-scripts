@@ -1,4 +1,4 @@
-import {getAccessibleServers, getOptimalHackable, scriptsToCopy} from '../utils/utils';
+import {getAccessibleServers, getOptimalHackable, scriptsToCopy} from '/utils/utils.js';
 
 export async function main(ns) {
 	let power = ns.args[0];
