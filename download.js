@@ -10,6 +10,7 @@ export async function main(ns) {
 		let scripts = ns.read(listOfScripts).split('\n');
 		for (let script of scripts) {
 			ns.tprint(`Downloading ${script}`);
+			if (script.includes('/')) script = '/' + script;
 			download = await ns.wget(`${url}/Scripts/${script}`, script);
 			if (!download) throw script;
 		}
