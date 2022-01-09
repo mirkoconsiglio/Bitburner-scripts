@@ -1,6 +1,8 @@
+augmentations/augmentation-lister.js
 augmentations/install-augmentations.js
 augmentations/purchase-augmentations.js
 automaton.js
+download.js
 exploits/dev-menu.js
 hacking/daemon.js
 hacking/deploy-daemons.js
@@ -8,10 +10,11 @@ hacking/grow.js
 hacking/hack-manager.js
 hacking/hack.js
 hacking/weaken.js
+scripts/scripts.js
+scripts/scripts.txt
 stock-market/early-stock-market.js
 stock-market/stock-market.js
 tools/analyze-server.js
-tools/augmentation-lister.js
 tools/bitnode-multipliers.js
 tools/cost-pserv.js
 tools/favor.js

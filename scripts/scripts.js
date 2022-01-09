@@ -34,7 +34,7 @@ function writeToFile(filename, str) {
 	});
 }
 
-let dir = path.join(__dirname, '../Scripts/');
+let dir = path.join(__dirname, '../');
 let files = getFiles(`${dir}`);
 let str = files.join('\n');
 writeToFile('scripts.txt', str);
