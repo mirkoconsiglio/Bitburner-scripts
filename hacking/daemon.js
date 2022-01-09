@@ -23,7 +23,7 @@ export async function main(ns) {
 		let info = getInfo(ns, data);
 		if (!info) continue;
 
-		await hackTarget(ns);
+		await hackTarget(ns, info, data);
 	}
 }
 

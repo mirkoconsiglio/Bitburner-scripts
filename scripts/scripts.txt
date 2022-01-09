@@ -24,6 +24,7 @@ tools/karma.js
 tools/monitor.js
 tools/pserv-buyer.js
 tools/reputation.js
+tools/script-remover.js
 utils/backdoor.js
 utils/connect.js
 utils/contractor.js
