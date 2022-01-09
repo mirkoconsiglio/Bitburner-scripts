@@ -4,7 +4,7 @@ export function printBoth(ns, str) {
 }
 
 export function scriptsToCopy() {
-	return ['./utils', '../hacking/daemon', '../hacking/hack', '../hacking/grow', '../hacking/weaken'];
+	return ['/utils/utils.js', '/hacking/daemon.js', '/hacking/hack.js', '/hacking/grow.js', '/hacking/weaken.js'];
 }
 
 export async function copyScriptsToAll(ns) {
