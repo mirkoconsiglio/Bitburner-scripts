@@ -22,7 +22,7 @@ function getFilesRecursive(dir, arrayOfFiles) {
 function getFiles(dir = __dirname) {
 	let files = getFilesRecursive(`${dir}`);
 	let relativeFiles = [];
-	files.forEach(file => relativeFiles.push('/' + path.relative(dir, file).replace(/\\/g, '/')));
+	files.forEach(file => relativeFiles.push(path.relative(dir, file).replace(/\\/g, '/')));
 	return relativeFiles;
 }
 
