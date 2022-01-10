@@ -2,11 +2,11 @@ import {manageAndHack} from '/hacking/hack-manager.js';
 import {contractor} from '/utils/contractor.js';
 import {copyScriptsToAll, getAccessibleServers, printBoth} from '/utils/utils.js';
 
-// TODO: Automate working for Factions
 // TODO: Create program automator
-// TODO: Hacking Exp generator
+// TODO: Faction automator
 // TODO: Crime automator
 // TODO: Gym automator
+// TODO: Hacking Exp generator
 
 export async function main(ns) {
 	ns.disableLog('ALL');

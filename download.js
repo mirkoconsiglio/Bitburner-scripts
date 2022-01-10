@@ -4,6 +4,7 @@ const listOfScripts = 'scripts.txt';
 export async function main(ns) {
 	ns.tprint('----- Downloading scripts -----');
 	try {
+		ns.tprint(`Downloading ${listOfScripts}`);
 		let download = await ns.wget(`${url}/scripts/${listOfScripts}`, listOfScripts);
 		if (!download) throw listOfScripts;
 
