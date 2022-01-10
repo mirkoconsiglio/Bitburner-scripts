@@ -74,7 +74,7 @@ export async function main(ns) {
 		for (let faction of factions) {
 			if (!askedFactions.includes(faction)) {
 				ns.print(`Request to join ${faction}.`);
-				ns.exec('/utils/join_faction.js', 'home', 1, faction)
+				ns.exec('/utils/join-faction.js', 'home', 1, faction)
 				askedFactions.push(faction); // Don't ask again
 			}
 		}
