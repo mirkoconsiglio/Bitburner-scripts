@@ -1,8 +1,4 @@
-import {
-	getAccessibleServers,
-	getOptimalHackable,
-	getScripts
-} from '/utils/utils.js';
+import {getAccessibleServers, getOptimalHackable, getScripts} from '/utils/utils.js';
 
 export async function main(ns) {
 	let scripts = getScripts();
