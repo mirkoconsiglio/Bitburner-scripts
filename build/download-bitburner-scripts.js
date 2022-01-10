@@ -1,5 +1,5 @@
 const url = 'https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/master';
-const listOfScripts = `/build/scripts.txt`;
+const listOfScripts = `build/scripts.txt`;
 
 export async function main(ns) {
 	ns.tprint('----- Downloading scripts -----');

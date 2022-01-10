@@ -8,7 +8,7 @@ function getFilesRecursive(dir, arrayOfFiles) {
 		files.forEach(function (file) {
 			let subfile = path.join(dir, file);
 			if (fs.statSync(subfile).isDirectory()) {
-				if (!subfile.endsWith('build')) arrayOfFiles = getFilesRecursive(subfile, arrayOfFiles);
+				arrayOfFiles = getFilesRecursive(subfile, arrayOfFiles);
 			} else {
 				arrayOfFiles.push(subfile);
 			}
@@ -22,7 +22,7 @@ function getFilesRecursive(dir, arrayOfFiles) {
 function getFiles(dir = __dirname) {
 	let files = getFilesRecursive(`${dir}`);
 	let relativeFiles = [];
-	files.forEach(file => relativeFiles.push(path.relative(dir, file).replace(/\\/g, '/')));
+	files.forEach(file => relativeFiles.push('/' + path.relative(dir, file).replace(/\\/g, '/')));
 	return relativeFiles;
 }
 
