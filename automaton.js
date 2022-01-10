@@ -2,12 +2,6 @@ import {manageAndHack} from '/hacking/hack-manager.js';
 import {contractor} from '/utils/contractor.js';
 import {copyScriptsToAll, getAccessibleServers, printBoth} from '/utils/utils.js';
 
-// TODO: Create program automator
-// TODO: Faction automator
-// TODO: Crime automator
-// TODO: Gym automator
-// TODO: Hacking Exp generator
-
 export async function main(ns) {
 	ns.disableLog('ALL');
 
@@ -48,18 +42,18 @@ export async function main(ns) {
 		}
 
 		// Upgrade home RAM
-		if (ns.upgradeHomeRam()) {
-			printBoth(ns, `Home RAM upgraded.`);
+		if (ns.getUpgradeHomeRamCost() <= ns.getServerMoneyAvailable('home')) {
+			ns.exec('/utils/upgrade-home-ram.js', 'home', 1, ns.getUpgradeHomeRamCost());
 		}
-		//Upgrade home cores
-		if (ns.upgradeHomeCores()) {
-			printBoth(ns, `Home cores upgraded.`);
+		// Upgrade home cores
+		if (ns.getUpgradeHomeCoresCost() <= ns.getServerMoneyAvailable('home')) {
+			ns.exec('/utils/upgrade-home-cores.js', 'home', 1, ns.getUpgradeHomeCoresCost());
 		}
 
 		// Backdoor servers
 		for (let server of getAccessibleServers(ns)) {
-			if (!(ns.getServer(server).backdoorInstalled ||
-				server === 'home' ||
+			if (!(server === 'home' ||
+				ns.getServer(server).backdoorInstalled ||
 				ns.isRunning('/utils/backdoor.js', 'home', server))) {
 				printBoth(ns, `Installing backdoor on ${server}.`);
 				ns.exec('/utils/backdoor.js', 'home', 1, server);
