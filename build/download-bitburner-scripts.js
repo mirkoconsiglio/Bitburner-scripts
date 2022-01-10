@@ -5,7 +5,7 @@ export async function main(ns) {
 	ns.tprint('----- Downloading scripts -----');
 	try {
 		ns.tprint(`Downloading ${listOfScripts}`);
-		let download = await ns.wget(`${url}/scripts/${listOfScripts}`, listOfScripts);
+		let download = await ns.wget(`${url}/build/${listOfScripts}`, listOfScripts);
 		if (!download) throw listOfScripts;
 		let scripts = ns.read(listOfScripts).split('\n');
 		for (let script of scripts) {
