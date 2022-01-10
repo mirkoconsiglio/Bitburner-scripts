@@ -10,7 +10,7 @@ import {
 
 export async function main(ns) {
 	let args = ns.flags([
-		['hacking', true],
+		['hacking', false],
 		['combat', false],
 		['company', false],
 		['hacknet', false],
@@ -65,11 +65,19 @@ export async function main(ns) {
 	}
 
 	// Check if there are any purchasable augmentations
-	if (augmentations.length !== 0) {
+	if (augmentations.length > 0) {
+		// Sort augmentations according to their price
+		augmentations.sort((a, b) => {
+			if (b.price > a.price) return 1;
+			else if (a.price > b.price) return -1;
+			else return ns.getAugmentationPrereq(b.name).length - ns.getAugmentationPrereq(a.name).length;
+		});
+
 		// Fit in augs before their prereqs
 		let tempAugs = [];
 		let coveredIndices = [];
 		for (let [i, aug] of augmentations.entries()) {
+			ns.tprint(aug);
 			if (coveredIndices.includes(i)) continue;
 			let prereq = ns.getAugmentationPrereq(aug.name);
 			if (prereq.length > 0) {
@@ -81,14 +89,15 @@ export async function main(ns) {
 			}
 			tempAugs.push(aug);
 		}
-		augmentations = tempAugs;
+		// Deep copy augmentations
+		augmentations = JSON.parse(JSON.stringify(tempAugs));
 
 		// Calculate price of augs
 		let stringAugs = '';
 		let totalPrice = 0;
 		for (let [i, aug] of augmentations.entries()) {
 			let updatedAugPrice = aug.price * 1.9 ** i;
-			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '0.000a')} (${ns.nFormat(updatedAugPrice, '0.000a')}). `;
+			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '$0.000a')} (${ns.nFormat(updatedAugPrice, '0.000a')}). `;
 			totalPrice += updatedAugPrice;
 		}
 
