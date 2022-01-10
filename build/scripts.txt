@@ -2,7 +2,10 @@ augmentations/augmentation-lister.js
 augmentations/install-augmentations.js
 augmentations/purchase-augmentations.js
 automaton.js
-download.js
+automators/create-programs.js
+automators/crime.js
+automators/gym.js
+automators/university.js
 exploits/dev-menu.js
 hacking/daemon.js
 hacking/deploy-daemons.js
@@ -10,8 +13,6 @@ hacking/grow.js
 hacking/hack-manager.js
 hacking/hack.js
 hacking/weaken.js
-scripts/scripts.js
-scripts/scripts.txt
 stock-market/early-stock-market.js
 stock-market/stock-market.js
 tools/analyze-server.js
@@ -29,4 +30,6 @@ utils/backdoor.js
 utils/connect.js
 utils/contractor.js
 utils/join-faction.js
+utils/upgrade-home-cores.js
+utils/upgrade-home-ram.js
 utils/utils.js

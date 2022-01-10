@@ -6,11 +6,10 @@ Collection of my personal Bitburner scripts.
 
 Run the following command on Bitburner
 
-> wget https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/master/download.js download.js
+> wget https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/master/build/download.js download-bitburner-scripts.js
 
 followed by
 
-> run download.js
-
+> run download-bitburner-scripts.js
 
 to download all the scripts.
