@@ -8,8 +8,7 @@ export async function main(ns) {
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
 
-	let contractorOnline = true;
-	let askedFactions = [];
+	const promptTimer = 15000;
 	const usefulPrograms = [
 		['BruteSSH.exe', 50],
 		['FTPCrack.exe', 100],
@@ -17,6 +16,10 @@ export async function main(ns) {
 		['HTTPWorm.exe', 400],
 		['SQLInject.exe', 800]
 	];
+
+	let contractorOnline = true;
+	let askedFactions = [];
+	let time = ns.getTimeSinceLastAug();
 
 	while (true) {
 		let player = ns.getPlayer();
@@ -69,6 +72,14 @@ export async function main(ns) {
 			ns.print(`Request to join ${factions}.`);
 			ns.exec('/utils/join-factions.js', 'home', 1, ...factions);
 			askedFactions = askedFactions.concat(factions); // Don't ask again
+		}
+
+		// Kill any prompt functions active for longer than promptTimer seconds
+		if (ns.getTimeSinceLastAug() - time > promptTimer) {
+			ns.scriptKill('/utils/upgrade-home-ram.js', 'home');
+			ns.scriptKill('/utils/upgrade-home-cores.js', 'home');
+			ns.scriptKill('/utils/join-factions.js', 'home');
+			time = ns.getTimeSinceLastAug();
 		}
 
 		await ns.sleep(1000);
