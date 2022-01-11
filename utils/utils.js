@@ -169,9 +169,9 @@ export function getFreeRam(ns, servers, hackables) {
 	let freeRams = [];
 	let unhackables = [];
 	for (let server of servers) {
-		if (hackables && ns.scriptRunning('daemon.js', server)) {
+		if (hackables && ns.scriptRunning('/hacking/daemon.js', server)) {
 			for (let hackable of hackables) {
-				if (ns.getRunningScript('daemon.js', server, hackable)) unhackables.push(hackable);
+				if (ns.getRunningScript('/hacking/daemon.js', server, hackable)) unhackables.push(hackable);
 			}
 			continue;
 		}
