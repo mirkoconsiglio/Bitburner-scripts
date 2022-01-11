@@ -166,14 +166,14 @@ export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs) {
 }
 
 export function getFreeRam(ns, servers, hackables) {
+	let scripts = getScripts();
 	let freeRams = [];
 	let unhackables = [];
 	for (let server of servers) {
-		if (hackables && ns.scriptRunning('/hacking/daemon.js', server)) {
+		if (hackables && ns.scriptRunning(scripts.daemon, server)) {
 			for (let hackable of hackables) {
-				if (ns.getRunningScript('/hacking/daemon.js', server, hackable)) {
+				if (ns.getRunningScript(scripts.daemon, server, hackable)) {
 					unhackables.push(hackable);
-					break;
 				}
 			}
 			continue;
