@@ -171,13 +171,16 @@ export function getFreeRam(ns, servers, hackables) {
 	for (let server of servers) {
 		if (hackables && ns.scriptRunning('/hacking/daemon.js', server)) {
 			for (let hackable of hackables) {
-				if (ns.getRunningScript('/hacking/daemon.js', server, hackable)) unhackables.push(hackable);
+				if (ns.getRunningScript('/hacking/daemon.js', server, hackable)) {
+					unhackables.push(hackable);
+					break;
+				}
 			}
 			continue;
 		}
 		let freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
 		if (server === 'home') freeRam -= 32;
-		if (freeRam > 0) freeRams.push({host: server, freeRam: freeRam});
+		if (freeRam > 1) freeRams.push({host: server, freeRam: freeRam});
 	}
 	let sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
 	if (hackables) {

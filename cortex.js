@@ -26,7 +26,7 @@ export async function main(ns) {
 
 		// Heal player
 		if (player.hp < player.max_hp) {
-			let money = ns.nFormat(ns.hospitalize(), '0.000a');
+			let money = ns.nFormat(ns.hospitalize(), '$0.000a');
 			printBoth(ns, `Player hospitalized for ${money}`);
 		}
 
@@ -58,7 +58,7 @@ export async function main(ns) {
 			if (!(server === 'home' ||
 				ns.getServer(server).backdoorInstalled ||
 				ns.isRunning('/utils/backdoor.js', 'home', server))) {
-				printBoth(ns, `Installing backdoor on ${server}.`);
+				ns.print(`Installing backdoor on ${server}.`);
 				ns.exec('/utils/backdoor.js', 'home', 1, server);
 			}
 		}
@@ -74,7 +74,7 @@ export async function main(ns) {
 			askedFactions = askedFactions.concat(factions); // Don't ask again
 		}
 
-		// Kill any prompt functions active for longer than promptTimer seconds
+		// Kill any prompt functions active for longer than 15 (promptTimer) seconds
 		if (ns.getTimeSinceLastAug() - time > promptTimer) {
 			ns.scriptKill('/utils/upgrade-home-ram.js', 'home');
 			ns.scriptKill('/utils/upgrade-home-cores.js', 'home');

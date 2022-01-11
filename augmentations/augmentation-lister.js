@@ -10,7 +10,7 @@ export async function main(ns) {
 			if (augmentation !== 'NeuroFlux Governor') {
 				await ns.write('augmentations-list.txt', `\n--- ${augmentation} ---\n`, 'a');
 				for (let [stat, multiplier] of Object.entries(ns.getAugmentationStats(augmentation))) {
-					await ns.write('augmentations-list.txt', `${stat}: ${multiplier}\n`, 'a');
+					await ns.write('/augmentations/list.txt', `${stat}: ${multiplier}\n`, 'a');
 				}
 			}
 		}
