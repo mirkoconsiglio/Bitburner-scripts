@@ -32,7 +32,7 @@ tools/reputation.js
 utils/backdoor.js
 utils/connect.js
 utils/contractor.js
-utils/join-faction.js
+utils/join-factions.js
 utils/upgrade-home-cores.js
 utils/upgrade-home-ram.js
 utils/utils.js

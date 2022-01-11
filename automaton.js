@@ -64,13 +64,11 @@ export async function main(ns) {
 		manageAndHack(ns);
 
 		// Check faction invites
-		let factions = ns.checkFactionInvitations();
-		for (let faction of factions) {
-			if (!askedFactions.includes(faction)) {
-				ns.print(`Request to join ${faction}.`);
-				ns.exec('/utils/join-faction.js', 'home', 1, faction)
-				askedFactions.push(faction); // Don't ask again
-			}
+		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
+		if (factions.length > 0) {
+			ns.print(`Request to join ${factions}.`);
+			ns.exec('/utils/join-factions.js', 'home', 1, ...factions);
+			askedFactions.push(faction); // Don't ask again
 		}
 
 		await ns.sleep(1000);
