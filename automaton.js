@@ -9,7 +9,7 @@ export async function main(ns) {
 	await copyScriptsToAll(ns);
 
 	let contractorOnline = true;
-	const askedFactions = [];
+	let askedFactions = [];
 	const usefulPrograms = [
 		['BruteSSH.exe', 50],
 		['FTPCrack.exe', 100],
@@ -68,7 +68,7 @@ export async function main(ns) {
 		if (factions.length > 0) {
 			ns.print(`Request to join ${factions}.`);
 			ns.exec('/utils/join-factions.js', 'home', 1, ...factions);
-			askedFactions.push(faction); // Don't ask again
+			askedFactions = askedFactions.concat(factions); // Don't ask again
 		}
 
 		await ns.sleep(1000);
