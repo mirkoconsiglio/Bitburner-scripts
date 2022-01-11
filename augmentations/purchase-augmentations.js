@@ -14,7 +14,8 @@ export async function main(ns) {
 		['combat', false],
 		['company', false],
 		['hacknet', false],
-		['bladeburner', false]
+		['bladeburner', false],
+		['install', false]
 	]);
 
 	// Check criterions for determining if augmentations are useful
@@ -144,6 +145,11 @@ export async function main(ns) {
 				ns.exit();
 			}
 		}
+	}
+
+	// Ask to install augmentations
+	if (args.install && await ns.prompt('Install augmentations?')) {
+		ns.installAugmentations('cortex.js');
 	}
 }
 
