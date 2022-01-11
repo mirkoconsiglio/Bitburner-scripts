@@ -16,9 +16,9 @@ export async function main(ns) {
 	if (args.course === 'Computer Science' ||
 		args.course === 'Data Structures' ||
 		args.course === 'Networks' ||
-		args.course === 'Algorithms') await studyHack(ns, args.university, args.course, level);
+		args.course === 'Algorithms') await studyHack(ns, args.university, args.course, args.level);
 	else if (args.course === 'Management' ||
-		args.course === 'Leadership') await studyCha(ns, args.university, args.course, level);
+		args.course === 'Leadership') await studyCha(ns, args.university, args.course, args.level);
 	else {
 		ns.tprint(`Invalid course.`);
 		ns.exit();
@@ -30,6 +30,7 @@ async function studyHack(ns, university, course, level) {
 	while (ns.getPlayer().hacking < level) {
 		await ns.sleep(1000);
 	}
+	ns.stopAction();
 }
 
 async function studyCha(ns, university, course, level) {
@@ -37,4 +38,5 @@ async function studyCha(ns, university, course, level) {
 	while (ns.getPlayer().charisma < level) {
 		await ns.sleep(1000);
 	}
+	ns.stopAction();
 }

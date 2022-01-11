@@ -17,10 +17,10 @@ export async function main(ns) {
 		ns.exit();
 	}
 
-	if (args.str || args.all) await workOutStr(ns, args.gym, level);
-	if (args.def || args.all) await workOutDef(ns, args.gym, level);
-	if (args.dex || args.all) await workOutDex(ns, args.gym, level);
-	if (args.agi || args.all) await workOutAgi(ns, args.gym, level);
+	if (args.str || args.all) await workOutStr(ns, args.gym, args.level);
+	if (args.def || args.all) await workOutDef(ns, args.gym, args.level);
+	if (args.dex || args.all) await workOutDex(ns, args.gym, args.level);
+	if (args.agi || args.all) await workOutAgi(ns, args.gym, args.level);
 }
 
 async function workOutStr(ns, gym, level) {
@@ -28,6 +28,7 @@ async function workOutStr(ns, gym, level) {
 	while (ns.getPlayer().strength < level) {
 		await ns.sleep(1000);
 	}
+	ns.stopAction();
 }
 
 async function workOutDef(ns, gym, level) {
@@ -35,6 +36,7 @@ async function workOutDef(ns, gym, level) {
 	while (ns.getPlayer().defense < level) {
 		await ns.sleep(1000);
 	}
+	ns.stopAction();
 }
 
 async function workOutDex(ns, gym, level) {
@@ -42,6 +44,7 @@ async function workOutDex(ns, gym, level) {
 	while (ns.getPlayer().dexterity < level) {
 		await ns.sleep(1000);
 	}
+	ns.stopAction();
 }
 
 async function workOutAgi(ns, gym, level) {
@@ -49,4 +52,5 @@ async function workOutAgi(ns, gym, level) {
 	while (ns.getPlayer().agility < level) {
 		await ns.sleep(1000);
 	}
+	ns.stopAction();
 }
