@@ -22,6 +22,7 @@ stock-market/early-stock-market.js
 stock-market/stock-market.js
 tools/analyze-server.js
 tools/bitnode-multipliers.js
+tools/connect.js
 tools/cost-pserv.js
 tools/favor.js
 tools/get-all-text.js
@@ -31,7 +32,6 @@ tools/monitor.js
 tools/pserv-buyer.js
 tools/reputation.js
 utils/backdoor.js
-utils/connect.js
 utils/contractor.js
 utils/join-factions.js
 utils/upgrade-home-cores.js
