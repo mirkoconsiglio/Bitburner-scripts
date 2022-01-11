@@ -2,7 +2,6 @@ import {getAccessibleServers, getOptimalHackable, getScripts, scriptsToCopy} fro
 
 export async function main(ns) {
 	let power = ns.args[0];
-	let runOnHome = ns.args[1] ? ns.args[1] : 1;
 
 	if (power < 0 || power > 20) {
 		ns.tprint(`Invalid RAM amount.`);
@@ -28,6 +27,6 @@ export async function main(ns) {
 		ns.tprint(`Buying server: ${server}, target RAM: ${targetRam}`);
 		ns.purchaseServer(server, targetRam);
 		await ns.scp(scriptsToCopy(), 'home', server);
-		ns.exec(getScripts().daemon, server, 1, hackables[i + runOnHome]);
+		ns.exec(getScripts().daemon, server, 1, hackables[i + 1]);
 	}
 }
