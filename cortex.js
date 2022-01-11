@@ -46,11 +46,11 @@ export async function main(ns) {
 
 		// Upgrade home RAM
 		if (ns.getUpgradeHomeRamCost() <= ns.getServerMoneyAvailable('home')) {
-			ns.exec('/utils/upgrade-home-ram.js', 'home', 1, ns.getUpgradeHomeRamCost());
+			ns.exec('/utils/upgrade-home-ram.js', 'home', 1);
 		}
 		// Upgrade home cores
 		if (ns.getUpgradeHomeCoresCost() <= ns.getServerMoneyAvailable('home')) {
-			ns.exec('/utils/upgrade-home-cores.js', 'home', 1, ns.getUpgradeHomeCoresCost());
+			ns.exec('/utils/upgrade-home-cores.js', 'home', 1);
 		}
 
 		// Backdoor servers
