@@ -26,8 +26,8 @@ export async function main(ns) {
 
 		// Heal player
 		if (player.hp < player.max_hp) {
-			let money = ns.nFormat(ns.hospitalize(), '$0.000a');
-			printBoth(ns, `Player hospitalized for ${money}`);
+			let cost = ns.hospitalize()
+			printBoth(ns, `Player hospitalized for ${ns.nFormat(cost, '$0.000a')}`);
 		}
 
 		// Contract solver (disables itself if any solution was incorrect)
