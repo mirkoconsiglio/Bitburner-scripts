@@ -1,0 +1,4 @@
+1.1 -> 1.2 -> 1.3   Max SF1 28% all
+5.1                 Int, Formulas & getBitNodeMultipliers()
+4.1 -> 4.2 -> 4.3   Max SF4 Singularity functions
+5.2 -> 5.3          Max SF5 14% hacking

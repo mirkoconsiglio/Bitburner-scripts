@@ -1,0 +1,1377 @@
+
+
+----- CyberSec -----
+
+--- BitWire ---
+hacking_mult: 1.05
+
+--- Synaptic Enhancement Implant ---
+hacking_speed_mult: 1.03
+
+--- Cranial Signal Processors - Gen I ---
+hacking_mult: 1.05
+hacking_speed_mult: 1.01
+
+--- Cranial Signal Processors - Gen II ---
+hacking_mult: 1.07
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+
+--- Neurotrainer I ---
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+
+
+----- Tian Di Hui -----
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+
+--- Social Negotiation Assistant (S.N.A) ---
+company_rep_mult: 1.15
+faction_rep_mult: 1.15
+work_money_mult: 1.1
+
+--- Neuroreceptor Management Implant ---
+
+
+----- Netburners -----
+
+--- Hacknet Node CPU Architecture Neural-Upload ---
+hacknet_node_money_mult: 1.15
+hacknet_node_purchase_cost_mult: 0.85
+
+--- Hacknet Node Cache Architecture Neural-Upload ---
+hacknet_node_money_mult: 1.1
+hacknet_node_level_cost_mult: 0.85
+
+--- Hacknet Node NIC Architecture Neural-Upload ---
+hacknet_node_money_mult: 1.1
+hacknet_node_purchase_cost_mult: 0.9
+
+--- Hacknet Node Kernel Direct-Neural Interface ---
+hacknet_node_money_mult: 1.25
+
+--- Hacknet Node Core Direct-Neural Interface ---
+hacknet_node_money_mult: 1.45
+
+
+----- Sector-12 -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- CashRoot Starter Kit ---
+
+
+----- Chongqing -----
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- DataJack ---
+hacking_money_mult: 1.25
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- Neuregen Gene Modification ---
+hacking_exp_mult: 1.4
+
+
+----- New Tokyo -----
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- DataJack ---
+hacking_money_mult: 1.25
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- NutriGen Implant ---
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+
+
+----- Ishima -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- INFRARET Enhancement ---
+dexterity_mult: 1.1
+crime_money_mult: 1.1
+crime_success_mult: 1.25
+
+
+----- Aevum -----
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- Synaptic Enhancement Implant ---
+hacking_speed_mult: 1.03
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Neurotrainer I ---
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+
+--- PCMatrix ---
+charisma_mult: 1.0777
+charisma_exp_mult: 1.0777
+company_rep_mult: 1.0777
+faction_rep_mult: 1.0777
+crime_money_mult: 1.0777
+crime_success_mult: 1.0777
+work_money_mult: 1.777
+
+
+----- Volhaven -----
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- DermaForce Particle Barrier ---
+defense_mult: 1.4
+
+
+----- NiteSec -----
+
+--- BitWire ---
+hacking_mult: 1.05
+
+--- Artificial Synaptic Potentiation ---
+hacking_exp_mult: 1.05
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+
+--- Neural-Retention Enhancement ---
+hacking_exp_mult: 1.25
+
+--- DataJack ---
+hacking_money_mult: 1.25
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Cranial Signal Processors - Gen II ---
+hacking_mult: 1.07
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+
+--- Neurotrainer II ---
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+
+--- CRTX42-AA Gene Modification ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+
+
+----- The Black Hand -----
+
+--- Artificial Synaptic Potentiation ---
+hacking_exp_mult: 1.05
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+
+--- Enhanced Myelin Sheathing ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+
+--- DataJack ---
+hacking_money_mult: 1.25
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+
+--- Cranial Signal Processors - Gen IV ---
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.2
+hacking_grow_mult: 1.25
+
+--- The Black Hand ---
+hacking_mult: 1.1
+strength_mult: 1.15
+dexterity_mult: 1.15
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.1
+
+
+----- BitRunners -----
+
+--- Artificial Bio-neural Network Implant ---
+hacking_mult: 1.12
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.15
+
+--- Enhanced Myelin Sheathing ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+
+--- DataJack ---
+hacking_money_mult: 1.25
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- Neural Accelerator ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.15
+hacking_money_mult: 1.2
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+
+--- Cranial Signal Processors - Gen IV ---
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.2
+hacking_grow_mult: 1.25
+
+--- Cranial Signal Processors - Gen V ---
+hacking_mult: 1.3
+hacking_money_mult: 1.25
+hacking_grow_mult: 1.75
+
+--- Neurotrainer II ---
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+
+--- BitRunners Neurolink ---
+hacking_mult: 1.15
+hacking_exp_mult: 1.2
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+
+
+----- ECorp -----
+
+--- Graphene Bionic Spine Upgrade ---
+strength_mult: 1.6
+defense_mult: 1.6
+dexterity_mult: 1.6
+agility_mult: 1.6
+
+--- Graphene Bionic Legs Upgrade ---
+agility_mult: 2.5
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- PC Direct-Neural Interface ---
+hacking_mult: 1.08
+company_rep_mult: 1.3
+
+--- PC Direct-Neural Interface Optimization Submodule ---
+hacking_mult: 1.1
+company_rep_mult: 1.75
+
+--- ECorp HVMind Implant ---
+hacking_grow_mult: 3
+
+
+----- MegaCorp -----
+
+--- Graphene Bionic Legs Upgrade ---
+agility_mult: 2.5
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+
+--- CordiARC Fusion Reactor ---
+strength_mult: 1.35
+defense_mult: 1.35
+dexterity_mult: 1.35
+agility_mult: 1.35
+strength_exp_mult: 1.35
+defense_exp_mult: 1.35
+dexterity_exp_mult: 1.35
+agility_exp_mult: 1.35
+
+
+----- KuaiGong International -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+
+--- Bionic Legs ---
+agility_mult: 1.6
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+
+--- HyperSight Corneal Implant ---
+dexterity_mult: 1.4
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Photosynthetic Cells ---
+strength_mult: 1.4
+defense_mult: 1.4
+agility_mult: 1.4
+
+
+----- Four Sigma -----
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+
+--- PC Direct-Neural Interface ---
+hacking_mult: 1.08
+company_rep_mult: 1.3
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+
+--- Neurotrainer III ---
+hacking_exp_mult: 1.2
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+charisma_exp_mult: 1.2
+
+
+----- NWO -----
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+
+--- Neurotrainer III ---
+hacking_exp_mult: 1.2
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+charisma_exp_mult: 1.2
+
+--- Power Recirculation Core ---
+hacking_mult: 1.05
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+agility_mult: 1.05
+charisma_mult: 1.05
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+
+--- Xanipher ---
+hacking_mult: 1.2
+strength_mult: 1.2
+defense_mult: 1.2
+dexterity_mult: 1.2
+agility_mult: 1.2
+charisma_mult: 1.2
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+
+--- Hydroflame Left Arm ---
+strength_mult: 2.7
+
+
+----- Blade Industries -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+
+--- Bionic Legs ---
+agility_mult: 1.6
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- PC Direct-Neural Interface ---
+hacking_mult: 1.08
+company_rep_mult: 1.3
+
+--- PC Direct-Neural Interface Optimization Submodule ---
+hacking_mult: 1.1
+company_rep_mult: 1.75
+
+--- HyperSight Corneal Implant ---
+dexterity_mult: 1.4
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Neotra ---
+strength_mult: 1.55
+defense_mult: 1.55
+
+
+----- OmniTek Incorporated -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+
+--- Bionic Legs ---
+agility_mult: 1.6
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- PC Direct-Neural Interface ---
+hacking_mult: 1.08
+company_rep_mult: 1.3
+
+--- OmniTek InfoLoad ---
+hacking_mult: 1.2
+hacking_exp_mult: 1.25
+
+
+----- Bachman & Associates -----
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+
+--- SmartJaw ---
+charisma_mult: 1.5
+charisma_exp_mult: 1.5
+company_rep_mult: 1.25
+faction_rep_mult: 1.25
+
+
+----- Clarke Incorporated -----
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+
+--- Neuronal Densification ---
+hacking_mult: 1.15
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+
+--- nextSENS Gene Modification ---
+hacking_mult: 1.2
+strength_mult: 1.2
+defense_mult: 1.2
+dexterity_mult: 1.2
+agility_mult: 1.2
+charisma_mult: 1.2
+
+
+----- Fulcrum Secret Technologies -----
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- NEMEAN Subdermal Weave ---
+defense_mult: 2.2
+
+--- Graphene Bone Lacings ---
+strength_mult: 1.7
+defense_mult: 1.7
+
+--- Graphene Bionic Spine Upgrade ---
+strength_mult: 1.6
+defense_mult: 1.6
+dexterity_mult: 1.6
+agility_mult: 1.6
+
+--- Graphene Bionic Legs Upgrade ---
+agility_mult: 2.5
+
+--- Artificial Bio-neural Network Implant ---
+hacking_mult: 1.12
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.15
+
+--- Enhanced Myelin Sheathing ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- PC Direct-Neural Interface Optimization Submodule ---
+hacking_mult: 1.1
+company_rep_mult: 1.75
+
+--- PC Direct-Neural Interface NeuroNet Injector ---
+hacking_mult: 1.1
+hacking_speed_mult: 1.05
+company_rep_mult: 2
+
+
+----- Slum Snakes -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- LuminCloaking-V1 Skin Implant ---
+agility_mult: 1.05
+crime_money_mult: 1.1
+
+--- LuminCloaking-V2 Skin Implant ---
+defense_mult: 1.1
+agility_mult: 1.1
+crime_money_mult: 1.25
+
+--- SmartSonar Implant ---
+dexterity_mult: 1.1
+dexterity_exp_mult: 1.15
+crime_money_mult: 1.25
+
+
+----- Tetrads -----
+
+--- HemoRecirculator ---
+strength_mult: 1.08
+defense_mult: 1.08
+dexterity_mult: 1.08
+agility_mult: 1.08
+
+--- LuminCloaking-V1 Skin Implant ---
+agility_mult: 1.05
+crime_money_mult: 1.1
+
+--- LuminCloaking-V2 Skin Implant ---
+defense_mult: 1.1
+agility_mult: 1.1
+crime_money_mult: 1.25
+
+--- Power Recirculation Core ---
+hacking_mult: 1.05
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+agility_mult: 1.05
+charisma_mult: 1.05
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+
+--- Bionic Arms ---
+strength_mult: 1.3
+dexterity_mult: 1.3
+
+
+----- Silhouette -----
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+
+--- TITN-41 Gene-Modification Injection ---
+charisma_mult: 1.15
+charisma_exp_mult: 1.15
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+
+
+----- Speakers for the Dead -----
+
+--- Unstable Circadian Modulator ---
+crime_money_mult: 2
+crime_success_mult: 2
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+
+--- Bionic Legs ---
+agility_mult: 1.6
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+
+--- The Shadow's Simulacrum ---
+company_rep_mult: 1.15
+faction_rep_mult: 1.15
+
+--- Graphene BrachiBlades Upgrade ---
+strength_mult: 1.4
+defense_mult: 1.4
+crime_money_mult: 1.3
+crime_success_mult: 1.1
+
+
+----- The Dark Army -----
+
+--- HemoRecirculator ---
+strength_mult: 1.08
+defense_mult: 1.08
+dexterity_mult: 1.08
+agility_mult: 1.08
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- The Shadow's Simulacrum ---
+company_rep_mult: 1.15
+faction_rep_mult: 1.15
+
+--- Power Recirculation Core ---
+hacking_mult: 1.05
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+agility_mult: 1.05
+charisma_mult: 1.05
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+
+--- Graphene Bionic Arms Upgrade ---
+strength_mult: 1.85
+dexterity_mult: 1.85
+
+
+----- The Syndicate -----
+
+--- HemoRecirculator ---
+strength_mult: 1.08
+defense_mult: 1.08
+dexterity_mult: 1.08
+agility_mult: 1.08
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+
+--- NEMEAN Subdermal Weave ---
+defense_mult: 2.2
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+
+--- Bionic Legs ---
+agility_mult: 1.6
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+
+--- The Shadow's Simulacrum ---
+company_rep_mult: 1.15
+faction_rep_mult: 1.15
+
+--- Power Recirculation Core ---
+hacking_mult: 1.05
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+agility_mult: 1.05
+charisma_mult: 1.05
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+
+--- BrachiBlades ---
+strength_mult: 1.15
+defense_mult: 1.15
+crime_money_mult: 1.15
+crime_success_mult: 1.1
+
+
+----- The Covenant -----
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+
+--- NEMEAN Subdermal Weave ---
+defense_mult: 2.2
+
+--- Graphene Bone Lacings ---
+strength_mult: 1.7
+defense_mult: 1.7
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- SPTN-97 Gene Modification ---
+hacking_mult: 1.15
+strength_mult: 1.75
+defense_mult: 1.75
+dexterity_mult: 1.75
+agility_mult: 1.75
+
+
+----- Daedalus -----
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- NEMEAN Subdermal Weave ---
+defense_mult: 2.2
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- The Red Pill ---
+
+
+----- Illuminati -----
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+
+--- NEMEAN Subdermal Weave ---
+defense_mult: 2.2
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+
+--- QLink ---
+hacking_mult: 1.75
+hacking_chance_mult: 2.5
+hacking_speed_mult: 2
+hacking_money_mult: 4

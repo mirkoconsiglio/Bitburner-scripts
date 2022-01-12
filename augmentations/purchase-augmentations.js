@@ -78,7 +78,6 @@ export async function main(ns) {
 		let tempAugs = [];
 		let coveredIndices = [];
 		for (let [i, aug] of augmentations.entries()) {
-			ns.tprint(aug);
 			if (coveredIndices.includes(i)) continue;
 			let prereq = ns.getAugmentationPrereq(aug.name);
 			if (prereq.length > 0) {

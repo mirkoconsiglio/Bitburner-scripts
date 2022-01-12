@@ -127,21 +127,6 @@ export function getAccessibleServers(ns) {
 	return getServers(ns).filter(server => hackServer(ns, server));
 }
 
-export async function backdoor(ns, server) {
-	let route = routeFinder(ns, server);
-	if (route && hackServer(ns, server)) {
-		for (let serv of route) {
-			ns.connect(serv);
-		}
-		ns.tprint(`Installing backdoor on ${server}.`);
-		await ns.installBackdoor();
-		ns.tprint(`Backdoor successfully installed.`);
-		for (let serv of route.reverse()) {
-			ns.connect(serv);
-		}
-	}
-}
-
 export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs) {
 	let scriptRam = ns.getScriptRam(script);
 	let remainingThread = threads;
