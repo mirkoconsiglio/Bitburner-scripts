@@ -251,16 +251,16 @@ function stockTrader(maxTrades, stockPrices) {
 	return highestProfit[maxTrades - 1][stockPrices.length - 1];
 }
 
-function genIPAddresses(array) {
+function genIPAddresses(string) {
 	let ips = [];
-	for (let i = 1; i < array.length - 2; i++) {
-		for (let j = i + 1; j < array.length - 1; j++) {
-			for (let k = j + 1; k < array.length; k++) {
+	for (let i = 1; i < string.length - 2; i++) {
+		for (let j = i + 1; j < string.length - 1; j++) {
+			for (let k = j + 1; k < string.length; k++) {
 				const ip = [
-					array.slice(0, i),
-					array.slice(i, j),
-					array.slice(j, k),
-					array.slice(k)
+					string.slice(0, i),
+					string.slice(i, j),
+					string.slice(j, k),
+					string.slice(k)
 				];
 
 				let isValid = true;
@@ -272,13 +272,11 @@ function genIPAddresses(array) {
 			}
 		}
 	}
-
 	return ips;
 }
 
 function isValidIpSegment(segment) {
-	return !((segment[0] === 0 && segment !== 0) || segment > 255);
-
+	return !((segment[0] === '0' && segment !== '0') || segment > 255);
 }
 
 function mergeOverlappingIntervals(array) {
