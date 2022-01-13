@@ -10,9 +10,18 @@ export async function main(ns) {
 		for (let augmentation of augmentations) {
 			if (augmentation !== 'NeuroFlux Governor') {
 				await ns.write(file, `\n--- ${augmentation} ---\n`, 'a');
-				for (let [stat, multiplier] of Object.entries(ns.getAugmentationStats(augmentation))) {
-					await ns.write(file, `${stat}: ${multiplier}\n`, 'a');
-				}
+				let stats = Object.entries(ns.getAugmentationStats(augmentation));
+				if (stats.length > 0) {
+					for (let [stat, multiplier] of stats) {
+						await ns.write(file, `${stat}: ${multiplier}\n`, 'a');
+					}
+				} else await ns.write(file, `Special\n`, 'a');
+				let price = ns.getAugmentationPrice(augmentation);
+				let repReq = ns.getAugmentationRepReq(augmentation);
+				let prereq = ns.getAugmentationPrereq(augmentation);
+				await ns.write(file, `Price: ${ns.nFormat(price, '$0.000a')}\n`, 'a');
+				await ns.write(file, `Rep: ${ns.nFormat(repReq, '0.000a')}\n`, 'a');
+				if (prereq.length > 0) await ns.write(file, `Prereq: ${prereq}\n`, 'a');
 			}
 		}
 	}
