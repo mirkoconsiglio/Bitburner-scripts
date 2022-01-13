@@ -8,7 +8,9 @@ export async function main(ns) {
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
 
-	const promptTimer = 15000;
+	const promptTimer = 15 * 1000; // 15 seconds
+	const upgradeRamTimer = 5 * 60 * 1000; // 5 minutes
+	const upgradeCoresTimer = 5 * 60 * 1000; // 5 minutes
 	const usefulPrograms = [
 		['BruteSSH.exe', 50],
 		['FTPCrack.exe', 100],
@@ -19,7 +21,9 @@ export async function main(ns) {
 
 	let contractorOnline = true;
 	let askedFactions = [];
-	let time = ns.getTimeSinceLastAug();
+	let promptTime = ns.getTimeSinceLastAug();
+	let upgradeRamTime = ns.getTimeSinceLastAug();
+	let upgradeCoresTime = ns.getTimeSinceLastAug();
 
 	while (true) {
 		let player = ns.getPlayer();
@@ -34,7 +38,7 @@ export async function main(ns) {
 		if (contractorOnline) contractorOnline = contractor(ns);
 
 		// Purchase TOR
-		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR.`);
+		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router.`);
 		// Purchase only useful programs
 		if (player.tor) {
 			for (let [program, hackingLevel] of usefulPrograms) {
@@ -45,12 +49,18 @@ export async function main(ns) {
 		}
 
 		// Upgrade home RAM
-		if (ns.getUpgradeHomeRamCost() <= ns.getServerMoneyAvailable('home')) {
+		if (ns.getUpgradeHomeRamCost() <= ns.getServerMoneyAvailable('home') &&
+			ns.getTimeSinceLastAug() - upgradeRamTime > upgradeRamTimer) {
 			ns.exec('/utils/upgrade-home-ram.js', 'home', 1);
+			upgradeRamTime = ns.getTimeSinceLastAug();
+			promptTime = ns.getTimeSinceLastAug();
 		}
 		// Upgrade home cores
-		if (ns.getUpgradeHomeCoresCost() <= ns.getServerMoneyAvailable('home')) {
+		if (ns.getUpgradeHomeCoresCost() <= ns.getServerMoneyAvailable('home') &&
+			ns.getTimeSinceLastAug() - upgradeCoresTime > upgradeCoresTimer) {
 			ns.exec('/utils/upgrade-home-cores.js', 'home', 1);
+			upgradeCoresTime = ns.getTimeSinceLastAug();
+			promptTime = ns.getTimeSinceLastAug();
 		}
 
 		// Backdoor servers
@@ -72,14 +82,15 @@ export async function main(ns) {
 			ns.print(`Request to join ${factions}.`);
 			ns.exec('/utils/join-factions.js', 'home', 1, ...factions);
 			askedFactions = askedFactions.concat(factions); // Don't ask again
+			promptTime = ns.getTimeSinceLastAug();
 		}
 
-		// Kill any prompt functions active for longer than 15 (promptTimer) seconds
-		if (ns.getTimeSinceLastAug() - time > promptTimer) {
+		// Kill any prompt functions active for longer than 15 seconds
+		if (ns.getTimeSinceLastAug() - promptTime > promptTimer) {
 			ns.scriptKill('/utils/upgrade-home-ram.js', 'home');
 			ns.scriptKill('/utils/upgrade-home-cores.js', 'home');
 			ns.scriptKill('/utils/join-factions.js', 'home');
-			time = ns.getTimeSinceLastAug();
+			promptTime = ns.getTimeSinceLastAug();
 		}
 
 		await ns.sleep(1000);
