@@ -21,9 +21,9 @@ export async function main(ns) {
 
 	let contractorOnline = true;
 	let askedFactions = [];
-	let promptTime = ns.getTimeSinceLastAug();
-	let upgradeRamTime = ns.getTimeSinceLastAug();
-	let upgradeCoresTime = ns.getTimeSinceLastAug();
+	let promptTime = promptTimer;
+	let upgradeRamTime = upgradeRamTimer;
+	let upgradeCoresTime = upgradeCoresTimer;
 
 	while (true) {
 		let player = ns.getPlayer();
