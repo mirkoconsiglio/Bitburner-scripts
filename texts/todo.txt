@@ -1,0 +1,2 @@
+Company automator
+Update hackable cost function
