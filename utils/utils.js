@@ -74,19 +74,11 @@ export function recursiveRouteFinder(ns, parent, host, server, route) {
 }
 
 export function getServers(ns) {
-	let servers = new Set(['home']);
-	recursiveScan('home', servers, ns);
-	return [...servers];
-}
-
-export function recursiveScan(host, servers, ns) {
-	let hosts = ns.scan(host);
-	for (let h of hosts) {
-		if (!servers.has(h)) {
-			servers.add(h);
-			recursiveScan(h, servers, ns);
-		}
+	let serverList = ['home'];
+	for (const s of serverList) {
+		ns.scan(s).filter(n => !serverList.includes(n)).forEach(n => serverList.push(n));
 	}
+	return serverList;
 }
 
 export function hackServer(ns, server) {
