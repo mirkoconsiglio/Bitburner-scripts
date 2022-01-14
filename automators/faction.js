@@ -20,7 +20,7 @@ export async function main(ns) {
 		if (args[faction.toLowerCase()]) {
 			ns.tprint(`Working for ${faction}.`);
 			while (ns.getFactionRep(faction) < args[faction.toLowerCase()]) {
-				if (!ns.isBusy()) ns.workForFaction(faction, workType, ns.isFocused());
+				ns.workForFaction(faction, workType, ns.isFocused());
 				await ns.sleep(1000);
 			}
 		}
