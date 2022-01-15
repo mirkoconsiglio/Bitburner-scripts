@@ -60,7 +60,10 @@ export async function main(ns) {
 			// Sell all stocks
 			for (let sym of ns.stock.getSymbols()) {
 				ns.stock.sell(sym, ns.stock.getMaxShares(sym));
-				ns.stock.sellShort(sym, ns.stock.getMaxShares(sym));
+				if (ns.getPlayer().bitNodeN === 8 ||
+					ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
+					ns.stock.sellShort(sym, ns.stock.getMaxShares(sym));
+				}
 			}
 		}
 	}
@@ -143,6 +146,16 @@ export async function main(ns) {
 				ns.tprint(`Could not purchase The Red Pill`);
 				ns.exit();
 			}
+		}
+	}
+
+	// Ask to purchase 4S market data and its TIX API
+	if (ns.getPlayer().hasTixApiAccess) {
+		if (!ns.getPlayer().has4SDataTixApi && ns.getServerMoneyAvailable('home') >= 25e9) {
+			if (await ns.prompt(`Purchase 4S Data TIX API?`)) ns.stock.purchase4SMarketDataTixApi();
+		}
+		if (!ns.getPlayer().has4SData && ns.getServerMoneyAvailable('home') >= 1e9) {
+			if (await ns.prompt(`Purchase 4S Data?`)) ns.stock.purchase4SMarketData();
 		}
 	}
 
