@@ -1,3 +1,4 @@
+cortex.js
 augmentations/augmentation-lister.js
 augmentations/install-augmentations.js
 augmentations/purchase-augmentations.js
@@ -10,7 +11,6 @@ build/download-bitburner-scripts.js
 build/script-remover.js
 build/scripts.js
 build/scripts.txt
-cortex.js
 exploits/dev-menu.js
 hacking/daemon.js
 hacking/deploy-daemons.js
