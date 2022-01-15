@@ -1,2 +1,4 @@
 Company automator
 Update hackable cost function
+Donate to Faction
+Fix prompts
