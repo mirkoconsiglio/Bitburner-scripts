@@ -11,6 +11,7 @@ build/download-bitburner-scripts.js
 build/script-remover.js
 build/scripts.js
 build/scripts.txt
+build/todo.txt
 exploits/dev-menu.js
 hacking/daemon.js
 hacking/deploy-daemons.js
@@ -23,7 +24,6 @@ stock-market/early-stock-market.js
 stock-market/stock-market.js
 texts/augmentations-list.txt
 texts/bitnode-order.txt
-texts/todo.txt
 tools/analyze-server.js
 tools/bitnode-multipliers.js
 tools/connect.js
