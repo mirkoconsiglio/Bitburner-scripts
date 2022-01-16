@@ -13,10 +13,10 @@ export async function main(ns) {
 	while (true) {
 		let scripts = getScripts();
 		let servers = getAccessibleServers(ns);
-		let hackables = getOptimalHackable(ns, servers).reverse();
-		let [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
+		let hackables = getOptimalHackable(ns, servers);
+		let [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables, true);
 
-		for (let target of filteredHackables) {
+		for (let target of filteredHackables.reverse()) {
 			findPlaceToRun(ns, scripts.grow, threads, freeRams, [target]);
 			findPlaceToRun(ns, scripts.weaken, threads, freeRams, [target]);
 		}
