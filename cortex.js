@@ -1,6 +1,6 @@
 import {manageAndHack} from '/hacking/hack-manager.js';
 import {contractor} from '/utils/contractor.js';
-import {copyScriptsToAll, getAccessibleServers, printBoth} from '/utils/utils.js';
+import {copyScriptsToAll, getAccessibleServers, printBoth, promptScriptRunning} from '/utils/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -8,7 +8,6 @@ export async function main(ns) {
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
 
-	const promptTimer = 15 * 1000; // 15 seconds
 	const upgradeRamTimer = 5 * 60 * 1000; // 5 minutes
 	const upgradeCoresTimer = 5 * 60 * 1000; // 5 minutes
 	const usefulPrograms = [
@@ -21,7 +20,6 @@ export async function main(ns) {
 
 	let contractorOnline = true;
 	let askedFactions = [];
-	let promptTime = promptTimer;
 	let upgradeRamTime = upgradeRamTimer;
 	let upgradeCoresTime = upgradeCoresTimer;
 
@@ -50,17 +48,17 @@ export async function main(ns) {
 
 		// Upgrade home RAM
 		if (ns.getUpgradeHomeRamCost() <= ns.getServerMoneyAvailable('home') &&
-			ns.getTimeSinceLastAug() - upgradeRamTime > upgradeRamTimer) {
+			ns.getTimeSinceLastAug() - upgradeRamTime > upgradeRamTimer &&
+			!promptScriptRunning(ns, 'home')) {
 			ns.exec('/utils/upgrade-home-ram.js', 'home', 1);
 			upgradeRamTime = ns.getTimeSinceLastAug();
-			promptTime = ns.getTimeSinceLastAug();
 		}
 		// Upgrade home cores
 		if (ns.getUpgradeHomeCoresCost() <= ns.getServerMoneyAvailable('home') &&
-			ns.getTimeSinceLastAug() - upgradeCoresTime > upgradeCoresTimer) {
+			ns.getTimeSinceLastAug() - upgradeCoresTime > upgradeCoresTimer &&
+			!promptScriptRunning(ns, 'home')) {
 			ns.exec('/utils/upgrade-home-cores.js', 'home', 1);
 			upgradeCoresTime = ns.getTimeSinceLastAug();
-			promptTime = ns.getTimeSinceLastAug();
 		}
 
 		// Backdoor servers
@@ -78,19 +76,10 @@ export async function main(ns) {
 
 		// Check faction invites
 		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
-		if (factions.length > 0) {
+		if (factions.length > 0 && !promptScriptRunning(ns, 'home')) {
 			ns.print(`Request to join ${factions}.`);
 			ns.exec('/utils/join-factions.js', 'home', 1, ...factions);
 			askedFactions = askedFactions.concat(factions); // Don't ask again
-			promptTime = ns.getTimeSinceLastAug();
-		}
-
-		// Kill any prompt functions active for longer than 15 seconds
-		if (ns.getTimeSinceLastAug() - promptTime > promptTimer) {
-			ns.scriptKill('/utils/upgrade-home-ram.js', 'home');
-			ns.scriptKill('/utils/upgrade-home-cores.js', 'home');
-			ns.scriptKill('/utils/join-factions.js', 'home');
-			promptTime = ns.getTimeSinceLastAug();
 		}
 
 		await ns.sleep(1000);

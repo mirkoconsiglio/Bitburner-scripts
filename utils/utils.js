@@ -142,7 +142,7 @@ export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs) {
 	return false;
 }
 
-export function getFreeRam(ns, servers, hackables) {
+export function getFreeRam(ns, servers, hackables, occupy = false) {
 	let scripts = getScripts();
 	let freeRams = [];
 	let unhackables = [];
@@ -153,7 +153,7 @@ export function getFreeRam(ns, servers, hackables) {
 					unhackables.push(hackable);
 				}
 			}
-			continue;
+			if (!occupy) continue;
 		}
 		let freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
 		if (server === 'home') freeRam -= 32;
@@ -254,4 +254,15 @@ export function isUsefulBladeburner(ns, name) {
 			stats.bladeburner_stamina_gain_mult ||
 			stats.bladeburner_success_chance_mult
 		);
+}
+
+export function promptScriptRunning(ns, server) {
+	for (let script of getPromptScripts()) {
+		if (ns.scriptRunning(script, server)) return true;
+	}
+	return false;
+}
+
+function getPromptScripts() {
+	return ['/utils/join-factions.js', '/utils/upgrade-home-ram.js', '/utils/upgrade-home-cores.js'];
 }
