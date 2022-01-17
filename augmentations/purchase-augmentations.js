@@ -46,7 +46,7 @@ export async function main(ns) {
 		let stocks = false;
 		for (let sym of ns.stock.getSymbols()) {
 			let pos = ns.stock.getPosition(sym);
-			if (pos[0] !== 0 || pos[2] !== 0) {
+			if (pos[0] > 0 || pos[2] > 0) {
 				stocks = true;
 				break;
 			}
@@ -100,7 +100,7 @@ export async function main(ns) {
 		let totalPrice = 0;
 		for (let [i, aug] of augmentations.entries()) {
 			let updatedAugPrice = aug.price * 1.9 ** i;
-			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '$0.000a')} (${ns.nFormat(updatedAugPrice, '0.000a')}). `;
+			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '$0.000a')} (${ns.nFormat(updatedAugPrice, '$0.000a')}). `;
 			totalPrice += updatedAugPrice;
 		}
 
