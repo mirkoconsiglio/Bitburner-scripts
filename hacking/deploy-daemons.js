@@ -1,9 +1,9 @@
 import {getAccessibleServers, getOptimalHackable, getScripts} from '/utils/utils.js';
 
 export async function main(ns) {
-	let scripts = getScripts();
-	let servers = getAccessibleServers(ns);
-	let hackables = getOptimalHackable(ns, servers);
+	const scripts = getScripts();
+	const servers = getAccessibleServers(ns);
+	const hackables = getOptimalHackable(ns, servers);
 
 	if (ns.scriptRunning(scripts.daemon, 'home')) ns.scriptKill(scripts.daemon, 'home');
 	ns.exec(scripts.daemon, 'home', 1, hackables[0]);

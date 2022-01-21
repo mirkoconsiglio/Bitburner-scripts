@@ -3,8 +3,8 @@ import {getFactions} from '/utils/utils.js';
 export async function main(ns) {
 	ns.disableLog('ALL');
 
-	let factions = getFactions();
-	let args = ns.flags([
+	const factions = getFactions();
+	const args = ns.flags([
 		['hacking', false],
 		['field', false],
 		['security', false]

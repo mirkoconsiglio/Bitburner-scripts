@@ -9,7 +9,7 @@ import {
 } from '/utils/utils.js';
 
 export async function main(ns) {
-	let args = ns.flags([
+	const args = ns.flags([
 		['hacking', false],
 		['combat', false],
 		['company', false],
@@ -19,7 +19,7 @@ export async function main(ns) {
 	]);
 
 	// Check criterions for determining if augmentations are useful
-	let criterions = [isUsefulGeneral];
+	const criterions = [isUsefulGeneral];
 	if (args.hacking) criterions.push(isUsefulHacking);
 	if (args.combat) criterions.push(isUsefulCombat);
 	if (args.company) criterions.push(isUsefulCompany);
@@ -54,8 +54,8 @@ export async function main(ns) {
 		// Ask if player wants to sell stocks
 		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) {
 			// Kill stock script
-			if (ns.isRunning('stock_market.js', 'home')) {
-				ns.kill('stock_market.js', 'home');
+			if (ns.isRunning('/stock-market/stock-market.js', 'home')) {
+				ns.kill('/stock-market/stock-market.js', 'home');
 			}
 			// Sell all stocks
 			for (let sym of ns.stock.getSymbols()) {

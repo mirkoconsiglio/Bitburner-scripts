@@ -78,21 +78,19 @@ function largestPrimeFactor(n) {
 		n = Math.floor(n / 2);
 		maxPrime = 2;
 	}
-
 	for (let i = 3; i <= Math.floor(Math.sqrt(n)) + 1; i = i + 2) {
 		while (n % i === 0) {
 			n = Math.floor(n / i);
 			maxPrime = i;
 		}
 	}
-
 	if (n > 2) maxPrime = n;
 
 	return maxPrime;
 }
 
 function subarrayMaxSum(array) {
-	let sumReduce = (a, b) => a + b;
+	const sumReduce = (a, b) => a + b;
 	let maxSum = -Infinity;
 	let sum;
 	for (let i = 0; i < array.length; i++) {
@@ -101,13 +99,12 @@ function subarrayMaxSum(array) {
 			if (sum > maxSum) maxSum = sum;
 		}
 	}
-
 	return maxSum;
 }
 
 function spiralizeMatrix(matrix) {
-	let rows = matrix.length;
-	let cols = matrix[0].length;
+	const rows = matrix.length;
+	const cols = matrix[0].length;
 
 	let maxrow = rows - 1;
 	let maxcol = cols - 1;
@@ -152,14 +149,13 @@ function spiralizeMatrix(matrix) {
 			col++;
 		}
 	}
-
 	return list;
 }
 
 function minPathSum(data) {
-	let total_paths = Math.pow(2, data.length - 1);
+	const totalPaths = Math.pow(2, data.length - 1);
 	let minSum = Infinity;
-	for (let i = 0; i < total_paths; i++) {
+	for (let i = 0; i < totalPaths; i++) {
 		let bin = i.toString(2);
 		while (bin.length < data.length - 1) {
 			bin = '0' + bin;
@@ -169,13 +165,12 @@ function minPathSum(data) {
 		let k = 0;
 		for (let j = 1; j < data.length; j++) {
 			let index = parseInt(bin.charAt(j - 1));
-			k = k + index;
-			sum = sum + data[j][k];
+			k += index;
+			sum += data[j][k];
 		}
 
 		if (sum < minSum) minSum = sum;
 	}
-
 	return minSum;
 }
 
@@ -197,11 +192,10 @@ function factorial(f, n) {
 }
 
 function uniquePathsII(grid) {
-	let gridSum = [];
+	const gridSum = [];
 	for (let i of grid) {
 		gridSum.push(i.slice());
 	}
-
 	for (let i = 0; i < gridSum.length; i++) {
 		for (let j = 0; j < gridSum[0].length; j++) {
 			if (gridSum[i][j] === 1) {
@@ -213,7 +207,6 @@ function uniquePathsII(grid) {
 			}
 		}
 	}
-
 	return gridSum[gridSum.length - 1][gridSum[0].length - 1];
 }
 
@@ -229,7 +222,7 @@ function stockTrader(maxTrades, stockPrices) {
 	}
 	tempArr += ']';
 
-	let highestProfit = JSON.parse(tempArr);
+	const highestProfit = JSON.parse(tempArr);
 
 	for (let i = 0; i < maxTrades; i++) {
 		for (let j = 0; j < stockPrices.length - 1; j++) {
@@ -252,7 +245,7 @@ function stockTrader(maxTrades, stockPrices) {
 }
 
 function genIPAddresses(string) {
-	let ips = [];
+	const ips = [];
 	for (let i = 1; i < string.length - 2; i++) {
 		for (let j = i + 1; j < string.length - 1; j++) {
 			for (let k = j + 1; k < string.length; k++) {
@@ -282,7 +275,7 @@ function isValidIpSegment(segment) {
 function mergeOverlappingIntervals(array) {
 	array.sort((a, b) => a[0] - b[0]);
 
-	let intervals = [array[0].slice()];
+	const intervals = [array[0].slice()];
 	for (let interval of array) {
 		let [x1, y1] = interval;
 		let [, y2] = intervals[intervals.length - 1];
@@ -290,12 +283,11 @@ function mergeOverlappingIntervals(array) {
 		if (y2 >= x1) intervals[intervals.length - 1][1] = Math.max(y1, y2);
 		else intervals.push(interval.slice());
 	}
-
 	return intervals;
 }
 
 function arrayJumpingGame(array) {
-	let reachable = new Array(array.length).fill(0);
+	const reachable = new Array(array.length).fill(0);
 	reachable[0] = 1;
 	for (let i = 0; i < array.length; i++) {
 		let num = array[i];
@@ -304,34 +296,30 @@ function arrayJumpingGame(array) {
 			reachable[i + j] = 1;
 		}
 	}
-
 	return reachable.includes(0) ? 0 : 1;
 }
 
 function totalWaysToSum(n) {
-	let table = [1];
+	const table = [1];
 	for (let i = 0; i < n; i++) {
 		table.push(0);
 	}
-
 	for (let i = 1; i < n; i++) {
 		for (let j = i; j <= n; j++) {
 			table[j] += table[j - i];
 		}
 	}
-
 	return table[n];
 }
 
 function validMathExpressions(data) {
-	let [digits, target] = data;
-	let valid = [];
+	const [digits, target] = data;
+	const valid = [];
 	for (let i = 0; i < 4 ** (digits.length - 1); i++) {
 		let j = i.toString(4);
 		while (j.length < digits.length - 1) {
 			j = '0' + j;
 		}
-
 		if (digits[0] === '0' && j[0] === '0') continue;
 
 		let expr = digits[0];
@@ -357,12 +345,11 @@ function validMathExpressions(data) {
 		}
 		if (eval(expr) === target) valid.push(expr);
 	}
-
 	return valid;
 }
 
 function sanitizeParentheses(data) {
-	let valid = new Set('');
+	const valid = new Set('');
 	let min = data.length;
 	for (let i = 0; i < 2 ** data.length; i++) {
 		let j = i.toString(2);
@@ -394,6 +381,5 @@ function sanitizeParentheses(data) {
 			valid.add(str);
 		}
 	}
-
 	return [...valid];
 }

@@ -21,7 +21,8 @@ export function getScripts() {
 		grow: '/hacking/grow.js',
 		weaken: '/hacking/weaken.js',
 		daemon: '/hacking/daemon.js',
-		utils: '/utils/utils.js'
+		utils: '/utils/utils.js',
+		share: '/utils/share.js'
 	}
 }
 
@@ -48,8 +49,8 @@ export function getPrograms() {
 }
 
 export function routeFinder(ns, server) {
-	let route = [];
-	let found = recursiveRouteFinder(ns, '', ns.getHostname(), server, route);
+	const route = [];
+	const found = recursiveRouteFinder(ns, '', ns.getHostname(), server, route);
 	if (found) return route;
 	else return null;
 }
@@ -74,8 +75,8 @@ export function recursiveRouteFinder(ns, parent, host, server, route) {
 }
 
 export function getServers(ns) {
-	let serverList = ['home'];
-	for (const s of serverList) {
+	const serverList = ['home'];
+	for (let s of serverList) {
 		ns.scan(s).filter(n => !serverList.includes(n)).forEach(n => serverList.push(n));
 	}
 	return serverList;
@@ -105,13 +106,11 @@ export function hackServer(ns, server) {
 		ns.sqlinject(server);
 		portOpened++;
 	}
-
 	if (ns.getServerNumPortsRequired(server) <= portOpened
 		&& ns.getServerRequiredHackingLevel(server) <= ns.getHackingLevel()) {
 		ns.nuke(server);
 		return true;
 	}
-
 	return false;
 }
 
@@ -120,7 +119,7 @@ export function getAccessibleServers(ns) {
 }
 
 export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs) {
-	let scriptRam = ns.getScriptRam(script);
+	const scriptRam = ns.getScriptRam(script);
 	let remainingThread = threads;
 	while (freeRams.length > 0) {
 		let host = freeRams[0].host;
@@ -143,9 +142,9 @@ export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs) {
 }
 
 export function getFreeRam(ns, servers, hackables, occupy = false) {
-	let scripts = getScripts();
-	let freeRams = [];
-	let unhackables = [];
+	const scripts = getScripts();
+	const freeRams = [];
+	const unhackables = [];
 	for (let server of servers) {
 		if (hackables && ns.scriptRunning(scripts.daemon, server)) {
 			for (let hackable of hackables) {
@@ -159,7 +158,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 		if (server === 'home') freeRam -= 32;
 		if (freeRam > 1) freeRams.push({host: server, freeRam: freeRam});
 	}
-	let sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
+	const sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
 	if (hackables) {
 		let filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
 		return [sortedFreeRams, filteredHackables];
@@ -174,14 +173,14 @@ export function getOptimalHackable(ns, servers) {
 }
 
 function costFn(ns, server) {
-	let hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
-	let grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
-	let weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
+	const hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
+	const grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
+	const weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
 	return hack / (grow * weaken);
 }
 
 export function isUsefulGeneral(ns, name) {
-	let stats = ns.getAugmentationStats(name);
+	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful general augmentations
 			stats.faction_rep_mult ||
@@ -193,7 +192,7 @@ export function isUsefulGeneral(ns, name) {
 }
 
 export function isUsefulHacking(ns, name) {
-	let stats = ns.getAugmentationStats(name);
+	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful hacking augmentations
 			stats.hacking_mult ||
@@ -206,7 +205,7 @@ export function isUsefulHacking(ns, name) {
 }
 
 export function isUsefulCombat(ns, name) {
-	let stats = ns.getAugmentationStats(name);
+	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful combat augmentations
 			stats.agility_exp_mult ||
@@ -223,7 +222,7 @@ export function isUsefulCombat(ns, name) {
 }
 
 export function isUsefulCompany(ns, name) {
-	let stats = ns.getAugmentationStats(name);
+	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful company augmentations
 			stats.charisma_exp_mult ||
@@ -234,7 +233,7 @@ export function isUsefulCompany(ns, name) {
 }
 
 export function isUsefulHacknet(ns, name) {
-	let stats = ns.getAugmentationStats(name);
+	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful hacknet augmentations
 			stats.hacknet_node_core_cost_mult ||
@@ -246,7 +245,7 @@ export function isUsefulHacknet(ns, name) {
 }
 
 export function isUsefulBladeburner(ns, name) {
-	let stats = ns.getAugmentationStats(name);
+	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful bladeburner augmentations
 			stats.bladeburner_analysis_mult ||

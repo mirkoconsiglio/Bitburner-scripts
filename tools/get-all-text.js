@@ -1,7 +1,7 @@
 import {getServers} from '/utils/utils.js';
 
 export async function main(ns) {
-	let servers = getServers(ns);
+	const servers = getServers(ns);
 	for (let server of servers) {
 		let files = ns.ls(server);
 		for (let file of files) {

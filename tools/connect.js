@@ -1,8 +1,8 @@
 import {routeFinder} from '/utils/utils.js';
 
 export async function main(ns) {
-	let server = ns.args[0];
-	let route = routeFinder(ns, server);
+	const server = ns.args[0];
+	const route = routeFinder(ns, server);
 	if (route) {
 		for (let serv of route) {
 			ns.connect(serv);

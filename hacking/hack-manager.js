@@ -16,11 +16,11 @@ export async function main(ns) {
 }
 
 export function manageAndHack(ns) {
-	let scripts = getScripts();
-	let servers = getAccessibleServers(ns);
-	let hackables = getOptimalHackable(ns, servers);
-	let [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
-	let hackstates = getHackStates(ns, servers, filteredHackables);
+	const scripts = getScripts();
+	const servers = getAccessibleServers(ns);
+	const hackables = getOptimalHackable(ns, servers);
+	const [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
+	const hackstates = getHackStates(ns, servers, filteredHackables);
 	for (let target of filteredHackables) {
 		let money = ns.getServerMoneyAvailable(target);
 		let maxMoney = ns.getServerMaxMoney(target);
@@ -60,8 +60,8 @@ export function manageAndHack(ns) {
 }
 
 function getHackStates(ns, servers, hackables) {
-	let scripts = getScripts();
-	let hackstates = new Map();
+	const scripts = getScripts();
+	const hackstates = new Map();
 	for (let server of servers.values()) {
 		for (let hackable of hackables.values()) {
 			let weakenScript = ns.getRunningScript(scripts.weaken, server, hackable);

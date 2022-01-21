@@ -1,8 +1,8 @@
 import {getFactions} from '/utils/utils.js';
 
 export async function main(ns) {
-	let file = '/texts/augmentations-list.txt';
-	let factions = getFactions();
+	const file = '/texts/augmentations-list.txt';
+	const factions = getFactions();
 	await ns.write(file, '', 'w');
 	for (let faction of factions) {
 		await ns.write(file, `\n\n----- ${faction} -----\n`, 'a');

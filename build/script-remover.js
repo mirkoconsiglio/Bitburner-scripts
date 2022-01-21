@@ -1,5 +1,5 @@
 export async function main(ns) {
-	let scriptsToKeep = ['/build/scripts.txt', '/build/download-bitburner-scripts.js'];
+	const scriptsToKeep = ['/build/scripts.txt', '/build/download-bitburner-scripts.js'];
 	ns.read('/build/scripts.txt').split('\n').forEach((script) => {
 		if (script.includes('/')) scriptsToKeep.push('/' + script);
 		else scriptsToKeep.push(script);
