@@ -15,8 +15,8 @@ export async function main(ns) {
 		gangJoined = ns.args[0];
 	} else gangJoined = ns.gang.getGangInformation().faction;
 
-	const str = 500;
-	const str_mult = 1.5;
+	const earlyStrength = 50;
+	const lateStrength = 500;
 	const otherGangs = Object.keys(ns.gang.getOtherGangInformation()).filter(faction => faction !== gangJoined);
 
 	let c = 0;
@@ -39,7 +39,7 @@ export async function main(ns) {
 		// Check for ascensions
 		for (let gangMember of gangRoster) {
 			if (!ns.gang.getAscensionResult(gangMember.name)) continue;
-			if (ns.gang.getAscensionResult(gangMember.name).str > str_mult) ns.gang.ascendMember(gangMember.name);
+			if (ns.gang.getAscensionResult(gangMember.name).str >= asc_mult(gangMember)) ns.gang.ascendMember(gangMember.name);
 		}
 		// Check for equipment purchases
 		for (let equipment of ns.gang.getEquipmentNames()) {
@@ -52,12 +52,12 @@ export async function main(ns) {
 		// Assign tasks
 		let clashChance = Array.from(otherGangs, (faction) => ns.gang.getChanceToWinClash(faction));
 		for (let gangMember of gangRoster) {
-			if (gangMember.str > 100 && gangRoster.length < 6) ns.gang.setMemberTask(gangMember.name, 'Mug People');
-			else if (gangMember.str < 500) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
-			else if (myGang.wantedPenalty < 0.05) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
+			if (gangMember.str > earlyStrength && gangRoster.length < 6) ns.gang.setMemberTask(gangMember.name, 'Mug People');
+			else if (gangMember.str < lateStrength) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
+			else if (myGang.wantedPenalty > 0) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
 			else if (clashChance.some(s => s < 0.8) && myGang.territory !== 1 && gangRoster.length === 12) {
 				ns.gang.setMemberTask(gangMember.name, 'Territory Warfare');
-			} else ns.gang.setMemberTask(gangMember.name, 'Human Trafficking');
+			} else ns.gang.setMemberTask(gangMember.name, 'Traffick Illegal Arms');
 		}
 		// Territory warfare checks
 		if (clashChance.every(e => e > 0.7) && myGang.territory !== 1) ns.gang.setTerritoryWarfare(true);
@@ -65,4 +65,8 @@ export async function main(ns) {
 
 		await ns.sleep(1000);
 	}
+}
+
+function asc_mult(gangMember) {
+	return Math.max(1.6 + (1 - gangMember.str_asc_mult) / 58, 1.1);
 }
