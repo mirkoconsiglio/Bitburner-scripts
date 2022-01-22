@@ -42,7 +42,7 @@ export async function main(ns) {
 			if (ns.gang.getAscensionResult(gangMember.name).str >= asc_mult(gangMember)) ns.gang.ascendMember(gangMember.name);
 		}
 		// Check for equipment purchases
-		for (let equipment of ns.gang.getEquipmentNames()) {
+		for (let equipment of ns.gang.getEquipmentNames().filter(equipment => !ns.gang.getEquipmentStats(equipment).hack)) {
 			for (let gangMember of gangRoster) {
 				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home') && gangMember.str >= lateStrength) {
 					ns.gang.purchaseEquipment(gangMember.name, equipment);
@@ -52,7 +52,7 @@ export async function main(ns) {
 		// Assign tasks
 		let clashChance = Array.from(otherGangs, (faction) => ns.gang.getChanceToWinClash(faction));
 		for (let gangMember of gangRoster) {
-			if (gangMember.str > earlyStrength && gangRoster.length < 6) ns.gang.setMemberTask(gangMember.name, 'Mug People');
+			if (gangMember.str >= earlyStrength && gangRoster.length <= 6) ns.gang.setMemberTask(gangMember.name, 'Mug People');
 			else if (gangMember.str < lateStrength) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
 			else if (myGang.wantedPenalty < 0.05) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
 			else if (clashChance.some(s => s < 0.8) && myGang.territory !== 1 && gangRoster.length === 12) {
