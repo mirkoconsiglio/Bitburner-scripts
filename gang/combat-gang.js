@@ -44,7 +44,7 @@ export async function main(ns) {
 		// Check for equipment purchases
 		for (let equipment of ns.gang.getEquipmentNames()) {
 			for (let gangMember of gangRoster) {
-				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home') && gangMember.str >= str) {
+				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home') && gangMember.str >= lateStrength) {
 					ns.gang.purchaseEquipment(gangMember.name, equipment);
 				}
 			}
@@ -54,7 +54,7 @@ export async function main(ns) {
 		for (let gangMember of gangRoster) {
 			if (gangMember.str > earlyStrength && gangRoster.length < 6) ns.gang.setMemberTask(gangMember.name, 'Mug People');
 			else if (gangMember.str < lateStrength) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
-			else if (myGang.wantedPenalty > 0) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
+			else if (myGang.wantedPenalty < 0.9) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
 			else if (clashChance.some(s => s < 0.8) && myGang.territory !== 1 && gangRoster.length === 12) {
 				ns.gang.setMemberTask(gangMember.name, 'Territory Warfare');
 			} else ns.gang.setMemberTask(gangMember.name, 'Traffick Illegal Arms');
