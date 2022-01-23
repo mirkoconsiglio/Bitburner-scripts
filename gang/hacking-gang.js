@@ -35,11 +35,7 @@ export async function main(ns) {
 			if (ns.gang.getAscensionResult(gangMember.name).hack >= asc_mult(gangMember)) ns.gang.ascendMember(gangMember.name);
 		}
 		// Check for equipment purchases
-		for (let gangMember of gangRoster) {
-			for (let equipment of ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).hack)) {
-				if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
-			}
-		}
+		purchaseEquipment(ns, gangRoster, hack_level);
 		// Assign tasks
 		for (let gangMember of gangRoster) {
 			if (gangMember.hack < hack_level) ns.gang.setMemberTask(gangMember.name, 'Train Hacking');
@@ -49,6 +45,16 @@ export async function main(ns) {
 		}
 
 		await ns.sleep(1000);
+	}
+}
+
+function purchaseEquipment(ns, gangRoster, hack_level) {
+	const orderedEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	for (let gangMember of gangRoster) {
+		if (gangMember.hack < hack_level) continue;
+		for (let equipment of orderedEquipment) {
+			if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
+		}
 	}
 }
 

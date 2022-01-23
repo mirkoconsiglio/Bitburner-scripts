@@ -36,7 +36,7 @@ export async function main(ns) {
 			if (ns.gang.getAscensionResult(gangMember.name).str >= asc_mult(gangMember)) ns.gang.ascendMember(gangMember.name);
 		}
 		// Check for equipment purchases
-		purchaseEquipment(ns, gangRoster);
+		purchaseEquipment(ns, gangRoster, strength_level);
 		// Assign tasks
 		let clashChance = Array.from(otherGangs, (faction) => ns.gang.getChanceToWinClash(faction));
 		for (let gangMember of gangRoster) {
@@ -55,13 +55,14 @@ export async function main(ns) {
 	}
 }
 
-function purchaseEquipment(ns, gangRoster) {
+function purchaseEquipment(ns, gangRoster, strength_level) {
 	const strEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).str).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
 	const defEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).def).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
 	const dexEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).dex).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
 	const agiEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).agi).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
 	const orderedEquipment = [...new Set([...strEquipment, ...defEquipment, ...dexEquipment, ...agiEquipment])];
 	for (let gangMember of gangRoster) {
+		if (gangMember.str < strength_level) continue;
 		for (let equipment of orderedEquipment) {
 			if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
 		}
