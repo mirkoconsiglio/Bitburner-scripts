@@ -77,7 +77,7 @@ export async function main(ns) {
 
 		// Backdoor servers
 		for (let server of getAccessibleServers(ns)) {
-			if (!(server === 'home' ||
+			if (!(server === 'home' || server === 'w0r1d_d43m0n' ||
 				ns.getServer(server).backdoorInstalled ||
 				ns.isRunning('/utils/backdoor.js', 'home', server))) {
 				ns.print(`Installing backdoor on ${server}`);
