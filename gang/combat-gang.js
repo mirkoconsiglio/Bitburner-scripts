@@ -36,13 +36,7 @@ export async function main(ns) {
 			if (ns.gang.getAscensionResult(gangMember.name).str >= asc_mult(gangMember)) ns.gang.ascendMember(gangMember.name);
 		}
 		// Check for equipment purchases
-		for (let equipment of ns.gang.getEquipmentNames().filter(equipment => !ns.gang.getEquipmentStats(equipment).hack)) {
-			for (let gangMember of gangRoster) {
-				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home')) {
-					ns.gang.purchaseEquipment(gangMember.name, equipment);
-				}
-			}
-		}
+		purchaseEquipment(ns, gangRoster);
 		// Assign tasks
 		let clashChance = Array.from(otherGangs, (faction) => ns.gang.getChanceToWinClash(faction));
 		for (let gangMember of gangRoster) {
@@ -58,6 +52,19 @@ export async function main(ns) {
 		else if (clashChance.some(s => s < 0.7) || myGang.territory === 1) ns.gang.setTerritoryWarfare(false);
 
 		await ns.sleep(1000);
+	}
+}
+
+function purchaseEquipment(ns, gangRoster) {
+	const strEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).str).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const defEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).def).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const dexEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).dex).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const agiEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).agi).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const orderedEquipment = [...new Set([...strEquipment, ...defEquipment, ...dexEquipment, ...agiEquipment])];
+	for (let gangMember of gangRoster) {
+		for (let equipment of orderedEquipment) {
+			if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
+		}
 	}
 }
 

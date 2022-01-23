@@ -35,11 +35,9 @@ export async function main(ns) {
 			if (ns.gang.getAscensionResult(gangMember.name).hack >= asc_mult(gangMember)) ns.gang.ascendMember(gangMember.name);
 		}
 		// Check for equipment purchases
-		for (let equipment of ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).hack)) {
-			for (let gangMember of gangRoster) {
-				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home')) {
-					ns.gang.purchaseEquipment(gangMember.name, equipment);
-				}
+		for (let gangMember of gangRoster) {
+			for (let equipment of ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).hack)) {
+				if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
 			}
 		}
 		// Assign tasks
