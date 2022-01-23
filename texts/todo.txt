@@ -1,3 +1,2 @@
-Company automator
-Update hackable cost function
-Donate to Faction
+Company work automator
+Update hackable cost function using formulas

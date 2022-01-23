@@ -1,23 +1,17 @@
 export async function main(ns) {
 	ns.disableLog('ALL')
 
-	let gangJoined;
 	if (!ns.gang.inGang()) {
-		if (!ns.args[0]) {
-			ns.tprint(`You need to specify a gang to join.`);
-			ns.exit();
-		}
-		if (!ns.gang.createGang(ns.args[0])) {
-			ns.tprint(`Failed to join ${ns.args[0]}.`);
-			ns.exit();
-		}
-		ns.tprint(`Joined ${ns.args[0]}.`);
-		gangJoined = ns.args[0];
-	} else gangJoined = ns.gang.getGangInformation().faction;
+		ns.tprint(`You need to join a gang first.`);
+		ns.exit();
+	} else if (ns.gang.getGangInformation().isHacking) {
+		ns.tprint(`Not a combat gang.`);
+		ns.exit();
+	}
 
-	const earlyStrength = 50;
-	const lateStrength = 500;
+	const gangJoined = ns.gang.getGangInformation().faction;
 	const otherGangs = Object.keys(ns.gang.getOtherGangInformation()).filter(faction => faction !== gangJoined);
+	const strength_level = 500;
 
 	let c = 0;
 	while (true) {
@@ -52,16 +46,16 @@ export async function main(ns) {
 		// Assign tasks
 		let clashChance = Array.from(otherGangs, (faction) => ns.gang.getChanceToWinClash(faction));
 		for (let gangMember of gangRoster) {
-			if (gangMember.str >= earlyStrength && gangRoster.length <= 6) ns.gang.setMemberTask(gangMember.name, 'Mug People');
-			else if (gangMember.str < lateStrength) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
+			if (gangMember.str < strength_level) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
 			else if (myGang.wantedPenalty < 0.05) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
-			else if (clashChance.some(s => s < 0.8) && myGang.territory !== 1 && gangRoster.length === 12) {
+			else if (gangRoster.length < 12) ns.gang.setMemberTask(gangMember.name, 'Terrorism');
+			else if (clashChance.some(s => s < 0.8) && myGang.territory < 1) {
 				ns.gang.setMemberTask(gangMember.name, 'Territory Warfare');
 			} else ns.gang.setMemberTask(gangMember.name, 'Traffick Illegal Arms');
 		}
 		// Territory warfare checks
-		if (clashChance.every(e => e > 0.7) && myGang.territory !== 1) ns.gang.setTerritoryWarfare(true);
-		if (clashChance.some(s => s < 0.6 || myGang.territory === 1)) ns.gang.setTerritoryWarfare(false);
+		if (clashChance.every(e => e > 0.8) && myGang.territory < 1) ns.gang.setTerritoryWarfare(true);
+		else if (clashChance.some(s => s < 0.7) || myGang.territory === 1) ns.gang.setTerritoryWarfare(false);
 
 		await ns.sleep(1000);
 	}
