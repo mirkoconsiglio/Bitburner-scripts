@@ -24,7 +24,10 @@ export async function main(ns) {
 	let upgradeCoresTime = upgradeCoresTimer;
 
 	while (true) {
-		let player = ns.getPlayer();
+		const player = ns.getPlayer();
+
+		// UI
+		ns.exec('/ui/overview.js', 'home');
 
 		// Heal player
 		if (player.hp < player.max_hp) {
@@ -46,16 +49,16 @@ export async function main(ns) {
 			ns.isRunning('/gang/hacking-gang', 'home'))) {
 			if (ns.gang.getGangInformation().isHacking) ns.exec('/gang/hacking-gang.js', 'home');
 			else ns.exec('/gang/combat-gang.js', 'home');
-			ns.print(`Started gang manager`);
+			printBoth(ns, `Started gang manager`);
 		}
 
 		// Purchase TOR
-		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router.`);
+		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
 		if (player.tor) {
 			for (let [program, hackingLevel] of usefulPrograms) {
 				if (!ns.fileExists(program) && player.hacking >= hackingLevel) {
-					if (ns.purchaseProgram(program)) printBoth(ns, `Purchased ${program}.`);
+					if (ns.purchaseProgram(program)) printBoth(ns, `Purchased ${program}`);
 				}
 			}
 		}
