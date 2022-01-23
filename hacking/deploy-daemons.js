@@ -5,13 +5,16 @@ export async function main(ns) {
 	const servers = getAccessibleServers(ns);
 	const hackables = getOptimalHackable(ns, servers);
 
-	if (ns.scriptRunning(scripts.daemon, 'home')) ns.scriptKill(scripts.daemon, 'home');
+	for (let script of scripts) {
+		ns.scriptKill(script, 'home');
+	}
 	ns.exec(scripts.daemon, 'home', 1, hackables[0]);
 
 	for (let [i, host] of ns.getPurchasedServers().entries()) {
 		if (i < hackables.length) {
-			if (ns.scriptRunning(scripts.daemon, host)) ns.scriptKill(scripts.daemon, host);
-			else ns.killall(host);
+			for (let script of scripts) {
+				ns.scriptKill(script, host);
+			}
 			ns.exec(scripts.daemon, host, 1, hackables[i + 1]);
 		} else break;
 	}

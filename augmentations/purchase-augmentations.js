@@ -60,8 +60,7 @@ export async function main(ns) {
 			// Sell all stocks
 			for (let sym of ns.stock.getSymbols()) {
 				ns.stock.sell(sym, ns.stock.getMaxShares(sym));
-				if (ns.getPlayer().bitNodeN === 8 ||
-					ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
+				if (ns.getPlayer().bitNodeN === 8 || ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
 					ns.stock.sellShort(sym, ns.stock.getMaxShares(sym));
 				}
 			}

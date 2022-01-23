@@ -38,7 +38,7 @@ export async function main(ns) {
 		// Check for equipment purchases
 		for (let equipment of ns.gang.getEquipmentNames().filter(equipment => !ns.gang.getEquipmentStats(equipment).hack)) {
 			for (let gangMember of gangRoster) {
-				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home') && gangMember.str >= lateStrength) {
+				if (ns.gang.getEquipmentCost(equipment) <= ns.getServerMoneyAvailable('home')) {
 					ns.gang.purchaseEquipment(gangMember.name, equipment);
 				}
 			}

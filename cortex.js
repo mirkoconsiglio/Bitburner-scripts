@@ -35,6 +35,20 @@ export async function main(ns) {
 		// Contract solver (disables itself if any solution was incorrect)
 		if (contractorOnline) contractorOnline = contractor(ns);
 
+		// Stock market
+		if (ns.getPlayer().has4SDataTixApi && !ns.isRunning('/stock-market/stock-market.js', 'home')) {
+			ns.exec('/stock-market/stock-market.js', 'home');
+		}
+
+		// Gang manager
+		if ((ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
+			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !(ns.isRunning('/gang/combat-gang', 'home') ||
+			ns.isRunning('/gang/hacking-gang', 'home'))) {
+			if (ns.gang.getGangInformation().isHacking) ns.exec('/gang/hacking-gang.js', 'home');
+			else ns.exec('/gang/combat-gang.js', 'home');
+			ns.print(`Started gang manager`);
+		}
+
 		// Purchase TOR
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router.`);
 		// Purchase only useful programs
@@ -66,7 +80,7 @@ export async function main(ns) {
 			if (!(server === 'home' ||
 				ns.getServer(server).backdoorInstalled ||
 				ns.isRunning('/utils/backdoor.js', 'home', server))) {
-				ns.print(`Installing backdoor on ${server}.`);
+				ns.print(`Installing backdoor on ${server}`);
 				ns.exec('/utils/backdoor.js', 'home', 1, server);
 			}
 		}
@@ -77,7 +91,7 @@ export async function main(ns) {
 		// Check faction invites
 		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
 		if (factions.length > 0 && !promptScriptRunning(ns, 'home')) {
-			ns.print(`Request to join ${factions}.`);
+			ns.print(`Request to join ${factions}`);
 			ns.exec('/utils/join-factions.js', 'home', 1, ...factions);
 			askedFactions = askedFactions.concat(factions); // Don't ask again
 		}

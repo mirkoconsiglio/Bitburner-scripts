@@ -1582,9 +1582,6 @@ Rep: 62.500k
 ----- Speakers for the Dead -----
 
 --- Unstable Circadian Modulator ---
-company_rep_mult: 1.25
-faction_rep_mult: 1.15
-work_money_mult: 1.7
 Price: $5.000b
 Rep: 362.500k
 
