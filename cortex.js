@@ -31,7 +31,7 @@ export async function main(ns) {
 
 		// Heal player
 		if (player.hp < player.max_hp) {
-			let cost = ns.hospitalize()
+			let cost = ns.hospitalize();
 			printBoth(ns, `Player hospitalized for ${ns.nFormat(cost, '$0.000a')}`);
 		}
 
@@ -45,8 +45,8 @@ export async function main(ns) {
 
 		// Gang manager
 		if ((ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
-			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !(ns.isRunning('/gang/combat-gang', 'home') ||
-			ns.isRunning('/gang/hacking-gang', 'home'))) {
+			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !(ns.isRunning('/gang/combat-gang.js', 'home') ||
+			ns.isRunning('/gang/hacking-gang.js', 'home'))) {
 			if (ns.gang.getGangInformation().isHacking) ns.exec('/gang/hacking-gang.js', 'home');
 			else ns.exec('/gang/combat-gang.js', 'home');
 			printBoth(ns, `Started gang manager`);

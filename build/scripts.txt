@@ -45,3 +45,4 @@ automators/create-programs.js
 automators/share.js
 gang/combat-gang.js
 gang/hacking-gang.js
+ui/overview.js
