@@ -10,7 +10,7 @@ export async function main(ns) {
 	}
 
 	const gangJoined = ns.gang.getGangInformation().faction;
-	const otherGangs = Object.keys(ns.gang.getOtherGangInformation()).filter(faction => faction !== gangJoined);
+	const otherGangs = Object.entries(ns.gang.getOtherGangInformation()).filter(([faction]) => faction !== gangJoined);
 	const strength_level = 500;
 
 	let c = 0;
@@ -38,35 +38,49 @@ export async function main(ns) {
 		// Check for equipment purchases
 		purchaseEquipment(ns, gangRoster, strength_level);
 		// Assign tasks
-		let clashChance = Array.from(otherGangs, (faction) => ns.gang.getChanceToWinClash(faction));
+		const clashChance = Array.from(otherGangs, ([faction]) => ns.gang.getChanceToWinClash(faction));
+		let warfareCounter = 0;
 		for (let gangMember of gangRoster) {
 			if (gangMember.str < strength_level) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
-			else if (myGang.wantedPenalty < 0.05) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
+			else if (myGang.wantedPenalty < 0.9) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
 			else if (gangRoster.length < 12) ns.gang.setMemberTask(gangMember.name, 'Terrorism');
-			else if (clashChance.some(s => s < 0.8) && myGang.territory < 1) {
+			else if (clashChance.some(s => s < 0.8) && myGang.territory < 1 && warfareCounter < 6) {
 				ns.gang.setMemberTask(gangMember.name, 'Territory Warfare');
+				warfareCounter++;
 			} else ns.gang.setMemberTask(gangMember.name, 'Human Trafficking');
 		}
 		// Territory warfare checks
-		if (clashChance.every(e => e > 0.8) && myGang.territory < 1) ns.gang.setTerritoryWarfare(true);
-		else if (clashChance.some(s => s < 0.7) || myGang.territory === 1) ns.gang.setTerritoryWarfare(false);
+		if (myGang.territory < 1 && fightForTerritory(ns, otherGangs)) ns.gang.setTerritoryWarfare(true);
+		else ns.gang.setTerritoryWarfare(false);
 
 		await ns.sleep(1000);
 	}
 }
 
 function purchaseEquipment(ns, gangRoster, strength_level) {
-	const strEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).str).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const defEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).def).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const dexEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).dex).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const agiEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).agi).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const orderedEquipment = [...new Set([...strEquipment, ...defEquipment, ...dexEquipment, ...agiEquipment])];
+	const allEquipment = ns.gang.getEquipmentNames();
+	const strEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).str).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const defEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).def).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const dexEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).dex).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const agiEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).agi).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const chaEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).cha).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const hackEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const orderedEquipment = [...new Set([...strEquipment, ...defEquipment, ...dexEquipment, ...agiEquipment, ...chaEquipment, ...hackEquipment])];
 	for (let gangMember of gangRoster) {
 		if (gangMember.str < strength_level) continue;
 		for (let equipment of orderedEquipment) {
-			if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
+			if (!gangMember.upgrades.includes(equipment) && !gangMember.augmentations.includes(equipment) &&
+				!ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
 		}
 	}
+}
+
+function fightForTerritory(ns, otherGangs) {
+	let averageWinChance = 0;
+	for (let [faction, info] of otherGangs) {
+		averageWinChance += info.territory * ns.gang.getChanceToWinClash(faction);
+	}
+	return averageWinChance / (1 - ns.gang.getGangInformation().territory) >= 0.7;
 }
 
 function asc_mult(gangMember) {

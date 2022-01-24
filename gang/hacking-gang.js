@@ -39,7 +39,7 @@ export async function main(ns) {
 		// Assign tasks
 		for (let gangMember of gangRoster) {
 			if (gangMember.hack < hack_level) ns.gang.setMemberTask(gangMember.name, 'Train Hacking');
-			else if (myGang.wantedPenalty < 0.05) ns.gang.setMemberTask(gangMember.name, 'Ethical Hacking');
+			else if (myGang.wantedPenalty < 0.9) ns.gang.setMemberTask(gangMember.name, 'Ethical Hacking');
 			else if (gangRoster.length < 12) ns.gang.setMemberTask(gangMember.name, 'Cyberterrorism');
 			else ns.gang.setMemberTask(gangMember.name, 'Money Laundering');
 		}
@@ -49,11 +49,15 @@ export async function main(ns) {
 }
 
 function purchaseEquipment(ns, gangRoster, hack_level) {
-	const orderedEquipment = ns.gang.getEquipmentNames().filter(equipment => ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const allEquipment = ns.gang.getEquipmentNames();
+	const hackEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const chaEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).cha).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const orderedEquipment = [...new Set([...hackEquipment, ...chaEquipment])];
 	for (let gangMember of gangRoster) {
 		if (gangMember.hack < hack_level) continue;
 		for (let equipment of orderedEquipment) {
-			if (!gangMember.upgrades.includes(equipment) && !ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
+			if (!gangMember.upgrades.includes(equipment) && !gangMember.augmentations.includes(equipment) &&
+				!ns.gang.purchaseEquipment(gangMember.name, equipment)) break;
 		}
 	}
 }
