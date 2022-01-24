@@ -1,5 +1,9 @@
 import {getServers, printBoth} from '/utils/utils.js';
 
+export async function main(ns) {
+	contractor(ns);
+}
+
 export function contractor(ns) {
 	for (let server of getServers(ns)) {
 		let files = ns.ls(server, '.cct');
