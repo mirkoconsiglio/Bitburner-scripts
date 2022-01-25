@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const http = require('https');
 
 function getFilesRecursive(dir, arrayOfFiles) {
 	try {
@@ -33,8 +34,13 @@ function writeToFile(filename, str) {
 	});
 }
 
-let dir = path.join(__dirname, '../');
-let files = getFiles(`${dir}`);
-let str = files.join('\n');
+const dir = path.join(__dirname, '../');
+const files = getFiles(`${dir}`);
+const str = files.join('\n');
 writeToFile('scripts.txt', str);
 
+const index = fs.createWriteStream('../types/index.d.ts');
+http.get('https://raw.githubusercontent.com/danielyxie/bitburner/dev/src/ScriptEditor/NetscriptDefinitions.d.ts',
+	function (response) {
+		response.pipe(index);
+	});

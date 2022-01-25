@@ -1,2 +1,0 @@
-Company work automator
-Update hackable cost function using formulas

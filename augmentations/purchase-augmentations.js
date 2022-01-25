@@ -1,12 +1,12 @@
 import {
-	getFactions,
 	isUsefulBladeburner,
 	isUsefulCombat,
 	isUsefulCompany,
 	isUsefulGeneral,
 	isUsefulHacking,
 	isUsefulHacknet
-} from '/utils/utils.js';
+} from '/augmentations/utils.js';
+import {getFactions} from '/utils/utils.js';
 
 export async function main(ns) {
 	const args = ns.flags([
