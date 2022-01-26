@@ -44,6 +44,19 @@ export function getFactions() {
 	];
 }
 
+export function getCompanies() {
+	return [
+		'ECorp', 'MegaCorp', 'Bachman and Associates', 'Blade Industries', 'NWO',
+		'Clarke Incorporated', 'OmniTek Incorporated', 'Four Sigma', 'KuaiGong International', 'Fulcrum Technologies',
+		'Storm Technologies', 'DefComm', 'Helios Labs', 'VitaLife', 'Icarus Microsystems',
+		'Universal Energy', 'Galactic Cybersystems', 'AeroCorp', 'Omnia Cybersystems',
+		'Solaris Space Systems', 'DeltaOne', 'Global Pharmaceuticals', 'Nova Medical',
+		'CIA', 'NSA', 'Watchdog Security', 'LexoCorp', 'Rho Construction', 'Alpha Enterprises',
+		'Aevum Police', 'SysCore Securities', 'CompuTek', 'NetLink Technologies',
+		'Carmichael Security', 'FoodNStuff', 'JoesGuns', 'Ishima Omega Software', 'Noodle Bar'
+	];
+}
+
 export function getPrograms() {
 	return [
 		'BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe',
