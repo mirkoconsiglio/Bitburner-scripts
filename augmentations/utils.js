@@ -73,3 +73,23 @@ export function isUsefulBladeburner(ns, name) {
 			stats.bladeburner_success_chance_mult
 		);
 }
+
+export function isUseful(ns, criterions, name) {
+	for (let criterion of criterions) {
+		if (criterion(ns, name)) return true;
+	}
+	return false;
+}
+
+export function isPurchasable(ns, faction, name, augmentations) {
+	let facRep = ns.getFactionRep(faction);
+	let price = ns.getAugmentationPrice(name);
+	let repReq = ns.getAugmentationRepReq(name);
+
+	return !(facRep < repReq || // Faction reputation prerequisite
+		ns.getServerMoneyAvailable('home') < price || // Check if it is able to be bought
+		augmentations.some(aug => aug.name === name) || // Check to see if it can be bought from another faction
+		ns.getOwnedAugmentations(true).includes(name) // Check if already bought
+	);
+}
+
