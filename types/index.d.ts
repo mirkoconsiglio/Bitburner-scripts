@@ -129,7 +129,7 @@ export interface CrimeStats {
   /** How much money is given */
   money: number;
   /** Name of crime */
-  name: number;
+  name: string;
   /** Milliseconds it takes to attempt the crime */
   time: number;
   /** Description of the crime activity */
@@ -3617,7 +3617,6 @@ interface SkillsFormulas {
    * @returns The calculated skill level.
    */
   calculateSkill(exp: number, skillMult?: number): number;
-
   /**
    * Calculate exp for skill level.
    * @param skill - target skill level
@@ -3634,12 +3633,12 @@ interface SkillsFormulas {
 interface HackingFormulas {
   /**
    * Calculate hack chance.
+   * (Ex: 0.25 would indicate a 25% chance of success.)
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack chance.
    */
   hackChance(server: Server, player: Player): number;
-
   /**
    * Calculate hack exp for one thread.
    * @remarks
@@ -3652,6 +3651,7 @@ interface HackingFormulas {
 
   /**
    * Calculate hack percent for one thread.
+   * (Ex: 0.25 would steal 25% of the server's current value.)
    * @remarks
    * Multiply by thread to get total percent hacked.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3661,7 +3661,8 @@ interface HackingFormulas {
   hackPercent(server: Server, player: Player): number;
 
   /**
-   * Calculate the percent a server would grow.
+   * Calculate the percent a server would grow to.
+   * (Ex: 3.0 would would grow the server to 300% of its current value.)
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param threads - Amount of thread.
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
@@ -3669,7 +3670,6 @@ interface HackingFormulas {
    * @returns The calculated grow percent.
    */
   growPercent(server: Server, threads: number, player: Player, cores?: number): number;
-
   /**
    * Calculate hack time.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3677,7 +3677,6 @@ interface HackingFormulas {
    * @returns The calculated hack time.
    */
   hackTime(server: Server, player: Player): number;
-
   /**
    * Calculate grow time.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3685,7 +3684,6 @@ interface HackingFormulas {
    * @returns The calculated grow time.
    */
   growTime(server: Server, player: Player): number;
-
   /**
    * Calculate weaken time.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3709,7 +3707,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated money gain rate.
    */
   moneyGainRate(level: number, ram: number, cores: number, mult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet node level.
    * @param startingLevel - starting level
@@ -3718,7 +3715,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet node ram.
    * @param startingRam - starting ram
@@ -3727,7 +3723,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet node cores.
    * @param startingCore - starting cores
@@ -3736,7 +3731,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
-
   /**
    * Calculate the cost of a hacknet node.
    * @param n - number of the hacknet node
@@ -3744,7 +3738,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   hacknetNodeCost(n: number, mult: number): number;
-
   /**
    * All constants used by the game.
    * @returns An object with all hacknet node constants used by the game.
@@ -3767,7 +3760,6 @@ interface HacknetServersFormulas {
    * @returns The calculated hash gain rate.
    */
   hashGainRate(level: number, ramUsed: number, maxRam: number, cores: number, mult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server level.
    * @param startingLevel - starting level
@@ -3776,7 +3768,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server ram.
    * @param startingRam - starting ram
@@ -3785,7 +3776,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server cores.
    * @param startingCore - starting cores
@@ -3794,7 +3784,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server cache.
    * @param startingCache - starting cache level
@@ -3802,7 +3791,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   cacheUpgradeCost(startingCache: number, extraCache?: number): number;
-
   /**
    * Calculate hash cost of an upgrade.
    * @param upgName - name of the upgrade
@@ -3810,7 +3798,6 @@ interface HacknetServersFormulas {
    * @returns The calculated hash cost.
    */
   hashUpgradeCost(upgName: number, level: number): number;
-
   /**
    * Calculate the cost of a hacknet server.
    * @param n - number of the hacknet server
@@ -3818,7 +3805,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   hacknetServerCost(n: number, mult?: number): number;
-
   /**
    * All constants used by the game.
    * @returns An object with all hacknet server constants used by the game.
@@ -3837,7 +3823,6 @@ interface GangFormulas {
    * @returns The calculated wanted penalty.
    */
   wantedPenalty(gang: GangGenInfo): number;
-
   /**
    * Calculate respect gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -3846,7 +3831,6 @@ interface GangFormulas {
    * @returns The calculated respect gain.
    */
   respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
-
   /**
    * Calculate wanted gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -3855,7 +3839,6 @@ interface GangFormulas {
    * @returns The calculated wanted gain.
    */
   wantedLevelGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
-
   /**
    * Calculate money gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -3934,7 +3917,6 @@ interface Stanek {
    * @returns The width of the gift.
    */
   width(): number;
-
   /**
    * Stanek's Gift height.
    * @remarks
@@ -3990,7 +3972,6 @@ interface Stanek {
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
   canPlace(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
-
   /**
    * Place fragment on Stanek's Gift.
    * @remarks
@@ -4003,7 +3984,6 @@ interface Stanek {
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
   place(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
-
   /**
    * Get placed fragment at location.
    * @remarks
@@ -4222,13 +4202,11 @@ export interface NS extends Singularity {
    * ```ts
    * // NS1:
    * var earnedMoney = hack("foodnstuff");
-   * earnedMoney = earnedMoney + hack("foodnstuff", { threads: 5 }); // Only use 5 threads to hack
    * ```
    * @example
    * ```ts
    * // NS2:
    * let earnedMoney = await ns.hack("foodnstuff");
-   * earnedMoney += await ns.hack("foodnstuff", { threads: 5 }); // Only use 5 threads to hack
    * ```
    * @param host - Hostname of the target server to hack.
    * @param opts - Optional parameters for configuring function behavior.
@@ -4256,16 +4234,14 @@ export interface NS extends Singularity {
    * @example
    * ```ts
    * // NS1:
-   * var availableMoney = getServerMoneyAvailable("foodnstuff");
+   * var currentMoney = getServerMoneyAvailable("foodnstuff");
    * currentMoney = currentMoney * (1 + grow("foodnstuff"));
-   * currentMoney = currentMoney * (1 + grow("foodnstuff", { threads: 5 })); // Only use 5 threads to grow
    * ```
    * @example
    * ```ts
    * // NS2:
-   * let availableMoney = ns.getServerMoneyAvailable("foodnstuff");
+   * let currentMoney = ns.getServerMoneyAvailable("foodnstuff");
    * currentMoney *= (1 + await ns.grow("foodnstuff"));
-   * currentMoney *= (1 + await ns.grow("foodnstuff", { threads: 5 })); // Only use 5 threads to grow
    * ```
    * @param host - Hostname of the target server to grow.
    * @param opts - Optional parameters for configuring function behavior.
@@ -4291,14 +4267,12 @@ export interface NS extends Singularity {
    * // NS1:
    * var currentSecurity = getServerSecurityLevel("foodnstuff");
    * currentSecurity = currentSecurity - weaken("foodnstuff");
-   * currentSecurity = currentSecurity - weaken("foodnstuff", { threads: 5 }); // Only use 5 threads to weaken
    * ```
    * @example
    * ```ts
    * // NS2:
    * let currentSecurity = ns.getServerSecurityLevel("foodnstuff");
    * currentSecurity -= await ns.weaken("foodnstuff");
-   * currentSecurity -= await ns.weaken("foodnstuff", { threads: 5 }); // Only use 5 threads to weaken
    * ```
    * @param host - Hostname of the target server to weaken.
    * @param opts - Optional parameters for configuring function behavior.
@@ -4484,6 +4458,17 @@ export interface NS extends Singularity {
    * @param args - Value(s) to be printed.
    */
   print(...args: any[]): void;
+
+  /**
+   * Prints a formatted string to the script’s logs.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * see: https://github.com/alexei/sprintf.js
+   * @param format - format of the message
+   * @param args - Value(s) to be printed.
+   */
+  printf(format: string, ...args: any[]): void;
 
   /**
    * Prints one or more values or variables to the Terminal.
@@ -4943,7 +4928,6 @@ export interface NS extends Singularity {
    * @returns True if the script is successfully killed, and false otherwise.
    */
   kill(script: number): boolean;
-
   kill(script: string, host: string, ...args: string[]): boolean;
 
   /**
@@ -5009,7 +4993,6 @@ export interface NS extends Singularity {
    * @returns True if the script/literature file is successfully copied over and false otherwise. If the files argument is an array then this function will return true if at least one of the files in the array is successfully copied.
    */
   scp(files: string | string[], destination: string): Promise<boolean>;
-
   scp(files: string | string[], source: string, destination: string): Promise<boolean>;
 
   /**
@@ -5298,7 +5281,6 @@ export interface NS extends Singularity {
    * @returns max ram (GB)
    */
   getServerMaxRam(host: string): number;
-
   /**
    * Get the used RAM on a server.
    * @remarks
@@ -5424,7 +5406,7 @@ export interface NS extends Singularity {
    * @param filename - Optional. Filename or PID of the script.
    * @param hostname - Optional. Name of host server the script is running on.
    * @param args  - Arguments to identify the script
-   * @returns info about a running script
+   * @returns The info about the running script if found, and null otherwise.
    */
   getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: (string | number)[]): RunningScript;
 
@@ -5637,7 +5619,6 @@ export interface NS extends Singularity {
    * @returns The data popped off the queue if it was full.
    */
   writePort(port: number, data: string | number): Promise<any>;
-
   /**
    * Read data from a port.
    * @remarks
@@ -5816,7 +5797,6 @@ export interface NS extends Singularity {
    * @returns Amount of income the specified script generates while online.
    */
   getScriptIncome(): [number, number];
-
   getScriptIncome(script: string, host: string, ...args: string[]): number;
 
   /**
@@ -5837,7 +5817,6 @@ export interface NS extends Singularity {
    * @returns Amount of hacking experience the specified script generates while online.
    */
   getScriptExpGain(): number;
-
   getScriptExpGain(script: string, host: string, ...args: string[]): number;
 
   /**
@@ -6140,7 +6119,6 @@ export interface OfficeAPI {
    * @returns A promise that is fulfilled when the assignment is complete.
    */
   assignJob(divisionName: string, cityName: string, employeeName: string, job: string): Promise<void>;
-
   /**
    * Hire an employee.
    * @param divisionName - Name of the division
@@ -6148,7 +6126,6 @@ export interface OfficeAPI {
    * @returns The newly hired employee, if any
    */
   hireEmployee(divisionName: string, cityName: string): Employee | undefined;
-
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
@@ -6156,7 +6133,6 @@ export interface OfficeAPI {
    * @param size - Amount of positions to open
    */
   upgradeOfficeSize(divisionName: string, cityName: string, size: number): void;
-
   /**
    * Throw a party for your employees
    * @param divisionName - Name of the division
@@ -6165,7 +6141,6 @@ export interface OfficeAPI {
    * @returns Amount of happiness increased.
    */
   throwParty(divisionName: string, cityName: string, costPerEmployee: number): Promise<number>;
-
   /**
    * Buy coffee for your employees
    * @param divisionName - Name of the division
@@ -6173,20 +6148,17 @@ export interface OfficeAPI {
    * @returns A promise that is fulfilled when the coffee is served.
    */
   buyCoffee(divisionName: string, cityName: string): Promise<void>;
-
   /**
    * Hire AdVert.
    * @param divisionName - Name of the division
    */
   hireAdVert(divisionName: string): void;
-
   /**
    * Purchase a research
    * @param divisionName - Name of the division
    * @param researchName - Name of the research
    */
   research(divisionName: string, researchName: string): void;
-
   /**
    * Get data about an office
    * @param divisionName - Name of the division
@@ -6194,7 +6166,6 @@ export interface OfficeAPI {
    * @returns Office data
    */
   getOffice(divisionName: string, cityName: string): Office;
-
   /**
    * Get data about an employee
    * @param divisionName - Name of the division
@@ -6203,14 +6174,12 @@ export interface OfficeAPI {
    * @returns Employee data
    */
   getEmployee(divisionName: string, cityName: string, employeeName: string): Employee;
-
   /**
    * Get the cost to Hire AdVert
    * @param divisionName - Name of the division
    * @returns Cost
    */
   getHireAdVertCost(divisionName: string): number;
-
   /**
    * Get the number of times you have Hired AdVert
    * @param divisionName - Name of the division
@@ -6221,7 +6190,7 @@ export interface OfficeAPI {
   /**
    * Get the cost to unlock research
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param researchName - Name of the research
    * @returns cost
    */
   getResearchCost(divisionName: string, researchName: string): number;
@@ -6229,11 +6198,10 @@ export interface OfficeAPI {
   /**
    * Gets if you have unlocked a research
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param researchName - Name of the research
    * @returns true is unlocked, false if not
    */
   hasResearched(divisionName: string, researchName: string): boolean;
-
   /**
    * Set the auto job assignment for a job
    * @param divisionName - Name of the division
@@ -6243,7 +6211,6 @@ export interface OfficeAPI {
    * @returns A promise that is fulfilled when the assignment is complete.
    */
   setAutoJobAssignment(divisionName: string, cityName: string, job: string, amount: number): Promise<boolean>;
-
   /**
    * Cost to Upgrade office size.
    * @param divisionName - Name of the division
@@ -6270,7 +6237,6 @@ export interface WarehouseAPI {
    * @param price - Price to sell, can be "MP"
    */
   sellMaterial(divisionName: string, cityName: string, materialName: string, amt: string, price: string): void;
-
   /**
    * Set product sell data.
    * @param divisionName - Name of the division
@@ -6288,7 +6254,6 @@ export interface WarehouseAPI {
       price: string,
       all: boolean,
   ): void;
-
   /**
    * Discontinue a product.
    * @param divisionName - Name of the division
@@ -6303,6 +6268,15 @@ export interface WarehouseAPI {
    * @param enabled - smart supply enabled
    */
   setSmartSupply(divisionName: string, cityName: string, enabled: boolean): void;
+
+  /**
+   * Set whether smart supply uses leftovers before buying
+   * @param divisionName - Name of the division
+   * @param cityName - Name of the city
+   * @param materialName - Name of the material
+   * @param enabled - smart supply use leftovers enabled
+   */
+  setSmartSupplyUseLeftovers(divisionName: string, cityName: string, materialName: string, enabled: boolean): void;
 
   /**
    * Set material buy data
@@ -6320,7 +6294,6 @@ export interface WarehouseAPI {
    * @returns warehouse data
    */
   getWarehouse(divisionName: string, cityName: string): Warehouse;
-
   /**
    * Get product data
    * @param divisionName - Name of the division
@@ -6328,7 +6301,6 @@ export interface WarehouseAPI {
    * @returns product data
    */
   getProduct(divisionName: string, productName: string): Product;
-
   /**
    * Get material data
    * @param divisionName - Name of the division
@@ -6336,7 +6308,6 @@ export interface WarehouseAPI {
    * @returns material data
    */
   getMaterial(divisionName: string, cityName: string, materialName: string): Material;
-
   /**
    * Set market TA 1 for a material.
    * @param divisionName - Name of the division
@@ -6345,7 +6316,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setMaterialMarketTA1(divisionName: string, cityName: string, materialName: string, on: boolean): void;
-
   /**
    * Set market TA 2 for a material.
    * @param divisionName - Name of the division
@@ -6354,7 +6324,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setMaterialMarketTA2(divisionName: string, cityName: string, materialName: string, on: boolean): void;
-
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
@@ -6362,7 +6331,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
-
   /**
    * Set market TA 2 for a product.
    * @param divisionName - Name of the division
@@ -6370,7 +6338,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
-
   /**
    * Set material export data
    * @param sourceDivision - Source division
@@ -6388,7 +6355,6 @@ export interface WarehouseAPI {
       materialName: string,
       amt: number,
   ): void;
-
   /**
    * Cancel material export
    * @param sourceDivision - Source division
@@ -6406,21 +6372,18 @@ export interface WarehouseAPI {
       materialName: string,
       amt: number,
   ): void;
-
   /**
    * Purchase warehouse for a new city
    * @param divisionName - Name of the division
    * @param cityName - Name of the city
    */
   purchaseWarehouse(divisionName: string, cityName: string): void;
-
   /**
    * Upgrade warehouse
    * @param divisionName - Name of the division
    * @param cityName - Name of the city
    */
   upgradeWarehouse(divisionName: string, cityName: string): void;
-
   /**
    * Create a new product
    * @param divisionName - Name of the division
@@ -6436,19 +6399,16 @@ export interface WarehouseAPI {
       designInvest: number,
       marketingInvest: number,
   ): void;
-
   /**
    * Gets the cost to purchase a warehouse
    * @returns cost
    */
   getPurchaseWarehouseCost(): number;
-
   /**
    * Gets the cost to upgrade a warehouse to the next level
    * @returns cost to upgrade
    */
   getUpgradeWarehouseCost(adivisionName: any, acityName: any): number;
-
   /**
    * Check if you have a warehouse in city
    * @returns true if warehouse is present, false if not
@@ -6468,54 +6428,46 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns true if created and false if not
    */
   createCorporation(corporationName: string, selfFund: boolean): boolean;
-
   /**
    * Check if you have a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns true if unlocked and false if not
    */
   hasUnlockUpgrade(upgradeName: string): boolean;
-
   /**
    * Gets the cost to unlock a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns cost of the upgrade
    */
   getUnlockUpgradeCost(upgradeName: string): number;
-
   /**
    * Get the level of a levelable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns the level of the upgrade
    */
   getUpgradeLevel(upgradeName: string): number;
-
   /**
    * Gets the cost to unlock the next level of a levelable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns cost of the upgrade
    */
   getUpgradeLevelCost(upgradeName: string): number;
-
   /**
    * Gets the cost to expand into a new industry
    * @param industryName - Name of the industry
    * @returns cost
    */
   getExpandIndustryCost(industryName: string): number;
-
   /**
    * Gets the cost to expand into a new city
    * @returns cost
    */
   getExpandCityCost(): number;
-
   /**
    * Get an offer for investment based on you companies current valuation
    * @returns An offer of investment
    */
   getInvestmentOffer(): InvestmentOffer;
-
   /**
    * Accept investment based on you companies current valuation
    * @remarks
@@ -6523,14 +6475,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns An offer of investment
    */
   acceptInvestmentOffer(): boolean;
-
   /**
    * Go public
    * @param numShares - number of shares you would like to issue for your IPO
    * @returns true if you successfully go public, false if not
    */
   goPublic(numShares: number): boolean;
-
   /**
    * Bribe a faction
    * @param factionName - Faction name
@@ -6539,46 +6489,39 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns True if successful, false if not
    */
   bribe(factionName: string, amountCash: number, amountShares: number): boolean;
-
   /**
    * Get corporation data
    * @returns Corporation data
    */
   getCorporation(): CorporationInfo;
-
   /**
    * Get division data
    * @param divisionName - Name of the division
    * @returns Division data
    */
   getDivision(divisionName: string): Division;
-
   /**
    * Expand to a new industry
    * @param industryType - Name of the industry
    * @param divisionName - Name of the division
    */
   expandIndustry(industryType: string, divisionName: string): void;
-
   /**
    * Expand to a new city
    * @param divisionName - Name of the division
    * @param cityName - Name of the city
    */
   expandCity(divisionName: string, cityName: string): void;
-
   /**
    * Unlock an upgrade
    * @param upgradeName - Name of the upgrade
    */
   unlockUpgrade(upgradeName: string): void;
-
   /**
    * Level an upgrade.
    * @param upgradeName - Name of the upgrade
    */
   levelUpgrade(upgradeName: string): void;
-
   /**
    * Issue dividends
    * @param percent - Percent of profit to issue as dividends.
@@ -6790,6 +6733,8 @@ interface InvestmentOffer {
  * @internal
  */
 interface UserInterfaceTheme {
+  [key: string]: string | undefined;
+
   primarylight: string;
   primary: string;
   primarydark: string;
@@ -6823,8 +6768,6 @@ interface UserInterfaceTheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
-
-  [key: string]: string | undefined;
 }
 
 /**
