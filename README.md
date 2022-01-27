@@ -13,3 +13,9 @@ followed by
 > run /build/download-bitburner-scripts.js
 
 to download all the scripts.
+
+# Use
+
+Cortex automates most things (except augmentation purchasing)
+
+> run cortex.js
