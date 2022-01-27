@@ -243,8 +243,55 @@ export async function part3(ns, cities, jobs, division) {
 
 export async function autopilot(ns, cities, jobs, division) {
 	const corp = ns.corporation;
-	// Autopilot
-	for (let version = 3; version < 20; version++) {
-		// TODO: autopilot
+	// Assuming Tobacco v3 has already started
+	let version = 3;
+	while (!corp.getProduct(division, 'Tobacco v' + version)) {
+		await ns.sleep(1000);
+	}
+	while (true) {
+		// Check tobacco progress
+		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress === 100) {
+			// Start selling the developed version
+			corp.sellProduct(division, 'Aevum', 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** version), true);
+			if (corp.hasResearched(division, 'Market-TA.II')) corp.setProductMarketTA2(division, 'Tobacco v' + version, true);
+			// Discontinue previous version
+			corp.discontinueProduct(division, 'Tobacco v' + (version - 1));
+			// Start making new version
+			version++;
+			if (!corp.getProduct(division, 'Tobacco v' + version)) corp.makeProduct(division, 'Aevum', 'Tobacco v' + version, 1e9, 1e9);
+		}
+		// Check research progress for Market TA
+		let researchCost = 0;
+		if (!corp.hasResearched(division, 'Market-TA.I')) researchCost += corp.getResearchCost(division, 'Market-TA.I');
+		if (!corp.hasResearched(division, 'Market-TA.II')) researchCost += corp.getResearchCost(division, 'Market-TA.II');
+		if (researchCost > 0 && corp.getDivision(division).research >= 1.5 * researchCost) {
+			if (!corp.hasResearched(division, 'Market-TA.I')) corp.research(division, 'Market-TA.I');
+			if (!corp.hasResearched(division, 'Market-TA.II')) {
+				corp.research(division, 'Market-TA.II');
+				// Set Market TA.II on for the current selling versions
+				corp.setProductMarketTA2(division, 'Tobacco v' + (version - 2), true);
+				corp.setProductMarketTA2(division, 'Tobacco v' + (version - 1), true);
+			}
+		}
+		// Upgrade Wilson analytics if we can
+		corp.levelUpgrade('Wilson Analytics');
+		// Check what is cheaper
+		if (corp.getOfficeSizeUpgradeCost(division, 'Aevum', 15) < corp.getHireAdVertCost(division)) {
+			// Upgrade office size in Aevum
+			if (corp.getOfficeSizeUpgradeCost(division, 'Aevum', 15) <= corp.getCorporation().funds) {
+				corp.upgradeOfficeSize(division, 'Aevum', 15);
+				for (let i = 0; i < 15; i++) {
+					corp.hireEmployee(division, 'Aevum');
+				}
+				let dist = Math.floor(corp.getOffice(division, 'Aevum').size / 5);
+				await corp.setAutoJobAssignment(division, 'Aevum', 'Operations', dist);
+				await corp.setAutoJobAssignment(division, 'Aevum', 'Engineer', dist);
+				await corp.setAutoJobAssignment(division, 'Aevum', 'Business', dist);
+				await corp.setAutoJobAssignment(division, 'Aevum', 'Management', dist);
+				await corp.setAutoJobAssignment(division, 'Aevum', 'Research & Development', dist);
+			}
+		}
+		// Hire advert
+		else if (corp.getHireAdVertCost(division) <= corp.getCorporation().funds) corp.hireAdVert(division);
 	}
 }
