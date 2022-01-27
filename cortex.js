@@ -22,9 +22,33 @@ export async function main(ns) {
 	let askedFactions = [];
 	let upgradeRamTime = upgradeRamTimer;
 	let upgradeCoresTime = upgradeCoresTimer;
+	let player = ns.getPlayer();
+
+	// Stock market manager
+	if (player.has4SDataTixApi && !ns.isRunning('/stock-market/stock-market.js', 'home') &&
+		await ns.prompt(`Start stock market manager?`)) {
+		ns.exec('/stock-market/stock-market.js', 'home');
+		printBoth(ns, `Started stock market manager`);
+	}
+
+	// Gang manager
+	if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
+		ns.heart.break() <= -54e3)) && ns.gang.inGang() && !(ns.isRunning('/gang/combat-gang.js', 'home') ||
+		ns.isRunning('/gang/hacking-gang.js', 'home')) && await ns.prompt(`Start gang manager?`)) {
+		if (ns.gang.getGangInformation().isHacking) ns.exec('/gang/hacking-gang.js', 'home');
+		else ns.exec('/gang/combat-gang.js', 'home');
+		printBoth(ns, `Started gang manager`);
+	}
+
+	// Corp manager
+	if ((player.bitNodeN === 3 || (ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl >= 1))) &&
+		player.hasCorporation && !ns.isRunning('/corporation/autopilot.js', 'home') && await ns.prompt(`Start corp manager?`)) {
+		ns.exec('/corporation/autopilot.js', 'home');
+		printBoth(ns, `Started corp manager`);
+	}
 
 	while (true) {
-		const player = ns.getPlayer();
+		player = ns.getPlayer();
 
 		// UI
 		ns.exec('/ui/overview.js', 'home');
@@ -37,20 +61,6 @@ export async function main(ns) {
 
 		// Contract solver (disables itself if any solution was incorrect)
 		if (contractorOnline) contractorOnline = contractor(ns);
-
-		// Stock market
-		if (ns.getPlayer().has4SDataTixApi && !ns.isRunning('/stock-market/stock-market.js', 'home')) {
-			ns.exec('/stock-market/stock-market.js', 'home');
-		}
-
-		// Gang manager
-		if ((ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
-			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !(ns.isRunning('/gang/combat-gang.js', 'home') ||
-			ns.isRunning('/gang/hacking-gang.js', 'home'))) {
-			if (ns.gang.getGangInformation().isHacking) ns.exec('/gang/hacking-gang.js', 'home');
-			else ns.exec('/gang/combat-gang.js', 'home');
-			printBoth(ns, `Started gang manager`);
-		}
 
 		// Purchase TOR
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
