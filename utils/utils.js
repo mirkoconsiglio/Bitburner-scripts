@@ -186,7 +186,7 @@ export function getOptimalHackable(ns, servers, cores = 1) {
 	return servers.filter(server => ns.getServerMaxMoney(server) > 0).sort((a, b) => targetCost(ns, b, cores) - targetCost(ns, a, cores));
 }
 
-function targetCost(ns, target, cores = 1) {
+export function targetCost(ns, target, cores = 1) { // TODO: include time in the cost function
 	const form = ns.formulas.hacking;
 	const player = ns.getPlayer(); // Get player info
 	const server = ns.getServer(target); // Get server info
@@ -229,7 +229,7 @@ function targetCost(ns, target, cores = 1) {
 	return averageMoneyPerRam;
 }
 
-function altTargetCost(ns, server) {
+export function altTargetCost(ns, server) {
 	const hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
 	const grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
 	const weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
