@@ -40,7 +40,7 @@ export function getFactions() {
 		'Clarke Incorporated', 'Fulcrum Secret Technologies',
 		'Slum Snakes', 'Tetrads', 'Silhouette', 'Speakers for the Dead',
 		'The Dark Army', 'The Syndicate', 'The Covenant', 'Daedalus',
-		'Illuminati'
+		'Illuminati', 'Bladeburner'
 	];
 }
 
@@ -54,14 +54,6 @@ export function getCompanies() {
 		'CIA', 'NSA', 'Watchdog Security', 'LexoCorp', 'Rho Construction', 'Alpha Enterprises',
 		'Aevum Police', 'SysCore Securities', 'CompuTek', 'NetLink Technologies',
 		'Carmichael Security', 'FoodNStuff', 'JoesGuns', 'Ishima Omega Software', 'Noodle Bar'
-	];
-}
-
-export function getPrograms() {
-	return [
-		'BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe',
-		'HTTPWorm.exe', 'SQLInject.exe', 'ServerProfiler.exe',
-		'DeepscanV1.exe', 'DeepscanV2.exe', 'AutoLink.exe', 'Formulas.exe'
 	];
 }
 
