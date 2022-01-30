@@ -3,10 +3,8 @@ import {getJobs} from '/corporation/utils.js';
 import {getCities} from '/utils/utils.js';
 
 export async function main(ns) {
-	// Check if script works
-	const sourceFiles = ns.getOwnedSourceFiles();
-	if (sourceFiles[3] !== 3 && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
-	if (sourceFiles[3] !== 3 && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
+	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
+	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
 	if (ns.getBitNodeMultipliers().CorporationValuation !== 1) throw new Error(`This script does not know how to deal with BitNodes that have a valuation modifier`);
 	// Set up
 	const cities = getCities();
