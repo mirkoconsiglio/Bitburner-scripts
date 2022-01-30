@@ -49,3 +49,5 @@ corporation/utils.js
 ui/overview.js
 gang/combat-gang.js
 gang/hacking-gang.js
+bladeburner/autopilot.js
+bladeburner/utils.js
