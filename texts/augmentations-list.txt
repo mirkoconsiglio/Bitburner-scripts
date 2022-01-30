@@ -1582,6 +1582,11 @@ Rep: 62.500k
 ----- Speakers for the Dead -----
 
 --- Unstable Circadian Modulator ---
+hacknet_node_money_mult: 1.2
+hacknet_node_purchase_cost_mult: 0.85
+hacknet_node_ram_cost_mult: 0.85
+hacknet_node_core_cost_mult: 0.85
+hacknet_node_level_cost_mult: 0.85
 Price: $5.000b
 Rep: 362.500k
 
@@ -2015,3 +2020,128 @@ hacking_speed_mult: 2
 hacking_money_mult: 4
 Price: $25.000t
 Rep: 1.875m
+
+
+----- Bladeburners -----
+
+--- EsperTech Bladeburner Eyewear ---
+dexterity_mult: 1.05
+bladeburner_success_chance_mult: 1.03
+Price: $165.000m
+Rep: 1.250k
+
+--- EMS-4 Recombination ---
+bladeburner_stamina_gain_mult: 1.02
+bladeburner_analysis_mult: 1.05
+bladeburner_success_chance_mult: 1.03
+Price: $275.000m
+Rep: 2.500k
+
+--- ORION-MKIV Shoulder ---
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+bladeburner_success_chance_mult: 1.04
+Price: $550.000m
+Rep: 6.250k
+
+--- Hyperion Plasma Cannon V1 ---
+bladeburner_success_chance_mult: 1.06
+Price: $2.750b
+Rep: 12.500k
+
+--- Hyperion Plasma Cannon V2 ---
+bladeburner_success_chance_mult: 1.08
+Price: $5.500b
+Rep: 25.000k
+Prereq: Hyperion Plasma Cannon V1
+
+--- GOLEM Serum ---
+strength_mult: 1.07
+defense_mult: 1.07
+dexterity_mult: 1.07
+agility_mult: 1.07
+bladeburner_stamina_gain_mult: 1.05
+Price: $11.000b
+Rep: 31.250k
+
+--- Vangelis Virus ---
+dexterity_exp_mult: 1.1
+bladeburner_analysis_mult: 1.1
+bladeburner_success_chance_mult: 1.04
+Price: $2.750b
+Rep: 18.750k
+
+--- Vangelis Virus 3.0 ---
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+bladeburner_analysis_mult: 1.15
+bladeburner_success_chance_mult: 1.05
+Price: $11.000b
+Rep: 37.500k
+Prereq: Vangelis Virus
+
+--- I.N.T.E.R.L.I.N.K.E.D ---
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+bladeburner_max_stamina_mult: 1.1
+Price: $5.500b
+Rep: 25.000k
+
+--- Blade's Runners ---
+agility_mult: 1.05
+bladeburner_max_stamina_mult: 1.05
+bladeburner_stamina_gain_mult: 1.05
+Price: $8.250b
+Rep: 20.000k
+
+--- BLADE-51b Tesla Armor ---
+strength_mult: 1.04
+defense_mult: 1.04
+dexterity_mult: 1.04
+agility_mult: 1.04
+bladeburner_stamina_gain_mult: 1.02
+bladeburner_success_chance_mult: 1.03
+Price: $1.375b
+Rep: 12.500k
+
+--- BLADE-51b Tesla Armor: Power Cells Upgrade ---
+bladeburner_max_stamina_mult: 1.05
+bladeburner_stamina_gain_mult: 1.02
+bladeburner_success_chance_mult: 1.05
+Price: $2.750b
+Rep: 18.750k
+Prereq: BLADE-51b Tesla Armor
+
+--- BLADE-51b Tesla Armor: Energy Shielding Upgrade ---
+defense_mult: 1.05
+bladeburner_success_chance_mult: 1.06
+Price: $5.500b
+Rep: 21.250k
+Prereq: BLADE-51b Tesla Armor
+
+--- BLADE-51b Tesla Armor: Unibeam Upgrade ---
+bladeburner_success_chance_mult: 1.08
+Price: $16.500b
+Rep: 31.250k
+Prereq: BLADE-51b Tesla Armor
+
+--- BLADE-51b Tesla Armor: Omnibeam Upgrade ---
+bladeburner_success_chance_mult: 1.1
+Price: $27.500b
+Rep: 62.500k
+Prereq: BLADE-51b Tesla Armor: Unibeam Upgrade
+
+--- BLADE-51b Tesla Armor: IPU Upgrade ---
+bladeburner_analysis_mult: 1.15
+bladeburner_success_chance_mult: 1.02
+Price: $1.100b
+Rep: 15.000k
+Prereq: BLADE-51b Tesla Armor
+
+--- The Blade's Simulacrum ---
+Special
+Price: $150.000b
+Rep: 1.250k
