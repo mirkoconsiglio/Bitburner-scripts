@@ -164,7 +164,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 			if (!occupy) continue;
 		}
 		let freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
-		if (server === 'home') freeRam -= 32;
+		if (server === 'home') freeRam -= 90;
 		if (freeRam > 1) freeRams.push({host: server, freeRam: freeRam});
 	}
 	const sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);

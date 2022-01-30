@@ -2,6 +2,7 @@ import {getActionData, getSkillsData} from '/bladeburner/utils.js';
 import {getCities} from '/utils/utils.js';
 
 export async function main(ns) {
+	ns.disableLog('ALL');
 	const bb = ns.bladeburner;
 	if (ns.getPlayer().bitNodeN !== 7 && !ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) throw new Error(`This script requires the Bladeburner API`);
 	if (!bb.joinBladeburnerDivision()) throw new Error(`Must be able to join Bladeburner division`);
@@ -14,6 +15,7 @@ export async function main(ns) {
 		if (maxRequiredRank < requiredRank) maxRequiredRank = requiredRank;
 		return {name: blackOp, requiredRank};
 	}).sort((a, b) => a.requiredRank - b.requiredRank);
+	ns.print(`Max rank required: ${maxRequiredRank}`);
 	// Autopilot
 	while (true) {
 		const rank = bb.getRank();
@@ -39,6 +41,7 @@ export async function main(ns) {
 			if (skill.cost > points) break;
 			// Purchase current best skill
 			bb.upgradeSkill(skill.name);
+			ns.print(`Purchasing ${skill.name} for ${skill.cost} points`);
 			// Update skill points
 			points = bb.getSkillPoints();
 		}
@@ -76,6 +79,7 @@ export async function main(ns) {
 		// Switch to best city
 		if (city !== bestCity) {
 			city = bestCity;
+			ns.print(`Switching to ${city}`);
 			bb.switchCity(city);
 		}
 		// Check if chaos is over 50
@@ -92,7 +96,7 @@ export async function main(ns) {
 			if (!minMax) needsFieldAnalysis = true;
 			return bb.getActionCountRemaining(a.type, a.name) > 0 && minMax && amax >= minChance;
 		}).map(a => {
-			const level = bb.bladeburner.getActionCurrentLevel(a.type, a.name);
+			const level = bb.getActionCurrentLevel(a.type, a.name);
 			const rewardMultiplier = Math.pow(a.rewardFac, level - 1);
 			const gain = a.rankGain * rewardMultiplier * ns.getBitNodeMultipliers().BladeburnerRank;
 			const time = bb.getActionTime(a.type, a.name);
@@ -126,9 +130,15 @@ export async function main(ns) {
 async function doAction(ns, type, name) {
 	const bb = ns.bladeburner;
 	// If already doing the action go back
-	if (bb.getCurrentAction().name === name) return;
+	if (bb.getCurrentAction().name === name) {
+		await ns.sleep(100);
+		return;
+	}
 	const time = bb.getActionTime(type, name);
 	const started = bb.startAction(type, name);
 	// Wait until the action finishes
-	if (started) await ns.sleep(time + 100);
+	if (started) {
+		ns.print(`Carrying out ${name}`);
+		await ns.sleep(time + 100);
+	}
 }
