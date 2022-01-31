@@ -11,7 +11,7 @@ export function getSkillsData() {
 			max: 25
 		},
 		{
-			name: 'Short Circuit',
+			name: 'Short-Circuit',
 			bonus: 5.5,
 			max: 25
 		},
@@ -40,11 +40,68 @@ export function getSkillsData() {
 			bonus: 4,
 			max: -1
 		}
+		// { // Not important
+		// 	name: 'Datamancer',
+		// 	bonus: 0,
+		// 	max: -1
+		// },
+		// { // Not important
+		// 	name: 'Cyber\'s Edge',
+		// 	bonus: 0,
+		// 	max: -1
+		// },
+		// { // Not important
+		// 	name: 'Hands of Midas',
+		// 	bonus: 0,
+		// 	max: -1
+		// },
+		// { // Not important
+		// 	name: 'Hyperdrive',
+		// 	bonus: 0,
+		// 	max: -1
+		// }
 	];
 }
 
 export function getActionData() {
 	return [
+		// General
+		{
+			name: 'Training',
+			type: 'General',
+			rewardFac: 0,
+			rankGain: 0
+		},
+		{
+			name: 'Field Analysis',
+			type: 'General',
+			rewardFac: 1,
+			rankGain: 0.1
+		},
+		{
+			name: 'Recruitment',
+			type: 'General',
+			rewardFac: 0,
+			rankGain: 0
+		},
+		{
+			name: 'Diplomacy',
+			type: 'General',
+			rewardFac: 0,
+			rankGain: 0
+		},
+		{
+			name: 'Hyperbolic Regeneration Chamber',
+			type: 'General',
+			rewardFac: 0,
+			rankGain: 0
+		},
+		{
+			name: 'Incite Violence',
+			type: 'General',
+			rewardFac: 0,
+			rankGain: 0
+		},
 		// Contracts
 		{
 			name: 'Tracking',

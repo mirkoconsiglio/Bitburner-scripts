@@ -16,6 +16,7 @@ export async function main(ns) {
 		return {name: blackOp, requiredRank};
 	}).sort((a, b) => a.requiredRank - b.requiredRank);
 	ns.print(`Max rank required: ${maxRequiredRank}`);
+	let lastLookAround = 0;
 	// Autopilot
 	while (true) {
 		const rank = bb.getRank();
@@ -41,7 +42,7 @@ export async function main(ns) {
 			if (skill.cost > points) break;
 			// Purchase current best skill
 			bb.upgradeSkill(skill.name);
-			ns.print(`Purchasing ${skill.name} for ${skill.cost} points`);
+			ns.print(`Purchasing ${skill.name} for ${skill.cost} skill points`);
 			// Update skill points
 			points = bb.getSkillPoints();
 		}
@@ -60,32 +61,37 @@ export async function main(ns) {
 		}
 		// Get current city
 		let city = bb.getCity();
-		// Check which is the best city
-		let bestPop = 0;
-		let bestCity = '';
-		for (const city of getCities()) {
-			bb.switchCity(city);
-			let [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
-			while (amin !== amax) {
-				await doAction(ns, 'general', 'Field Analysis');
-				[amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
+		if (lastLookAround < ns.getTimeSinceLastAug() - 60 * 60 * 1000) {
+			// Update best city
+			ns.print(`Finding best city`);
+			lastLookAround = ns.getTimeSinceLastAug();
+			let bestPop = 0;
+			let bestCity = '';
+			for (const city of getCities()) {
+				bb.switchCity(city);
+				let [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
+				while (amin !== amax) {
+					await doAction(ns, 'general', 'Field Analysis');
+					[amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
+				}
+				const pop = bb.getCityEstimatedPopulation(city);
+				if (pop > bestPop) {
+					bestPop = pop;
+					bestCity = city;
+				}
 			}
-			const pop = bb.getCityEstimatedPopulation(city);
-			if (pop > bestPop) {
-				bestPop = pop;
-				bestCity = city;
+			// Switch to best city
+			if (city !== bestCity) {
+				city = bestCity;
+				ns.print(`Switched to ${city}`);
+				bb.switchCity(city);
 			}
-		}
-		// Switch to best city
-		if (city !== bestCity) {
-			city = bestCity;
-			ns.print(`Switching to ${city}`);
-			bb.switchCity(city);
 		}
 		// Check if chaos is over 50
 		const chaos = bb.getCityChaos(city);
 		if (chaos >= 50) {
-			await doAction('general', 'Diplomacy');
+			ns.print(`Chaos is high in ${city}`);
+			await doAction(ns, 'general', 'Diplomacy');
 			continue;
 		}
 		// Get best action
@@ -112,18 +118,18 @@ export async function main(ns) {
 		}).sort((a, b) => b.gain * b.chance / b.time - a.gain * a.chance / a.time);
 		// Do field analysis if needed
 		if (needsFieldAnalysis) {
-			await doAction('general', 'Field Analysis');
+			await doAction(ns, 'general', 'Field Analysis');
 			continue;
 		}
 		// Check stamina
 		const [stamina, maxStamina] = bb.getStamina();
 		if (stamina < maxStamina / 2 || actions.length === 0) {
-			await doAction('general', 'Hyperbolic Regeneration Chamber');
+			await doAction(ns, 'general', 'Hyperbolic Regeneration Chamber');
 			continue;
 		}
 		// Do best action
 		const action = actions[0];
-		await doAction(action.type, action.name);
+		await doAction(ns, action.type, action.name);
 	}
 }
 
