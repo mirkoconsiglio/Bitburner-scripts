@@ -33,33 +33,33 @@ export function getSkillsData() {
 		{
 			name: 'Reaper',
 			bonus: 4,
-			max: -1
+			max: 150
 		},
 		{
 			name: 'Evasive System',
 			bonus: 4,
+			max: 150
+		},
+		{
+			name: 'Datamancer',
+			bonus: 0,
+			max: -1
+		},
+		{
+			name: 'Cyber\'s Edge',
+			bonus: 0,
+			max: -1
+		},
+		{
+			name: 'Hands of Midas',
+			bonus: 0,
+			max: -1
+		},
+		{
+			name: 'Hyperdrive',
+			bonus: 0,
 			max: -1
 		}
-		// { // Not important
-		// 	name: 'Datamancer',
-		// 	bonus: 0,
-		// 	max: -1
-		// },
-		// { // Not important
-		// 	name: 'Cyber\'s Edge',
-		// 	bonus: 0,
-		// 	max: -1
-		// },
-		// { // Not important
-		// 	name: 'Hands of Midas',
-		// 	bonus: 0,
-		// 	max: -1
-		// },
-		// { // Not important
-		// 	name: 'Hyperdrive',
-		// 	bonus: 0,
-		// 	max: -1
-		// }
 	];
 }
 
@@ -134,24 +134,27 @@ export function getActionData() {
 			rewardFac: 1.09,
 			rankGain: 4.4
 		},
-		// { // kills too much pop
-		//     name: 'Sting Operation',
-		//     type: 'Operation',
-		//     rewardFac: 1.095,
-		//     rankGain: 5.5,
-		// },
-		// { // Too much chaos
-		//     name: 'Raid',
-		//     type: 'Operation',
-		//     rewardFac: 1.1,
-		//     rankGain: 55,
-		// },
-		// { // kills too much pop
-		//     name: 'Stealth Retirement Operation',
-		//     type: 'Operation',
-		//     rewardFac: 1.11,
-		//     rankGain: 22,
-		// },
+		{
+			name: 'Sting Operation',
+			type: 'Operation',
+			rewardFac: 1.095,
+			rankGain: 5.5,
+			late: true
+		},
+		{
+			name: 'Raid',
+			type: 'Operation',
+			rewardFac: 1.1,
+			rankGain: 55,
+			late: true
+		},
+		{
+			name: 'Stealth Retirement Operation',
+			type: 'Operation',
+			rewardFac: 1.11,
+			rankGain: 22,
+			late: true
+		},
 		{
 			name: 'Assassination',
 			type: 'Operation',

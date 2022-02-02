@@ -99,8 +99,9 @@ export async function main(ns) {
 		const actions = getActionData().filter(a => {
 			const [amin, amax] = bb.getActionEstimatedSuccessChance(a.type, a.name);
 			const minMax = amin === amax;
+			const include = a.late ? bb.getActionCountRemaining('Operation', 'Assassination') === 0 : true;
 			if (!minMax) needsFieldAnalysis = true;
-			return bb.getActionCountRemaining(a.type, a.name) > 0 && minMax && amax >= minChance;
+			return bb.getActionCountRemaining(a.type, a.name) > 0 && minMax && amax >= minChance && include;
 		}).map(a => {
 			const level = bb.getActionCurrentLevel(a.type, a.name);
 			const rewardMultiplier = Math.pow(a.rewardFac, level - 1);
