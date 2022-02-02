@@ -59,6 +59,26 @@ export function getSkillsData() {
 			name: 'Hyperdrive',
 			bonus: 0,
 			max: -1
+		},
+		{
+			name: 'Datamancer',
+			bonus: 0,
+			max: -1
+		},
+		{
+			name: 'Cyber\'s Edge',
+			bonus: 0,
+			max: -1
+		},
+		{
+			name: 'Hands of Midas',
+			bonus: 0,
+			max: -1
+		},
+		{
+			name: 'Hyperdrive',
+			bonus: 0,
+			max: -1
 		}
 	];
 }
