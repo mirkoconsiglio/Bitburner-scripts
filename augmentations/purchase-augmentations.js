@@ -17,15 +17,16 @@ export async function main(ns) {
 		['company', false],
 		['hacknet', false],
 		['bladeburner', false],
+		['all', false],
 		['install', false]
 	]);
 	// Check criterions for determining if augmentations are useful
 	const criterions = [isUsefulGeneral];
-	if (args.hacking) criterions.push(isUsefulHacking);
-	if (args.combat) criterions.push(isUsefulCombat);
-	if (args.company) criterions.push(isUsefulCompany);
-	if (args.hacknet) criterions.push(isUsefulHacknet);
-	if (args.bladeburner) criterions.push(isUsefulBladeburner);
+	if (args.hacking || args.all) criterions.push(isUsefulHacking);
+	if (args.combat || args.all) criterions.push(isUsefulCombat);
+	if (args.company || args.all) criterions.push(isUsefulCompany);
+	if (args.hacknet || args.all) criterions.push(isUsefulHacknet);
+	if (args.bladeburner || args.all) criterions.push(isUsefulBladeburner);
 
 	let augmentations = [];
 	for (let faction of getFactions()) {
