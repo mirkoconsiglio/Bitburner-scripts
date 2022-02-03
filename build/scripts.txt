@@ -51,3 +51,4 @@ gang/combat-gang.js
 gang/hacking-gang.js
 bladeburner/autopilot.js
 bladeburner/utils.js
+sleeve/autopilot.js

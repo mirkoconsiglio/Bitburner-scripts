@@ -169,63 +169,63 @@ export interface CrimeStats {
 export interface AugmentationStats {
   /** Multiplier to hacking skill */
   hacking_mult?: number;
-    /** Multiplier to strength skill */
+  /** Multiplier to strength skill */
   strength_mult?: number;
-    /** Multiplier to defense skill */
+  /** Multiplier to defense skill */
   defense_mult?: number;
-    /** Multiplier to dexterity skill */
+  /** Multiplier to dexterity skill */
   dexterity_mult?: number;
-    /** Multiplier to agility skill */
+  /** Multiplier to agility skill */
   agility_mult?: number;
-    /** Multiplier to charisma skill */
+  /** Multiplier to charisma skill */
   charisma_mult?: number;
-    /** Multiplier to hacking experience gain rate */
+  /** Multiplier to hacking experience gain rate */
   hacking_exp_mult?: number;
-    /** Multiplier to strength experience gain rate */
+  /** Multiplier to strength experience gain rate */
   strength_exp_mult?: number;
-    /** Multiplier to defense experience gain rate */
+  /** Multiplier to defense experience gain rate */
   defense_exp_mult?: number;
-    /** Multiplier to dexterity experience gain rate */
+  /** Multiplier to dexterity experience gain rate */
   dexterity_exp_mult?: number;
-    /** Multiplier to agility experience gain rate */
+  /** Multiplier to agility experience gain rate */
   agility_exp_mult?: number;
-    /** Multiplier to charisma experience gain rate */
+  /** Multiplier to charisma experience gain rate */
   charisma_exp_mult?: number;
-    /** Multiplier to chance of successfully performing a hack */
+  /** Multiplier to chance of successfully performing a hack */
   hacking_chance_mult?: number;
-    /** Multiplier to hacking speed */
+  /** Multiplier to hacking speed */
   hacking_speed_mult?: number;
-    /** Multiplier to amount of money the player gains from hacking */
+  /** Multiplier to amount of money the player gains from hacking */
   hacking_money_mult?: number;
-    /** Multiplier to amount of money injected into servers using grow */
+  /** Multiplier to amount of money injected into servers using grow */
   hacking_grow_mult?: number;
-    /** Multiplier to amount of reputation gained when working */
+  /** Multiplier to amount of reputation gained when working */
   company_rep_mult?: number;
-    /** Multiplier to amount of reputation gained when working */
+  /** Multiplier to amount of reputation gained when working */
   faction_rep_mult?: number;
-    /** Multiplier to amount of money gained from crimes */
+  /** Multiplier to amount of money gained from crimes */
   crime_money_mult?: number;
-    /** Multiplier to crime success rate */
+  /** Multiplier to crime success rate */
   crime_success_mult?: number;
-    /** Multiplier to amount of money gained from working */
+  /** Multiplier to amount of money gained from working */
   work_money_mult?: number;
-    /** Multiplier to amount of money produced by Hacknet Nodes */
+  /** Multiplier to amount of money produced by Hacknet Nodes */
   hacknet_node_money_mult?: number;
-    /** Multiplier to cost of purchasing a Hacknet Node */
+  /** Multiplier to cost of purchasing a Hacknet Node */
   hacknet_node_purchase_cost_mult?: number;
-    /** Multiplier to cost of ram for a Hacknet Node */
+  /** Multiplier to cost of ram for a Hacknet Node */
   hacknet_node_ram_cost_mult?: number;
-    /** Multiplier to cost of core for a Hacknet Node */
+  /** Multiplier to cost of core for a Hacknet Node */
   hacknet_node_core_cost_mult?: number;
-    /** Multiplier to cost of leveling up a Hacknet Node */
+  /** Multiplier to cost of leveling up a Hacknet Node */
   hacknet_node_level_cost_mult?: number;
-    /** Multiplier to Bladeburner max stamina */
+  /** Multiplier to Bladeburner max stamina */
   bladeburner_max_stamina_mult?: number;
-    /** Multiplier to Bladeburner stamina gain rate */
+  /** Multiplier to Bladeburner stamina gain rate */
   bladeburner_stamina_gain_mult?: number;
-    /** Multiplier to effectiveness in Bladeburner Field Analysis */
+  /** Multiplier to effectiveness in Bladeburner Field Analysis */
   bladeburner_analysis_mult?: number;
-    /** Multiplier to success chance in Bladeburner contracts/operations */
+  /** Multiplier to success chance in Bladeburner contracts/operations */
   bladeburner_success_chance_mult?: number;
 }
 
@@ -444,7 +444,7 @@ export interface Server {
   /** IP Address. Must be unique */
   ip: string;
 
-    /** Flag indicating whether player is currently connected to this server */
+  /** Flag indicating whether player is currently connected to this server */
   isConnectedTo: boolean;
 
   /** RAM (GB) available on this server */
@@ -587,7 +587,7 @@ export interface BitNodeMultipliers {
   ScriptHackMoneyGain: number;
   /** Influences the growth percentage per cycle against a server. */
   ServerGrowthRate: number;
-    /** Influences the maximum money that a server can grow to. */
+  /** Influences the maximum money that a server can grow to. */
   ServerMaxMoney: number;
   /** Influences the initial money that a server starts with. */
   ServerStartingMoney: number;
@@ -647,7 +647,7 @@ export interface PlayerSkills {
   dexterity: number;
   /** Agility level */
   agility: number;
-    /** Charisma level */
+  /** Charisma level */
   charisma: number;
   /** Intelligence level */
   intelligence: number;
@@ -847,7 +847,7 @@ export interface GangTaskStats {
   baseMoney: number;
   /** Hacking skill impact on task scaling */
   hackWeight: number;
-    /** Strength skill impact on task scaling */
+  /** Strength skill impact on task scaling */
   strWeight: number;
   /** Defense skill impact on task scaling */
   defWeight: number;
@@ -1575,18 +1575,18 @@ export interface Singularity {
    */
   purchaseProgram(programName: string): boolean;
 
-    /**
-     * Check if the player is busy.
-     * @remarks
-     * RAM cost: 0.5 GB * 16/4/1
-     *
-     *
-     * Returns a boolean indicating whether or not the player is currently performing an
-     * ‘action’. These actions include working for a company/faction, studying at a university,
-     * working out at a gym, creating a program, committing a crime, or carrying out a Hacking Mission.
-     *
-     * @returns True if the player is currently performing an ‘action’, false otherwise.
-     */
+  /**
+   * Check if the player is busy.
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   *
+   *
+   * Returns a boolean indicating whether or not the player is currently performing an
+   * ‘action’. These actions include working for a company/faction, studying at a university,
+   * working out at a gym, creating a program, committing a crime, or carrying out a Hacking Mission.
+   *
+   * @returns True if the player is currently performing an ‘action’, false otherwise.
+   */
   isBusy(): boolean;
 
   /**
@@ -2571,26 +2571,26 @@ export interface Hacknet {
    */
   getHashUpgradeLevel(upgName: string): number;
 
-    /**
-     * Get the multiplier to study.
-     * @remarks
-     * RAM cost: 0 GB
-     *
-     * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
-     *
-     * @returns Multiplier.
-     */
+  /**
+   * Get the multiplier to study.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
+   *
+   * @returns Multiplier.
+   */
   getStudyMult(): number;
 
-    /**
-     * Get the multiplier to training.
-     * @remarks
-     * RAM cost: 0 GB
-     *
-     * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
-     *
-     * @returns Multiplier.
-     */
+  /**
+   * Get the multiplier to training.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
+   *
+   * @returns Multiplier.
+   */
   getTrainingMult(): number;
 }
 
@@ -3076,18 +3076,18 @@ export interface Bladeburner {
  * @public
  */
 export interface CodingContract {
-    /**
-     * Attempts a coding contract.
-     * @remarks
-     * RAM cost: 10 GB
-     *
-     * Attempts to solve the Coding Contract with the provided solution.
-     *
-     * @param answer - Solution for the contract.
-     * @param fn - Filename of the contract.
-     * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
-     * @param opts - Optional parameters for configuring function behavior.
-     * @returns True if the solution was correct, false otherwise. If the returnReward option is configured, then the function will instead return a string. If the contract is successfully solved, the string will contain a description of the contract’s reward. Otherwise, it will be an empty string.
+  /**
+   * Attempts a coding contract.
+   * @remarks
+   * RAM cost: 10 GB
+   *
+   * Attempts to solve the Coding Contract with the provided solution.
+   *
+   * @param answer - Solution for the contract.
+   * @param fn - Filename of the contract.
+   * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param opts - Optional parameters for configuring function behavior.
+   * @returns True if the solution was correct, false otherwise. If the returnReward option is configured, then the function will instead return a string. If the contract is successfully solved, the string will contain a description of the contract’s reward. Otherwise, it will be an empty string.
    */
   attempt(answer: string[] | number, filename: string, host?: string, opts?: CodingAttemptOptions): boolean | string;
 
@@ -5393,19 +5393,19 @@ export interface NS extends Singularity {
    */
   isRunning(script: FilenameOrPID, host: string, ...args: string[]): boolean;
 
-    /**
-     * Get general info about a running script.
-     * @remarks
-     * RAM cost: 0.3 GB
-     *
-     * Running with no args returns current script.
-     * If you use a PID as the first parameter, the hostname and args parameters are unnecessary.
-     *
-     * @param filename - Optional. Filename or PID of the script.
-     * @param hostname - Optional. Name of host server the script is running on.
-     * @param args  - Arguments to identify the script
-     * @returns The info about the running script if found, and null otherwise.
-     */
+  /**
+   * Get general info about a running script.
+   * @remarks
+   * RAM cost: 0.3 GB
+   *
+   * Running with no args returns current script.
+   * If you use a PID as the first parameter, the hostname and args parameters are unnecessary.
+   *
+   * @param filename - Optional. Filename or PID of the script.
+   * @param hostname - Optional. Name of host server the script is running on.
+   * @param args  - Arguments to identify the script
+   * @returns The info about the running script if found, and null otherwise.
+   */
   getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: (string | number)[]): RunningScript;
 
   /**
@@ -6243,12 +6243,12 @@ export interface WarehouseAPI {
    * @param all - Sell in all city
    */
   sellProduct(
-      divisionName: string,
-      cityName: string,
-      productName: string,
-      amt: string,
-      price: string,
-      all: boolean,
+    divisionName: string,
+    cityName: string,
+    productName: string,
+    amt: string,
+    price: string,
+    all: boolean,
   ): void;
   /**
    * Discontinue a product.
@@ -6340,12 +6340,12 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to export.
    */
   exportMaterial(
-      sourceDivision: string,
-      sourceCity: string,
-      targetDivision: string,
-      targetCity: string,
-      materialName: string,
-      amt: number,
+    sourceDivision: string,
+    sourceCity: string,
+    targetDivision: string,
+    targetCity: string,
+    materialName: string,
+    amt: number,
   ): void;
   /**
    * Cancel material export
@@ -6357,12 +6357,12 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to export.
    */
   cancelExportMaterial(
-      sourceDivision: string,
-      sourceCity: string,
-      targetDivision: string,
-      targetCity: string,
-      materialName: string,
-      amt: number,
+    sourceDivision: string,
+    sourceCity: string,
+    targetDivision: string,
+    targetCity: string,
+    materialName: string,
+    amt: number,
   ): void;
   /**
    * Purchase warehouse for a new city
@@ -6385,11 +6385,11 @@ export interface WarehouseAPI {
    * @param marketingInvest - Amount to invest for the marketing of the product.
    */
   makeProduct(
-      divisionName: string,
-      cityName: string,
-      productName: string,
-      designInvest: number,
-      marketingInvest: number,
+    divisionName: string,
+    cityName: string,
+    productName: string,
+    designInvest: number,
+    marketingInvest: number,
   ): void;
   /**
    * Gets the cost to purchase a warehouse
@@ -6681,7 +6681,7 @@ interface EmployeeJobs {
 interface Division {
   /** Name of the division */
   name: string;
-    /** Type of division, like Agriculture */
+  /** Type of division, like Agriculture */
   type: string;
   /** Awareness of the division */
   awareness: number;

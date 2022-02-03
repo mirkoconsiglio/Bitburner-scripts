@@ -11,7 +11,7 @@ export async function main(ns) {
 			headers.push(`Income\u00A0`);
 			values.push(`${ns.nFormat(ns.getScriptIncome()[0], '$0.000a')}`);
 			headers.push(`Karma`);
-			values.push(ns.heart.break());
+			values.push(`${ns.nFormat(ns.heart.break(), '0.000a')}`);
 			hook0.innerText = headers.join('\n');
 			hook1.innerText = values.join('\n');
 		} catch (err) {
