@@ -6,10 +6,10 @@ export async function main(ns) {
 
 export function contractor(ns) {
 	for (let server of getServers(ns)) {
-		let files = ns.ls(server, '.cct');
+		const files = ns.ls(server, '.cct');
 		for (let file of files) {
-			let contract = ns.codingcontract.getContractType(file, server);
-			let data = ns.codingcontract.getData(file, server);
+			const contract = ns.codingcontract.getContractType(file, server);
+			const data = ns.codingcontract.getData(file, server);
 			let solution;
 			switch (contract) {
 				case 'Find Largest Prime Factor':
@@ -63,7 +63,7 @@ export function contractor(ns) {
 				default:
 					printBoth(ns, `Found ${file} on ${server} of type: ${contract}.`)
 			}
-			let result = ns.codingcontract.attempt(solution, file, server, {returnReward: true});
+			const result = ns.codingcontract.attempt(solution, file, server, {returnReward: true});
 			if (result) {
 				printBoth(ns, `Solved ${file} on ${server} of type: ${contract}. ${result}.`);
 			} else {

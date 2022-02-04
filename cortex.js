@@ -43,16 +43,23 @@ export async function main(ns) {
 		printBoth(ns, `Started corp manager`);
 	}
 	// Bladeburner manager
-	if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1))
-		&& !ns.isRunning('/bladeburner/autopilot.js', 'home') && await ns.prompt(`Start bladeburner manager?`)) {
+	if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
+		bb.joinBladeburnerDivision() && !ns.isRunning('/bladeburner/autopilot.js', 'home') &&
+		await ns.prompt(`Start bladeburner manager?`)) {
 		ns.exec('/bladeburner/autopilot.js', 'home');
 		printBoth(ns, `Started bladeburner manager`);
+	}
+	// Sleeve manager
+	if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1))
+		&& !ns.isRunning('/sleeve/autopilot.js', 'home') && await ns.prompt(`Start sleeve manager?`)) {
+		ns.exec('/sleeve/autopilot.js', 'home');
+		printBoth(ns, `Started sleeve manager`);
 	}
 	// Cortex
 	while (true) {
 		player = ns.getPlayer();
 		// UI
-		ns.exec('/ui/overview.js', 'home');
+		if (!ns.isRunning('/ui/overview.js')) ns.exec('/ui/overview.js', 'home');
 		// Heal player
 		if (player.hp < player.max_hp) {
 			let cost = ns.hospitalize();
