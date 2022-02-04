@@ -39,7 +39,7 @@ export async function main(ns) {
 		// Assign tasks
 		for (let gangMember of gangRoster) {
 			if (gangMember.hack < hack_level) ns.gang.setMemberTask(gangMember.name, 'Train Hacking');
-			else if (myGang.wantedPenalty < 0.9) ns.gang.setMemberTask(gangMember.name, 'Ethical Hacking');
+			else if (myGang.wantedPenalty < 0.5) ns.gang.setMemberTask(gangMember.name, 'Ethical Hacking');
 			else if (gangRoster.length < 12) ns.gang.setMemberTask(gangMember.name, 'Cyberterrorism');
 			else ns.gang.setMemberTask(gangMember.name, 'Money Laundering');
 		}

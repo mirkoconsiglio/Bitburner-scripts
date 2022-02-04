@@ -12,7 +12,7 @@ export async function main(ns) {
 			} else {
 				if (ns.sleeve.getTask(i).task !== 'Shock Recovery') ns.sleeve.setToShockRecovery(i);
 			}
-			ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i)}`);
+			ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i).task}`);
 		}
 		await ns.sleep(1000);
 	}

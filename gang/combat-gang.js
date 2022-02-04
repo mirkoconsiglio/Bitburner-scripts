@@ -42,7 +42,7 @@ export async function main(ns) {
 		let warfareCounter = 0;
 		for (let gangMember of gangRoster) {
 			if (gangMember.str < strength_level) ns.gang.setMemberTask(gangMember.name, 'Train Combat');
-			else if (myGang.wantedPenalty < 0.9) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
+			else if (myGang.wantedPenalty < 0.5) ns.gang.setMemberTask(gangMember.name, 'Vigilante Justice');
 			else if (gangRoster.length < 12) ns.gang.setMemberTask(gangMember.name, 'Terrorism');
 			else if (clashChance.some(s => s < 0.8) && myGang.territory < 1 && warfareCounter < 6) {
 				ns.gang.setMemberTask(gangMember.name, 'Territory Warfare');

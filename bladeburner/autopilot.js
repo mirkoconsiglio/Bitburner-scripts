@@ -19,6 +19,7 @@ export async function main(ns) {
 	let lastLookAround = 0;
 	// Autopilot
 	while (true) {
+		const player = ns.getPlayer();
 		const rank = bb.getRank();
 		// Join Faction if we can
 		if (rank > 25) bb.joinBladeburnerFaction();
@@ -45,6 +46,11 @@ export async function main(ns) {
 			ns.print(`Purchasing ${skill.name} for ${skill.cost} skill points`);
 			// Update skill points
 			points = bb.getSkillPoints();
+		}
+		// Train combat to get 100 in all combat stats
+		if (player.str < 100 || player.def < 100 || player.dex < 100 || player.agi < 100) {
+			await doAction(ns, 'general', 'Training');
+			continue;
 		}
 		// Check if we can do black ops
 		for (const blackOp of blackOps) {
@@ -124,7 +130,7 @@ export async function main(ns) {
 		}
 		// Check stamina
 		const [stamina, maxStamina] = bb.getStamina();
-		if (stamina < maxStamina / 2 || actions.length === 0) {
+		if (stamina < maxStamina / 2) {
 			await doAction(ns, 'general', 'Hyperbolic Regeneration Chamber');
 			continue;
 		}
