@@ -44,7 +44,7 @@ export async function main(ns) {
 	}
 	// Bladeburner manager
 	if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
-		bb.joinBladeburnerDivision() && !ns.isRunning('/bladeburner/autopilot.js', 'home') &&
+		ns.bladeburner.joinBladeburnerDivision() && !ns.isRunning('/bladeburner/autopilot.js', 'home') &&
 		await ns.prompt(`Start bladeburner manager?`)) {
 		ns.exec('/bladeburner/autopilot.js', 'home');
 		printBoth(ns, `Started bladeburner manager`);

@@ -24,6 +24,7 @@ hacking/hack.js
 hacking/weaken.js
 stock-market/early-stock-market.js
 stock-market/stock-market.js
+stock-market/autopilot.js
 texts/augmentations-list.txt
 texts/bitnode-order.txt
 tools/analyze-server.js
