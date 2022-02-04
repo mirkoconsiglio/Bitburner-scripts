@@ -48,7 +48,7 @@ export async function main(ns) {
 			points = bb.getSkillPoints();
 		}
 		// Train combat to get 100 in all combat stats
-		if (player.str < 100 || player.def < 100 || player.dex < 100 || player.agi < 100) {
+		if (player.strength < 100 || player.defense < 100 || player.dexterity < 100 || player.agility < 100) {
 			await doAction(ns, 'general', 'Training');
 			continue;
 		}
