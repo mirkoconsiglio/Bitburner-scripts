@@ -31,7 +31,7 @@ export function manageAndHack(ns) {
 		if (secDiff > 0) {
 			let threads = Math.ceil(secDiff * 20) - hackstates.get(target).weaken;
 			if (threads > 0) {
-				if (!findPlaceToRun(ns, scripts.weaken, threads, freeRams, [target])) {
+				if (!findPlaceToRun(ns, scripts.weaken, threads, freeRams, target)) {
 					return;
 				}
 			}
@@ -42,7 +42,7 @@ export function manageAndHack(ns) {
 		if (moneyPercent < 0.9) {
 			let threads = Math.ceil(ns.growthAnalyze(target, 1 / moneyPercent)) - hackstates.get(target).grow;
 			if (threads > 0) {
-				if (!findPlaceToRun(ns, scripts.grow, threads, freeRams, [target])) {
+				if (!findPlaceToRun(ns, scripts.grow, threads, freeRams, target)) {
 					return;
 				}
 			}
@@ -51,7 +51,7 @@ export function manageAndHack(ns) {
 		if (moneyPercent > 0.75 && secDiff < 50) {
 			let threads = Math.floor(ns.hackAnalyzeThreads(target, money - (0.4 * maxMoney))) - hackstates.get(target).hack;
 			if (threads > 0) {
-				if (!findPlaceToRun(ns, scripts.hack, threads, freeRams, [target])) {
+				if (!findPlaceToRun(ns, scripts.hack, threads, freeRams, target)) {
 					return;
 				}
 			}

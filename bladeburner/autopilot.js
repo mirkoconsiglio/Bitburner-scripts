@@ -63,6 +63,11 @@ export async function main(ns) {
 				[amin, amax] = bb.getActionEstimatedSuccessChance('BlackOps', blackOp.name);
 			}
 			if (amax < 1) break; // Attempt only at 100%
+			// Ask player to complete the Bitnode
+			if (blackOp.name === 'Operation Daedalus' && !(await ns.prompt(`Complete Operation Daedalus and finish bitnode?`))) {
+				ns.tprint(`Stopping Bladeburner manager`);
+				ns.exit();
+			}
 			await doAction(ns, 'BlackOps', blackOp.name);
 		}
 		// Get current city

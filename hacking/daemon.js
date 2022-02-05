@@ -59,11 +59,11 @@ async function primeTarget(ns, sec, money, data) {
 		let freeRams = getFreeRam(ns, servers);
 
 		let growFound = true;
-		if (!grown) growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, [data.target]);
+		if (!grown) growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, data.target);
 		if (growFound) grown = true;
 
 		let weakenFound = true;
-		if (!weakened) weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, [data.target]);
+		if (!weakened) weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, data.target);
 		if (weakenFound) weakened = true;
 
 		if (!growFound) await ns.sleep(1000);

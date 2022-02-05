@@ -8,8 +8,8 @@ export async function main(ns) {
 	while (true) {
 		let servers = getAccessibleServers(ns);
 		let freeRams = getFreeRam(ns, servers);
-		findPlaceToRun(ns, scripts.grow, threads, freeRams, ['joesguns', 0, i]);
-		findPlaceToRun(ns, scripts.weaken, threads, freeRams, ['joesguns', 0, i]);
+		findPlaceToRun(ns, scripts.grow, threads, freeRams, 'joesguns', 0, i);
+		findPlaceToRun(ns, scripts.weaken, threads, freeRams, 'joesguns', 0, i);
 		await ns.sleep(1000);
 	}
 }

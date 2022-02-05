@@ -127,7 +127,7 @@ export function getAccessibleServers(ns) {
 	return getServers(ns).filter(server => hackServer(ns, server));
 }
 
-export function findPlaceToRun(ns, script, threads, freeRams, scriptArgs = []) {
+export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
 	const scriptRam = ns.getScriptRam(script);
 	let remainingThread = threads;
 	while (freeRams.length > 0) {

@@ -102,6 +102,8 @@ export async function main(ns) {
 		}
 		// Simple hack manager
 		manageAndHack(ns);
+		// TODO: Deploy daemons when at 4 TiB
+
 		// Check faction invites
 		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
 		if (factions.length > 0 && !promptScriptRunning(ns, 'home')) {
