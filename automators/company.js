@@ -28,20 +28,17 @@ export async function main(ns) {
 	else if (args.part_time_employee) workType = 'part-time Employee';
 	else if (args.waiter) workType = 'Waiter';
 	else if (args.part_time_waiter) workType = 'part-time Waiter';
-	else {
-		ns.tprint(`Invalid work type.`);
-		ns.exit();
-	}
+	else throw new Error(`Invalid work type`);
 
 	for (let i = 0; i < args._.length; i += 2) {
 		let company = companies.find(company => company.toLowerCase() === args._[i]);
 		if (company) {
-			ns.tprint(`Working for ${company}.`);
+			ns.tprint(`Working for ${company}`);
 			while (ns.getCompanyRep(company) < args._[i + 1]) {
 				ns.applyToCompany(company, workType);
 				ns.workForCompany(company, ns.isFocused());
 				await ns.sleep(1000);
 			}
-		} else ns.tprint(`Could not find company.`);
+		} else ns.tprint(`Could not find ${args._[i]}`);
 	}
 }

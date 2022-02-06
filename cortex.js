@@ -27,57 +27,17 @@ export async function main(ns) {
 	];
 	// Variables
 	let contractorOnline = true;
+	let askedStock = false;
+	let askedGang = false;
+	let askedCorp = false;
+	let askedBladeburner = false;
+	let askedSleeve = false;
 	let askedFactions = [];
 	let upgradeRamTime = upgradeRamTimer;
 	let upgradeCoresTime = upgradeCoresTimer;
-	let player = ns.getPlayer();
-	// Stock market manager
-	if (player.has4SDataTixApi && !ns.isRunning(scripts.stock, host) &&
-		enoughRam(ns, scripts.stock, host) && await ns.prompt(`Start stock market manager?`)) {
-		ns.exec(scripts.stock, host);
-		printBoth(ns, `Started stock market manager`);
-	}
-	// Gang manager
-	if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
-		ns.heart.break() <= -54e3)) && ns.gang.inGang()) {
-		if (ns.gang.getGangInformation().isHacking) {
-			if (!ns.isRunning(scripts.hackingGang, host) && enoughRam(ns, scripts.hackingGang, host) &&
-				await ns.prompt(`Start hacking gang manager?`)) {
-				ns.exec(scripts.hackingGang, host);
-				printBoth(ns, `Started hacking gang manager`);
-			}
-		} else {
-			if (!ns.isRunning(scripts.combatGang, host) && enoughRam(ns, scripts.combatGang, host) &&
-				await ns.prompt(`Start combat gang manager?`)) {
-				ns.exec(scripts.combatGang, host);
-				printBoth(ns, `Started combat gang manager`);
-			}
-		}
-	}
-	// Corp manager
-	if ((player.bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3)) &&
-		player.hasCorporation && !ns.isRunning(scripts.corp, host) &&
-		enoughRam(ns, scripts.corp, host) && await ns.prompt(`Start corp manager?`)) {
-		ns.exec(scripts.corp, host);
-		printBoth(ns, `Started corp manager`);
-	}
-	// Bladeburner manager
-	if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
-		ns.bladeburner.joinBladeburnerDivision() && !ns.isRunning(scripts.bladeburner, host) &&
-		enoughRam(ns, scripts.bladeburner, host) && await ns.prompt(`Start bladeburner manager?`)) {
-		ns.exec(scripts.bladeburner, host);
-		printBoth(ns, `Started bladeburner manager`);
-	}
-	// Sleeve manager
-	if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1))
-		&& !ns.isRunning(scripts.sleeve, host) && enoughRam(ns, scripts.sleeve, host) &&
-		await ns.prompt(`Start sleeve manager?`)) {
-		ns.exec(scripts.sleeve, host);
-		printBoth(ns, `Started sleeve manager`);
-	}
 	// Cortex
 	while (true) {
-		player = ns.getPlayer();
+		const player = ns.getPlayer();
 		// UI
 		if (!ns.isRunning(scripts.ui) && enoughRam(ns, scripts.ui, host)) ns.exec(scripts.ui, host);
 		// Heal player
@@ -120,17 +80,70 @@ export async function main(ns) {
 				ns.exec(scripts.backdoor, host, 1, server);
 			}
 		}
-		// Simple hack manager
-		manageAndHack(ns);
-		// TODO: Deploy daemons when at 4 TiB
 		// Check faction invites
 		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
-		if (factions.length > 0 && !promptScriptRunning(ns, host)) {
+		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, host) &&
+			!promptScriptRunning(ns, host)) {
 			ns.print(`Request to join ${factions}`);
 			ns.exec(scripts.joinFactions, host, 1, ...factions);
 			askedFactions = askedFactions.concat(factions); // Don't ask again
 		}
-
+		// Stock market manager
+		if (player.has4SDataTixApi && !ns.isRunning(scripts.stock, host) && !askedStock &&
+			enoughRam(ns, scripts.stock, host) && await ns.prompt(`Start stock market manager?`)) {
+			ns.exec(scripts.stock, host);
+			printBoth(ns, `Started stock market manager`);
+			askedStock = true;
+		}
+		// Gang manager
+		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
+			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !askedGang) {
+			if (ns.gang.getGangInformation().isHacking) {
+				if (!ns.isRunning(scripts.hackingGang, host) && enoughRam(ns, scripts.hackingGang, host) &&
+					await ns.prompt(`Start hacking gang manager?`)) {
+					ns.exec(scripts.hackingGang, host);
+					printBoth(ns, `Started hacking gang manager`);
+				}
+			} else {
+				if (!ns.isRunning(scripts.combatGang, host) && enoughRam(ns, scripts.combatGang, host) &&
+					await ns.prompt(`Start combat gang manager?`)) {
+					ns.exec(scripts.combatGang, host);
+					printBoth(ns, `Started combat gang manager`);
+				}
+			}
+			askedGang = true;
+		}
+		// Corp manager
+		if ((player.bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3)) &&
+			player.hasCorporation && !ns.isRunning(scripts.corp, host) && !askedCorp &&
+			enoughRam(ns, scripts.corp, host) && await ns.prompt(`Start corp manager?`)) {
+			ns.exec(scripts.corp, host);
+			printBoth(ns, `Started corp manager`);
+			askedCorp = true;
+		}
+		// Bladeburner manager
+		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
+			ns.bladeburner.joinBladeburnerDivision() && !askedBladeburner &&
+			!ns.isRunning(scripts.bladeburner, host) && enoughRam(ns, scripts.bladeburner, host) &&
+			await ns.prompt(`Start bladeburner manager?`)) {
+			ns.exec(scripts.bladeburner, host);
+			printBoth(ns, `Started bladeburner manager`);
+			askedBladeburner = true;
+		}
+		// Sleeve manager
+		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1)) &&
+			!askedSleeve && !ns.isRunning(scripts.sleeve, host) &&
+			enoughRam(ns, scripts.sleeve, host) && await ns.prompt(`Start sleeve manager?`)) {
+			ns.exec(scripts.sleeve, host);
+			printBoth(ns, `Started sleeve manager`);
+			askedSleeve = true;
+		}
+		// Deploy daemons if home RAM >= 4 TiB
+		if (ns.getServerMaxRam('home') >= 2 ** 12 &&
+			enoughRam(ns, scripts.deployDaemons, host)) ns.exec(scripts.deployDaemons, host);
+		// Simple hack manager
+		manageAndHack(ns);
+		// Update every second
 		await ns.sleep(1000);
 	}
 }
