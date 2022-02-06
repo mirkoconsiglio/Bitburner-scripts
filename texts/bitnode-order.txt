@@ -2,10 +2,12 @@
 5.1                     Int, Formulas & getBitNodeMultipliers()
 4.1  -> 4.2  -> 4.3     Max SF4 Singularity Functions
 5.2  -> 5.3             Max SF5 14% Hacking
-2.1  -> 2.2  -> 2.3     MAX SF2 42% Crime & Charisma, Gangs
+2.1  -> 2.2  -> 2.3     Max SF2 42% Crime & Charisma, Gangs
 3.1                     Corps
 12.1                    NFG-1
 6.1                     Bladeburner
 7.1                     Bladeburner API
 10.1 -> 10.2 -> 10.3    Sleeves
 3.2  -> 3.3             Max SF3 14% Company Salary and Charisma, Office API & Warehouse API
+6.2  -> 6.3             Max SF6 14% Combat
+7.2  -> 7.3             Max SF7 14% Bladeburner
