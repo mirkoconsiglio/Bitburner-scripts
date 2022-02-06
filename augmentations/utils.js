@@ -3,10 +3,11 @@ export function isUsefulGeneral(ns, name) {
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful general augmentations
 			stats.faction_rep_mult ||
-			name === 'CashRoot Starter Kit' ||
-			name === 'Neurolink' ||
-			name === 'PCMatrix' ||
-			name === 'Neuroreceptor Management Implant'
+			name === 'CashRoot Starter Kit' || // Starting money and programs
+			name === 'BitRunners Neurolink' || // Programs
+			name === 'PCMatrix' || // Programs
+			name === 'Neuroreceptor Management Implant' || // No simultaneous penalty
+			name === 'The Blade\'s Simulacrum' // Bladeburner and working
 		);
 }
 
