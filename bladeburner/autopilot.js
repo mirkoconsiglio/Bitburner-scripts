@@ -64,9 +64,9 @@ export async function main(ns) {
 			}
 			if (amax < 1) break; // Attempt only at 100%
 			// Ask player to complete the Bitnode
-			if (blackOp.name === 'Operation Daedalus' && !(await ns.prompt(`Complete Operation Daedalus and finish bitnode?`))) {
+			if (blackOp.name === 'Operation Daedalus' && !await ns.prompt(`Complete Operation Daedalus and finish Bitnode?`)) {
 				ns.tprint(`Stopping Bladeburner manager`);
-				ns.exit();
+				return;
 			}
 			await doAction(ns, 'BlackOps', blackOp.name);
 		}

@@ -26,7 +26,18 @@ export function getScripts() {
 		weaken: '/hacking/weaken.js',
 		daemon: '/hacking/daemon.js',
 		utils: '/utils/utils.js',
-		share: '/utils/share.js'
+		share: '/utils/share.js',
+		combatGang: '/gang/combat-gang.js',
+		hackingGang: '/gang/hacking-gang.js',
+		corp: '/corporation/autopilot.js',
+		bladeburner: '/bladeburner/autopilot.js',
+		stock: '/stock-market/stock-market.js',
+		sleeve: '/sleeve/autopilot.js',
+		ui: '/ui/overview.js',
+		upgradeHomeRam: '/utils/upgrade-home-ram.js',
+		upgradeHomeCores: '/utils/upgrade-home-cores.js',
+		backdoor: '/utils/backdoor.js',
+		joinFactions: '/utils/joinFactions.js'
 	}
 }
 
@@ -237,4 +248,8 @@ export function promptScriptRunning(ns, server) {
 
 function getPromptScripts() {
 	return ['/utils/join-factions.js', '/utils/upgrade-home-ram.js', '/utils/upgrade-home-cores.js'];
+}
+
+export function enoughRam(ns, script, server = ns.getHostname()) {
+	return ns.getScriptRam(script, server) <= ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
 }
