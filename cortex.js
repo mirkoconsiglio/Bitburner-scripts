@@ -90,9 +90,11 @@ export async function main(ns) {
 		}
 		// Stock market manager
 		if (player.has4SDataTixApi && !ns.isRunning(scripts.stock, host) && !askedStock &&
-			enoughRam(ns, scripts.stock, host) && await ns.prompt(`Start stock market manager?`)) {
-			ns.exec(scripts.stock, host);
-			printBoth(ns, `Started stock market manager`);
+			enoughRam(ns, scripts.stock, host)) {
+			if (await ns.prompt(`Start stock market manager?`)) {
+				ns.exec(scripts.stock, host);
+				printBoth(ns, `Started stock market manager`);
+			}
 			askedStock = true;
 		}
 		// Gang manager
@@ -116,26 +118,31 @@ export async function main(ns) {
 		// Corp manager
 		if ((player.bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3)) &&
 			player.hasCorporation && !ns.isRunning(scripts.corp, host) && !askedCorp &&
-			enoughRam(ns, scripts.corp, host) && await ns.prompt(`Start corp manager?`)) {
-			ns.exec(scripts.corp, host);
-			printBoth(ns, `Started corp manager`);
+			enoughRam(ns, scripts.corp, host)) {
+			if (await ns.prompt(`Start corp manager?`)) {
+				ns.exec(scripts.corp, host);
+				printBoth(ns, `Started corp manager`);
+			}
 			askedCorp = true;
 		}
 		// Bladeburner manager
 		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
 			ns.bladeburner.joinBladeburnerDivision() && !askedBladeburner &&
-			!ns.isRunning(scripts.bladeburner, host) && enoughRam(ns, scripts.bladeburner, host) &&
-			await ns.prompt(`Start bladeburner manager?`)) {
-			ns.exec(scripts.bladeburner, host);
-			printBoth(ns, `Started bladeburner manager`);
+			!ns.isRunning(scripts.bladeburner, host) && enoughRam(ns, scripts.bladeburner, host)) {
+			if (await ns.prompt(`Start bladeburner manager?`)) {
+				ns.exec(scripts.bladeburner, host);
+				printBoth(ns, `Started bladeburner manager`);
+			}
 			askedBladeburner = true;
 		}
 		// Sleeve manager
 		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1)) &&
 			!askedSleeve && !ns.isRunning(scripts.sleeve, host) &&
-			enoughRam(ns, scripts.sleeve, host) && await ns.prompt(`Start sleeve manager?`)) {
-			ns.exec(scripts.sleeve, host);
-			printBoth(ns, `Started sleeve manager`);
+			enoughRam(ns, scripts.sleeve, host)) {
+			if (await ns.prompt(`Start sleeve manager?`)) {
+				ns.exec(scripts.sleeve, host);
+				printBoth(ns, `Started sleeve manager`);
+			}
 			askedSleeve = true;
 		}
 		// Deploy daemons if home RAM >= 4 TiB
