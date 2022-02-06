@@ -25,6 +25,7 @@ export function getScripts() {
 		grow: '/hacking/grow.js',
 		weaken: '/hacking/weaken.js',
 		daemon: '/hacking/daemon.js',
+		deployDaemons: '/hacking/deploy-daemons.js',
 		utils: '/utils/utils.js',
 		share: '/utils/share.js',
 		combatGang: '/gang/combat-gang.js',
@@ -37,7 +38,7 @@ export function getScripts() {
 		upgradeHomeRam: '/utils/upgrade-home-ram.js',
 		upgradeHomeCores: '/utils/upgrade-home-cores.js',
 		backdoor: '/utils/backdoor.js',
-		joinFactions: '/utils/joinFactions.js'
+		joinFactions: '/utils/join-factions.js'
 	}
 }
 
