@@ -1,5 +1,5 @@
 import {getActionData, getSkillsData} from '/bladeburner/utils.js';
-import {getCities} from '/utils/utils.js';
+import {getCities, promptScriptRunning} from '/utils/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -64,9 +64,14 @@ export async function main(ns) {
 			}
 			if (amax < 1) break; // Attempt only at 100%
 			// Ask player to complete the Bitnode
-			if (blackOp.name === 'Operation Daedalus' && !await ns.prompt(`Complete Operation Daedalus and finish Bitnode?`)) {
-				ns.tprint(`Stopping Bladeburner manager`);
-				return;
+			if (blackOp.name === 'Operation Daedalus') {
+				while (promptScriptRunning(ns, 'home')) {
+					await ns.sleep(1000);
+				}
+				if (await ns.prompt(`Complete Operation Daedalus and finish Bitnode?`)) {
+					ns.tprint(`Stopping Bladeburner manager`);
+					return;
+				}
 			}
 			await doAction(ns, 'BlackOps', blackOp.name);
 		}

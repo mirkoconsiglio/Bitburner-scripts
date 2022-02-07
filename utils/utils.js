@@ -248,7 +248,21 @@ export function promptScriptRunning(ns, server) {
 }
 
 function getPromptScripts() {
-	return ['/utils/join-factions.js', '/utils/upgrade-home-ram.js', '/utils/upgrade-home-cores.js'];
+	return [
+		'/utils/join-factions.js',
+		'/utils/upgrade-home-ram.js',
+		'/utils/upgrade-home-cores.js',
+		'/augmentations/install-augmentations.js',
+		'/augmentations/purchase-augmentations.js',
+		'/build/script-remover.js',
+		'/sleeve/company.js',
+		'/sleeve/crime.js',
+		'/sleeve/faction.js',
+		'/sleeve/gym.js',
+		'/sleeve/shock-recovery.js',
+		'/sleeve/synchronize.js',
+		'/sleeve/university.js'
+	];
 }
 
 export function enoughRam(ns, script, server = ns.getHostname()) {
