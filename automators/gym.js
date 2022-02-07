@@ -1,5 +1,5 @@
 export async function main(ns) {
-	let args = ns.flags([
+	const args = ns.flags([
 		['str', false],
 		['def', false],
 		['dex', false],
