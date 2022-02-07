@@ -27,6 +27,7 @@ export async function main(ns) {
 	];
 	// Variables
 	let contractorOnline = true;
+	let askedUI = false;
 	let askedStock = false;
 	let askedGang = false;
 	let askedCorp = false;
@@ -38,8 +39,6 @@ export async function main(ns) {
 	// Cortex
 	while (true) {
 		const player = ns.getPlayer();
-		// UI
-		if (!ns.isRunning(scripts.ui) && enoughRam(ns, scripts.ui, host)) ns.exec(scripts.ui, host);
 		// Heal player
 		if (player.hp < player.max_hp) {
 			let cost = ns.hospitalize();
@@ -57,6 +56,20 @@ export async function main(ns) {
 				}
 			}
 		}
+		// Backdoor servers
+		for (let server of getAccessibleServers(ns)) {
+			if (!(server === 'home' || server === 'w0r1d_d43m0n' ||
+				ns.getServer(server).backdoorInstalled ||
+				ns.isRunning(scripts.backdoor, host, server))) {
+				ns.print(`Installing backdoor on ${server}`);
+				ns.exec(scripts.backdoor, host, 1, server);
+			}
+		}
+		// Deploy daemons if home RAM >= 4 TiB
+		if (ns.getServerMaxRam('home') >= 2 ** 12 &&
+			enoughRam(ns, scripts.deployDaemons, host)) ns.exec(scripts.deployDaemons, host);
+		// Simple hack manager
+		manageAndHack(ns);
 		// Upgrade home RAM
 		if (ns.getUpgradeHomeRamCost() <= player.money &&
 			ns.getTimeSinceLastAug() - upgradeRamTime > upgradeRamTimer &&
@@ -71,22 +84,11 @@ export async function main(ns) {
 			ns.exec(scripts.upgradeHomeCores, host, 1);
 			upgradeCoresTime = ns.getTimeSinceLastAug();
 		}
-		// Backdoor servers
-		for (let server of getAccessibleServers(ns)) {
-			if (!(server === 'home' || server === 'w0r1d_d43m0n' ||
-				ns.getServer(server).backdoorInstalled ||
-				ns.isRunning(scripts.backdoor, host, server))) {
-				ns.print(`Installing backdoor on ${server}`);
-				ns.exec(scripts.backdoor, host, 1, server);
-			}
-		}
-		// Check faction invites
-		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
-		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, host) &&
+		// UI
+		if (!ns.isRunning(scripts.ui) && enoughRam(ns, scripts.ui, host) &&
 			!promptScriptRunning(ns, host)) {
-			ns.print(`Request to join ${factions}`);
-			ns.exec(scripts.joinFactions, host, 1, ...factions);
-			askedFactions = askedFactions.concat(factions); // Don't ask again
+			if (await ns.prompt(`Start UI manager?`)) ns.exec(scripts.ui, host);
+			askedUI = true;
 		}
 		// Stock market manager
 		if (player.has4SDataTixApi && !ns.isRunning(scripts.stock, host) && !askedStock &&
@@ -146,11 +148,14 @@ export async function main(ns) {
 			}
 			askedSleeve = true;
 		}
-		// Deploy daemons if home RAM >= 4 TiB
-		if (ns.getServerMaxRam('home') >= 2 ** 12 &&
-			enoughRam(ns, scripts.deployDaemons, host)) ns.exec(scripts.deployDaemons, host);
-		// Simple hack manager
-		manageAndHack(ns);
+		// Check faction invites
+		let factions = ns.checkFactionInvitations().filter(faction => !askedFactions.includes(faction));
+		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, host) &&
+			!promptScriptRunning(ns, host)) {
+			ns.print(`Request to join ${factions}`);
+			ns.exec(scripts.joinFactions, host, 1, ...factions);
+			askedFactions = askedFactions.concat(factions); // Don't ask again
+		}
 		// Update every second
 		await ns.sleep(1000);
 	}

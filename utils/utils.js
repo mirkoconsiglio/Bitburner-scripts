@@ -32,7 +32,7 @@ export function getScripts() {
 		hackingGang: '/gang/hacking-gang.js',
 		corp: '/corporation/autopilot.js',
 		bladeburner: '/bladeburner/autopilot.js',
-		stock: '/stock-market/stock-market.js',
+		stock: '/stock-market/autopilot.js',
 		sleeve: '/sleeve/autopilot.js',
 		ui: '/ui/overview.js',
 		upgradeHomeRam: '/utils/upgrade-home-ram.js',
