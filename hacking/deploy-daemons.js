@@ -14,7 +14,7 @@ export async function main(ns) {
 		if (i < hackables.length) {
 			if (!ns.isRunning(scripts.daemon, host, hackables[i + 1])) {
 				ns.scriptKill(scripts.daemon, host);
-				ns.exec(scripts.daemon, 'home', 1, hackables[i + 1]);
+				ns.exec(scripts.daemon, host, 1, hackables[i + 1]);
 			}
 		} else break;
 	}
