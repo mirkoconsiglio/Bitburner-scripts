@@ -90,7 +90,7 @@ export async function main(ns) {
 		}
 		// Stock market manager
 		if (player.has4SDataTixApi && !ns.isRunning(scripts.stock, host) && !askedStock &&
-			enoughRam(ns, scripts.stock, host)) {
+			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
 				ns.exec(scripts.stock, host);
 				printBoth(ns, `Started stock market manager`);
@@ -99,7 +99,7 @@ export async function main(ns) {
 		}
 		// Gang manager
 		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
-			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !askedGang) {
+			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !askedGang && !promptScriptRunning(ns, host)) {
 			if (ns.gang.getGangInformation().isHacking) {
 				if (!ns.isRunning(scripts.hackingGang, host) && enoughRam(ns, scripts.hackingGang, host) &&
 					await ns.prompt(`Start hacking gang manager?`)) {
@@ -118,7 +118,7 @@ export async function main(ns) {
 		// Corp manager
 		if ((player.bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3)) &&
 			player.hasCorporation && !ns.isRunning(scripts.corp, host) && !askedCorp &&
-			enoughRam(ns, scripts.corp, host)) {
+			enoughRam(ns, scripts.corp, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start corp manager?`)) {
 				ns.exec(scripts.corp, host);
 				printBoth(ns, `Started corp manager`);
@@ -128,7 +128,8 @@ export async function main(ns) {
 		// Bladeburner manager
 		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
 			ns.bladeburner.joinBladeburnerDivision() && !askedBladeburner &&
-			!ns.isRunning(scripts.bladeburner, host) && enoughRam(ns, scripts.bladeburner, host)) {
+			!ns.isRunning(scripts.bladeburner, host) && enoughRam(ns, scripts.bladeburner, host) &&
+			!promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start bladeburner manager?`)) {
 				ns.exec(scripts.bladeburner, host);
 				printBoth(ns, `Started bladeburner manager`);
@@ -138,7 +139,7 @@ export async function main(ns) {
 		// Sleeve manager
 		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1)) &&
 			!askedSleeve && !ns.isRunning(scripts.sleeve, host) &&
-			enoughRam(ns, scripts.sleeve, host)) {
+			enoughRam(ns, scripts.sleeve, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
 				ns.exec(scripts.sleeve, host);
 				printBoth(ns, `Started sleeve manager`);
