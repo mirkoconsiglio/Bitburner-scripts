@@ -53,3 +53,10 @@ gang/hacking-gang.js
 bladeburner/autopilot.js
 bladeburner/utils.js
 sleeve/autopilot.js
+sleeve/gym.js
+sleeve/university.js
+sleeve/crime.js
+sleeve/company.js
+sleeve/faction.js
+sleeve/shock-recovery.js
+sleeve/synchronize.js

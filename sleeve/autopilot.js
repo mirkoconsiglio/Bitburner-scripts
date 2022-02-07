@@ -1,3 +1,4 @@
+// TODO: Augmentation purchasing
 export async function main(ns) {
 	ns.disableLog('ALL');
 	while (true) {
