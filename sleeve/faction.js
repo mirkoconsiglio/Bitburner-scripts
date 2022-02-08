@@ -8,9 +8,9 @@ export async function main(ns) {
 		['security', false]
 	]);
 
-	const faction = factions.find(faction => faction.toLowerCase() === args._[0]);
+	const faction = factions.find(faction => faction.toLowerCase() === args._[1].toLowerCase());
 	if (!faction) {
-		ns.tprint(`Could not find ${args._[0]}`);
+		ns.tprint(`Could not find ${args._[1]}`);
 		ns.exit();
 	}
 
@@ -26,7 +26,5 @@ export async function main(ns) {
 		ns.kill(scripts.sleeve, 'home');
 	} else ns.exit();
 
-	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
-		ns.sleeve.setToFactionWork(i, faction, workType);
-	}
+	ns.sleeve.setToFactionWork(ns.args[0], faction, workType);
 }

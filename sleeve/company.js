@@ -2,9 +2,9 @@ import {getCompanies, getScripts} from '/utils/utils.js';
 
 export async function main(ns) {
 	const companies = getCompanies();
-	const company = companies.find(company => company.toLowerCase() === ns.args[0]);
+	const company = companies.find(company => company.toLowerCase() === ns.args[1].toLowerCase());
 	if (!company) {
-		ns.tprint(`Could not find ${ns.args[0]}`);
+		ns.tprint(`Could not find ${ns.args[1]}`);
 		ns.exit();
 	}
 
@@ -14,7 +14,5 @@ export async function main(ns) {
 		ns.kill(scripts.sleeve, 'home');
 	} else ns.exit();
 
-	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
-		ns.sleeve.setToCompanyWork(i, company);
-	}
+	ns.sleeve.setToCompanyWork(ns.args[0], company);
 }
