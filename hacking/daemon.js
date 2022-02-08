@@ -8,9 +8,9 @@ export async function main(ns) {
 		let sec = ns.getServerSecurityLevel(data.target);
 		let money = ns.getServerMoneyAvailable(data.target);
 		if (!(money === data.maxMoney) || !(sec === data.minSec)) {
-			ns.print(`Priming ${data.target}.`);
+			ns.print(`Priming ${data.target} in ${ns.getWeakenTime(data.target).toFixed(2)} seconds`);
 			let primed = await primeTarget(ns, sec, money, data);
-			if (primed) ns.print(`${data.target} is primed.`);
+			if (primed) ns.print(`${data.target} is primed`);
 			else continue;
 		}
 
@@ -47,12 +47,11 @@ async function primeTarget(ns, sec, money, data) {
 	let weakened = weakenThreads === 0;
 
 	let freeRAM = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
-	if (data.host === 'home') freeRAM -= 20;
 	let primeRAM = data.growScriptRam * growThreads + data.weakenScriptRam * weakenThreads;
 
 	if (primeRAM > freeRAM) {
 		ns.print(`Not enough RAM on ${data.host} to prime ${data.target}`);
-		ns.print(`Priming RAM: ${primeRAM}, available RAM: ${freeRAM}`);
+		ns.print(`Priming RAM: ${primeRAM.toFixed(2)}, available RAM: ${freeRAM.toFixed(2)}`);
 		ns.print(`Finding other hosts to prime ${data.target}`);
 
 		let servers = getAccessibleServers(ns);
@@ -94,7 +93,6 @@ function getInfo(ns, data) {
 	let gWeakenThreads = Math.ceil(growThreads * data.growSec / data.weakenSec); // Number of threads to weaken after grow
 
 	let freeRAM = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
-	if (data.host === 'home') freeRAM -= 32;
 	let cycleRAM = data.hackScriptRam * hackThreads + data.growScriptRam * growThreads + data.weakenScriptRam * (hWeakenThreads + gWeakenThreads); // Calculating how much RAM is used for a single run
 	let cycleCount = Math.floor(freeRAM / cycleRAM);
 	let cycleDelay = weakenTime / cycleCount;
@@ -152,7 +150,7 @@ function packageData(ns) {
 	const host = ns.getHostname();
 	const cores = ns.getServer(host).cpuCores;
 
-	const cycleDelayThresh = 200;
+	const cycleDelayThresh = 100;
 	const drainPercent = 0.5;
 	const increasePercent = 1 / (1 - drainPercent);
 

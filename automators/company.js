@@ -31,7 +31,7 @@ export async function main(ns) {
 	else throw new Error(`Invalid work type`);
 
 	for (let i = 0; i < args._.length; i += 2) {
-		let company = companies.find(company => company.toLowerCase() === args._[i]);
+		let company = companies.find(company => company.toLowerCase() === args._[i].toLowerCase());
 		if (company) {
 			ns.tprint(`Working for ${company}`);
 			while (ns.getCompanyRep(company) < args._[i + 1]) {

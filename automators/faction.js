@@ -17,7 +17,7 @@ export async function main(ns) {
 	else throw new Error(`Invalid work type`);
 
 	for (let i = 0; i < args._.length; i += 2) {
-		const faction = factions.find(faction => faction.toLowerCase() === args._[i]);
+		const faction = factions.find(faction => faction.toLowerCase() === args._[i].toLowerCase());
 		if (faction) {
 			ns.tprint(`Working for ${faction}`);
 			while (ns.getFactionRep(faction) < args._[i + 1]) {
