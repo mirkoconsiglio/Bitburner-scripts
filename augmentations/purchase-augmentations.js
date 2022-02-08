@@ -4,9 +4,10 @@ import {
 	isUsefulBladeburner,
 	isUsefulCombat,
 	isUsefulCompany,
-	isUsefulGeneral,
+	isUsefulFaction,
 	isUsefulHacking,
-	isUsefulHacknet
+	isUsefulHacknet,
+	isUsefulPrograms
 } from '/augmentations/utils.js';
 import {getFactions} from '/utils/utils.js';
 
@@ -16,16 +17,20 @@ export async function main(ns) {
 		['combat', false],
 		['company', false],
 		['hacknet', false],
+		['programs', false],
+		['faction', false],
 		['bladeburner', false],
 		['all', false],
 		['install', false]
 	]);
 	// Check criterions for determining if augmentations are useful
-	const criterions = [isUsefulGeneral];
+	const criterions = [];
 	if (args.hacking || args.all) criterions.push(isUsefulHacking);
 	if (args.combat || args.all) criterions.push(isUsefulCombat);
 	if (args.company || args.all) criterions.push(isUsefulCompany);
 	if (args.hacknet || args.all) criterions.push(isUsefulHacknet);
+	if (args.programs || args.all) criterions.push(isUsefulPrograms);
+	if (args.faction || args.all) criterions.push(isUsefulFaction);
 	if (args.bladeburner || args.all) criterions.push(isUsefulBladeburner);
 
 	let augmentations = [];
@@ -42,6 +47,7 @@ export async function main(ns) {
 			}
 		}
 	}
+	// Sell stocks before buying augmentations
 	if (ns.getPlayer().hasTixApiAccess) { // Check if player has TIX API
 		// Check if player has any stocks
 		let stocks = false;
@@ -114,7 +120,6 @@ export async function main(ns) {
 				highestRepFaction = faction;
 			}
 		}
-
 		let counter = 0;
 		while (ns.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) {
 			counter++;
