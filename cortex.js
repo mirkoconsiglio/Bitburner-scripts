@@ -86,12 +86,12 @@ export async function main(ns) {
 		}
 		// UI
 		if (!ns.isRunning(scripts.ui) && enoughRam(ns, scripts.ui, host) &&
-			!promptScriptRunning(ns, host)) {
+			!promptScriptRunning(ns, host) && !askedUI) {
 			if (await ns.prompt(`Start UI manager?`)) ns.exec(scripts.ui, host);
 			askedUI = true;
 		}
 		// Stock market manager
-		if (player.has4SDataTixApi && !ns.isRunning(scripts.stock, host) && !askedStock &&
+		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, host) && !askedStock &&
 			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
 				ns.exec(scripts.stock, host);
