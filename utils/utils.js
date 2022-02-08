@@ -187,10 +187,10 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 }
 
 export function getOptimalHackable(ns, servers, cores = 1) {
-	return servers.filter(server => ns.getServerMaxMoney(server) > 0).sort((a, b) => targetCost(ns, b, cores) - targetCost(ns, a, cores));
+	return servers.filter(server => ns.getServerMaxMoney(server) > 0).sort((a, b) => targetCost(ns, b, cores)[0] - targetCost(ns, a, cores)[0]);
 }
 
-export function targetCost(ns, target, cores = 1) { // TODO: include time in the cost function
+export function targetCost(ns, target, cores = 1, hackPercent = 0.5, freeRam = 2 ** 15) {
 	const form = ns.formulas.hacking;
 	const player = ns.getPlayer(); // Get player info
 	const server = ns.getServer(target); // Get server info
@@ -204,36 +204,62 @@ export function targetCost(ns, target, cores = 1) { // TODO: include time in the
 	const hackRam = ns.getScriptRam(scripts.hack);
 	const growRam = ns.getScriptRam(scripts.grow);
 	const weakenRam = ns.getScriptRam(scripts.weaken);
-	// Percent to hack (decimal form)
-	const hackPercent = 0.01;
+
+	// RAM calculations
+
 	// Hack threads per hack percent
-	const hackThreadsPerHackPercent = hackPercent / form.hackPercent(server, player);
+	const hackThreads = hackPercent / form.hackPercent(server, player);
 	// Weaken threads needed per hack thread
 	const weakenThreadsPerHackThread = hackSec / weakenSec;
-	// Weaken threads per hack thread per hack percent
-	const weakenThreadsPerHackPercentAfterHack = weakenThreadsPerHackThread * hackThreadsPerHackPercent;
+	// Weaken threads per hack thread
+	const weakenThreadsAfterHack = weakenThreadsPerHackThread * hackThreads;
 	// Percent to grow by 1 thread at min sec
 	const growPercent = form.growPercent(server, 1, player, cores);
-	// Grow threads needed per hack percent
-	const growThreadsPerHackPercent = Math.log(1 / (1 - hackPercent)) / Math.log(growPercent);
+	// Grow threads needed
+	const growThreads = Math.log(1 / (1 - hackPercent)) / Math.log(growPercent);
 	// Weaken threads needed per grow thread
 	const weakenThreadsPerGrowThread = growSec / weakenSec;
-	// Weaken threads needed per grow thread per hack percent
-	const weakenThreadsPerHackPercentAfterGrow = weakenThreadsPerGrowThread * growThreadsPerHackPercent;
-	// Total threads per hack percent
-	const totalRamPerHackPercent = hackThreadsPerHackPercent * hackRam + growThreadsPerHackPercent * growRam +
-		(weakenThreadsPerHackPercentAfterHack + weakenThreadsPerHackPercentAfterGrow) * weakenRam;
+	// Weaken threads needed per grow thread
+	const weakenThreadsAfterGrow = weakenThreadsPerGrowThread * growThreads;
+	// Cycle RAM
+	const cycleRam = hackThreads * hackRam + growThreads * growRam + (weakenThreadsAfterHack + weakenThreadsAfterGrow) * weakenRam;
+	// Number of cycles in one cycle group
+	const cycleCount = Math.floor(freeRam / cycleRam);
+	// Group RAM
+	const groupRam = cycleRam * cycleCount;
+
+	// Stolen money calculations
+
 	// Chance to hack at min sec
 	const chance = form.hackChance(server, player);
-	// Average money stolen per hack percent
-	const averageMoneyPerHackPercent = server.moneyMax * hackPercent * chance;
-	// Average money stolen per unit RAM
-	const averageMoneyPerRam = averageMoneyPerHackPercent / totalRamPerHackPercent;
-	//
-	return averageMoneyPerRam;
+	// Average money stolen per cycle
+	const averageMoneyPerCycle = server.moneyMax * hackPercent * chance;
+	// Average money stolen per group
+	const averageMoneyPerGroup = averageMoneyPerCycle * cycleCount;
+
+	// Time taken calculations
+
+	// Time taken for weaken
+	const weakenTime = form.weakenTime(server, player);
+	// Time taken from one cycle to the next
+	const cycleDelay = weakenTime / cycleCount;
+	// Time taken from one group to the next
+	const groupDelay = cycleDelay * cycleCount; // equivalent to weaken time
+
+	// Cost function calculations
+
+	// Average Money per unit Ram per unit time
+	const averageMoneyPerRamPerTime = averageMoneyPerGroup / (2 * groupDelay * groupRam);
+	// Average money stolen per unit Ram
+	const averageMoneyPerRam = averageMoneyPerRamPerTime * (2 * groupDelay);
+	// Average money stolen per unit time
+	const averageMoneyPerTime = averageMoneyPerGroup * groupRam;
+
+	// Cost
+	return [averageMoneyPerRamPerTime, averageMoneyPerRam, averageMoneyPerTime];
 }
 
-export function altTargetCost(ns, server) {
+export function altTargetCost(ns, server) { // Doesn't use Formulas
 	const hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
 	const grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
 	const weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
