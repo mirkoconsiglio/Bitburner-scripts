@@ -26,7 +26,7 @@ export async function main(ns) {
 			await stockMarket3(ns);
 			break;
 		default:
-			throw new Error(`Invalid stock trader number`);
+			throw new Error(`How did we get here?`);
 	}
 }
 // Basic
