@@ -16,6 +16,7 @@ export async function main(ns) {
 	const args = ns.flags([
 		['hacking', false],
 		['combat', false],
+		['crime', false],
 		['company', false],
 		['hacknet', false],
 		['programs', false],
@@ -29,6 +30,7 @@ export async function main(ns) {
 	const criterions = [];
 	if (args.hacking || args.all) criterions.push(isUsefulHacking);
 	if (args.combat || args.all) criterions.push(isUsefulCombat);
+	if (args.crime || args.all) criterions.push(isUsefulCrime);
 	if (args.company || args.all) criterions.push(isUsefulCompany);
 	if (args.hacknet || args.all) criterions.push(isUsefulHacknet);
 	if (args.programs || args.all) criterions.push(isUsefulPrograms);

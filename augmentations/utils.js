@@ -1,6 +1,6 @@
 export function isUsefulPrograms(ns, name) {
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
-		( 	// Useful general augmentations
+		( 	// Useful programs augmentations
 			name === 'CashRoot Starter Kit' || // Starting money and programs
 			name === 'BitRunners Neurolink' || // Programs
 			name === 'PCMatrix' // Programs
@@ -10,7 +10,7 @@ export function isUsefulPrograms(ns, name) {
 export function isUsefulFaction(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
-		stats.faction_rep_mult; // Faction reputation
+		stats.faction_rep_mult; // Useful faction augmentations
 }
 
 export function isUsefulFocus(ns, name) {
@@ -46,7 +46,14 @@ export function isUsefulCombat(ns, name) {
 			stats.dexterity_exp_mult ||
 			stats.dexterity_mult ||
 			stats.strength_exp_mult ||
-			stats.strength_mult ||
+			stats.strength_mult
+		);
+}
+
+export function isUsefulCrime(ns, name) {
+	const stats = ns.getAugmentationStats(name);
+	return name !== 'NeuroFlux Governor' && // Ignore NFG
+		( 	// Useful crime augmentations
 			stats.crime_money_mult ||
 			stats.crime_success_mult
 		);

@@ -1,4 +1,4 @@
-import {isUsefulCombat} from '/augmentations/utils.js';
+import {isUsefulCrime} from '/augmentations/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -8,7 +8,7 @@ export async function main(ns) {
 			// Check for augmentation purchases
 			const augmentations = ns.sleeve.getSleevePurchasableAugs(i);
 			for (let aug of augmentations) {
-				if (isUsefulCombat(ns, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost) {
+				if (isUsefulCrime(ns, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost) {
 					ns.sleeve.purchaseSleeveAug(i, aug.name);
 				}
 			}
