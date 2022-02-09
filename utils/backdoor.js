@@ -7,9 +7,7 @@ export async function main(ns) {
 		for (let serv of route) {
 			ns.connect(serv);
 		}
-		ns.tprint(`Installing backdoor on ${server}.`);
 		await ns.installBackdoor();
-		ns.tprint(`Backdoor successfully installed on ${server}.`);
 		for (let serv of route.reverse()) {
 			ns.connect(serv);
 		}
