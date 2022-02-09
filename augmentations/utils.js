@@ -10,11 +10,16 @@ export function isUsefulPrograms(ns, name) {
 export function isUsefulFaction(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
-		( 	// Useful general augmentations
-			stats.faction_rep_mult ||
+		stats.faction_rep_mult; // Faction reputation
+}
+
+export function isUsefulFocus(ns, name) {
+	return name !== 'NeuroFlux Governor' && // Ignore NFG
+		( 	// Useful focus augmentations
 			name === 'Neuroreceptor Management Implant' || // No simultaneous penalty
 			name === 'The Blade\'s Simulacrum' // Bladeburner and working
 		);
+
 }
 
 export function isUsefulHacking(ns, name) {

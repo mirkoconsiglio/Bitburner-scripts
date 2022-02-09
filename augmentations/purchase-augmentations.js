@@ -5,6 +5,7 @@ import {
 	isUsefulCombat,
 	isUsefulCompany,
 	isUsefulFaction,
+	isUsefulFocus,
 	isUsefulHacking,
 	isUsefulHacknet,
 	isUsefulPrograms
@@ -20,10 +21,11 @@ export async function main(ns) {
 		['programs', false],
 		['faction', false],
 		['bladeburner', false],
+		['focus', false],
 		['all', false],
 		['install', false]
 	]);
-	// Check criterions for determining if augmentations are useful
+	// Check criterions for determining what augmentations are useful
 	const criterions = [];
 	if (args.hacking || args.all) criterions.push(isUsefulHacking);
 	if (args.combat || args.all) criterions.push(isUsefulCombat);
@@ -32,6 +34,7 @@ export async function main(ns) {
 	if (args.programs || args.all) criterions.push(isUsefulPrograms);
 	if (args.faction || args.all) criterions.push(isUsefulFaction);
 	if (args.bladeburner || args.all) criterions.push(isUsefulBladeburner);
+	if (args.focus || args.all) criterions.push(isUsefulFocus);
 
 	let augmentations = [];
 	for (let faction of getFactions()) {
@@ -141,10 +144,12 @@ export async function main(ns) {
 	}
 	// Ask to purchase 4S market data and its TIX API
 	if (ns.getPlayer().hasTixApiAccess) {
-		if (!ns.getPlayer().has4SDataTixApi && ns.getServerMoneyAvailable('home') >= 25e9) {
+		let cost = 25e9 * ns.getBitNodeMultipliers().FourSigmaMarketDataApiCost;
+		if (!ns.getPlayer().has4SDataTixApi && ns.getServerMoneyAvailable('home') >= cost) {
 			if (await ns.prompt(`Purchase 4S Data TIX API?`)) ns.stock.purchase4SMarketDataTixApi();
 		}
-		if (!ns.getPlayer().has4SData && ns.getServerMoneyAvailable('home') >= 1e9) {
+		cost = 1e9 * ns.getBitNodeMultipliers().FourSigmaMarketDataCost;
+		if (!ns.getPlayer().has4SData && ns.getServerMoneyAvailable('home') >= cost) {
 			if (await ns.prompt(`Purchase 4S Data?`)) ns.stock.purchase4SMarketData();
 		}
 	}
