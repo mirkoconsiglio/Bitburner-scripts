@@ -2,7 +2,7 @@
 // Constants
 const commission = 1e5;
 const FourSigmaMarketDataBasePrice = 25e9;
-// Settings
+// Parameters
 const historyLength = 100; // Maximum cycles to predict from
 const bidThreshold = 1e4;
 const askThreshold = 50;
@@ -29,7 +29,6 @@ export async function main(ns) {
 			throw new Error(`Invalid stock trader number`);
 	}
 }
-
 // Basic
 async function stockMarket1(ns) {
 	let lastAsk = ns.stock.getAskPrice(symbol);
@@ -39,7 +38,8 @@ async function stockMarket1(ns) {
 		ns.clearLog();
 		// Data
 		const player = ns.getPlayer();
-		const [shares, , sharesShort] = ns.stock.getPosition(symbol);
+		const position = ns.stock.getPosition(symbol);
+		const shares = position[0];
 		const ask = ns.stock.getAskPrice(symbol);
 		const bid = ns.stock.getBidPrice(symbol);
 		// Buy 4S Data TIX API if we can
@@ -105,7 +105,6 @@ async function stockMarket1(ns) {
 		await ns.sleep(1000);
 	}
 }
-
 // Can short
 async function stockMarket2(ns) {
 	let lastAsk = ns.stock.getAskPrice(symbol);
@@ -115,7 +114,9 @@ async function stockMarket2(ns) {
 		ns.clearLog();
 		// Data
 		const player = ns.getPlayer();
-		const [shares, , sharesShort] = ns.stock.getPosition(symbol);
+		const position = ns.stock.getPosition(symbol);
+		const shares = position[0];
+		const sharesShort = position[2];
 		const ask = ns.stock.getAskPrice(symbol);
 		const bid = ns.stock.getBidPrice(symbol);
 		// Buy 4S Data TIX API if we can
@@ -204,8 +205,8 @@ async function stockMarket2(ns) {
 	}
 }
 
-// Can place limit/stop orders
 // TODO: Use limit/stop orders
+// Can place limit/stop orders
 async function stockMarket3(ns) {
 	let lastAsk = ns.stock.getAskPrice(symbol);
 	let lastBid = ns.stock.getBidPrice(symbol);
@@ -214,7 +215,9 @@ async function stockMarket3(ns) {
 		ns.clearLog();
 		// Data
 		const player = ns.getPlayer();
-		const [shares, , sharesShort] = ns.stock.getPosition(symbol);
+		const position = ns.stock.getPosition(symbol);
+		const shares = position[0];
+		const sharesShort = position[2];
 		const ask = ns.stock.getAskPrice(symbol);
 		const bid = ns.stock.getBidPrice(symbol);
 		// Buy 4S Data TIX API if we can
