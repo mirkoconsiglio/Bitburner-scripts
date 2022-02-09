@@ -1,7 +1,7 @@
 // Requires WarehouseAPI and OfficeAPI
 import {getJobs} from '/corporation/utils.js';
 import {getCities} from '/utils/utils.js';
-// TODO: TESTING
+
 // TODO: Adjust according to corporation valuation
 export async function main(ns) {
 	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
