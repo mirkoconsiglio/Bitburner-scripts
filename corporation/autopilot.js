@@ -2,7 +2,6 @@
 import {getJobs} from '/corporation/utils.js';
 import {getCities} from '/utils/utils.js';
 
-// TODO: Adjust according to corporation valuation
 export async function main(ns) {
 	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
 	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
@@ -88,7 +87,20 @@ export async function part2(ns, cities, jobs, division) {
 	}
 	// Wait for investment offer of $210b
 	while (corp.getInvestmentOffer() < 210e9) {
-		await ns.sleep(1000);
+		// Hire advert
+		await moneyFor(ns, corp.getHireAdVertCost, division);
+		corp.hireAdVert(division);
+		// Get upgrades
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'FocusWires');
+		corp.levelUpgrade('FocusWires');
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'Neural Accelerators');
+		corp.levelUpgrade('Neural Accelerators');
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'Speech Processor Implants');
+		corp.levelUpgrade('Speech Processor Implants');
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'Nuoptimal Nootropic Injector Implants');
+		corp.levelUpgrade('Nuoptimal Nootropic Injector Implants');
+		// Wait 1 minute
+		await ns.sleep(60 * 1000);
 	}
 	corp.acceptInvestmentOffer();
 	// Upgrade office size to nine
@@ -138,7 +150,20 @@ export async function part2(ns, cities, jobs, division) {
 	}
 	// Wait for investment offer of $5t
 	while (corp.getInvestmentOffer() < 5e12) {
-		await ns.sleep(1000);
+		// Hire advert
+		await moneyFor(ns, corp.getHireAdVertCost, division);
+		corp.hireAdVert(division);
+		// Get upgrades
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'FocusWires');
+		corp.levelUpgrade('FocusWires');
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'Neural Accelerators');
+		corp.levelUpgrade('Neural Accelerators');
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'Speech Processor Implants');
+		corp.levelUpgrade('Speech Processor Implants');
+		await moneyFor(ns, corp.getUpgradeLevelCost, 'Nuoptimal Nootropic Injector Implants');
+		corp.levelUpgrade('Nuoptimal Nootropic Injector Implants');
+		// Wait 1 minute
+		await ns.sleep(60 * 1000);
 	}
 	corp.acceptInvestmentOffer();
 	// Upgrade warehouses
@@ -308,6 +333,13 @@ export async function autopilot(ns, cities, jobs, division) {
 		}
 		// Hire advert
 		else if (corp.getHireAdVertCost(division) <= corp.getCorporation().funds) corp.hireAdVert(division);
+		// Check for investors
+		if (corp.getInvestmentOffer() >= 800e12) {
+			corp.acceptInvestmentOffer();
+			// Exit autopilot
+			ns.alert(`Last investment offer accepted. Turning off corporation autopilot.`);
+			ns.exit();
+		}
 
 		await ns.sleep(1000);
 	}
