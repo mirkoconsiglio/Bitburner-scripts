@@ -8,6 +8,6 @@
 6.1                     Bladeburner
 7.1                     Bladeburner API
 10.1 -> 10.2 -> 10.3    Sleeves
-3.2  -> 3.3             Max SF3 14% Company Salary and Charisma, Office API & Warehouse API
 6.2  -> 6.3             Max SF6 14% Combat
 7.2  -> 7.3             Max SF7 14% Bladeburner
+3.2  -> 3.3             Max SF3 14% Company Salary and Charisma, Office API & Warehouse API
