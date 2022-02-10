@@ -11,11 +11,20 @@ automators/university.js
 automators/exp.js
 automators/company.js
 automators/share.js
+automators/intelligence.js
 build/download-bitburner-scripts.js
 build/script-remover.js
 build/update.js
 build/scripts.txt
 exploits/dev-menu.js
+exploits/unclickable.js
+exploits/bypass.js
+exploits/prototype-tampering.js
+exploits/time-compression.js
+exploits/undocumented-function-call.js
+exploits/edit-save-file.js
+exploits/n00dles.js
+exploits/reality alteration.js
 hacking/daemon.js
 hacking/deploy-daemons.js
 hacking/grow.js
