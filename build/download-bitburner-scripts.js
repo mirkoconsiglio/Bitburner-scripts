@@ -1,20 +1,16 @@
 export async function main(ns) {
 	const url = 'https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/master';
-	const listOfScripts = `build/scripts.txt`;
+	const listOfScripts = 'build/scripts.txt';
 	ns.tprint('----- Downloading scripts -----');
-	try {
-		ns.tprint(`Downloading ${listOfScripts}`);
-		let download = await ns.wget(`${url}/${listOfScripts}`, '/' + listOfScripts);
-		if (!download) throw listOfScripts;
-		let scripts = ns.read('/' + listOfScripts).split('\n');
-		for (let script of scripts) {
-			ns.tprint(`Downloading ${script}`);
-			if (script.includes('/')) download = await ns.wget(`${url}/${script}`, '/' + script);
-			else download = await ns.wget(`${url}/${script}`, script);
-			if (!download) throw script;
-		}
-		ns.tprint('----- Download complete -----');
-	} catch (script) {
-		ns.tprint(`Could not download ${script}`);
+	ns.tprint(`Downloading ${listOfScripts}`);
+	let download = await ns.wget(`${url}/${listOfScripts}`, '/' + listOfScripts);
+	if (!download) throw new Error(`Could not download ${listOfScripts}`);
+	let scripts = ns.read('/' + listOfScripts).split('\n');
+	for (let script of scripts) {
+		if (script === listOfScripts || (script.includes('/') ? '/' : '') + script === ns.getScriptName()) continue;
+		ns.tprint(`Downloading ${script}`);
+		download = await ns.wget(`${url}/${script}`, (script.includes('/') ? '/' : '') + script);
+		if (!download) throw new Error(`Could not download ${script}`);
 	}
+	ns.tprint('----- Download complete -----');
 }
