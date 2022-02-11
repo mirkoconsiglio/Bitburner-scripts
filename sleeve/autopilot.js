@@ -12,17 +12,10 @@ export async function main(ns) {
 					ns.sleeve.purchaseSleeveAug(i, aug.name);
 				}
 			}
-			// Assign task
-			const sleeveStats = ns.sleeve.getSleeveStats(i);
-			if (ns.heart.break() > -54e3 || (sleeveStats.shock === 0 && sleeveStats.sync === 100)) {
-				const crime = sleeveStats.strength < 50 ? 'Mug' : 'Homicide';
-				if (ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
-			} else if (sleeveStats.sync < 100) {
-				if (ns.sleeve.getTask(i).task !== 'Synchronize') ns.sleeve.setToSynchronize(i);
-			} else if (sleeveStats.shock > 0) {
-				if (ns.sleeve.getTask(i).task !== 'Shock Recovery') ns.sleeve.setToShockRecovery(i);
-			} else throw new Error(`How did we get here?`);
-			ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i).task}`);
+			// Assign crime
+			const crime = ns.sleeve.getSleeveStats(i).strength < 50 ? 'Mug' : 'Homicide';
+			if (ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
+			ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i).crime}`);
 		}
 		await ns.sleep(1000);
 	}
