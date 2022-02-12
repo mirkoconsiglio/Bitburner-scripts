@@ -68,7 +68,7 @@ export async function main(ns) {
 				while (promptScriptRunning(ns, 'home')) {
 					await ns.sleep(1000);
 				}
-				if (await ns.prompt(`Complete Operation Daedalus and finish Bitnode?`)) {
+				if (!await ns.prompt(`Complete Operation Daedalus and finish Bitnode?`)) {
 					ns.tprint(`Stopping Bladeburner manager`);
 					return;
 				}
