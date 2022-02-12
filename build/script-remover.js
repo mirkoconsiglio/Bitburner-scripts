@@ -6,6 +6,10 @@ export async function main(ns) {
 	});
 	let files = ns.ls('home').filter(file =>
 		file.endsWith('.js') || file.endsWith('.txt'));
+	if (files.length === 0) {
+		ns.tprint(`There are no files to delete`);
+		ns.exit();
+	}
 	for (let file of files) {
 		if (!scriptsToKeep.includes(file)) {
 			if (await ns.prompt(`Delete ${file}?`)) {
