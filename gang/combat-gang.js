@@ -59,13 +59,11 @@ export async function main(ns) {
 
 function purchaseEquipment(ns, gangRoster, strength_level) {
 	const allEquipment = ns.gang.getEquipmentNames();
-	const strEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).str).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const defEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).def).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const dexEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).dex).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const agiEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).agi).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const chaEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).cha).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const hackEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
-	const orderedEquipment = [...new Set([...strEquipment, ...defEquipment, ...dexEquipment, ...agiEquipment, ...chaEquipment, ...hackEquipment])];
+	// purchase: first str and def; second dex and agi; third cha and hack
+	const strAndDefEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).str || ns.gang.getEquipmentStats(equipment).def).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const dexAndAgiEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).dex || ns.gang.getEquipmentStats(equipment).agi).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const chaAndHackEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).cha || ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
+	const orderedEquipment = [...new Set([...strAndDefEquipment, ...dexAndAgiEquipment, ...chaAndHackEquipment])];
 	for (let gangMember of gangRoster) {
 		if (gangMember.str < strength_level) continue;
 		for (let equipment of orderedEquipment) {
