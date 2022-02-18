@@ -38,6 +38,12 @@ export async function main(ns) {
 	if (args.faction || args.all) criterions.push(isUsefulFaction);
 	if (args.bladeburner || args.all) criterions.push(isUsefulBladeburner);
 	if (args.focus || args.all) criterions.push(isUsefulFocus);
+	// Augmentation price increase
+	let mult = 0;
+	for (let i = 0; i < (ns.getOwnedSourceFiles().find(s => s.n === 11) ?? {lvl: 0}).lvl; i++) {
+		mult += 4 / Math.pow(2, i);
+	}
+	const inc = 1.9 - mult / 100;
 
 	let augmentations = [];
 	for (let faction of getFactions()) {
@@ -100,7 +106,7 @@ export async function main(ns) {
 		let stringAugs = '';
 		let totalPrice = 0;
 		for (let [i, aug] of augmentations.entries()) {
-			let updatedAugPrice = aug.price * 1.9 ** i;
+			let updatedAugPrice = aug.price * inc ** i;
 			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '$0.000a')} (${ns.nFormat(updatedAugPrice, '$0.000a')}). `;
 			totalPrice += updatedAugPrice;
 		}
