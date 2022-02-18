@@ -50,7 +50,7 @@ export async function main(ns) {
 			} else ns.gang.setMemberTask(gangMember.name, 'Human Trafficking');
 		}
 		// Territory warfare checks
-		if (myGang.territory < 1 && fightForTerritory(ns, otherGangs)) ns.gang.setTerritoryWarfare(true);
+		if (Number(Math.round(Number(myGang.territory + 'e' + 10)) + 'e' + 10 * -1) < 1 && fightForTerritory(ns, otherGangs)) ns.gang.setTerritoryWarfare(true);
 		else ns.gang.setTerritoryWarfare(false);
 
 		await ns.sleep(1000);

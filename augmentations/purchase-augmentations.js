@@ -4,6 +4,7 @@ import {
 	isUsefulBladeburner,
 	isUsefulCombat,
 	isUsefulCompany,
+	isUsefulCrime,
 	isUsefulFaction,
 	isUsefulFocus,
 	isUsefulHacking,
