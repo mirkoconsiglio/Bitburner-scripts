@@ -73,7 +73,7 @@ export async function main(ns) {
 		// Ask if player wants to sell stocks
 		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) {
 			// Kill stock script
-			ns.scriptKill('/stock-market/stock-market.js', 'home');
+			ns.scriptKill('/stock-market/autopilot.js', 'home');
 			// Sell all stocks
 			for (let sym of ns.stock.getSymbols()) {
 				ns.stock.sell(sym, ns.stock.getMaxShares(sym));
@@ -127,6 +127,11 @@ export async function main(ns) {
 		let highestRepFaction;
 		let highestRep = 0;
 		for (let faction of getFactions()) {
+			// Cannot buy NFG from gangs
+			if (ns.gang.inGang() && ns.gang.getGangInformation().faction === faction) continue;
+			// Cannot buy NFG from Bladeburners
+			if (faction === 'Bladeburners') continue;
+			// Take highest reputation faction
 			if (ns.getFactionRep(faction) > highestRep) {
 				highestRep = ns.getFactionRep(faction);
 				highestRepFaction = faction;
@@ -136,7 +141,7 @@ export async function main(ns) {
 		while (ns.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) {
 			counter++;
 		}
-		ns.tprint(`Purchased ${counter} levels of NeuroFlux Governor.`);
+		ns.tprint(`Purchased ${counter} levels of NeuroFlux Governor`);
 	}
 	// Check if The Red Pill is available
 	if (ns.getPlayer().factions.includes('Daedalus') &&
