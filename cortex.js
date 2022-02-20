@@ -58,9 +58,11 @@ export async function main(ns) {
 		}
 		// Backdoor servers
 		for (let server of getAccessibleServers(ns)) {
-			if (!(server === 'home' || server === 'w0r1d_d43m0n' ||
-				ns.getServer(server).backdoorInstalled ||
-				ns.isRunning(scripts.backdoor, host, server))) {
+			if (!(ns.getServer(server).backdoorInstalled ||
+				ns.isRunning(scripts.backdoor, host, server) ||
+				server === 'home' || (server === 'w0r1d_d43m0n' &&
+					!promptScriptRunning(ns, host) &&
+					!await ns.prompt(`Backdoor w0r1d_d43m0n and complete Bitnode?`)))) {
 				ns.print(`Installing backdoor on ${server}`);
 				ns.exec(scripts.backdoor, host, 1, server);
 			}
