@@ -22,30 +22,37 @@ export async function main(ns) {
 
 export async function part1(ns, cities, jobs, division) {
 	const corp = ns.corporation;
-	// Expand to division and get smart supply
-	if (!corp.getDivision(division)) corp.expandIndustry('Agriculture', division);
+	// Expand to agriculture division
+	try {
+		corp.getDivision(division);
+	} catch (err) {
+		corp.expandIndustry('Agriculture', division);
+	}
 	await moneyFor(ns, corp.getUnlockUpgradeCost, 'Smart Supply');
 	corp.unlockUpgrade('Smart Supply');
 	corp.setSmartSupply(division, 'Sector-12', true);
 	for (let city of cities) {
+		// Expand to city
+		corp.expandCity(division, city);
 		// Purchase warehouse
 		await moneyFor(ns, corp.getPurchaseWarehouseCost);
 		corp.purchaseWarehouse(division, city);
 		// Hire three employees
-		for (let i = 0; i < 3 - corp.getOffice(division, city).employees.length; i++) {
-			corp.hireEmployee(division, city);
-		}
-		await corp.setAutoJobAssignment(division, city, 'Operations', 1);
-		await corp.setAutoJobAssignment(division, city, 'Engineer', 1);
-		await corp.setAutoJobAssignment(division, city, 'Business', 1);
+		hireMaxEmployees(corp, division, city);
+		// Assign jobs
+		await corp.setAutoJobAssignment(division, city, jobs.operations, 1);
+		await corp.setAutoJobAssignment(division, city, jobs.engineer, 1);
+		await corp.setAutoJobAssignment(division, city, jobs.business, 1);
+		// Start selling material
+		corp.sellMaterial(division, city, 'Food', 'MAX', 'MP');
+		corp.sellMaterial(division, city, 'Plants', 'MAX', 'MP');
+	}
+	for (let city of cities) {
 		// Upgrade warehouse twice
 		for (let i = 0; i < 2; i++) {
 			await moneyFor(ns, corp.getUpgradeWarehouseCost, division, city);
 			corp.upgradeWarehouse(division, city);
 		}
-		// Start selling material
-		corp.sellMaterial(division, city, 'Food', 'MAX', 'MP');
-		corp.sellMaterial(division, city, 'Plants', 'MAX', 'MP');
 	}
 	// Hire advert
 	await moneyFor(ns, corp.getHireAdVertCost, division);
@@ -209,27 +216,23 @@ export async function part3(ns, cities, jobs, division) {
 			await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, 27);
 			corp.upgradeOfficeSize(division, city, 27);
 			// Hire 60 employees
-			for (let i = 0; i < 30; i++) {
-				corp.hireEmployee(division, city);
+			hireMaxEmployees(corp, division, city);
+			// Assign jobs
+			for (let job of Object.values(jobs)) {
+				await corp.setAutoJobAssignment(division, city, job, 6);
 			}
-			await corp.setAutoJobAssignment(division, city, 'Operations', 6);
-			await corp.setAutoJobAssignment(division, city, 'Engineer', 6);
-			await corp.setAutoJobAssignment(division, city, 'Business', 6);
-			await corp.setAutoJobAssignment(division, city, 'Management', 6);
-			await corp.setAutoJobAssignment(division, city, 'Research & Development', 6);
 		} else {
 			// Upgrade Office size to nine
 			await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, 6);
 			corp.upgradeOfficeSize(division, city, 6);
 			// Hire nine employees
-			for (let i = 0; i < 9; i++) {
-				corp.hireEmployee(division, city);
-			}
-			await corp.setAutoJobAssignment(division, city, 'Operations', 2);
-			await corp.setAutoJobAssignment(division, city, 'Engineer', 2);
-			await corp.setAutoJobAssignment(division, city, 'Business', 1);
-			await corp.setAutoJobAssignment(division, city, 'Management', 2);
-			await corp.setAutoJobAssignment(division, city, 'Research & Development', 2);
+			hireMaxEmployees(corp, division, city);
+			// Assign jobs
+			await corp.setAutoJobAssignment(division, city, jobs.operations, 2);
+			await corp.setAutoJobAssignment(division, city, jobs.engineer, 2);
+			await corp.setAutoJobAssignment(division, city, jobs.business, 1);
+			await corp.setAutoJobAssignment(division, city, jobs.management, 2);
+			await corp.setAutoJobAssignment(division, city, jobs.RAndD, 2);
 		}
 	}
 	// Start making Tobacco v1
@@ -268,11 +271,10 @@ export async function part3(ns, cities, jobs, division) {
 		}
 		await ns.sleep(1000);
 	}
-	await corp.setAutoJobAssignment(division, 'Aevum', 'Operations', 12);
-	await corp.setAutoJobAssignment(division, 'Aevum', 'Engineer', 12);
-	await corp.setAutoJobAssignment(division, 'Aevum', 'Business', 12);
-	await corp.setAutoJobAssignment(division, 'Aevum', 'Management', 12);
-	await corp.setAutoJobAssignment(division, 'Aevum', 'Research & Development', 12);
+	// Assign jobs
+	for (let job of Object.values(jobs)) {
+		await corp.setAutoJobAssignment(division, city, job, 12);
+	}
 	// Wait for Tobacco v2 to finish
 	while (corp.getProduct(division, 'Tobacco v2').developmentProgress < 100) {
 		await ns.sleep(1000);
@@ -320,15 +322,12 @@ export async function autopilot(ns, cities, jobs, division) {
 			// Upgrade office size in Aevum
 			if (corp.getOfficeSizeUpgradeCost(division, 'Aevum', 15) <= corp.getCorporation().funds) {
 				corp.upgradeOfficeSize(division, 'Aevum', 15);
-				for (let i = 0; i < 15; i++) {
-					corp.hireEmployee(division, 'Aevum');
+				hireMaxEmployees(corp, division, 'Aevum');
+				// Assign jobs
+				const dist = Math.floor(corp.getOffice(division, 'Aevum').size / Object.keys(jobs).length);
+				for (let job of Object.values(jobs)) {
+					await corp.setAutoJobAssignment(division, city, job, dist);
 				}
-				let dist = Math.floor(corp.getOffice(division, 'Aevum').size / 5);
-				await corp.setAutoJobAssignment(division, 'Aevum', 'Operations', dist);
-				await corp.setAutoJobAssignment(division, 'Aevum', 'Engineer', dist);
-				await corp.setAutoJobAssignment(division, 'Aevum', 'Business', dist);
-				await corp.setAutoJobAssignment(division, 'Aevum', 'Management', dist);
-				await corp.setAutoJobAssignment(division, 'Aevum', 'Research & Development', dist);
 			}
 		}
 		// Hire advert
@@ -349,5 +348,12 @@ export async function autopilot(ns, cities, jobs, division) {
 async function moneyFor(ns, func, ...args) {
 	while (func(...args) > ns.corporation.getCorporation().funds) {
 		await ns.sleep(1000);
+	}
+}
+
+// Function to hire employees up to office size
+function hireMaxEmployees(corp, division, city) {
+	while (corp.getOffice(division, city).employees.length < corp.getOffice(division, city).size) {
+		corp.hireEmployee(division, city);
 	}
 }

@@ -1,3 +1,9 @@
 export function getJobs() {
-	return ['Operations', 'Engineer', 'Business', 'Management', 'Research & Development'];
+	return {
+		operations: 'Operations',
+		engineer: 'Engineer',
+		business: 'Business',
+		management: 'Management',
+		RAndD: 'Research & Development'
+	};
 }
