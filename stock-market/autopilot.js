@@ -10,7 +10,7 @@ const symbol = 'JGN'; // Target Joesguns
 const askHistory = [];
 const bidHistory = [];
 let forecast = {ask: 0, bid: 0};
-
+// TODO: fix script when not being able to short
 export async function main(ns) {
 	const player = ns.getPlayer();
 	if (!player.hasWseAccount) throw new Error(`You need WSE account to trade stocks`);
