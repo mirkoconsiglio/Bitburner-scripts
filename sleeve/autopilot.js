@@ -1,7 +1,10 @@
 import {isUsefulCrime} from '/augmentations/utils.js';
+import {getWorks} from '/sleeve/utils.js';
 
+// TODO: better sleeve autopilot
 export async function main(ns) {
 	ns.disableLog('ALL');
+	const works = getWorks();
 	while (true) {
 		ns.clearLog();
 		const player = ns.getPlayer();
@@ -16,14 +19,17 @@ export async function main(ns) {
 			// Assign tasks
 			if (i === 0 && player.isWorking && player.workType === 'Working for Faction') { // Sleeve 0 copies player
 				const name = player.currentWorkFactionName;
-				const workType = player.workType;
-				if (ns.sleeve.getTask(i).task !== 'Working for Faction' ||
-					ns.sleeve.getTask(i).factionWorkType !== workType) ns.sleeve.setToFactionWork(i, name, workType);
-				ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i).factionWorkType}`);
+				if (ns.sleeve.getTask(i).task !== 'Faction' || !works.includes(ns.sleeve.getTask(i).factionWorkType)) {
+					let j = 0;
+					while (!ns.sleeve.setToFactionWork(i, name, works[j])) {
+						j++;
+					}
+				}
+				ns.print(`Sleeve ${i}: Working for ${name}`);
 			} else if (i === 0 && player.isWorking && player.workType === 'Working for Company') { // Sleeve 0 copies player
 				const name = player.currentWorkFactionName;
-				if (ns.sleeve.getTask(i).task !== 'Working for Company') ns.sleeve.setToCompanyWork(i, name);
-				ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i).factionWorkType}`);
+				if (ns.sleeve.getTask(i).task !== 'Company') ns.sleeve.setToCompanyWork(i, name);
+				ns.print(`Sleeve ${i}: Working for ${name}`);
 			} else { // Crime
 				const crime = ns.sleeve.getSleeveStats(i).strength < 50 ? 'Mug' : 'Homicide';
 				if (ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
