@@ -27,6 +27,7 @@ export async function main(ns) {
 		ns.tprint(`Buying server: ${server}, target RAM: ${targetRam}`);
 		ns.purchaseServer(server, targetRam);
 		await ns.scp(scriptsToCopy(), 'home', server);
-		ns.exec(getScripts().daemon, server, 1, hackables[i + 1]);
+		// Run daemon if server RAM >= 16 TiB
+		if (power > 14) ns.exec(getScripts().daemon, server, 1, hackables[i + 1]);
 	}
 }

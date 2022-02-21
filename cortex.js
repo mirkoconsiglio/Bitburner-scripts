@@ -1,3 +1,4 @@
+import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
 import {contractor} from '/utils/contractor.js';
 import {
@@ -67,11 +68,6 @@ export async function main(ns) {
 				ns.exec(scripts.backdoor, host, 1, server);
 			}
 		}
-		// Deploy daemons if home RAM >= 4 TiB
-		if (ns.getServerMaxRam('home') >= 2 ** 12 &&
-			enoughRam(ns, scripts.deployDaemons, host)) ns.exec(scripts.deployDaemons, host);
-		// Simple hack manager
-		manageAndHack(ns);
 		// Upgrade home RAM
 		if (ns.getUpgradeHomeRamCost() <= player.money &&
 			ns.getTimeSinceLastAug() - upgradeRamTime > upgradeRamTimer &&
@@ -158,6 +154,10 @@ export async function main(ns) {
 			ns.exec(scripts.joinFactions, host, 1, ...factions);
 			askedFactions = askedFactions.concat(factions); // Don't ask again
 		}
+		// Deploy daemons
+		deployDaemons(ns);
+		// Simple hack manager
+		manageAndHack(ns);
 		// Update every second
 		await ns.sleep(1000);
 	}
