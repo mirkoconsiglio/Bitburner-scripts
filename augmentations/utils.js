@@ -35,6 +35,15 @@ export function isUsefulHacking(ns, name) {
 		)
 }
 
+export function isUsefulHackingSkill(ns, name) {
+	const stats = ns.getAugmentationStats(name);
+	return name !== 'NeuroFlux Governor' && // Ignore NFG
+		( 	// Useful hacking skill augmentations
+			stats.hacking_mult ||
+			stats.hacking_exp_mult
+		);
+}
+
 export function isUsefulCombat(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
