@@ -1,9 +1,10 @@
-import {getCompanies} from '/utils/utils.js';
+import {getCompanies, getJobs} from '/utils/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
 
 	const companies = getCompanies();
+	const jobs = getJobs();
 	const args = ns.flags([
 		['agent', false],
 		['business', false],
@@ -18,16 +19,16 @@ export async function main(ns) {
 	]);
 
 	let workType;
-	if (args.agent) workType = 'Agent';
-	else if (args.business) workType = 'Business';
-	else if (args.it) workType = 'IT';
-	else if (args.security) workType = 'Security';
-	else if (args.software) workType = 'software';
-	else if (args.software_consultant) workType = 'Software Consultant';
-	else if (args.employee) workType = 'Employee';
-	else if (args.part_time_employee) workType = 'part-time Employee';
-	else if (args.waiter) workType = 'Waiter';
-	else if (args.part_time_waiter) workType = 'part-time Waiter';
+	if (args.agent) workType = jobs.agent.name;
+	else if (args.business) workType = jobs.business.name;
+	else if (args.it) workType = jobs.it.name;
+	else if (args.security) workType = jobs.security.name;
+	else if (args.software) workType = jobs.software.name;
+	else if (args.software_consultant) workType = jobs.software_consultant.name;
+	else if (args.employee) workType = jobs.employee.name;
+	else if (args.part_time_employee) workType = jobs.part_time_employee.name;
+	else if (args.waiter) workType = jobs.waiter.name;
+	else if (args.part_time_waiter) workType = jobs.waiter.name;
 	else throw new Error(`Invalid work type`);
 
 	for (let i = 0; i < args._.length; i += 2) {

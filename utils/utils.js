@@ -69,6 +69,71 @@ export function getCompanies() {
 	];
 }
 
+export function getJobs() {
+	return {
+		agent: {
+			name: 'Agent',
+			hacking: true,
+			combat: true,
+			charisma: true
+		},
+		business: {
+			name: 'Business',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		it: {
+			name: 'IT',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		security: {
+			name: 'Security',
+			hacking: true,
+			combat: true,
+			charisma: true
+		},
+		software: {
+			name: 'Software',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		software_consultant: {
+			name: 'Software Consultant',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		employee: {
+			name: 'Employee',
+			hacking: false,
+			combat: true,
+			charisma: true
+		},
+		part_time_employee: {
+			name: 'part-time Employee',
+			hacking: false,
+			combat: true,
+			charisma: true
+		},
+		waiter: {
+			name: 'Employee',
+			hacking: false,
+			combat: true,
+			charisma: true
+		},
+		part_time_waiter: {
+			name: 'part-time Waiter',
+			hacking: false,
+			combat: true,
+			charisma: true
+		}
+	};
+}
+
 export function routeFinder(ns, server) {
 	const route = [];
 	const found = recursiveRouteFinder(ns, '', ns.getHostname(), server, route);
