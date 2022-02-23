@@ -44,7 +44,7 @@ export async function main(ns) {
 		mult += 4 / Math.pow(2, i);
 	}
 	const inc = 1.9 - mult / 100;
-
+	// Get all useful and purchasable augmentations
 	let augmentations = [];
 	for (let faction of getFactions()) {
 		for (let aug of ns.getAugmentationsFromFaction(faction)) {
