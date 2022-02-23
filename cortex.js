@@ -70,17 +70,17 @@ export async function main(ns) {
 		}
 		// Upgrade home RAM
 		if (ns.getUpgradeHomeRamCost() <= player.money &&
-			ns.getTimeSinceLastAug() - upgradeRamTime > upgradeRamTimer &&
+			Date.now() - upgradeRamTime > upgradeRamTimer &&
 			!promptScriptRunning(ns, host) && ns.getServerMaxRam('home') < 2 ** 30) {
 			ns.exec(scripts.upgradeHomeRam, host, 1);
-			upgradeRamTime = ns.getTimeSinceLastAug();
+			upgradeRamTime = Date.now();
 		}
 		// Upgrade home cores
 		if (ns.getUpgradeHomeCoresCost() <= player.money &&
-			ns.getTimeSinceLastAug() - upgradeCoresTime > upgradeCoresTimer &&
+			Date.now() - upgradeCoresTime > upgradeCoresTimer &&
 			!promptScriptRunning(ns, host) && ns.getServer('home').cpuCores < 8) {
 			ns.exec(scripts.upgradeHomeCores, host, 1);
-			upgradeCoresTime = ns.getTimeSinceLastAug();
+			upgradeCoresTime = Date.now();
 		}
 		// UI
 		if (!ns.isRunning(scripts.ui) && enoughRam(ns, scripts.ui, host) &&
