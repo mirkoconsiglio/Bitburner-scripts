@@ -42,8 +42,9 @@ export function getSkillsData() {
 		},
 		{
 			name: 'Datamancer',
-			bonus: 0,
-			max: -1
+			bonus: 1,
+			max: -1,
+			late: true
 		},
 		{
 			name: 'Cyber\'s Edge',
@@ -96,7 +97,8 @@ export function getActionData() {
 			name: 'Field Analysis',
 			type: 'General',
 			rewardFac: 1,
-			rankGain: 0.1
+			rankGain: 0.1,
+			accuracy: 'eff'
 		},
 		{
 			name: 'Recruitment',
@@ -146,13 +148,15 @@ export function getActionData() {
 			name: 'Investigation',
 			type: 'Operation',
 			rewardFac: 1.07,
-			rankGain: 2.2
+			rankGain: 2.2,
+			accuracy: 0.4
 		},
 		{
 			name: 'Undercover Operation',
 			type: 'Operation',
 			rewardFac: 1.09,
-			rankGain: 4.4
+			rankGain: 4.4,
+			accuracy: 0.8
 		},
 		{
 			name: 'Sting Operation',
@@ -182,4 +186,33 @@ export function getActionData() {
 			rankGain: 44
 		}
 	];
+}
+
+export function bestOpForImprovingAccuracy(ns) {
+	const bb = ns.bladeburner;
+	const improvingAccuracyActions = getActionData().filter(a => a.accuracy);
+	let bestCost = 0;
+	let type;
+	let op;
+	for (let action of improvingAccuracyActions) {
+		if (bb.getActionCountRemaining(action.type, action.name) === 0) continue;
+		let cost = action.accuracy;
+		if (cost === 'eff') cost = calculateEff(ns); // Used for general field analysis
+		cost *= bb.getActionEstimatedSuccessChance(action.type, action.name)[1]; // Multiply by current supposed best chance
+		cost /= bb.getActionTime(action.type, action.name); // Divide by time taken for the action to complete
+		if (cost > bestCost) {
+			bestCost = cost;
+			type = action.type;
+			op = action.name;
+		}
+	}
+	return [type, op];
+}
+
+function calculateEff(ns) {
+	const player = ns.getPlayer();
+	return (0.04 * Math.pow(player.hacking, 0.3) +
+			0.04 * Math.pow(player.intelligence, 0.9) +
+			0.02 * Math.pow(player.charisma, 0.3)) *
+		player.bladeburner_analysis_mult;
 }

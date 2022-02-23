@@ -1,4 +1,4 @@
-import {getActionData, getSkillsData} from '/bladeburner/utils.js';
+import {bestOpForImprovingAccuracy, getActionData, getSkillsData} from '/bladeburner/utils.js';
 import {getCities, promptScriptRunning} from '/utils/utils.js';
 
 export async function main(ns) {
@@ -23,18 +23,20 @@ export async function main(ns) {
 		const rank = bb.getRank();
 		// Join Faction if we can
 		if (rank > 25) bb.joinBladeburnerFaction();
-		// Get average chance for assassination op
-		const [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
-		const average = (amin + amax) / 2;
 		// Check if we can get skills
 		let points = bb.getSkillPoints();
 		while (points > 0) {
 			const skills = getSkillsData().filter(s => bb.getSkillLevel(s.name) < s.max || s.max === -1).map(
 				s => {
 					const cost = bb.getSkillUpgradeCost(s.name);
+					let value = s.bonus / cost;
+					if (s.name === 'Overclock' &&
+						bb.getActionEstimatedSuccessChance('Operation', 'Assassination')[0] === 1) value = 1000;
+					else if (s.late &&
+						bb.getSkillLevel('Overclock') < getSkillsData().find(s => s.name === 'Overclock').max) value = 0;
 					return {
 						...s,
-						value: s.name === 'Overclock' && average === 1 ? 100 : s.bonus / cost,
+						value: value,
 						cost
 					};
 				}).sort((a, b) => b.value - a.value);
@@ -81,18 +83,18 @@ export async function main(ns) {
 			lastLookAround = Date.now();
 			// Update best city
 			ns.print(`Finding best city`);
-			const op = bb.getActionCountRemaining('Operation', 'Assassination') > 0 ? 'Assassination' : 'Raid';
+			const raid = bb.getActionCountRemaining('Operation', 'Assassination') === 0;
 			let bestPop = 0;
 			let bestCity = '';
 			for (const city of getCities()) {
 				bb.switchCity(city);
-				let [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', op);
+				let [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
 				while (amin !== amax) {
-					await doAction(ns, 'General', 'Field Analysis');
-					[amin, amax] = bb.getActionEstimatedSuccessChance('Operation', op);
+					await improveAccuracy(ns);
+					[amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
 				}
 				const pop = bb.getCityEstimatedPopulation(city);
-				if (pop > bestPop) {
+				if (pop > bestPop && !(raid && bb.getCityCommunities(city) === 0)) {
 					bestPop = pop;
 					bestCity = city;
 				}
@@ -108,20 +110,20 @@ export async function main(ns) {
 		const chaos = bb.getCityChaos(city);
 		if (chaos >= 50) {
 			ns.print(`Chaos is high in ${city}`);
-			const [amin] = bb.getActionEstimatedSuccessChance('Operation', 'Stealth Retirement Operation');
-			if (amin === 100 && bb.getActionCountRemaining('Operation', 'Stealth Retirement Operation')) {
+			if (bb.getActionEstimatedSuccessChance('Operation', 'Stealth Retirement Operation')[0] === 100 &&
+				bb.getActionCountRemaining('Operation', 'Stealth Retirement Operation') > 0) {
 				await doAction(ns, 'Operation', 'Stealth Retirement Operation');
 			} else await doAction(ns, 'General', 'Diplomacy');
 			continue;
 		}
 		// Get best action
-		let needsFieldAnalysis = false;
+		let needsImprovedAccuracy = false;
 		const actions = getActionData().filter(a => {
 			const [amin, amax] = bb.getActionEstimatedSuccessChance(a.type, a.name);
 			const minMax = amin === amax;
 			const include = a.late ? bb.getActionCountRemaining('Operation', 'Assassination') === 0 : true;
-			if (!minMax) needsFieldAnalysis = true;
-			return bb.getActionCountRemaining(a.type, a.name) > 0 && minMax && amax >= minChance && include;
+			if (!minMax) needsImprovedAccuracy = true;
+			return bb.getActionCountRemaining(a.type, a.name) > 0 && minMax && amin >= minChance && include;
 		}).map(a => {
 			const level = bb.getActionCurrentLevel(a.type, a.name);
 			const rewardMultiplier = Math.pow(a.rewardFac, level - 1);
@@ -138,8 +140,8 @@ export async function main(ns) {
 			};
 		}).sort((a, b) => b.gain * b.chance / b.time - a.gain * a.chance / a.time);
 		// Do field analysis if needed
-		if (needsFieldAnalysis) {
-			await doAction(ns, 'General', 'Field Analysis');
+		if (needsImprovedAccuracy) {
+			await improveAccuracy(ns);
 			continue;
 		}
 		// Check stamina
@@ -152,6 +154,11 @@ export async function main(ns) {
 		const action = actions[0];
 		await doAction(ns, action.type, action.name);
 	}
+}
+
+async function improveAccuracy(ns) {
+	const [type, name] = bestOpForImprovingAccuracy(ns);
+	await doAction(ns, type, name);
 }
 
 async function doAction(ns, type, name) {
