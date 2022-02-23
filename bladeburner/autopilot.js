@@ -49,7 +49,7 @@ export async function main(ns) {
 		}
 		// Train combat to get 100 in all combat stats
 		if (player.strength < 100 || player.defense < 100 || player.dexterity < 100 || player.agility < 100) {
-			await doAction(ns, 'general', 'Training');
+			await doAction(ns, 'General', 'Training');
 			continue;
 		}
 		// Check if we can do black ops
@@ -59,7 +59,7 @@ export async function main(ns) {
 			let [amin, amax] = bb.getActionEstimatedSuccessChance('BlackOps', blackOp.name);
 			if (amax < 1) break; // Not yet at 100%
 			while (amin !== amax) { // Needs field analysis
-				await doAction(ns, 'general', 'Field Analysis');
+				await doAction(ns, 'General', 'Field Analysis');
 				[amin, amax] = bb.getActionEstimatedSuccessChance('BlackOps', blackOp.name);
 			}
 			if (amax < 1) break; // Attempt only at 100%
@@ -77,18 +77,19 @@ export async function main(ns) {
 		}
 		// Get current city
 		let city = bb.getCity();
-		if (lastLookAround < ns.getTimeSinceLastAug() - 60 * 60 * 1000) {
+		if (lastLookAround < Date.now() - 60 * 60 * 1000) {
+			lastLookAround = Date.now();
 			// Update best city
 			ns.print(`Finding best city`);
-			lastLookAround = ns.getTimeSinceLastAug();
+			const op = bb.getActionCountRemaining('Operation', 'Assassination') > 0 ? 'Assassination' : 'Raid';
 			let bestPop = 0;
 			let bestCity = '';
 			for (const city of getCities()) {
 				bb.switchCity(city);
-				let [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
+				let [amin, amax] = bb.getActionEstimatedSuccessChance('Operation', op);
 				while (amin !== amax) {
-					await doAction(ns, 'general', 'Field Analysis');
-					[amin, amax] = bb.getActionEstimatedSuccessChance('Operation', 'Assassination');
+					await doAction(ns, 'General', 'Field Analysis');
+					[amin, amax] = bb.getActionEstimatedSuccessChance('Operation', op);
 				}
 				const pop = bb.getCityEstimatedPopulation(city);
 				if (pop > bestPop) {
@@ -107,7 +108,10 @@ export async function main(ns) {
 		const chaos = bb.getCityChaos(city);
 		if (chaos >= 50) {
 			ns.print(`Chaos is high in ${city}`);
-			await doAction(ns, 'general', 'Diplomacy');
+			const [amin] = bb.getActionEstimatedSuccessChance('Operation', 'Stealth Retirement Operation');
+			if (amin === 100 && bb.getActionCountRemaining('Operation', 'Stealth Retirement Operation')) {
+				await doAction(ns, 'Operation', 'Stealth Retirement Operation');
+			} else await doAction(ns, 'General', 'Diplomacy');
 			continue;
 		}
 		// Get best action
@@ -135,13 +139,13 @@ export async function main(ns) {
 		}).sort((a, b) => b.gain * b.chance / b.time - a.gain * a.chance / a.time);
 		// Do field analysis if needed
 		if (needsFieldAnalysis) {
-			await doAction(ns, 'general', 'Field Analysis');
+			await doAction(ns, 'General', 'Field Analysis');
 			continue;
 		}
 		// Check stamina
 		const [stamina, maxStamina] = bb.getStamina();
 		if (stamina < maxStamina / 2) {
-			await doAction(ns, 'general', 'Hyperbolic Regeneration Chamber');
+			await doAction(ns, 'General', 'Hyperbolic Regeneration Chamber');
 			continue;
 		}
 		// Do best action
@@ -157,9 +161,17 @@ async function doAction(ns, type, name) {
 		await ns.sleep(100);
 		return;
 	}
-	const time = bb.getActionTime(type, name);
-	const started = bb.startAction(type, name);
+	// Take into account bonus time
+	let time = bb.getActionTime(type, name);
+	const bonusTime = bb.getBonusTime();
+	if (bonusTime > 0) {
+		if (bonusTime < time) {
+			let diff = time - bonusTime;
+			time = diff + bonusTime / 5;
+		} else time /= 5;
+	}
 	// Wait until the action finishes
+	const started = bb.startAction(type, name);
 	if (started) {
 		ns.print(`Carrying out ${name}`);
 		await ns.sleep(time + 100);
