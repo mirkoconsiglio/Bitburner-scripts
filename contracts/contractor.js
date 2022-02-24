@@ -346,7 +346,7 @@ function validMathExpressions(data) {
 					break;
 			}
 			expr += op + digits[k];
-		}
+		} // TODO: update to not use eval
 		if (eval(expr) === target) valid.push(expr);
 	}
 	return valid;
