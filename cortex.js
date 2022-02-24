@@ -1,6 +1,9 @@
+// noinspection JSUnresolvedVariable
+
+import {contractor} from '/contracts/contractor.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
-import {contractor} from '/utils/contractor.js';
+import {upgradeHacknet} from '/hacknet/hacknet-manager.js';
 import {
 	copyScriptsToAll,
 	enoughRam,
@@ -38,6 +41,7 @@ export async function main(ns) {
 	let upgradeRamTime = upgradeRamTimer;
 	let upgradeCoresTime = upgradeCoresTimer;
 	// Cortex
+	// noinspection InfiniteLoopJS
 	while (true) {
 		const player = ns.getPlayer();
 		// Heal player
@@ -98,6 +102,7 @@ export async function main(ns) {
 			askedStock = true;
 		}
 		// Gang manager
+		// noinspection JSUnresolvedFunction
 		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
 			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !askedGang && !promptScriptRunning(ns, host)) {
 			if (ns.gang.getGangInformation().isHacking) {
@@ -158,6 +163,8 @@ export async function main(ns) {
 		deployDaemons(ns);
 		// Simple hack manager
 		manageAndHack(ns);
+		// Hacknet manager
+		upgradeHacknet(ns);
 		// Update every second
 		await ns.sleep(1000);
 	}

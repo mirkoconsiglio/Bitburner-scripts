@@ -26,8 +26,9 @@ export function getScripts() {
 		weaken: '/hacking/weaken.js',
 		daemon: '/hacking/daemon.js',
 		deployDaemons: '/hacking/deploy-daemons.js',
+		backdoor: '/hacking/backdoor.js',
+		share: '/hacking/share.js',
 		utils: '/utils/utils.js',
-		share: '/utils/share.js',
 		combatGang: '/gang/combat-gang.js',
 		hackingGang: '/gang/hacking-gang.js',
 		corp: '/corporation/autopilot.js',
@@ -37,7 +38,6 @@ export function getScripts() {
 		ui: '/ui/overview.js',
 		upgradeHomeRam: '/utils/upgrade-home-ram.js',
 		upgradeHomeCores: '/utils/upgrade-home-cores.js',
-		backdoor: '/utils/backdoor.js',
 		joinFactions: '/utils/join-factions.js'
 	}
 }
@@ -201,7 +201,7 @@ export function hackServer(ns, server) {
 }
 
 export function getAccessibleServers(ns) {
-	return getServers(ns).filter(server => hackServer(ns, server));
+	return getServers(ns).filter(server => hackServer(ns, server) && !server.startsWith('hacknet-node-'));
 }
 
 export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
@@ -324,6 +324,7 @@ export function targetCost(ns, target, cores = 1, hackPercent = 0.5, freeRam = 2
 	return [averageMoneyPerRamPerTime, averageMoneyPerRam, averageMoneyPerTime];
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function altTargetCost(ns, server) { // Doesn't use Formulas
 	const hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
 	const grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;

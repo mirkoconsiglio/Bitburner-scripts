@@ -31,6 +31,8 @@ hacking/grow.js
 hacking/hack-manager.js
 hacking/hack.js
 hacking/weaken.js
+hacking/backdoor.js
+hacking/share.js
 stock-market/early-stock-market.js
 stock-market/stock-market.js
 stock-market/autopilot.js
@@ -48,13 +50,10 @@ tools/monitor.js
 tools/pserv-buyer.js
 tools/reputation.js
 tools/player.js
-utils/backdoor.js
-utils/contractor.js
 utils/join-factions.js
 utils/upgrade-home-cores.js
 utils/upgrade-home-ram.js
 utils/utils.js
-utils/share.js
 corporation/autopilot.js
 corporation/utils.js
 ui/overview.js
@@ -71,3 +70,7 @@ sleeve/faction.js
 sleeve/shock-recovery.js
 sleeve/synchronize.js
 sleeve/utils.js
+hacknet/hacknet-manager.js
+hacknet/utils.js
+hacknet/hash-buyer.js
+contracts/contractor.js
