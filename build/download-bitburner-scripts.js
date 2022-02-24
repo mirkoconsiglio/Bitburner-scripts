@@ -10,7 +10,7 @@ export async function main(ns) {
 		if (script === listOfScripts || (script.includes('/') ? '/' : '') + script === ns.getScriptName()) continue;
 		ns.tprint(`Downloading ${script}`);
 		download = await ns.wget(`${url}/${script}`, (script.includes('/') ? '/' : '') + script);
-		if (!download) throw new Error(`Could not download ${script}`);
+		if (!download) ns.alert(`Could not download ${script}`);
 	}
 	ns.tprint('----- Download complete -----');
 }
