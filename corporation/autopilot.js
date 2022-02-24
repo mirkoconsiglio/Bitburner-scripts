@@ -1,4 +1,6 @@
 // Requires WarehouseAPI and OfficeAPI
+// noinspection DuplicatedCode
+
 import {getJobs} from '/corporation/utils.js';
 import {getCities} from '/utils/utils.js';
 
@@ -203,7 +205,7 @@ export async function part2(ns, cities, jobs, division) {
 	}
 }
 
-export async function part3(ns, cities, jobs, division) {
+export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
 	// Expand into tobacco industry
 	corp.expandIndustry('Tobacco', division);
@@ -211,7 +213,7 @@ export async function part3(ns, cities, jobs, division) {
 		// Purchase warehouse
 		await moneyFor(ns, corp.getPurchaseWarehouseCost);
 		corp.purchaseWarehouse(division, city);
-		if (city === 'Aevum') {
+		if (city === mainCity) {
 			// Upgrade Office size to 60
 			await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, 27);
 			corp.upgradeOfficeSize(division, city, 27);
@@ -236,7 +238,7 @@ export async function part3(ns, cities, jobs, division) {
 		}
 	}
 	// Start making Tobacco v1
-	if (!corp.getProduct(division, 'Tobacco v1')) corp.makeProduct(division, 'Aevum', 'Tobacco v1', 1e9, 1e9);
+	if (!corp.getProduct(division, 'Tobacco v1')) corp.makeProduct(division, mainCity, 'Tobacco v1', 1e9, 1e9);
 	// Get upgrades
 	while (true) {
 		if (corp.getUpgradeLevel('Wilson Analytics') < 14) corp.levelUpgrade('Wilson Analytics');
@@ -258,32 +260,32 @@ export async function part3(ns, cities, jobs, division) {
 		await ns.sleep(1000);
 	}
 	// Start selling Tobacco v1 in all cities
-	corp.sellProduct(division, 'Aevum', 'Tobacco v1', 'MAX', 'MP*2', true);
+	corp.sellProduct(division, mainCity, 'Tobacco v1', 'MAX', 'MP*2', true);
 	// Start making Tobacco v2
-	if (!corp.getProduct(division, 'Tobacco v2')) corp.makeProduct(division, 'Aevum', 'Tobacco v2', 1e9, 1e9);
+	if (!corp.getProduct(division, 'Tobacco v2')) corp.makeProduct(division, mainCity, 'Tobacco v2', 1e9, 1e9);
 	// Upgrade Aevum office size
-	while (corp.getOffice(division, 'Aevum').size < 60) {
-		corp.upgradeOfficeSize(division, 'Aevum', 30);
+	while (corp.getOffice(division, mainCity).size < 60) {
+		corp.upgradeOfficeSize(division, mainCity, 30);
 		// Start selling Tobacco v2 and start making Tobacco v3 if it finishes
 		if (corp.getProduct(division, 'Tobacco v2').developmentProgress === 100) {
-			corp.sellProduct(division, 'Aevum', 'Tobacco v2', 'MAX', 'MP*4', true);
-			if (!corp.getProduct(division, 'Tobacco v3')) corp.makeProduct(division, 'Aevum', 'Tobacco v3', 1e9, 1e9);
+			corp.sellProduct(division, mainCity, 'Tobacco v2', 'MAX', 'MP*4', true);
+			if (!corp.getProduct(division, 'Tobacco v3')) corp.makeProduct(division, mainCity, 'Tobacco v3', 1e9, 1e9);
 		}
 		await ns.sleep(1000);
 	}
 	// Assign jobs
 	for (let job of Object.values(jobs)) {
-		await corp.setAutoJobAssignment(division, city, job, 12);
+		await corp.setAutoJobAssignment(division, mainCity, job, 12);
 	}
 	// Wait for Tobacco v2 to finish
 	while (corp.getProduct(division, 'Tobacco v2').developmentProgress < 100) {
 		await ns.sleep(1000);
 	}
-	corp.sellProduct(division, 'Aevum', 'Tobacco v2', 'MAX', 'MP*4', true);
-	if (!corp.getProduct(division, 'Tobacco v3')) corp.makeProduct(division, 'Aevum', 'Tobacco v3', 1e9, 1e9);
+	corp.sellProduct(division, mainCity, 'Tobacco v2', 'MAX', 'MP*4', true);
+	if (!corp.getProduct(division, 'Tobacco v3')) corp.makeProduct(division, mainCity, 'Tobacco v3', 1e9, 1e9);
 }
 
-export async function autopilot(ns, cities, jobs, division) {
+export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
 	// Assuming Tobacco v3 has already started
 	let version = 3;
@@ -294,13 +296,13 @@ export async function autopilot(ns, cities, jobs, division) {
 		// Check tobacco progress
 		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress === 100) {
 			// Start selling the developed version
-			corp.sellProduct(division, 'Aevum', 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** version), true);
+			corp.sellProduct(division, mainCity, 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** version), true);
 			if (corp.hasResearched(division, 'Market-TA.II')) corp.setProductMarketTA2(division, 'Tobacco v' + version, true);
 			// Discontinue previous version
 			corp.discontinueProduct(division, 'Tobacco v' + (version - 1));
 			// Start making new version
 			version++;
-			if (!corp.getProduct(division, 'Tobacco v' + version)) corp.makeProduct(division, 'Aevum', 'Tobacco v' + version, 1e9, 1e9);
+			if (!corp.getProduct(division, 'Tobacco v' + version)) corp.makeProduct(division, mainCity, 'Tobacco v' + version, 1e9, 1e9);
 		}
 		// Check research progress for Market TA
 		let researchCost = 0;
@@ -318,15 +320,15 @@ export async function autopilot(ns, cities, jobs, division) {
 		// Upgrade Wilson analytics if we can
 		corp.levelUpgrade('Wilson Analytics');
 		// Check what is cheaper
-		if (corp.getOfficeSizeUpgradeCost(division, 'Aevum', 15) < corp.getHireAdVertCost(division)) {
+		if (corp.getOfficeSizeUpgradeCost(division, mainCity, 15) < corp.getHireAdVertCost(division)) {
 			// Upgrade office size in Aevum
-			if (corp.getOfficeSizeUpgradeCost(division, 'Aevum', 15) <= corp.getCorporation().funds) {
-				corp.upgradeOfficeSize(division, 'Aevum', 15);
-				hireMaxEmployees(corp, division, 'Aevum');
+			if (corp.getOfficeSizeUpgradeCost(division, mainCity, 15) <= corp.getCorporation().funds) {
+				corp.upgradeOfficeSize(division, mainCity, 15);
+				hireMaxEmployees(corp, division, mainCity);
 				// Assign jobs
-				const dist = Math.floor(corp.getOffice(division, 'Aevum').size / Object.keys(jobs).length);
+				const dist = Math.floor(corp.getOffice(division, mainCity).size / Object.keys(jobs).length);
 				for (let job of Object.values(jobs)) {
-					await corp.setAutoJobAssignment(division, city, job, dist);
+					await corp.setAutoJobAssignment(division, mainCity, job, dist);
 				}
 			}
 		}
@@ -337,9 +339,8 @@ export async function autopilot(ns, cities, jobs, division) {
 			corp.acceptInvestmentOffer();
 			// Exit autopilot
 			ns.alert(`Last investment offer accepted. Turning off corporation autopilot.`);
-			ns.exit();
+			break;
 		}
-
 		await ns.sleep(1000);
 	}
 }

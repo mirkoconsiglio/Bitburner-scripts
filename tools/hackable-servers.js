@@ -10,6 +10,7 @@ export async function main(ns) {
 		const minSec = ns.getServerMinSecurityLevel(server);
 		const cost = targetCost(ns, server, args.cores);
 		let string = `${i + 1}: Server: ${server}`;
+		// noinspection JSUnresolvedVariable
 		if (args.verbose) string += `, Maximum Money: ${money}, Growth: ${growth}, Min Security: ${minSec}`;
 		for (let [j, c] of cost.entries()) {
 			string += `, Cost ${j + 1}: ${ns.nFormat(c, '0.000a')}`;

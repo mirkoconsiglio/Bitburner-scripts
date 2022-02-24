@@ -11,6 +11,7 @@ export async function main(ns) {
 	await copyScriptsToAll(ns);
 	const threads = Number.MAX_VALUE;
 	const scripts = getScripts();
+	// noinspection InfiniteLoopJS
 	while (true) {
 		let servers = getAccessibleServers(ns);
 		let hackables = getOptimalHackable(ns, servers);

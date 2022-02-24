@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 import {
 	isPurchasable,
 	isUseful,

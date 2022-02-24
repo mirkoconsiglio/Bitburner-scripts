@@ -19,6 +19,7 @@ export async function main(ns) {
 	const usefulHacking = Array(numSleeves).fill(false);
 	const usefulFaction = Array(numSleeves).fill(false);
 	const usefulCompany = Array(numSleeves).fill(false);
+	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		const player = ns.getPlayer();

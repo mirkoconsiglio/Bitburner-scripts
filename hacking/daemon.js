@@ -4,6 +4,7 @@ export async function main(ns) {
 	ns.disableLog('ALL');
 	const data = packageData(ns);
 
+	// noinspection InfiniteLoopJS
 	while (true) {
 		let sec = ns.getServerSecurityLevel(data.target);
 		let money = ns.getServerMoneyAvailable(data.target);
@@ -185,6 +186,8 @@ function packageData(ns) {
 	};
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function autocomplete(data) {
+	// noinspection JSUnresolvedVariable
 	return data.servers;
 }

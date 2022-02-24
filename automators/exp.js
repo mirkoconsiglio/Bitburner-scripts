@@ -5,6 +5,7 @@ export async function main(ns) {
 	const threads = Number.MAX_VALUE;
 	const scripts = getScripts();
 	let i = 0;
+	// noinspection InfiniteLoopJS
 	while (true) {
 		let servers = getAccessibleServers(ns);
 		let freeRams = getFreeRam(ns, servers);

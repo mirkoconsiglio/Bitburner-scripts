@@ -10,6 +10,8 @@ export async function main(ns) {
 	}
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function autocomplete(data) {
+	// noinspection JSUnresolvedVariable
 	return data.servers;
 }

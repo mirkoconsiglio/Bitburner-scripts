@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 import {getCompanies, getJobs} from '/utils/utils.js';
 
 export async function main(ns) {

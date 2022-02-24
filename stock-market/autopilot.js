@@ -1,5 +1,7 @@
 // Requires WSE and TIX API
 // Constants
+// noinspection DuplicatedCode
+
 const commission = 1e5;
 const FourSigmaMarketDataBasePrice = 25e9;
 // Parameters
@@ -34,6 +36,7 @@ async function stockMarket1(ns) {
 	let lastAsk = ns.stock.getAskPrice(symbol);
 	let lastBid = ns.stock.getBidPrice(symbol);
 	// Autopilot
+	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		// Data
@@ -110,6 +113,7 @@ async function stockMarket2(ns) {
 	let lastAsk = ns.stock.getAskPrice(symbol);
 	let lastBid = ns.stock.getBidPrice(symbol);
 	// Autopilot
+	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		// Data
@@ -211,6 +215,7 @@ async function stockMarket3(ns) {
 	let lastAsk = ns.stock.getAskPrice(symbol);
 	let lastBid = ns.stock.getBidPrice(symbol);
 	// Autopilot
+	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		// Data

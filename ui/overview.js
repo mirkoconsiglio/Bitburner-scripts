@@ -1,9 +1,11 @@
+// noinspection JSUnresolvedFunction,JSUnresolvedVariable
+
 export async function main(ns) {
 	ns.disableLog('ALL');
-
 	const doc = eval('document');
 	const hook0 = doc.getElementById('overview-extra-hook-0');
 	const hook1 = doc.getElementById('overview-extra-hook-1');
+	// noinspection InfiniteLoopJS
 	while (true) {
 		try {
 			const headers = [];

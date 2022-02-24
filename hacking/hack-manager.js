@@ -9,6 +9,7 @@ import {
 
 export async function main(ns) {
 	await copyScriptsToAll(ns);
+	// noinspection InfiniteLoopJS
 	while (true) {
 		manageAndHack(ns);
 		await ns.sleep(1000);

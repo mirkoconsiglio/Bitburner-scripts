@@ -1,5 +1,7 @@
+// noinspection DuplicatedCode
+
 export async function main(ns) {
-	ns.disableLog('ALL')
+	ns.disableLog('ALL');
 
 	if (!ns.gang.inGang()) {
 		ns.tprint(`You need to join a gang first.`);
@@ -14,6 +16,7 @@ export async function main(ns) {
 	const strength_level = 500;
 
 	let c = 0;
+	// noinspection InfiniteLoopJS
 	while (true) {
 		// Check for recruits
 		if (ns.gang.canRecruitMember()) {

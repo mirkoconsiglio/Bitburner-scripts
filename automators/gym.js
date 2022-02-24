@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 export async function main(ns) {
 	const args = ns.flags([
 		['str', false],

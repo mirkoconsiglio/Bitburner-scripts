@@ -9,8 +9,8 @@ export async function main(ns) {
 
 	ns.tprint(`
 ${server}:
-    RAM        : ${ns.nFormat(usedRam * 1000 ** 3, "0.00b")} / ${ns.nFormat(maxRam * 1000 ** 3, "0.00b")} (${(usedRam / maxRam * 100).toFixed(2)}%)
-    $          : ${ns.nFormat(money, "$0.000a")} / ${ns.nFormat(maxMoney, "$0.000a")} (${(money / maxMoney * 100).toFixed(2)}%)
+    RAM        : ${ns.nFormat(usedRam * 1000 ** 3, '0.00b')} / ${ns.nFormat(maxRam * 1000 ** 3, '0.00b')} (${(usedRam / maxRam * 100).toFixed(2)}%)
+    $          : ${ns.nFormat(money, '$0.000a')} / ${ns.nFormat(maxMoney, '$0.000a')} (${(money / maxMoney * 100).toFixed(2)}%)
     security   : ${minSec.toFixed(2)} / ${sec.toFixed(2)}
     growth     : ${ns.getServerGrowth(server)}
     hack time  : ${ns.tFormat(ns.getHackTime(server))}
@@ -26,6 +26,8 @@ ${server}:
 `);
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function autocomplete(data) {
+	// noinspection JSUnresolvedVariable
 	return data.servers;
 }

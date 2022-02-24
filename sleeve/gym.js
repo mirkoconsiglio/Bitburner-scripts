@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 import {getScripts} from '/utils/utils.js';
 
 export async function main(ns) {
