@@ -30,7 +30,7 @@ function getFiles(dir = __dirname) {
 function writeToFile(filename, str) {
 	fs.writeFile(filename, str, (err) => {
 		if (err) console.log(err);
-		else console.log("File written successfully");
+		else console.log('File written successfully');
 	});
 }
 
