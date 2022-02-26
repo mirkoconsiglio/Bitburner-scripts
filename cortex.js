@@ -3,6 +3,7 @@
 import {contractor} from '/contracts/contractor.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
+import {spendHashes} from '/hacknet/hash-spender.js';
 import {
 	copyScriptsToAll,
 	enoughRam,
@@ -12,7 +13,6 @@ import {
 	printBoth,
 	promptScriptRunning
 } from '/utils/utils.js';
-import {spendHashes} from 'hacknet/hash-spender.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
@@ -25,7 +25,6 @@ export async function main(ns) {
 	const upgradeCoresTimer = 5 * 60 * 1000; // 5 minutes
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
 	// Variables
-	let contractorOnline = true;
 	const vars = {
 		contractor: true,
 		ui: false,
@@ -49,7 +48,7 @@ export async function main(ns) {
 			ns.print(`Player hospitalized for ${ns.nFormat(cost, '$0.000a')}`);
 		}
 		// Contract solver (disables itself if any solution was incorrect)
-		if (contractorOnline) contractorOnline = contractor(ns);
+		if (vars.contractor) vars.contractor = contractor(ns);
 		// Purchase TOR
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
@@ -176,7 +175,7 @@ export async function main(ns) {
 			vars.factions = vars.factions.concat(factions); // Don't ask again
 		}
 		// Spend Hashes
-		if (haveHacknetServers) spendHashes(ns, 'Sell For Money');
+		if (haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons
 		deployDaemons(ns);
 		// Simple hack manager
