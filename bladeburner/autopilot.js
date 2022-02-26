@@ -110,7 +110,7 @@ export async function main(ns) {
 		const chaos = bb.getCityChaos(city);
 		if (chaos >= 50) {
 			ns.print(`Chaos is high in ${city}`);
-			if (bb.getActionEstimatedSuccessChance('Operation', 'Stealth Retirement Operation')[0] === 100 &&
+			if (bb.getActionEstimatedSuccessChance('Operation', 'Stealth Retirement Operation')[0] === 1 &&
 				bb.getActionCountRemaining('Operation', 'Stealth Retirement Operation') > 0) {
 				await doAction(ns, 'Operation', 'Stealth Retirement Operation');
 			} else await doAction(ns, 'General', 'Diplomacy');
