@@ -1,10 +1,24 @@
 // Requires WarehouseAPI and OfficeAPI
-// noinspection DuplicatedCode
-
-import {getJobs} from '/corporation/utils.js';
+import {
+	buyMaterialsUpto,
+	expandCity,
+	expandIndustry,
+	finishProduct,
+	getJobs,
+	hireAdVertUpto,
+	hireMaxEmployees,
+	investmentOffer,
+	makeProduct,
+	purchaseWarehouse,
+	unlockUpgrade,
+	upgradeOffice,
+	upgradeUpto,
+	upgradeWarehouseUpto
+} from '/corporation/utils.js';
 import {getCities} from '/utils/utils.js';
 
 export async function main(ns) {
+	ns.disableLog('ALL');
 	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
 	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
 	// Set up
@@ -24,276 +38,170 @@ export async function main(ns) {
 
 export async function part1(ns, cities, jobs, division) {
 	const corp = ns.corporation;
-	// Expand to agriculture division
-	try {
-		corp.getDivision(division);
-	} catch (err) {
-		corp.expandIndustry('Agriculture', division);
-	}
-	await moneyFor(ns, corp.getUnlockUpgradeCost, 'Smart Supply');
-	corp.unlockUpgrade('Smart Supply');
+	// Expand to Agriculture division
+	await expandIndustry(ns, 'Agriculture', division);
+	// Unlock Smart Supply
+	await unlockUpgrade(ns, 'Smart Supply');
+	// Turn on Smart Supply
 	corp.setSmartSupply(division, 'Sector-12', true);
+	// Expand
 	for (let city of cities) {
 		// Expand to city
-		corp.expandCity(division, city);
+		await expandCity(ns, division, city);
 		// Purchase warehouse
-		await moneyFor(ns, corp.getPurchaseWarehouseCost);
-		corp.purchaseWarehouse(division, city);
-		// Hire three employees
-		hireMaxEmployees(corp, division, city);
-		// Assign jobs
-		await corp.setAutoJobAssignment(division, city, jobs.operations, 1);
-		await corp.setAutoJobAssignment(division, city, jobs.engineer, 1);
-		await corp.setAutoJobAssignment(division, city, jobs.business, 1);
+		await purchaseWarehouse(ns, division, city);
+		// upgrade office to 3 and assign jobs
+		const settings = [
+			{job: 'Operations', num: 1},
+			{job: 'Engineer', num: 1},
+			{job: 'Business', num: 1}
+		];
+		await upgradeOffice(ns, division, city, 3, settings);
 		// Start selling material
 		corp.sellMaterial(division, city, 'Food', 'MAX', 'MP');
 		corp.sellMaterial(division, city, 'Plants', 'MAX', 'MP');
 	}
+	// Upgrade warehouse upto level 2
 	for (let city of cities) {
-		// Upgrade warehouse twice
-		for (let i = 0; i < 2; i++) {
-			await moneyFor(ns, corp.getUpgradeWarehouseCost, division, city);
-			corp.upgradeWarehouse(division, city);
-		}
+		await upgradeWarehouseUpto(ns, division, city, 2);
 	}
 	// Hire advert
-	await moneyFor(ns, corp.getHireAdVertCost, division);
-	corp.hireAdVert(division);
+	await hireAdVertUpto(ns, division, 1);
 }
 
 export async function part2(ns, cities, jobs, division) {
-	const corp = ns.corporation;
 	// Get upgrades
-	for (let i = 0; i < 2; i++) {
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'FocusWires');
-		corp.levelUpgrade('FocusWires');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Neural Accelerators');
-		corp.levelUpgrade('Neural Accelerators');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Speech Processor Implants');
-		corp.levelUpgrade('Speech Processor Implants');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Nuoptimal Nootropic Injector Implants');
-		corp.levelUpgrade('Nuoptimal Nootropic Injector Implants');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Smart Factories');
-		corp.levelUpgrade('Smart Factories');
-	}
+	let upgrades = [
+		{name: 'FocusWires', level: 2},
+		{name: 'Neural Accelerators', level: 2},
+		{name: 'Speech Processor Implants', level: 2},
+		{name: 'Nuoptimal Nootropic Injector Implants', level: 2},
+		{name: 'Smart Factories', level: 2}
+	];
+	await upgradeUpto(ns, upgrades);
 	// Boost production
 	for (let city of cities) {
-		corp.buyMaterial(division, city, 'Hardware', 12.5);
-		corp.buyMaterial(division, city, 'AI Cores', 7.5);
-		corp.buyMaterial(division, city, 'Real Estate', 2700);
-		while (true) {
-			let hardware = corp.getMaterial(division, city, 'Hardware');
-			let aiCores = corp.getMaterial(division, city, 'AI Cores');
-			let realEstate = corp.getMaterial(division, city, 'Real Estate');
-
-			if (hardware.qty >= 125) corp.buyMaterial(division, city, 'Hardware', 0);
-			if (aiCores.qty >= 75) corp.buyMaterial(division, city, 'AI Cores', 0);
-			if (realEstate.qty >= 27000) corp.buyMaterial(division, city, 'Real Estate', 0);
-			if (hardware.qty >= 125 && aiCores.qty >= 75 && realEstate.qty >= 27000) break;
-
-			await ns.sleep(1000);
-		}
+		const materials = [
+			{name: 'Hardware', qty: 125},
+			{name: 'AI Cores', qty: 75},
+			{name: 'Real Estate', qty: 27e3}
+		];
+		await buyMaterialsUpto(ns, division, city, materials);
 	}
-	// Wait for investment offer of $210b
-	while (corp.getInvestmentOffer() < 210e9) {
-		// Hire advert
-		await moneyFor(ns, corp.getHireAdVertCost, division);
-		corp.hireAdVert(division);
-		// Get upgrades
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'FocusWires');
-		corp.levelUpgrade('FocusWires');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Neural Accelerators');
-		corp.levelUpgrade('Neural Accelerators');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Speech Processor Implants');
-		corp.levelUpgrade('Speech Processor Implants');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Nuoptimal Nootropic Injector Implants');
-		corp.levelUpgrade('Nuoptimal Nootropic Injector Implants');
-		// Wait 1 minute
-		await ns.sleep(60 * 1000);
-	}
-	corp.acceptInvestmentOffer();
+	// Wait for investment offer of $210b for the first round
+	await investmentOffer(ns, 210e9, 1);
 	// Upgrade office size to nine
 	for (let city of cities) {
-		await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, 6);
-		corp.upgradeOfficeSize(division, city, 6);
-		await corp.setAutoJobAssignment(division, city, 'Operations', 2);
-		await corp.setAutoJobAssignment(division, city, 'Engineer', 2);
-		await corp.setAutoJobAssignment(division, city, 'Business', 1);
-		await corp.setAutoJobAssignment(division, city, 'Management', 2);
-		await corp.setAutoJobAssignment(division, city, 'Research & Development', 2);
+		const settings = [
+			{job: 'Operations', num: 2},
+			{job: 'Engineer', num: 2},
+			{job: 'Business', num: 1},
+			{job: 'Management', num: 2},
+			{job: 'Research & Development', num: 2}
+		];
+		await upgradeOffice(ns, division, city, 9, settings);
 	}
 	// Upgrade factories and storage
-	for (let i = 0; i < 10; i++) {
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Smart Factories');
-		corp.levelUpgrade('Smart Factories');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Smart Storage');
-		corp.levelUpgrade('Smart Storage');
-	}
+	upgrades = [
+		{name: 'Smart Factories', level: 10},
+		{name: 'Smart Storage', level: 10}
+	];
+	await upgradeUpto(ns, upgrades);
 	// Upgrade warehouses
 	for (let city of cities) {
-		for (let i = 0; i < 7; i++) {
-			await moneyFor(ns, corp.getUpgradeWarehouseCost, division, city);
-			corp.upgradeWarehouse(division, city);
-		}
+		await upgradeWarehouseUpto(ns, division, city, 7);
 	}
 	// Boost production
 	for (let city of cities) {
-		corp.buyMaterial(division, city, 'Hardware', 267.5);
-		corp.buyMaterial(division, city, 'Robots', 9.6);
-		corp.buyMaterial(division, city, 'AI Cores', 244.5);
-		corp.buyMaterial(division, city, 'Real Estate', 11940);
-		while (true) {
-			let hardware = corp.getMaterial(division, city, 'Hardware');
-			let robots = corp.getMaterial(division, city, 'Robots');
-			let aiCores = corp.getMaterial(division, city, 'AI Cores');
-			let realEstate = corp.getMaterial(division, city, 'Real Estate');
-
-			if (hardware.qty >= 2800) corp.buyMaterial(division, city, 'Hardware', 0);
-			if (robots.qty >= 96) corp.buyMaterial(division, city, 'Robots', 0);
-			if (aiCores.qty >= 2520) corp.buyMaterial(division, city, 'AI Cores', 0);
-			if (realEstate.qty >= 146400) corp.buyMaterial(division, city, 'Real Estate', 0);
-			if (hardware.qty >= 2800 && robots.qty >= 96 && aiCores.qty >= 2520 && realEstate.qty >= 146400) break;
-
-			await ns.sleep(1000);
-		}
+		const materials = [
+			{name: 'Hardware', qty: 2800},
+			{name: 'Robots', qty: 96},
+			{name: 'AI Cores', qty: 2520},
+			{name: 'Real Estate', qty: 146400}
+		];
+		await buyMaterialsUpto(ns, division, city, materials);
 	}
-	// Wait for investment offer of $5t
-	while (corp.getInvestmentOffer() < 5e12) {
-		// Hire advert
-		await moneyFor(ns, corp.getHireAdVertCost, division);
-		corp.hireAdVert(division);
-		// Get upgrades
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'FocusWires');
-		corp.levelUpgrade('FocusWires');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Neural Accelerators');
-		corp.levelUpgrade('Neural Accelerators');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Speech Processor Implants');
-		corp.levelUpgrade('Speech Processor Implants');
-		await moneyFor(ns, corp.getUpgradeLevelCost, 'Nuoptimal Nootropic Injector Implants');
-		corp.levelUpgrade('Nuoptimal Nootropic Injector Implants');
-		// Wait 1 minute
-		await ns.sleep(60 * 1000);
-	}
-	corp.acceptInvestmentOffer();
+	// Wait for investment offer of $5t for the second round
+	await investmentOffer(ns, 5e12, 2);
 	// Upgrade warehouses
 	for (let city of cities) {
-		for (let i = 0; i < 9; i++) {
-			await moneyFor(ns, corp.getUpgradeWarehouseCost, division, city);
-			corp.upgradeWarehouse(division, city);
-		}
+		await upgradeWarehouseUpto(ns, division, city, 9);
 	}
 	// Boost production
 	for (let city of cities) {
-		corp.buyMaterial(division, city, 'Hardware', 650);
-		corp.buyMaterial(division, city, 'Robots', 63);
-		corp.buyMaterial(division, city, 'AI Cores', 375);
-		corp.buyMaterial(division, city, 'Real Estate', 8400);
-		while (true) {
-			let hardware = corp.getMaterial(division, city, 'Hardware');
-			let robots = corp.getMaterial(division, city, 'Robots');
-			let aiCores = corp.getMaterial(division, city, 'AI Cores');
-			let realEstate = corp.getMaterial(division, city, 'Real Estate');
-
-			if (hardware.qty >= 9300) corp.buyMaterial(division, city, 'Hardware', 0);
-			if (robots.qty >= 726) corp.buyMaterial(division, city, 'Robots', 0);
-			if (aiCores.qty >= 6270) corp.buyMaterial(division, city, 'AI Cores', 0);
-			if (realEstate.qty >= 230400) corp.buyMaterial(division, city, 'Real Estate', 0);
-			if (hardware.qty >= 9300 && robots.qty >= 726 && aiCores.qty >= 6270 && realEstate.qty >= 230400) break;
-
-			await ns.sleep(1000);
-		}
+		const materials = [
+			{name: 'Hardware', qty: 9300},
+			{name: 'Robots', qty: 726},
+			{name: 'AI Cores', qty: 6270},
+			{name: 'Real Estate', qty: 230400}
+		];
+		await buyMaterialsUpto(ns, division, city, materials);
 	}
 }
 
 export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
-	// Expand into tobacco industry
-	corp.expandIndustry('Tobacco', division);
+	// Expand into Tobacco industry
+	await expandIndustry(ns, 'Tobacco', division);
 	for (let city of cities) {
+		// Expand to city
+		await expandCity(ns, division, city);
 		// Purchase warehouse
-		await moneyFor(ns, corp.getPurchaseWarehouseCost);
-		corp.purchaseWarehouse(division, city);
+		await purchaseWarehouse(ns, division, city);
 		if (city === mainCity) {
 			// Upgrade Office size to 60
-			await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, 27);
-			corp.upgradeOfficeSize(division, city, 27);
-			// Hire 60 employees
-			hireMaxEmployees(corp, division, city);
-			// Assign jobs
-			for (let job of Object.values(jobs)) {
-				await corp.setAutoJobAssignment(division, city, job, 6);
-			}
+			const settings = [
+				{job: 'Operations', num: 12},
+				{job: 'Engineer', num: 12},
+				{job: 'Business', num: 12},
+				{job: 'Management', num: 12},
+				{job: 'Research & Development', num: 12}
+			];
+			await upgradeOffice(ns, division, city, 60, settings);
 		} else {
 			// Upgrade Office size to nine
-			await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, 6);
-			corp.upgradeOfficeSize(division, city, 6);
-			// Hire nine employees
-			hireMaxEmployees(corp, division, city);
-			// Assign jobs
-			await corp.setAutoJobAssignment(division, city, jobs.operations, 2);
-			await corp.setAutoJobAssignment(division, city, jobs.engineer, 2);
-			await corp.setAutoJobAssignment(division, city, jobs.business, 1);
-			await corp.setAutoJobAssignment(division, city, jobs.management, 2);
-			await corp.setAutoJobAssignment(division, city, jobs.RAndD, 2);
+			const settings = [
+				{job: 'Operations', num: 2},
+				{job: 'Engineer', num: 2},
+				{job: 'Business', num: 1},
+				{job: 'Management', num: 2},
+				{job: 'Research & Development', num: 2}
+			];
+			await upgradeOffice(ns, division, city, 9, settings);
 		}
 	}
 	// Start making Tobacco v1
-	if (!corp.getProduct(division, 'Tobacco v1')) corp.makeProduct(division, mainCity, 'Tobacco v1', 1e9, 1e9);
+	await makeProduct(ns, division, mainCity, 'Tobacco v1', 1e9, 1e9);
 	// Get upgrades
-	while (true) {
-		if (corp.getUpgradeLevel('Wilson Analytics') < 14) corp.levelUpgrade('Wilson Analytics');
-		if (corp.getUpgradeLevel('FocusWires') < 20) corp.levelUpgrade('FocusWires');
-		if (corp.getUpgradeLevel('Neural Accelerators') < 20) corp.levelUpgrade('Neural Accelerators');
-		if (corp.getUpgradeLevel('Speech Processor Implants') < 20) corp.levelUpgrade('Speech Processor Implants');
-		if (corp.getUpgradeLevel('Nuoptimal Nootropic Injector Implants') < 20) corp.levelUpgrade('Nuoptimal Nootropic Injector Implants');
-
-		if (corp.getUpgradeLevel('Wilson Analytics') >= 14 &&
-			corp.getUpgradeLevel('FocusWires') >= 20 &&
-			corp.getUpgradeLevel('Neural Accelerators') >= 20 &&
-			corp.getUpgradeLevel('Speech Processor Implants') >= 20 &&
-			corp.getUpgradeLevel('Nuoptimal Nootropic Injector Implants') >= 20) break;
-
-		await ns.sleep(1000);
-	}
+	let upgrades = [
+		{name: 'FocusWires', level: 20},
+		{name: 'Neural Accelerators', level: 20},
+		{name: 'Speech Processor Implants', level: 20},
+		{name: 'Nuoptimal Nootropic Injector Implants', level: 20},
+		{name: 'Wilson Analytics', level: 14}
+	];
+	await upgradeUpto(ns, upgrades);
 	// Wait for Tobacco v1 to finish
-	while (corp.getProduct(division, 'Tobacco v1').developmentProgress < 100) {
-		await ns.sleep(1000);
-	}
+	await finishProduct(ns, division, 'Tobacco v1');
 	// Start selling Tobacco v1 in all cities
 	corp.sellProduct(division, mainCity, 'Tobacco v1', 'MAX', 'MP*2', true);
 	// Start making Tobacco v2
-	if (!corp.getProduct(division, 'Tobacco v2')) corp.makeProduct(division, mainCity, 'Tobacco v2', 1e9, 1e9);
-	// Upgrade Aevum office size
-	while (corp.getOffice(division, mainCity).size < 60) {
-		corp.upgradeOfficeSize(division, mainCity, 30);
-		// Start selling Tobacco v2 and start making Tobacco v3 if it finishes
-		if (corp.getProduct(division, 'Tobacco v2').developmentProgress === 100) {
-			corp.sellProduct(division, mainCity, 'Tobacco v2', 'MAX', 'MP*4', true);
-			if (!corp.getProduct(division, 'Tobacco v3')) corp.makeProduct(division, mainCity, 'Tobacco v3', 1e9, 1e9);
-		}
-		await ns.sleep(1000);
-	}
-	// Assign jobs
-	for (let job of Object.values(jobs)) {
-		await corp.setAutoJobAssignment(division, mainCity, job, 12);
-	}
+	await makeProduct(ns, division, mainCity, 'Tobacco v2', 2e9, 2e9);
 	// Wait for Tobacco v2 to finish
-	while (corp.getProduct(division, 'Tobacco v2').developmentProgress < 100) {
-		await ns.sleep(1000);
-	}
+	await finishProduct(ns, division, 'Tobacco v2');
+	// Start selling Tobacco v2 in all cities
 	corp.sellProduct(division, mainCity, 'Tobacco v2', 'MAX', 'MP*4', true);
-	if (!corp.getProduct(division, 'Tobacco v3')) corp.makeProduct(division, mainCity, 'Tobacco v3', 1e9, 1e9);
+	// Start making Tobacco v3
+	await makeProduct(ns, division, mainCity, 'Tobacco v3', 4e9, 4e9);
 }
 
 export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
 	// Assuming Tobacco v3 has already started
 	let version = 3;
-	while (!corp.getProduct(division, 'Tobacco v' + version)) {
-		await ns.sleep(1000);
-	}
+	if (!corp.getProduct(division, 'Tobacco v' + version)) throw new Error(`Have not start Tobacco v${version} yet`);
+	// Check tobacco progress
 	while (true) {
-		// Check tobacco progress
 		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress === 100) {
 			// Start selling the developed version
 			corp.sellProduct(division, mainCity, 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** version), true);
@@ -302,7 +210,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			corp.discontinueProduct(division, 'Tobacco v' + (version - 1));
 			// Start making new version
 			version++;
-			if (!corp.getProduct(division, 'Tobacco v' + version)) corp.makeProduct(division, mainCity, 'Tobacco v' + version, 1e9, 1e9);
+			await makeProduct(ns, division, mainCity, 'Tobacco v' + version, 2 ** (version - 1) * 1e9, 2 ** (version - 1) * 1e9);
 		}
 		// Check research progress for Market TA
 		let researchCost = 0;
@@ -335,26 +243,11 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 		// Hire advert
 		else if (corp.getHireAdVertCost(division) <= corp.getCorporation().funds) corp.hireAdVert(division);
 		// Check for investors
-		if (corp.getInvestmentOffer() >= 800e12) {
-			corp.acceptInvestmentOffer();
+		if (corp.getInvestmentOffer().funds >= 800e12) {
 			// Exit autopilot
-			ns.alert(`Last investment offer accepted. Turning off corporation autopilot.`);
+			ns.alert(`Turning off corporation autopilot.`);
 			break;
 		}
 		await ns.sleep(1000);
-	}
-}
-
-// Function to wait for enough money
-async function moneyFor(ns, func, ...args) {
-	while (func(...args) > ns.corporation.getCorporation().funds) {
-		await ns.sleep(1000);
-	}
-}
-
-// Function to hire employees up to office size
-function hireMaxEmployees(corp, division, city) {
-	while (corp.getOffice(division, city).employees.length < corp.getOffice(division, city).size) {
-		corp.hireEmployee(division, city);
 	}
 }

@@ -33,7 +33,7 @@ export async function main(ns) {
 			// Check for augmentation purchases
 			const augmentations = ns.sleeve.getSleevePurchasableAugs(i);
 			for (let aug of augmentations) {
-				if (isUseful(ns, criterions, aug) && ns.getServerMoneyAvailable('home') >= aug.cost) {
+				if (isUseful(ns, criterions, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost) {
 					ns.sleeve.purchaseSleeveAug(i, aug.name);
 				}
 			}
