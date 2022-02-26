@@ -318,38 +318,29 @@ function totalWaysToSum(n) {
 
 function validMathExpressions(data) {
 	const [digits, target] = data;
-	const valid = [];
-	for (let i = 0; i < 4 ** (digits.length - 1); i++) {
-		let j = i.toString(4);
-		while (j.length < digits.length - 1) {
-			j = '0' + j;
-		}
-		if (digits[0] === '0' && j[0] === '0') continue;
 
-		let expr = digits[0];
-		for (let k = 1; k < digits.length; k++) {
-			if (digits[k] === '0' && j[k] === '0' && j[k - 1] !== '0') break;
+	const result = [];
+	if (digits == null || digits.length === 0) return result;
+	recursiveExpression(result, '', digits, target, 0, 0, 0);
 
-			let op;
-			switch (j[k - 1]) {
-				case '0':
-					op = '';
-					break;
-				case '1':
-					op = '+';
-					break;
-				case '2':
-					op = '-';
-					break;
-				case '3':
-					op = '*';
-					break;
-			}
-			expr += op + digits[k];
-		} // TODO: update to not use eval
-		if (eval(expr) === target) valid.push(expr);
+	return result;
+}
+
+function recursiveExpression(res, path, digits, target, pos, evaluated, multed) {
+	if (pos === digits.length) {
+		if (target === evaluated) res.push(path);
+		return;
 	}
-	return valid;
+	for (let i = pos; i < digits.length; i++) {
+		if (i !== pos && digits[pos] === '0') break;
+		const cur = parseInt(digits.substring(pos, i + 1));
+		if (pos === 0) recursiveExpression(res, path + cur, digits, target, i + 1, cur, cur);
+		else {
+			recursiveExpression(res, path + '+' + cur, digits, target, i + 1, evaluated + cur, cur);
+			recursiveExpression(res, path + '-' + cur, digits, target, i + 1, evaluated - cur, -cur);
+			recursiveExpression(res, path + '*' + cur, digits, target, i + 1, evaluated - multed + multed * cur, multed * cur);
+		}
+	}
 }
 
 function sanitizeParentheses(data) {
