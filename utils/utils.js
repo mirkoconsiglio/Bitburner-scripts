@@ -15,10 +15,6 @@ export async function copyScriptsToAll(ns) {
 	}
 }
 
-export function scriptsToCopy() {
-	return Object.values(getScripts());
-}
-
 export function getScripts() {
 	return {
 		hack: '/hacking/hack.js',
@@ -34,12 +30,18 @@ export function getScripts() {
 		corp: '/corporation/autopilot.js',
 		bladeburner: '/bladeburner/autopilot.js',
 		stock: '/stock-market/autopilot.js',
+		hacknet_server: '/hacknet/hacknet-server-manager.js',
+		hacknet_node: '/hacknet/hacknet-node-manager.js',
 		sleeve: '/sleeve/autopilot.js',
 		ui: '/ui/overview.js',
 		upgradeHomeRam: '/utils/upgrade-home-ram.js',
 		upgradeHomeCores: '/utils/upgrade-home-cores.js',
 		joinFactions: '/utils/join-factions.js'
 	}
+}
+
+export function scriptsToCopy() {
+	return Object.values(getScripts());
 }
 
 export function getFactions() {
@@ -330,6 +332,16 @@ export function altTargetCost(ns, server) { // Doesn't use Formulas
 	const grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
 	const weaken = ns.getWeakenTime(server) * ns.getServerMinSecurityLevel(server) ** 2;
 	return hack / (grow * weaken);
+}
+
+export function getUSefulPrograms() {
+	return [
+		{name: 'BruteSSH.exe', level: 50},
+		{name: 'FTPCrack.exe', level: 100},
+		{name: 'relaySMTP.exe', level: 300},
+		{name: 'HTTPWorm.exe', level: 400},
+		{name: 'SQLInject.exe', level: 800}
+	];
 }
 
 export function promptScriptRunning(ns, server) {
