@@ -70,7 +70,8 @@ sleeve/faction.js
 sleeve/shock-recovery.js
 sleeve/synchronize.js
 sleeve/utils.js
-hacknet/hacknet-manager.js
+hacknet/hacknet-server-manager.js
 hacknet/utils.js
-hacknet/hash-buyer.js
+hacknet/hash-spender.js
+hacknet/hacknet-node-manager.js
 contracts/contractor.js

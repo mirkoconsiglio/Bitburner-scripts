@@ -3,21 +3,21 @@ import {getUpgrades} from '/hacknet/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('sleep');
-	let maxSpend = Number.MAX_VALUE;
-	const maxPayoffTime = 60 * 60; // 1 hour
+	let maxSpend = Infinity;
+	const maxPayoffTime = 18000; // 6 hours
 	while (true) {
 		const spend = upgradeHacknet(ns, maxSpend, maxPayoffTime);
 		if (spend === false) {
-			ns.print(`Spending limit reached. Stopping Hacknet autopilot...`);
+			ns.print(`Spending limit reached. Stopping Hacknet manager...`);
 			break;
 		}
 		maxSpend -= spend;
-		await ns.sleep(1000);
+		await ns.sleep(100);
 	}
 }
 
 // Will buy the most effective hacknet upgrade, so long as it will pay for itself in maxPayoffTimeSeconds
-export function upgradeHacknet(ns, maxSpend = Number.MAX_VALUE, maxPayoffTimeSeconds = 3600) {
+export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 18000 /* 6 hours */) {
 	const hn = ns.hacknet;
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
 	const form = haveHacknetServers ? ns.formulas.hacknetServers : ns.formulas.hacknetNodes;
