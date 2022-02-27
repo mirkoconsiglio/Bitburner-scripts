@@ -6,23 +6,25 @@ import {
 	isUsefulFaction,
 	isUsefulHackingSkill
 } from '/augmentations/utils.js';
-import {getWorks} from '/sleeve/utils.js';
+import {defineAutopilotData, getAutopilotData, getWorks} from '/sleeve/utils.js';
 import {getJobs} from '/utils/utils.js';
 
-// TODO: setting an action manually overides autopilot
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const works = getWorks();
 	const jobs = getJobs();
 	const numSleeves = ns.sleeve.getNumSleeves();
-	const usefulCombat = Array(numSleeves).fill(false);
-	const usefulHacking = Array(numSleeves).fill(false);
-	const usefulFaction = Array(numSleeves).fill(false);
-	const usefulCompany = Array(numSleeves).fill(false);
+	const usefulCombat = Array.from({length: numSleeves}, _ => false);
+	const usefulHacking = Array.from({length: numSleeves}, _ => false);
+	const usefulFaction = Array.from({length: numSleeves}, _ => false);
+	const usefulCompany = Array.from({length: numSleeves}, _ => false);
+	defineAutopilotData(ns);
 	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		const player = ns.getPlayer();
+		const autopilot = getAutopilotData(ns);
+
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			// Check for useful augmentations
 			const criterions = [isUsefulCrime];
@@ -38,22 +40,27 @@ export async function main(ns) {
 				}
 			}
 			// Assign tasks
-			if (i === 0 && player.isWorking && player.workType === 'Working for Faction') { // Sleeve 0 copies player
+			// Sleeve 0 copies player working for faction
+			if (i === 0 && player.isWorking && player.workType === 'Working for Faction') {
 				const name = player.currentWorkFactionName;
-				if (ns.sleeve.getTask(i).task !== 'Faction' || !works.includes(ns.sleeve.getTask(i).factionWorkType)) {
+				if (autopilot[i] && ns.sleeve.getTask(i).task !== 'Faction' || !works.includes(ns.sleeve.getTask(i).factionWorkType)) {
 					let j = 0;
 					while (!ns.sleeve.setToFactionWork(i, name, works[j])) {
 						j++;
 					}
 				}
 				ns.print(`Sleeve ${i}: Working for ${name}`);
-			} else if (i === 0 && player.isWorking && player.workType === 'Working for Company') { // Sleeve 0 copies player
+			}
+			// Sleeve 0 copies player working for company
+			else if (i === 0 && player.isWorking && player.workType === 'Working for Company') {
 				const name = player.companyName;
-				if (ns.sleeve.getTask(i).task !== 'Company') ns.sleeve.setToCompanyWork(i, name);
+				if (autopilot[i] && ns.sleeve.getTask(i).task !== 'Company') ns.sleeve.setToCompanyWork(i, name);
 				ns.print(`Sleeve ${i}: Working for ${name}`);
-			} else { // Crime
+			}
+			// Crime
+			else {
 				const crime = ns.sleeve.getSleeveStats(i).strength < 50 ? 'Mug' : 'Homicide';
-				if (ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
+				if (autopilot[i] && ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
 				ns.print(`Sleeve ${i}: ${ns.sleeve.getTask(i).crime}`);
 			}
 			// Make relevant augmentations purchasable for sleeves

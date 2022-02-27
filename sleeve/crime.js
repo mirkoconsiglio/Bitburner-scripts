@@ -1,13 +1,17 @@
-import {getScripts} from '/utils/utils.js';
+import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
-	const scripts = getScripts();
-	if (ns.isRunning(scripts.sleeve, 'home') &&
-		await ns.prompt(`This requires that the sleeve manager is killed, continue?`)) {
-		ns.kill(scripts.sleeve, 'home');
-	} else ns.exit();
+	const args = ns.flags([['all', false]]);
+	const crime = args._[0] ?? 'Homicide';
+	const sleeveNumber = args.all ? undefined : (args._[1] ?? throw new Error(`Either choose a sleeve number or --all`));
 
-	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
-		ns.sleeve.setToCommitCrime(i, ns.args[0]);
+	if (args.all) {
+		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
+			disableSleeveAutopilot(ns, i);
+			ns.sleeve.setToCommitCrime(i, crime);
+		}
+	} else {
+		disableSleeveAutopilot(ns, sleeveNumber);
+		ns.sleeve.setToCommitCrime(sleeveNumber, crime);
 	}
 }

@@ -1,18 +1,16 @@
-import {getCompanies, getScripts} from '/utils/utils.js';
+import {getCompanies} from '/utils/utils.js';
+import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
-	const companies = getCompanies();
-	const company = companies.find(company => company.toLowerCase() === ns.args[1].toLowerCase());
-	if (!company) {
-		ns.tprint(`Could not find ${ns.args[1]}`);
+	const sleeveNumber = ns.args[0] ?? throw new Error(`Need to specify sleeve number`);
+	const company = ns.args[1] ?? throw new Error(`Need to specify company`);
+
+	const foundCompany = getCompanies().find(c => c.toLowerCase() === company.toLowerCase());
+	if (!foundCompany) {
+		ns.tprint(`Could not find ${company}`);
 		ns.exit();
 	}
 
-	const scripts = getScripts();
-	if (ns.isRunning(scripts.sleeve, 'home') &&
-		await ns.prompt(`This requires that the sleeve manager is killed, continue?`)) {
-		ns.kill(scripts.sleeve, 'home');
-	} else ns.exit();
-
-	ns.sleeve.setToCompanyWork(ns.args[0], company);
+	disableSleeveAutopilot(ns, sleeveNumber);
+	ns.sleeve.setToCompanyWork(sleeveNumber, foundCompany);
 }

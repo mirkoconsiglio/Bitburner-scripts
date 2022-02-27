@@ -1,6 +1,4 @@
-// noinspection JSUnresolvedVariable
-
-import {getScripts} from '/utils/utils.js';
+import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
 	const args = ns.flags([
@@ -8,8 +6,10 @@ export async function main(ns) {
 		['def', false],
 		['dex', false],
 		['agi', false],
-		['gym', 'Powerhouse Gym']
+		['gym', 'Powerhouse Gym'],
+		['all', false]
 	]);
+	const sleeveNumber = args.all ? undefined : (args._[0] ?? throw new Error(`Either choose a sleeve number or --all`));
 
 	let city;
 	if (args.gym === 'Crush Fitness Gym' || args.gym === 'Snap Fitness Gym') city = 'Aevum';
@@ -24,14 +24,14 @@ export async function main(ns) {
 	else if (args.agi) stat = 'Agility';
 	else throw new Error('Invalid stat');
 
-	const scripts = getScripts();
-	if (ns.isRunning(scripts.sleeve, 'home') &&
-		await ns.prompt(`This requires that the sleeve manager is killed, continue?`)) {
-		ns.kill(scripts.sleeve, 'home');
-	} else ns.exit();
-
-	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
-		if (city) ns.sleeve.travel(i, city);
-		ns.sleeve.setToGymWorkout(i, args.gym, stat);
+	if (args.all) {
+		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
+			if (city) ns.sleeve.travel(i, city);
+			disableSleeveAutopilot(ns, i);
+			ns.sleeve.setToGymWorkout(i, args.gym, stat);
+		}
+	} else {
+		disableSleeveAutopilot(ns, sleeveNumber);
+		ns.sleeve.setToGymWorkout(sleeveNumber, args.gym, stat);
 	}
 }

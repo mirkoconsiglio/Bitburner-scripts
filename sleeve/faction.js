@@ -1,18 +1,20 @@
 // noinspection JSUnresolvedVariable
 
-import {getFactions, getScripts} from '/utils/utils.js';
+import {getFactions} from '/utils/utils.js';
+import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
-	const factions = getFactions();
 	const args = ns.flags([
 		['hacking', false],
 		['field', false],
 		['security', false]
 	]);
+	const sleeveNumber = args._[0] ?? throw new Error(`Need to specify sleeve number`);
+	const faction = args._[1] ?? throw new Error(`Need to specify company`);
 
-	const faction = factions.find(faction => faction.toLowerCase() === args._[1].toLowerCase());
-	if (!faction) {
-		ns.tprint(`Could not find ${args._[1]}`);
+	const foundFaction = getFactions().find(f => f.toLowerCase() === faction.toLowerCase());
+	if (!foundFaction) {
+		ns.tprint(`Could not find ${faction}`);
 		ns.exit();
 	}
 
@@ -22,11 +24,6 @@ export async function main(ns) {
 	else if (args.security) workType = 'Security Work';
 	else throw new Error(`Invalid work type`);
 
-	const scripts = getScripts();
-	if (ns.isRunning(scripts.sleeve, 'home') &&
-		await ns.prompt(`This requires that the sleeve manager is killed, continue?`)) {
-		ns.kill(scripts.sleeve, 'home');
-	} else ns.exit();
-
-	ns.sleeve.setToFactionWork(ns.args[0], faction, workType);
+	disableSleeveAutopilot(ns, sleeveNumber);
+	ns.sleeve.setToFactionWork(sleeveNumber, foundFaction, workType);
 }
