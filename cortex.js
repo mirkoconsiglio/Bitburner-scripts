@@ -9,7 +9,7 @@ import {
 	enoughRam,
 	getAccessibleServers,
 	getScripts,
-	getUSefulPrograms,
+	getUsefulPrograms,
 	printBoth,
 	promptScriptRunning
 } from '/utils/utils.js';
@@ -53,7 +53,7 @@ export async function main(ns) {
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
 		if (player.tor) {
-			for (let program of getUSefulPrograms()) {
+			for (let program of getUsefulPrograms()) {
 				if (!ns.fileExists(program.name) && player.hacking >= program.level) {
 					if (ns.purchaseProgram(program.name)) printBoth(ns, `Purchased ${program.name}`);
 				}
