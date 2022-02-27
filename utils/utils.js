@@ -334,7 +334,7 @@ export function altTargetCost(ns, server) { // Doesn't use Formulas
 	return hack / (grow * weaken);
 }
 
-export function getUSefulPrograms() {
+export function getUsefulPrograms() {
 	return [
 		{name: 'BruteSSH.exe', level: 50},
 		{name: 'FTPCrack.exe', level: 100},
@@ -371,4 +371,10 @@ function getPromptScripts() {
 
 export function enoughRam(ns, script, server = ns.getHostname()) {
 	return ns.getScriptRam(script, server) <= ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
+}
+
+export function getPorts() {
+	return {
+		sleeve: 10
+	};
 }
