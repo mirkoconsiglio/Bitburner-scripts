@@ -72,14 +72,14 @@ export async function main(ns) {
 		}
 		// Upgrade home RAM
 		if (ns.getUpgradeHomeRamCost() <= player.money &&
-			Date.now() - upgradeRamTime > upgradeRamTimer &&
+			Date.now() - vars.upgradeRamTime > upgradeRamTimer &&
 			!promptScriptRunning(ns, host) && ns.getServerMaxRam('home') < 2 ** 30) {
 			ns.exec(scripts.upgradeHomeRam, host, 1);
 			vars.upgradeRamTime = Date.now();
 		}
 		// Upgrade home cores
 		if (ns.getUpgradeHomeCoresCost() <= player.money &&
-			Date.now() - upgradeCoresTime > upgradeCoresTimer &&
+			Date.now() - vars.upgradeCoresTime > upgradeCoresTimer &&
 			!promptScriptRunning(ns, host) && ns.getServer('home').cpuCores < 8) {
 			ns.exec(scripts.upgradeHomeCores, host, 1);
 			vars.upgradeCoresTime = Date.now();
