@@ -23,13 +23,13 @@ export async function main(ns) {
 export async function spendHashes(ns, upgrade, target = undefined, liquidate = false) {
 	const hn = ns.hacknet;
 	const capacity = hn.hashCapacity();
-	const startingHashes = hn.numHashes();
+	// const startingHashes = hn.numHashes();
 	const globalProduction = Array.from({length: hn.numNodes()}, (_, i) => hn.getNodeStats(i)).reduce((total, node) => total + node.production, 0);
 	let success;
 	while (hn.numHashes() > (liquidate ? hn.hashCost(upgrade) : capacity - 2 * globalProduction)) {
 		success = target ? hn.spendHashes(upgrade, target) : hn.spendHashes(upgrade);
 		await ns.sleep(100);
 	}
-	if (success) ns.print(`Spent ${startingHashes - hn.numHashes()} hashes at ${ns.nFormat(globalProduction, '$0.000a')} hashes per second`);
-	else ns.print(`ERROR failed to spend hashes. (Have: ${ns.nFormat(hn.numHashes(), '0.000a')} Capacity: ${ns.nFormat(hn.hashCapacity(), '0.000a')}`);
+	// if (success) ns.print(`Spent ${startingHashes - hn.numHashes()} hashes at ${ns.nFormat(globalProduction, '$0.000a')} hashes per second`);
+	// else ns.print(`ERROR failed to spend hashes. (Have: ${ns.nFormat(hn.numHashes(), '0.000a')} Capacity: ${ns.nFormat(hn.hashCapacity(), '0.000a')}`);
 }

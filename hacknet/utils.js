@@ -44,7 +44,7 @@ function productionMult(ns, type, level) {
 		case 'cores':
 			return form.hashGainRate(1, 0, 1, level + 1) / form.hashGainRate(1, 0, 1, level) - 1;
 		case 'cache':
-			return hn.numHashes() / hn.hashCapacity();
+			return 0.1 * hn.numHashes() / hn.hashCapacity();
 		default:
 			throw new Error(`Invalid type encountered in Hacknet production multiplier`);
 	}
