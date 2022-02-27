@@ -3,11 +3,12 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
 	const args = ns.flags([
+		['sleeve', -1],
 		['university', 'ZB Institute of Technology'],
 		['course', 'Leadership'],
 		['all', false]
 	]);
-	const sleeveNumber = args.all ? undefined : (args._[0] ?? throw new Error(`Either choose a sleeve number or --all`));
+	if (!args.all && args.sleeve === -1) throw new Error(`Need to specify --sleeve number or --all`);
 
 	let city;
 	if (args.university === 'Summit University') city = 'Aevum';
@@ -22,7 +23,7 @@ export async function main(ns) {
 			ns.sleeve.setToUniversityCourse(i, args.university, args.course);
 		}
 	} else {
-		disableSleeveAutopilot(ns, sleeveNumber);
-		ns.sleeve.setToUniversityCourse(sleeveNumber, args.university, args.course);
+		disableSleeveAutopilot(ns, args.sleeve);
+		ns.sleeve.setToUniversityCourse(args.sleeve, args.university, args.course);
 	}
 }

@@ -18,11 +18,17 @@ export function disableSleeveAutopilot(ns, sleeveNumber) {
 	port.tryWrite(data);
 }
 
-export function getAutopilotData(ns) {
+export function getAutopilotData(ns, peek = false) {
 	const port = ns.getPortHandle(getPorts().sleeve);
-	return port.empty() ? defineAutopilotData(ns) : port.read();
+	if (port.empty()) return defineAutopilotData(ns);
+	else if (peek) return port.peek();
+	else return port.read();
 }
 
-export function defineAutopilotData(ns) {
-	return Array.from({length: ns.sleeve.getNumSleeves()}, _ => true);
+export function defineAutopilotData(ns, clear = true) {
+	const data = Array.from({length: ns.sleeve.getNumSleeves()}, _ => true);
+	const port = ns.getPortHandle(getPorts().sleeve);
+	if (clear) port.clear();
+	port.tryWrite(data);
+	return data;
 }

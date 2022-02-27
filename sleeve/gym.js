@@ -2,6 +2,7 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
 	const args = ns.flags([
+		['sleeve', -1],
 		['str', false],
 		['def', false],
 		['dex', false],
@@ -9,7 +10,7 @@ export async function main(ns) {
 		['gym', 'Powerhouse Gym'],
 		['all', false]
 	]);
-	const sleeveNumber = args.all ? undefined : (args._[0] ?? throw new Error(`Either choose a sleeve number or --all`));
+	if (!args.all && args.sleeve === -1) throw new Error(`Need to specify --sleeve number or --all`);
 
 	let city;
 	if (args.gym === 'Crush Fitness Gym' || args.gym === 'Snap Fitness Gym') city = 'Aevum';
@@ -31,7 +32,7 @@ export async function main(ns) {
 			ns.sleeve.setToGymWorkout(i, args.gym, stat);
 		}
 	} else {
-		disableSleeveAutopilot(ns, sleeveNumber);
-		ns.sleeve.setToGymWorkout(sleeveNumber, args.gym, stat);
+		disableSleeveAutopilot(ns, args.sleeve);
+		ns.sleeve.setToGymWorkout(args.sleeve, args.gym, stat);
 	}
 }

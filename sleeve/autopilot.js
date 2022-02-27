@@ -23,7 +23,7 @@ export async function main(ns) {
 	while (true) {
 		ns.clearLog();
 		const player = ns.getPlayer();
-		const autopilot = getAutopilotData(ns);
+		const autopilot = getAutopilotData(ns, true);
 
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			// Check for useful augmentations

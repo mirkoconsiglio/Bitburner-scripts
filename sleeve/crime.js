@@ -1,17 +1,20 @@
 import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
-	const args = ns.flags([['all', false]]);
-	const crime = args._[0] ?? 'Homicide';
-	const sleeveNumber = args.all ? undefined : (args._[1] ?? throw new Error(`Either choose a sleeve number or --all`));
+	const args = ns.flags([
+		['crime', 'Homicide'],
+		['sleeve', -1],
+		['all', false]
+	]);
+	if (!args.all && args.sleeve === -1) throw new Error(`Need to specify --sleeve number or --all`);
 
 	if (args.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			disableSleeveAutopilot(ns, i);
-			ns.sleeve.setToCommitCrime(i, crime);
+			ns.sleeve.setToCommitCrime(i, args.crime);
 		}
 	} else {
-		disableSleeveAutopilot(ns, sleeveNumber);
-		ns.sleeve.setToCommitCrime(sleeveNumber, crime);
+		disableSleeveAutopilot(ns, args.sleeve);
+		ns.sleeve.setToCommitCrime(args.sleeve, args.crime);
 	}
 }
