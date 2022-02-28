@@ -25,8 +25,8 @@ async function moneyForAmount(ns, amount) {
 // Function to hire employees up to office size
 export function hireMaxEmployees(ns, division, city) {
 	const corp = ns.corporation;
+	ns.print(`Hiring employees for ${division} (${city})`);
 	while (corp.getOffice(division, city).employees.length < corp.getOffice(division, city).size) {
-		ns.print(`Hiring employees for ${division} (${city})`);
 		corp.hireEmployee(division, city);
 	}
 }
@@ -114,11 +114,18 @@ export async function investmentOffer(ns, amount, round = 5) {
 // Function to start making a product
 export async function makeProduct(ns, division, city, name, design = 0, marketing = 0) {
 	const corp = ns.corporation;
-	if (!corp.getDivision(division).products.includes(name)) {
+	const products = corp.getDivision(division).products;
+	const proposedVersion = parseInt(name.slice(-1));
+	let currentBestVersion = 0;
+	for (let product of products) {
+		let version = parseInt(product.slice(-1));
+		if (version > currentBestVersion) currentBestVersion = version;
+	}
+	if (proposedVersion > currentBestVersion) {
 		await moneyForAmount(ns, design + marketing);
 		corp.makeProduct(division, city, name, design, marketing);
 		ns.print(`Started to make a ${name} in ${division} (${city}) with ${ns.nFormat(design, '$0.000a')} for design and ${ns.nFormat(marketing, '$0.000a')} for marketing`);
-	} else ns.print(`Already making ${name} in ${division} (${city})`);
+	} else ns.print(`Already making/made ${name} in ${division} (${city})`);
 }
 
 // Function to finish making a product
@@ -127,6 +134,7 @@ export async function finishProduct(ns, division, name) {
 	while (ns.corporation.getProduct(division, name).developmentProgress < 100) {
 		await ns.sleep(1000);
 	}
+	ns.print(`Finished making ${name} in ${division}`);
 }
 
 // Function to expand industry

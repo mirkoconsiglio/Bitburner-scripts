@@ -194,32 +194,34 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	// Start making Tobacco v3
 	await makeProduct(ns, division, mainCity, 'Tobacco v3', 4e9, 4e9);
 }
-
 export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
-	// Assuming Tobacco v3 has already started
+	const market1 = 'Market-TA.I';
+	const market2 = 'Market-TA.II';
+	// Start making Tobacco v3 if it has not already started
 	let version = 3;
-	if (!corp.getProduct(division, 'Tobacco v' + version)) throw new Error(`Must have already started Tobacco v${version}`);
+	await makeProduct(ns, division, mainCity, 'Tobacco v3', 4e9, 4e9);
 	// Check tobacco progress
 	while (true) {
-		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress === 100) {
+		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress >= 100) {
 			// Start selling the developed version
 			corp.sellProduct(division, mainCity, 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** version), true);
-			if (corp.hasResearched(division, 'Market-TA.II')) corp.setProductMarketTA2(division, 'Tobacco v' + version, true);
+			if (corp.hasResearched(division, market2)) corp.setProductMarketTA2(division, 'Tobacco v' + version, true);
 			// Discontinue previous version
 			corp.discontinueProduct(division, 'Tobacco v' + (version - 1));
 			// Start making new version
+			await makeProduct(ns, division, mainCity, 'Tobacco v' + (version + 1), 1e9 * 2 ** version, 1e9 * 2 ** version);
+			// Update current version
 			version++;
-			await makeProduct(ns, division, mainCity, 'Tobacco v' + version, 2 ** (version - 1) * 1e9, 2 ** (version - 1) * 1e9);
 		}
-		// Check research progress for Market TA
+		// Check research progress for Market TAs
 		let researchCost = 0;
-		if (!corp.hasResearched(division, 'Market-TA.I')) researchCost += corp.getResearchCost(division, 'Market-TA.I');
-		if (!corp.hasResearched(division, 'Market-TA.II')) researchCost += corp.getResearchCost(division, 'Market-TA.II');
+		if (!corp.hasResearched(division, market1)) researchCost += corp.getResearchCost(division, market1);
+		if (!corp.hasResearched(division, market2)) researchCost += corp.getResearchCost(division, market2);
 		if (researchCost > 0 && corp.getDivision(division).research >= 1.5 * researchCost) {
-			if (!corp.hasResearched(division, 'Market-TA.I')) corp.research(division, 'Market-TA.I');
-			if (!corp.hasResearched(division, 'Market-TA.II')) {
-				corp.research(division, 'Market-TA.II');
+			if (!corp.hasResearched(division, market1)) corp.research(division, market1);
+			if (!corp.hasResearched(division, market2)) {
+				corp.research(division, market2);
 				// Set Market TA.II on for the current selling versions
 				corp.setProductMarketTA2(division, 'Tobacco v' + (version - 2), true);
 				corp.setProductMarketTA2(division, 'Tobacco v' + (version - 1), true);
@@ -230,9 +232,9 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 		// Check what is cheaper
 		if (corp.getOfficeSizeUpgradeCost(division, mainCity, 15) < corp.getHireAdVertCost(division)) {
 			// Upgrade office size in Aevum
-			if (corp.getOfficeSizeUpgradeCost(division, mainCity, 15) <= corp.getCorporation().funds) {
+			if (corp.getCorporation().funds >= corp.getOfficeSizeUpgradeCost(division, mainCity, 15)) {
 				corp.upgradeOfficeSize(division, mainCity, 15);
-				hireMaxEmployees(corp, division, mainCity);
+				hireMaxEmployees(ns, division, mainCity);
 				// Assign jobs
 				const dist = Math.floor(corp.getOffice(division, mainCity).size / Object.keys(jobs).length);
 				for (let job of Object.values(jobs)) {
@@ -241,11 +243,11 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			}
 		}
 		// Hire advert
-		else if (corp.getHireAdVertCost(division) <= corp.getCorporation().funds) corp.hireAdVert(division);
+		else if (corp.getCorporation().funds >= corp.getHireAdVertCost(division)) corp.hireAdVert(division);
 		// Check for investors
 		if (corp.getInvestmentOffer().funds >= 800e12) {
 			// Exit autopilot
-			ns.alert(`Turning off corporation autopilot.`);
+			ns.alert(`Time to go public. Turning off corporation autopilot...`);
 			break;
 		}
 		await ns.sleep(1000);
