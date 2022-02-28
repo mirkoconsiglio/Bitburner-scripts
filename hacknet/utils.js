@@ -35,17 +35,26 @@ export function getUpgrades(ns) {
 function productionMult(ns, type, level) {
 	const hn = ns.hacknet;
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
-	const form = haveHacknetServers ? ns.formulas.hacknetServers : ns.formulas.hacknetNodes;
+	const form = haveHacknetServers ? ns.formulas.hacknetServers.hashGainRate : ns.formulas.hacknetNodes.moneyGainRate;
+	let curLevel;
+	let nextLevel;
 	switch (type) {
 		case 'level':
-			return form.hashGainRate(level + 1, 0, 1, 1) / form.hashGainRate(level, 0, 1, 1) - 1;
+			curLevel = haveHacknetServers ? [level, 0, 1, 1] : [level, 1, 1];
+			nextLevel = haveHacknetServers ? [level + 1, 0, 1, 1] : [level + 1, 1, 1];
+			break;
 		case 'ram':
-			return form.hashGainRate(1, 0, level * 2, 1) / form.hashGainRate(1, 0, level, 1) - 1;
+			curLevel = haveHacknetServers ? [1, level, 1, 1] : [1, level, 1];
+			nextLevel = haveHacknetServers ? [1, level * 2, 1, 1] : [1, level * 2, 1];
+			break;
 		case 'cores':
-			return form.hashGainRate(1, 0, 1, level + 1) / form.hashGainRate(1, 0, 1, level) - 1;
+			curLevel = haveHacknetServers ? [1, 0, 1, level] : [1, 1, level];
+			nextLevel = haveHacknetServers ? [1, 0, 1, level + 1] : [1, 1, level + 1];
+			break;
 		case 'cache':
 			return 0.1 * hn.numHashes() / hn.hashCapacity();
 		default:
 			throw new Error(`Invalid type encountered in Hacknet production multiplier`);
 	}
+	return form(...nextLevel) / form(...curLevel) - 1;
 }

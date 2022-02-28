@@ -1,14 +1,19 @@
 // Requires formulas
 import {getUpgrades} from '/hacknet/utils.js';
+import {printBoth} from '/utils/utils.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');
-	let maxSpend = Infinity;
-	const maxPayoffTime = 21600; // 6 hours
+	const args = ns.flags([
+		['max-spend', Infinity],
+		['max-payoff-time', Infinity]
+	]);
+	let maxSpend = args['max-spend'];
+	const maxPayoffTime = args['max-payoff-time'];
 	while (true) {
 		const spend = upgradeHacknet(ns, maxSpend, maxPayoffTime);
-		if (spend === false) {
-			ns.print(`Spending limit reached. Stopping Hacknet manager...`);
+		if (typeof spend === 'string') {
+			printBoth(ns, spend);
 			break;
 		}
 		maxSpend -= spend;
@@ -67,11 +72,11 @@ export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 2
 	let strPayoff = `production ${ns.nFormat((shouldBuyNewNode ? newNodePayoff : bestUpgradePayoff) * cost, '0.000a')}, payoff time: ${ns.tFormat(1000 * payoffTimeSeconds)}`;
 	if (cost > maxSpend) {
 		ns.print(`The next best purchase would be ${strPurchase} but the cost ${ns.nFormat(cost, '$0.000a')} exceeds the limit (${ns.nFormat(maxSpend, '$0.000a')})`);
-		return false; // Overspending
+		return 'Spending limit reached. Turning off Hacknet manager...'; // Overspending
 	}
 	if (payoffTimeSeconds > maxPayoffTimeSeconds) {
 		ns.print(`The next best purchase would be ${strPurchase} but the ${strPayoff} is worse than the limit (${ns.tFormat(1000 * maxPayoffTimeSeconds)})`);
-		return false; // Won't pay itself off
+		return 'Max payoff time reached. Turning off Hacknet manager...'; // Won't pay itself off
 	}
 	const success = shouldBuyNewNode ? hn.purchaseNode() !== -1 : bestUpgrade.upgrade(nodeToUpgrade, 1);
 	ns.print(success ? `Purchased ${strPurchase} with ${strPayoff}` : `Insufficient funds to purchase the next best upgrade: ${strPurchase}`);
