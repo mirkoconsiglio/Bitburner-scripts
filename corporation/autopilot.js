@@ -109,7 +109,7 @@ export async function part2(ns, cities, jobs, division) {
 	await upgradeUpto(ns, upgrades);
 	// Upgrade warehouses
 	for (let city of cities) {
-		await upgradeWarehouseUpto(ns, division, city, 7);
+		await upgradeWarehouseUpto(ns, division, city, 9);
 	}
 	// Boost production
 	for (let city of cities) {
@@ -125,7 +125,7 @@ export async function part2(ns, cities, jobs, division) {
 	await investmentOffer(ns, 5e12, 2);
 	// Upgrade warehouses
 	for (let city of cities) {
-		await upgradeWarehouseUpto(ns, division, city, 9);
+		await upgradeWarehouseUpto(ns, division, city, 19);
 	}
 	// Boost production
 	for (let city of cities) {
@@ -151,13 +151,13 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 		if (city === mainCity) {
 			// Upgrade Office size to 60
 			const settings = [
-				{job: 'Operations', num: 12},
-				{job: 'Engineer', num: 12},
-				{job: 'Business', num: 12},
-				{job: 'Management', num: 12},
-				{job: 'Research & Development', num: 12}
+				{job: 'Operations', num: 6},
+				{job: 'Engineer', num: 6},
+				{job: 'Business', num: 6},
+				{job: 'Management', num: 6},
+				{job: 'Research & Development', num: 6}
 			];
-			await upgradeOffice(ns, division, city, 60, settings);
+			await upgradeOffice(ns, division, city, 30, settings);
 		} else {
 			// Upgrade Office size to nine
 			const settings = [
@@ -199,7 +199,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 	const corp = ns.corporation;
 	// Assuming Tobacco v3 has already started
 	let version = 3;
-	if (!corp.getProduct(division, 'Tobacco v' + version)) throw new Error(`Have not start Tobacco v${version} yet`);
+	if (!corp.getProduct(division, 'Tobacco v' + version)) throw new Error(`Must have already started Tobacco v${version}`);
 	// Check tobacco progress
 	while (true) {
 		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress === 100) {
@@ -226,7 +226,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			}
 		}
 		// Upgrade Wilson analytics if we can
-		corp.levelUpgrade('Wilson Analytics');
+		if (corp.getCorporation().funds >= corp.getUpgradeLevelCost('Wilson Analytics')) corp.levelUpgrade('Wilson Analytics');
 		// Check what is cheaper
 		if (corp.getOfficeSizeUpgradeCost(division, mainCity, 15) < corp.getHireAdVertCost(division)) {
 			// Upgrade office size in Aevum

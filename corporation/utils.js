@@ -15,6 +15,13 @@ async function moneyFor(ns, func, ...args) {
 	}
 }
 
+// Function to wait for enough money
+async function moneyForAmount(ns, amount) {
+	while (amount > ns.corporation.getCorporation().funds) {
+		await ns.sleep(1000);
+	}
+}
+
 // Function to hire employees up to office size
 export function hireMaxEmployees(ns, division, city) {
 	const corp = ns.corporation;
@@ -54,7 +61,7 @@ export async function buyMaterialsUpto(ns, division, city, materials) {
 			else breakOut = false;
 		}
 		if (breakOut) break;
-		await ns.sleep(1000);
+		await ns.sleep(100);
 	}
 }
 
@@ -85,7 +92,7 @@ export async function upgradeOffice(ns, division, city, size, settings) {
 	if (upgradeSize > 0) {
 		ns.print(`Upgrading office in ${division} (${city}) to ${size}`);
 		await moneyFor(ns, corp.getOfficeSizeUpgradeCost, division, city, upgradeSize);
-		corp.upgradeOfficeSize(division, city, size);
+		corp.upgradeOfficeSize(division, city, upgradeSize);
 	}
 	hireMaxEmployees(ns, division, city);
 	for (let setting of settings) {
@@ -107,11 +114,11 @@ export async function investmentOffer(ns, amount, round = 5) {
 // Function to start making a product
 export async function makeProduct(ns, division, city, name, design = 0, marketing = 0) {
 	const corp = ns.corporation;
-	if (!corp.getProduct(division, 'Tobacco v1')) {
-		await moneyFor(x => x, design + marketing);
+	if (!corp.getDivision(division).products.includes(name)) {
+		await moneyForAmount(ns, design + marketing);
 		corp.makeProduct(division, city, name, design, marketing);
 		ns.print(`Started to make a ${name} in ${division} (${city}) with ${ns.nFormat(design, '$0.000a')} for design and ${ns.nFormat(marketing, '$0.000a')} for marketing`);
-	}
+	} else ns.print(`Already making ${name} in ${division} (${city})`);
 }
 
 // Function to finish making a product
@@ -125,13 +132,11 @@ export async function finishProduct(ns, division, name) {
 // Function to expand industry
 export async function expandIndustry(ns, industry, division) {
 	const corp = ns.corporation;
-	try {
-		corp.getDivision(division);
-	} catch (err) {
+	if (!corp.getCorporation().divisions.some(d => d.type === industry || d.name === division)) {
 		ns.print(`Expanding to ${industry} industry: ${division}`);
 		await moneyFor(ns, corp.getExpandIndustryCost, industry);
 		corp.expandIndustry(industry, division);
-	}
+	} else ns.print(`Already expanded to ${industry} industry: ${division}`);
 }
 
 // Function to expand city
@@ -141,7 +146,7 @@ export async function expandCity(ns, division, city) {
 		await moneyFor(ns, corp.getExpandCityCost);
 		corp.expandCity(division, city);
 		ns.print(`Expanded to ${city} for ${division}`);
-	}
+	} else ns.print(`Already expanded to ${city} for ${division}`);
 }
 
 // Function to purchase warehouse
@@ -151,7 +156,7 @@ export async function purchaseWarehouse(ns, division, city) {
 		await moneyFor(ns, corp.getPurchaseWarehouseCost);
 		corp.purchaseWarehouse(division, city);
 		ns.print(`Purchased warehouse in ${division} (${city})`);
-	}
+	} else ns.print(`Already purchased warehouse in ${city} for ${division}`);
 }
 
 // Function to unlock upgrade
@@ -161,5 +166,5 @@ export async function unlockUpgrade(ns, upgrade) {
 		await moneyFor(ns, corp.getUnlockUpgradeCost, upgrade);
 		corp.unlockUpgrade(upgrade);
 		ns.print(`Purchased ${upgrade}`);
-	}
+	} else ns.print(`Already purchased ${upgrade}`);
 }
