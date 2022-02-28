@@ -4,6 +4,7 @@ import {contractor} from '/contracts/contractor.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
+import {updateOverview} from '/ui/overview.js';
 import {
 	copyScriptsToAll,
 	enoughRam,
@@ -27,7 +28,6 @@ export async function main(ns) {
 	// Variables
 	const vars = {
 		contractor: true,
-		ui: false,
 		stock: false,
 		gang: false,
 		corp: false,
@@ -83,12 +83,6 @@ export async function main(ns) {
 			!promptScriptRunning(ns, host) && ns.getServer('home').cpuCores < 8) {
 			ns.exec(scripts.upgradeHomeCores, host, 1);
 			vars.upgradeCoresTime = Date.now();
-		}
-		// UI
-		if (!ns.isRunning(scripts.ui) && enoughRam(ns, scripts.ui, host) &&
-			!promptScriptRunning(ns, host) && !vars.ui) {
-			if (await ns.prompt(`Start UI manager?`)) ns.exec(scripts.ui, host);
-			vars.ui = true;
 		}
 		// Stock market manager
 		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, host) && !vars.stock &&
@@ -180,6 +174,8 @@ export async function main(ns) {
 		deployDaemons(ns);
 		// Simple hack manager
 		manageAndHack(ns);
+		// Update overview
+		updateOverview(ns);
 		// Update every second
 		await ns.sleep(1000);
 	}
