@@ -134,19 +134,11 @@ export async function main(ns) {
 			vars.bladeburner = true;
 		}
 		// Hacknet manager
-		if (!vars.hacknet && !promptScriptRunning(ns, host)) {
-			if (haveHacknetServers) {
-				if (!ns.isRunning(scripts.hacknet_server, host) && enoughRam(ns, scripts.hacknet_server, host) &&
-					await ns.prompt(`Start Hacknet server manager?`)) {
-					ns.exec(scripts.hacknet_server, host);
-					printBoth(ns, `Started Hacknet server manager`);
-				}
-			} else {
-				if (!ns.isRunning(scripts.hacknet_node, host) && enoughRam(ns, scripts.hacknet_node, host) &&
-					await ns.prompt(`Start Hacknet node manager?`)) {
-					ns.exec(scripts.hacknet_node, host);
-					printBoth(ns, `Started Hacknet node manager`);
-				}
+		if (!vars.hacknet && !promptScriptRunning(ns, host) && !ns.isRunning(scripts.hacknet, host) &&
+			enoughRam(ns, scripts.hacknet, host)) {
+			if (await ns.prompt(`Start Hacknet manager?`)) {
+				ns.exec(scripts.hacknet, host);
+				printBoth(ns, `Started Hacknet manager`);
 			}
 			vars.hacknet = true;
 		}
