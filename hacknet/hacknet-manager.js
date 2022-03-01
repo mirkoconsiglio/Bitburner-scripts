@@ -29,11 +29,11 @@ export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 2
 	const currentHacknetMult = ns.getPlayer().hacknet_node_money_mult;
 	// Find the best upgrade we can make to an existing node
 	const upgrades = getUpgrades(ns);
+	let bestUpgradePayoff = 0;
 	let nodeToUpgrade;
 	let bestUpgrade;
-	let bestUpgradePayoff = 0;
-	let cost = 0;
-	let upgradedValue = 0;
+	let cost;
+	let upgradedValue;
 	let worstNodeProduction = Number.MAX_VALUE; // Used to hold how productive a newly purchased node might be
 	for (let i = 0; i < hn.numNodes(); i++) {
 		const nodeStats = hn.getNodeStats(i);
@@ -45,9 +45,9 @@ export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 2
 			const currentUpgradeCost = upgrade.cost(i);
 			const payoff = upgrade.addedProduction(nodeStats) / currentUpgradeCost; // Production per money
 			if (payoff > bestUpgradePayoff) {
+				bestUpgradePayoff = payoff;
 				nodeToUpgrade = i;
 				bestUpgrade = upgrade;
-				bestUpgradePayoff = payoff;
 				cost = currentUpgradeCost;
 				upgradedValue = upgrade.nextValue(nodeStats);
 			}
