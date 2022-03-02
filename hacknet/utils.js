@@ -51,8 +51,10 @@ function productionMult(ns, type, level) {
 			curLevel = haveHacknetServers ? [1, 0, 1, level] : [1, 1, level];
 			nextLevel = haveHacknetServers ? [1, 0, 1, level + 1] : [1, 1, level + 1];
 			break;
-		case 'cache': // Doesn't improve production, but we consider buying cache if hash is at 90% capacity
-			return 10 * (hn.numHashes() / hn.hashCapacity() - 0.9);
+		case 'cache': // Doesn't improve production, but we consider buying cache if hash is at percentageCutoff capacity
+			const percentageCutoff = 0.95;
+			const mult = 1 / (1 - percentageCutoff);
+			return mult * (hn.numHashes() / hn.hashCapacity() - percentageCutoff);
 		default:
 			throw new Error(`Invalid type encountered in Hacknet production multiplier`);
 	}
