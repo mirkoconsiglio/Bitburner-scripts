@@ -13,7 +13,7 @@ import {
 	isUsefulHacknet,
 	isUsefulPrograms
 } from '/augmentations/utils.js';
-import {getFactions} from '/utils/utils.js';
+import {getFactions, getScripts} from '/utils/utils.js';
 
 export async function main(ns) {
 	const args = ns.flags([
@@ -29,6 +29,7 @@ export async function main(ns) {
 		['all', false],
 		['install', false]
 	]);
+	const scripts = getScripts();
 	// Check criterions for determining what augmentations are useful
 	const criterions = [];
 	if (args.hacking || args.all) criterions.push(isUsefulHacking);
@@ -45,7 +46,7 @@ export async function main(ns) {
 	for (let i = 0; i < (ns.getOwnedSourceFiles().find(s => s.n === 11) ?? {lvl: 0}).lvl; i++) {
 		mult += 4 / Math.pow(2, i);
 	}
-	const inc = 1.9 - mult / 100;
+	const inc = 1.9 * (1 - mult / 100);
 	// Get all useful and purchasable augmentations
 	let augmentations = [];
 	for (let faction of getFactions()) {
@@ -75,13 +76,26 @@ export async function main(ns) {
 		// Ask if player wants to sell stocks
 		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) {
 			// Kill stock script
-			ns.scriptKill('/stock-market/autopilot.js', 'home');
+			ns.scriptKill(scripts.stock, 'home');
 			// Sell all stocks
 			for (let sym of ns.stock.getSymbols()) {
 				ns.stock.sell(sym, ns.stock.getMaxShares(sym));
 				if (ns.getPlayer().bitNodeN === 8 || ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
 					ns.stock.sellShort(sym, ns.stock.getMaxShares(sym));
 				}
+			}
+		}
+	}
+	// Sell hashes before buying augmentations
+	if (ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9)) { // Check if player has hacknet servers
+		// Check if player has any hashes
+		if (ns.hacknet.numHashes() > 0 && await ns.prompt(`Do you want to sell all hashes?`)) {
+			// Kill hacknet manager
+			ns.scriptKill(scripts.hacknet, 'home');
+			while (ns.hacknet.numHashes() > 4) {
+				// Sell all hashes
+				ns.hacknet.spendHashes('Sell for Money');
+				await ns.sleep(1);
 			}
 		}
 	}
