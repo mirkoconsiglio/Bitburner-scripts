@@ -96,7 +96,9 @@ export async function upgradeOffice(ns, division, city, size, settings) {
 	}
 	hireMaxEmployees(ns, division, city);
 	for (let setting of settings) {
-		await corp.setAutoJobAssignment(division, city, setting.job, setting.num);
+		if (corp.getOffice(division, city).employeeProd[setting.job] !== setting.num) {
+			await corp.setAutoJobAssignment(division, city, setting.job, setting.num);
+		}
 	}
 }
 
@@ -108,6 +110,7 @@ export async function investmentOffer(ns, amount, round = 5) {
 	while (corp.getInvestmentOffer().funds < amount) {
 		await ns.sleep(1000);
 	}
+	if (corp.getInvestmentOffer().round > round) return; // In case investment offer is accepted manually
 	corp.acceptInvestmentOffer();
 }
 
@@ -115,10 +118,10 @@ export async function investmentOffer(ns, amount, round = 5) {
 export async function makeProduct(ns, division, city, name, design = 0, marketing = 0) {
 	const corp = ns.corporation;
 	const products = corp.getDivision(division).products;
-	const proposedVersion = parseInt(name.slice(-1));
+	const proposedVersion = parseVersion(name);
 	let currentBestVersion = 0;
 	for (let product of products) {
-		let version = parseInt(product.slice(-1));
+		let version = parseVersion(product);
 		if (version > currentBestVersion) currentBestVersion = version;
 	}
 	if (proposedVersion > currentBestVersion) {
@@ -135,6 +138,39 @@ export async function finishProduct(ns, division, name) {
 		await ns.sleep(1000);
 	}
 	ns.print(`Finished making ${name} in ${division}`);
+}
+
+// Function to get latest product version
+export function getLatestVersion(ns, division) {
+	const products = ns.corporation.getDivision(division).products;
+	let latestVersion = 0;
+	for (let product of products) {
+		let version = parseVersion(product);
+		if (version > latestVersion) latestVersion = version;
+	}
+	return latestVersion;
+}
+
+// Function to get earliest product version
+export function getEarliestVersion(ns, division) {
+	const products = ns.corporation.getDivision(division).products;
+	let earliestVersion = Number.MAX_SAFE_INTEGER;
+	for (let product of products) {
+		let version = parseVersion(product);
+		if (version < earliestVersion) earliestVersion = version;
+	}
+	return earliestVersion;
+}
+
+// Function to parse product version from name
+function parseVersion(name) {
+	let version = '';
+	for (let i = 1; i <= name.length; i++) {
+		let slice = name.slice(-i);
+		if (!isNaN(slice)) version = slice;
+		else if (version === '') throw new Error(`Product name must end with version number`);
+		else return parseInt(version);
+	}
 }
 
 // Function to expand industry
@@ -175,4 +211,16 @@ export async function unlockUpgrade(ns, upgrade) {
 		corp.unlockUpgrade(upgrade);
 		ns.print(`Purchased ${upgrade}`);
 	} else ns.print(`Already purchased ${upgrade}`);
+}
+
+// Function to return important upgrades
+export function getUpgrades() {
+	return {
+		lab: 'Hi-Tech R&D Laboratory',
+		market1: 'Market-TA.I',
+		market2: 'Market-TA.II',
+		fulcrum: 'uPgrade: Fulcrum',
+		capacity1: 'uPgrade: Capacity.I',
+		capacity2: 'uPgrade: Capacity.II'
+	};
 }
