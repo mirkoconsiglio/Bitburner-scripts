@@ -4,6 +4,7 @@ export function getWorks() {
 	return ['security', 'field', 'hacking'];
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function enableSleeveAutopilot(ns, sleeveNumber) {
 	const port = ns.getPortHandle(getPorts().sleeve);
 	const data = port.empty() ? defineAutopilotData(ns) : port.read();

@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 export async function main(ns) {
