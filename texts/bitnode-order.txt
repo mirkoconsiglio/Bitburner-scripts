@@ -13,3 +13,4 @@
 3.2  -> 3.3             Max SF3 14% Company Salary and Charisma, Office API & Warehouse API
 11.1 -> 11.2 -> 11.3    Max SF11 56% Company Salary and Reputation Gain, 7% Augmentation Price Decrease, Favored Reputation
 9.1  -> 9.2  -> 9.3     Max SF9 14% Hacknet, Hacknet Servers, 128 GiB RAM, Bitnode Server
+12.2                    NFG-2
