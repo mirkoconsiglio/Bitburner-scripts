@@ -7,10 +7,11 @@ export async function main(ns) {
 	let i = 0;
 	// noinspection InfiniteLoopJS
 	while (true) {
-		let servers = getAccessibleServers(ns);
-		let freeRams = getFreeRam(ns, servers);
+		const servers = getAccessibleServers(ns);
+		const freeRams = getFreeRam(ns, servers);
 		findPlaceToRun(ns, scripts.grow, threads, freeRams, 'joesguns', 0, i);
 		findPlaceToRun(ns, scripts.weaken, threads, freeRams, 'joesguns', 0, i);
+		i++;
 		await ns.sleep(1000);
 	}
 }
