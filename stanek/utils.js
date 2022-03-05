@@ -58,3 +58,10 @@ export function getFragmentType() {
 		Booster: 18
 	};
 }
+
+export function setupPattern(ns, pattern) {
+	ns.stanek.clear();
+	for (let fragment of pattern) {
+		ns.stanek.place(fragment.rootX, fragment.rootY, fragment.rotation, fragment.fragmentID);
+	}
+}

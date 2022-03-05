@@ -38,7 +38,9 @@ export async function main(ns) {
 		backdoorWorldDaemon: false,
 		factions: [],
 		upgradeRamTime: upgradeRamTimer,
-		upgradeCoresTime: upgradeCoresTimer
+		upgradeCoresTime: upgradeCoresTimer,
+		pattern: 'starter',
+		chargerThreads: 1000
 	};
 	// Cortex
 	// noinspection InfiniteLoopJS
@@ -160,6 +162,8 @@ export async function main(ns) {
 			ns.exec(scripts.joinFactions, host, 1, ...factions);
 			vars.factions = vars.factions.concat(factions); // Don't ask again
 		}
+		// Charge Stanek
+		ns.exec(scripts.stanek, host, 1, vars.pattern, vars.chargerThreads);
 		// Spend Hashes
 		if (haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons

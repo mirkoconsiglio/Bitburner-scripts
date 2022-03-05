@@ -31,7 +31,7 @@ export function getScripts() {
 		bladeburner: '/bladeburner/autopilot.js',
 		stock: '/stock-market/autopilot.js',
 		hacknet: '/hacknet/hacknet-manager.js',
-		stanek: '/stanek/stanek.js',
+		stanek: '/stanek/charger.js',
 		charge: '/stanek/charge.js',
 		sleeve: '/sleeve/autopilot.js',
 		ui: '/ui/overview.js',
