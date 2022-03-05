@@ -15,6 +15,7 @@ import {
 	promptScriptRunning
 } from '/utils/utils.js';
 
+// TODO: Smarter asking for upgrading home RAM/Cores
 export async function main(ns) {
 	ns.disableLog('ALL');
 	// Copy necessary scripts to all servers
@@ -34,6 +35,7 @@ export async function main(ns) {
 		bladeburner: false,
 		hacknet: false,
 		sleeve: false,
+		backdoorWorldDaemon: false,
 		factions: [],
 		upgradeRamTime: upgradeRamTimer,
 		upgradeCoresTime: upgradeCoresTimer
@@ -61,11 +63,9 @@ export async function main(ns) {
 		}
 		// Backdoor servers
 		for (let server of getAccessibleServers(ns)) {
-			if (!(ns.getServer(server).backdoorInstalled ||
-				ns.isRunning(scripts.backdoor, host, server) ||
-				server === 'home' || (server === 'w0r1d_d43m0n' &&
-					!promptScriptRunning(ns, host) &&
-					!await ns.prompt(`Backdoor w0r1d_d43m0n and complete Bitnode?`)))) {
+			if (!ns.getServer(server).backdoorInstalled &&
+				!ns.isRunning(scripts.backdoor, host, server) &&
+				server !== 'home' && server !== 'w0r1d_d43m0n') { // TODO: prompt backdooring world daemon
 				ns.print(`Installing backdoor on ${server}`);
 				ns.exec(scripts.backdoor, host, 1, server);
 			}
