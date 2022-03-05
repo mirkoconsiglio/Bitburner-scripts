@@ -71,4 +71,8 @@ sleeve/utils.js
 hacknet/hacknet-manager.js
 hacknet/utils.js
 hacknet/hash-spender.js
+stanek/stanek.js
+stanek/utils.js
+stanek/charge.js
+stanek/save.js
 contracts/contractor.js

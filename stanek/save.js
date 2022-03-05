@@ -3,7 +3,7 @@ export async function main(ns) {
 		rootX: f.x,
 		rootY: f.y,
 		rotation: f.rotation,
-		fragmentId: f.id,
+		fragmentID: f.id,
 		type: f.type
 	}))));
 }

@@ -31,6 +31,8 @@ export function getScripts() {
 		bladeburner: '/bladeburner/autopilot.js',
 		stock: '/stock-market/autopilot.js',
 		hacknet: '/hacknet/hacknet-manager.js',
+		stanek: '/stanek/stanek.js',
+		charge: '/stanek/charge.js',
 		sleeve: '/sleeve/autopilot.js',
 		ui: '/ui/overview.js',
 		upgradeHomeRam: '/utils/upgrade-home-ram.js',
@@ -235,9 +237,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 	for (let server of servers) {
 		if (hackables && ns.scriptRunning(scripts.daemon, server)) {
 			for (let hackable of hackables) {
-				if (ns.getRunningScript(scripts.daemon, server, hackable)) {
-					unhackables.push(hackable);
-				}
+				if (ns.getRunningScript(scripts.daemon, server, hackable)) unhackables.push(hackable);
 			}
 			if (!occupy) continue;
 		}
