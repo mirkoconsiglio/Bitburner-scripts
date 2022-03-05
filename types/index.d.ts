@@ -105,12 +105,12 @@ interface RunningScript {
   logs: string[];
   offlineExpGained: number;
   offlineMoneyMade: number;
-    /** Offline running time of the script, in seconds **/
-    offlineRunningTime: number;
+  /** Offline running time of the script, in seconds **/
+  offlineRunningTime: number;
   onlineExpGained: number;
   onlineMoneyMade: number;
-    /** Online running time of the script, in seconds **/
-    onlineRunningTime: number;
+  /** Online running time of the script, in seconds **/
+  onlineRunningTime: number;
   pid: number;
   ramUsage: number;
   server: string;
@@ -900,76 +900,76 @@ export interface GangTerritory {
  * @public
  */
 export interface GangMemberInfo {
-    /** Name of the gang member */
-    name: string;
-    /** Currently assigned task */
-    task: string;
-    earnedRespect: number;
+  /** Name of the gang member */
+  name: string;
+  /** Currently assigned task */
+  task: string;
+  earnedRespect: number;
 
-    /** Hack skill level */
-    hack: number;
-    /** Strength skill level */
-    str: number;
-    /** Defense skill level */
-    def: number;
-    /** Dexterity skill level */
-    dex: number;
-    /** Agility skill level */
-    agi: number;
-    /** Charisma skill level */
-    cha: number;
+  /** Hack skill level */
+  hack: number;
+  /** Strength skill level */
+  str: number;
+  /** Defense skill level */
+  def: number;
+  /** Dexterity skill level */
+  dex: number;
+  /** Agility skill level */
+  agi: number;
+  /** Charisma skill level */
+  cha: number;
 
-    /** Current hack experience */
-    hack_exp: number;
-    /** Current strength experience */
-    str_exp: number;
-    /** Current defense experience */
-    def_exp: number;
-    /** Current dexterity experience */
-    dex_exp: number;
-    /** Current agility experience */
-    agi_exp: number;
-    /** Current charisma experience */
-    cha_exp: number;
+  /** Current hack experience */
+  hack_exp: number;
+  /** Current strength experience */
+  str_exp: number;
+  /** Current defense experience */
+  def_exp: number;
+  /** Current dexterity experience */
+  dex_exp: number;
+  /** Current agility experience */
+  agi_exp: number;
+  /** Current charisma experience */
+  cha_exp: number;
 
-    /** Hack multiplier from equipment */
-    hack_mult: number;
-    /** Strength multiplier from equipment */
-    str_mult: number;
-    /** Defense multiplier from equipment */
-    def_mult: number;
-    /** Dexterity multiplier from equipment */
-    dex_mult: number;
-    /** Agility multiplier from equipment */
-    agi_mult: number;
-    /** Charisma multiplier from equipment */
-    cha_mult: number;
+  /** Hack multiplier from equipment */
+  hack_mult: number;
+  /** Strength multiplier from equipment */
+  str_mult: number;
+  /** Defense multiplier from equipment */
+  def_mult: number;
+  /** Dexterity multiplier from equipment */
+  dex_mult: number;
+  /** Agility multiplier from equipment */
+  agi_mult: number;
+  /** Charisma multiplier from equipment */
+  cha_mult: number;
 
-    /** Hack multiplier from ascensions */
-    hack_asc_mult: number;
-    /** Strength multiplier from ascensions */
-    str_asc_mult: number;
-    /** Defense multiplier from ascensions */
-    def_asc_mult: number;
-    /** Dexterity multiplier from ascensions */
-    dex_asc_mult: number;
-    /** Agility multiplier from ascensions */
-    agi_asc_mult: number;
-    /** Charisma multiplier from ascensions */
-    cha_asc_mult: number;
+  /** Hack multiplier from ascensions */
+  hack_asc_mult: number;
+  /** Strength multiplier from ascensions */
+  str_asc_mult: number;
+  /** Defense multiplier from ascensions */
+  def_asc_mult: number;
+  /** Dexterity multiplier from ascensions */
+  dex_asc_mult: number;
+  /** Agility multiplier from ascensions */
+  agi_asc_mult: number;
+  /** Charisma multiplier from ascensions */
+  cha_asc_mult: number;
 
-    /** Total earned hack experience */
-    hack_asc_points: number;
-    /** Total earned strength experience */
-    str_asc_points: number;
-    /** Total earned defense experience */
-    def_asc_points: number;
-    /** Total earned dexterity experience */
-    dex_asc_points: number;
-    /** Total earned agility experience */
-    agi_asc_points: number;
-    /** Total earned charisma experience */
-    cha_asc_points: number;
+  /** Total earned hack experience */
+  hack_asc_points: number;
+  /** Total earned strength experience */
+  str_asc_points: number;
+  /** Total earned defense experience */
+  def_asc_points: number;
+  /** Total earned dexterity experience */
+  dex_asc_points: number;
+  /** Total earned agility experience */
+  agi_asc_points: number;
+  /** Total earned charisma experience */
+  cha_asc_points: number;
 
   upgrades: string[];
   augmentations: string[];
@@ -4963,43 +4963,43 @@ export interface NS extends Singularity {
    */
   kill(script: number): boolean;
 
-    /**
-     * {@inheritDoc NS.(kill:1)}
-     * @example
-     * ```ts
-     * // NS1:
-     * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-     * kill("foo.script", "foodnstuff");
-     *
-     * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-     * kill("foo.script", getHostname());
-     *
-     * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-     * kill("foo.script", getHostname(), 1, "foodnstuff");
-     * ```
-     * @example
-     * ```ts
-     * // NS2:
-     * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-     * ns.kill("foo.script", "foodnstuff");
-     *
-     * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-     * ns.kill("foo.script", getHostname());
-     *
-     * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-     * ns.kill("foo.script", getHostname(), 1, "foodnstuff");
-     * ```
-     */
-    kill(script: string, host: string, ...args: string[]): boolean;
+  /**
+   * {@inheritDoc NS.(kill:1)}
+   * @example
+   * ```ts
+   * // NS1:
+   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
+   * kill("foo.script", "foodnstuff");
+   *
+   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
+   * kill("foo.script", getHostname());
+   *
+   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
+   * kill("foo.script", getHostname(), 1, "foodnstuff");
+   * ```
+   * @example
+   * ```ts
+   * // NS2:
+   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
+   * ns.kill("foo.script", "foodnstuff");
+   *
+   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
+   * ns.kill("foo.script", getHostname());
+   *
+   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
+   * ns.kill("foo.script", getHostname(), 1, "foodnstuff");
+   * ```
+   */
+  kill(script: string, host: string, ...args: string[]): boolean;
 
-    /**
-     * Terminate all scripts on a server.
-     * @remarks
-     * RAM cost: 0.5 GB
-     *
-     * Kills all running scripts on the specified server. This function returns true
-     * if any scripts were killed, and false otherwise. In other words, it will return
-     * true if there are any scripts running on the target server.
+  /**
+   * Terminate all scripts on a server.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * Kills all running scripts on the specified server. This function returns true
+   * if any scripts were killed, and false otherwise. In other words, it will return
+   * true if there are any scripts running on the target server.
    * If no host is defined, it will kill all scripts, where the script is running.
    *
    * @param host - IP or hostname of the server on which to kill all scripts.
@@ -5056,80 +5056,80 @@ export interface NS extends Singularity {
    */
   scp(files: string | string[], destination: string): Promise<boolean>;
 
-    /**
-     * {@inheritDoc NS.(scp:1)}
-     * @example
-     * ```ts
-     * // NS1:
-     * //Copies foo.lit from the helios server to the home computer:
-     * scp("foo.lit", "helios", "home");
-     *
-     * //Tries to copy three files from rothman-uni to home computer:
-     * files = ["foo1.lit", "foo2.script", "foo3.script"];
-     * scp(files, "rothman-uni", "home");
-     * ```
-     * @example
-     * ```ts
-     * // NS2:
-     * //Copies foo.lit from the helios server to the home computer:
-     * await ns.scp("foo.lit", "helios", "home");
-     *
-     * //Tries to copy three files from rothman-uni to home computer:
-     * files = ["foo1.lit", "foo2.script", "foo3.script"];
-     * await ns.scp(files, "rothman-uni", "home");
-     * ```
-     * @example
-     * ```ts
-     * //ns2, copies files from home to a target server
-     * const server = ns.args[0];
-     * const files = ["hack.js","weaken.js","grow.js"];
-     * await ns.scp(files, "home", server);
-     * ```
-     */
-    scp(files: string | string[], source: string, destination: string): Promise<boolean>;
+  /**
+   * {@inheritDoc NS.(scp:1)}
+   * @example
+   * ```ts
+   * // NS1:
+   * //Copies foo.lit from the helios server to the home computer:
+   * scp("foo.lit", "helios", "home");
+   *
+   * //Tries to copy three files from rothman-uni to home computer:
+   * files = ["foo1.lit", "foo2.script", "foo3.script"];
+   * scp(files, "rothman-uni", "home");
+   * ```
+   * @example
+   * ```ts
+   * // NS2:
+   * //Copies foo.lit from the helios server to the home computer:
+   * await ns.scp("foo.lit", "helios", "home");
+   *
+   * //Tries to copy three files from rothman-uni to home computer:
+   * files = ["foo1.lit", "foo2.script", "foo3.script"];
+   * await ns.scp(files, "rothman-uni", "home");
+   * ```
+   * @example
+   * ```ts
+   * //ns2, copies files from home to a target server
+   * const server = ns.args[0];
+   * const files = ["hack.js","weaken.js","grow.js"];
+   * await ns.scp(files, "home", server);
+   * ```
+   */
+  scp(files: string | string[], source: string, destination: string): Promise<boolean>;
 
-    /**
-     * List files on a server.
-     * @remarks
-     * RAM cost: 0.2 GB
-     *
-     * Returns an array with the filenames of all files on the specified server
-     * (as strings). The returned array is sorted in alphabetic order.
-     *
+  /**
+   * List files on a server.
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * Returns an array with the filenames of all files on the specified server
+   * (as strings). The returned array is sorted in alphabetic order.
+   *
    * @param host - Host of the target server.
    * @param grep - A substring to search for in the filename.
    * @returns Array with the filenames of all files on the specified server.
    */
   ls(host: string, grep?: string): string[];
 
-    /**
-     * List running scripts on a server.
-     * @remarks
-     * RAM cost: 0.2 GB
-     *
-     * Returns an array with general information about all scripts running on the specified target server.
-     *
-     * @example
-     * ```ts
-     * // NS1:
-     * var scripts = ps("home");
-     * for (var i = 0; i < scripts.length; ++i) {
-     *     tprint(scripts[i].filename + ' ' + scripts[i].threads);
-     *     tprint(scripts[i].args);
-     * }
-     * ```
-     * @example
-     * ```ts
-     * // NS2:
-     * const ps = ns.ps("home");
-     * for (let script of ps) {
-     *     ns.tprint(`${script.filename} ${script.threads}`);
-     *     ns.tprint(script.args);
-     * }
-     * ```
-     * @param host - Host address of the target server. If not specified, it will be the current server’s IP by default.
-     * @returns Array with general information about all scripts running on the specified target server.
-     */
+  /**
+   * List running scripts on a server.
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * Returns an array with general information about all scripts running on the specified target server.
+   *
+   * @example
+   * ```ts
+   * // NS1:
+   * var scripts = ps("home");
+   * for (var i = 0; i < scripts.length; ++i) {
+   *     tprint(scripts[i].filename + ' ' + scripts[i].threads);
+   *     tprint(scripts[i].args);
+   * }
+   * ```
+   * @example
+   * ```ts
+   * // NS2:
+   * const ps = ns.ps("home");
+   * for (let script of ps) {
+   *     ns.tprint(`${script.filename} ${script.threads}`);
+   *     ns.tprint(script.args);
+   * }
+   * ```
+   * @param host - Host address of the target server. If not specified, it will be the current server’s IP by default.
+   * @returns Array with general information about all scripts running on the specified target server.
+   */
   ps(host?: string): ProcessInfo[];
 
   /**
@@ -5891,42 +5891,42 @@ export interface NS extends Singularity {
    */
   getScriptIncome(): [number, number];
 
-    /**
-     * {@inheritDoc NS.(getScriptIncome:1)}
-     */
-    getScriptIncome(script: string, host: string, ...args: string[]): number;
+  /**
+   * {@inheritDoc NS.(getScriptIncome:1)}
+   */
+  getScriptIncome(script: string, host: string, ...args: string[]): number;
 
-    /**
-     * Get the exp gain of a script.
-     * @remarks
-     * RAM cost: 0.1 GB
-     *
-     * Returns the amount of hacking experience the specified script generates while online
-     * (when the game is open, does not apply for offline experience gains). Remember that a
-     * script is uniquely identified by both its name and its arguments.
-     *
-     * This function can also return the total experience gain rate of all of your active
-     * scripts by running the function with no arguments.
-     *
-     * @param script - Filename of script.
-     * @param host - Server on which script is running.
-     * @param args - Arguments that the script is running with.
-     * @returns Amount of hacking experience the specified script generates while online.
-     */
-    getScriptExpGain(): number;
+  /**
+   * Get the exp gain of a script.
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * Returns the amount of hacking experience the specified script generates while online
+   * (when the game is open, does not apply for offline experience gains). Remember that a
+   * script is uniquely identified by both its name and its arguments.
+   *
+   * This function can also return the total experience gain rate of all of your active
+   * scripts by running the function with no arguments.
+   *
+   * @param script - Filename of script.
+   * @param host - Server on which script is running.
+   * @param args - Arguments that the script is running with.
+   * @returns Amount of hacking experience the specified script generates while online.
+   */
+  getScriptExpGain(): number;
 
-    /**
-     * {@inheritDoc NS.(getScriptExpGain:1)}
-     */
-    getScriptExpGain(script: string, host: string, ...args: string[]): number;
+  /**
+   * {@inheritDoc NS.(getScriptExpGain:1)}
+   */
+  getScriptExpGain(script: string, host: string, ...args: string[]): number;
 
-    /**
-     * Returns the amount of time in milliseconds that have passed since you last installed Augmentations.
-     *
-     * @remarks RAM cost: 0.05 GB
-     * @returns Time in milliseconds that have passed since you last installed Augmentations.
-     */
-    getTimeSinceLastAug(): number;
+  /**
+   * Returns the amount of time in milliseconds that have passed since you last installed Augmentations.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Time in milliseconds that have passed since you last installed Augmentations.
+   */
+  getTimeSinceLastAug(): number;
 
   /**
    * Format a string.
