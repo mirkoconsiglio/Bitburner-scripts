@@ -3,7 +3,6 @@ import {
 	buyMaterialsUpto,
 	expandCity,
 	expandIndustry,
-	finishProduct,
 	getEarliestVersion,
 	getJobs,
 	getLatestVersion,
@@ -54,12 +53,12 @@ export async function part1(ns, cities, jobs, division) {
 		// Purchase warehouse
 		await purchaseWarehouse(ns, division, city);
 		// upgrade office to 3 and assign jobs
-		const settings = [
+		const positions = [
 			{job: jobs.operations, num: 1},
 			{job: jobs.engineer, num: 1},
 			{job: jobs.business, num: 1}
 		];
-		await upgradeOffice(ns, division, city, 3, settings);
+		await upgradeOffice(ns, division, city, 3, positions);
 		// Start selling material
 		corp.sellMaterial(division, city, 'Food', 'MAX', 'MP');
 		corp.sellMaterial(division, city, 'Plants', 'MAX', 'MP');
@@ -95,14 +94,14 @@ export async function part2(ns, cities, jobs, division) {
 	await investmentOffer(ns, 210e9, 1);
 	// Upgrade office size to nine
 	for (let city of cities) {
-		const settings = [
+		const positions = [
 			{job: jobs.operations, num: 2},
 			{job: jobs.engineer, num: 2},
 			{job: jobs.business, num: 1},
 			{job: jobs.management, num: 2},
 			{job: jobs.RAndD, num: 2}
 		];
-		await upgradeOffice(ns, division, city, 9, settings);
+		await upgradeOffice(ns, division, city, 9, positions);
 	}
 	// Upgrade factories and storage
 	upgrades = [
@@ -143,7 +142,6 @@ export async function part2(ns, cities, jobs, division) {
 }
 
 export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
-	const corp = ns.corporation;
 	// Expand into Tobacco industry
 	await expandIndustry(ns, 'Tobacco', division);
 	for (let city of cities) {
@@ -153,24 +151,24 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 		await purchaseWarehouse(ns, division, city);
 		if (city === mainCity) {
 			// Upgrade Office size to 60
-			const settings = [
+			const positions = [
 				{job: jobs.operations, num: 6},
 				{job: jobs.engineer, num: 6},
 				{job: jobs.business, num: 6},
 				{job: jobs.management, num: 6},
 				{job: jobs.RAndD, num: 6}
 			];
-			await upgradeOffice(ns, division, city, 30, settings);
+			await upgradeOffice(ns, division, city, 30, positions);
 		} else {
 			// Upgrade Office size to nine
-			const settings = [
+			const positions = [
 				{job: jobs.operations, num: 2},
 				{job: jobs.engineer, num: 2},
 				{job: jobs.business, num: 1},
 				{job: jobs.management, num: 2},
 				{job: jobs.RAndD, num: 2}
 			];
-			await upgradeOffice(ns, division, city, 9, settings);
+			await upgradeOffice(ns, division, city, 9, positions);
 		}
 	}
 	// Start making Tobacco v1
@@ -184,21 +182,6 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 		{name: 'Wilson Analytics', level: 14}
 	];
 	await upgradeUpto(ns, upgrades);
-	// Confirm that we are not in autopilot phase
-	if (getLatestVersion(ns, division) === 1) {
-		// Wait for Tobacco v1 to finish
-		await finishProduct(ns, division, 'Tobacco v1');
-		// Start selling Tobacco v1 in all cities
-		corp.sellProduct(division, mainCity, 'Tobacco v1', 'MAX', 'MP*2', true);
-		// Start making Tobacco v2
-		await makeProduct(ns, division, mainCity, 'Tobacco v2', 2e9, 2e9);
-		// Wait for Tobacco v2 to finish
-		await finishProduct(ns, division, 'Tobacco v2');
-		// Start selling Tobacco v2 in all cities
-		corp.sellProduct(division, mainCity, 'Tobacco v2', 'MAX', 'MP*4', true);
-		// Start making Tobacco v3
-		await makeProduct(ns, division, mainCity, 'Tobacco v3', 4e9, 4e9);
-	}
 }
 
 // TODO: Buy tax reduction upgrades
@@ -218,7 +201,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 	while (true) {
 		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress >= 100) {
 			// Start selling the developed version
-			corp.sellProduct(division, mainCity, 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** version), true);
+			corp.sellProduct(division, mainCity, 'Tobacco v' + version, 'MAX', 'MP*' + (2 ** (version - 1)), true);
 			// Set Market TA II if researched
 			if (corp.hasResearched(division, upgrades.market2)) corp.setProductMarketTA2(division, 'Tobacco v' + version, true);
 			// Discontinue earliest version
@@ -237,7 +220,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 		let researchCost = 0;
 		if (!corp.hasResearched(division, upgrades.market1)) researchCost += corp.getResearchCost(division, upgrades.market1);
 		if (!corp.hasResearched(division, upgrades.market2)) researchCost += corp.getResearchCost(division, upgrades.market2);
-		if (researchCost > 0 && corp.getDivision(division).research >= minResearch) {
+		if (researchCost > 0 && corp.getDivision(division).research - researchCost >= minResearch) {
 			if (!corp.hasResearched(division, upgrades.market1)) corp.research(division, upgrades.market1);
 			if (!corp.hasResearched(division, upgrades.market2)) {
 				corp.research(division, upgrades.market2);

@@ -38,7 +38,7 @@ export async function upgradeUpto(ns, upgrades) {
 		while (corp.getUpgradeLevel(upgrade.name) < upgrade.level) {
 			await moneyFor(ns, corp.getUpgradeLevelCost, upgrade.name);
 			corp.levelUpgrade(upgrade.name);
-			ns.print(`Upgraded ${upgrade.name} to level ${upgrade.level}`);
+			ns.print(`Upgraded ${upgrade.name} to level ${corp.getUpgradeLevel(upgrade.name)}`);
 		}
 	}
 }
@@ -71,7 +71,7 @@ export async function upgradeWarehouseUpto(ns, division, city, level) {
 	while (corp.getWarehouse(division, city).level < level) {
 		await moneyFor(ns, corp.getUpgradeWarehouseCost, division, city);
 		corp.upgradeWarehouse(division, city);
-		ns.print(`Upgraded warehouse in ${division} (${city}) to level ${level}`);
+		ns.print(`Upgraded warehouse in ${division} (${city}) to level ${corp.getWarehouse(division, city).level}`);
 	}
 }
 
@@ -95,11 +95,21 @@ export async function upgradeOffice(ns, division, city, size, settings) {
 		corp.upgradeOfficeSize(division, city, upgradeSize);
 	}
 	hireMaxEmployees(ns, division, city);
+	const positions = getPositions(ns, division, city);
 	for (let setting of settings) {
-		if (corp.getOffice(division, city).employeeProd[setting.job] !== setting.num) {
-			await corp.setAutoJobAssignment(division, city, setting.job, setting.num);
-		}
+		if (positions[setting.job] !== setting.num) await corp.setAutoJobAssignment(division, city, setting.job, setting.num);
 	}
+}
+
+function getPositions(ns, division, city) {
+	const corp = ns.corporation;
+	const positions = {};
+	const employeeNames = corp.getOffice(division, city).employees;
+	for (let employeeName of employeeNames) {
+		const employeePos = corp.getEmployee(division, city, employeeName).pos;
+		positions[employeePos] = (positions[employeePos] || 0) + 1;
+	}
+	return positions;
 }
 
 // Function to wait for an investment offer of a certain amount
