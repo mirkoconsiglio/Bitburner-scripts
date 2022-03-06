@@ -142,6 +142,7 @@ export async function makeProduct(ns, division, city, name, design = 0, marketin
 }
 
 // Function to finish making a product
+// noinspection JSUnusedGlobalSymbols
 export async function finishProduct(ns, division, name) {
 	ns.print(`Waiting for ${name} to finish in ${division}`);
 	while (ns.corporation.getProduct(division, name).developmentProgress < 100) {
