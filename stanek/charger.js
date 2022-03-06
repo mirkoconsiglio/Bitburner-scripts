@@ -1,7 +1,7 @@
 import {getFragmentType, getPatterns, setupPattern} from '/stanek/utils.js';
 import {findPlaceToRun, getAccessibleServers, getFreeRam, getScripts} from '/utils/utils.js';
 
-export async function main(ns) {
+export async function main(ns) { // TODO: Optimize charger
 	const pattern = getPatterns()[ns.args[0] ?? 'starter'];
 	const threadsPerCycle = ns.args[1] ?? 1000;
 	const scripts = getScripts();
@@ -16,8 +16,8 @@ export async function main(ns) {
 			const servers = getAccessibleServers(ns);
 			const freeRams = getFreeRam(ns, servers);
 			findPlaceToRun(ns, scripts.charge, threadsPerCycle, freeRams, fragment.rootX, fragment.rootY, i);
-			last = current;
 			ns.print(`${fragment.fragmentID} is at ${current}`);
+			last = current;
 			await ns.sleep(1000);
 			current = Math.round((ns.stanek.activeFragments().find(f => f.id === fragment.fragmentID)?.avgCharge ?? 0) * 10) / 10;
 		}

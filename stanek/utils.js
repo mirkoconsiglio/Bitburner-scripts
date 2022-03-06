@@ -60,8 +60,88 @@ export function getFragmentType() {
 }
 
 export function setupPattern(ns, pattern) {
-	ns.stanek.clear();
+	const st = ns.stanek;
 	for (let fragment of pattern) {
-		ns.stanek.place(fragment.rootX, fragment.rootY, fragment.rotation, fragment.fragmentID);
+		const x = fragment.rootX;
+		const y = fragment.rootY;
+		const rot = fragment.rotation;
+		const id = fragment.fragmentID;
+		if (!st.canPlace(x, y, rot, id)) makeSpace(ns, x, y, rot, id);
+		st.place(x, y, rot, id);
 	}
+}
+
+function makeSpace(ns, rootX, rootY, rotation, fragmentID) {
+	const st = ns.stanek;
+	const fragment = getFragment(ns, fragmentID);
+	const activeFragments = st.activeFragments();
+	const sameActiveFragments = activeFragments.filter(f => f.id === fragmentID);
+	// Check first if we are going over the limit
+	if (sameActiveFragments.length + 1 > fragment.limit) {
+		// Remove any fragments with the same ID
+		for (let sameActiveFragment of sameActiveFragments) {
+			st.remove(sameActiveFragment.x, sameActiveFragment.y);
+		}
+		// Check if we can place fragment now
+		if (st.canPlace(rootX, rootY, rotation, fragmentID)) return true;
+	}
+	// Check if we are colliding with another fragment
+	const coordinates = getCoordinates(ns, rootX, rootY, fragment.shape);
+	for (let entry of getActiveFragmentsCoordinates(ns)) {
+		if (coordinates.some(c => entry.coordinates.includes(c))) {
+			st.remove(entry.fragment.x, entry.fragment.y);
+		}
+		// Check if we can place fragment now
+		if (st.canPlace(rootX, rootY, rotation, fragmentID)) return true;
+	}
+	// Something is stopping us from making space
+	return false;
+}
+
+// noinspection JSUnusedLocalSymbols
+function fragmentHeight(ns, fragmentID, rotation) {
+	const shape = getFragment(ns, fragmentID).shape;
+	if (rotation % 2 === 0) return shape.length;
+	return shape[0].length;
+}
+
+// noinspection JSUnusedLocalSymbols
+function fragmentWidth(ns, fragmentID, rotation) {
+	const shape = getFragment(ns, fragmentID).shape;
+	if (rotation % 2 === 0) return shape[0].length;
+	return shape.length;
+}
+
+export function getFragment(ns, fragmentID) {
+	return ns.stanek.fragmentDefinitions().find(f => f.id === fragmentID);
+}
+
+function getCoordinates(ns, rootX, rootY, shape) {
+	const st = ns.stanek;
+	const coordinates = [];
+	for (let [i, row] of shape.entries()) {
+		for (let [j, cell] of row.entries()) {
+			// Check if fragment occupies the cell
+			if (cell === false) continue;
+			const x = rootX + i;
+			const y = rootY + j;
+			// If we are going over the gift's edges continue
+			if (x < 0 || y < 0 || x >= st.width() || y >= st.height()) continue;
+			coordinates.push([x, y]);
+		}
+	}
+	return coordinates;
+}
+
+function getActiveFragmentsCoordinates(ns) {
+	const st = ns.stanek;
+	const activeFragments = st.activeFragments();
+	const data = [];
+	for (let activeFragment of activeFragments) {
+		data.push({
+			fragment: activeFragment,
+			coordinates: getCoordinates(ns, activeFragment.x, activeFragment.y, getFragment(ns, activeFragment.id).shape)
+		});
+	}
+	return data;
 }
