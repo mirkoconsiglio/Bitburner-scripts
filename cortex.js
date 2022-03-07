@@ -14,21 +14,22 @@ import {
 	printBoth,
 	promptScriptRunning
 } from '/utils/utils.js';
+import {charger} from 'stanek/controller.js';
 
-// TODO: Smarter asking for upgrading home RAM/Cores
 export async function main(ns) {
 	ns.disableLog('ALL');
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
-	// Constants
-	const host = ns.getHostname();
 	const scripts = getScripts();
-	const upgradeRamTimer = 5 * 60 * 1000; // 5 minutes
-	const upgradeCoresTimer = 5 * 60 * 1000; // 5 minutes
-	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
 	// Variables
 	const vars = {
+		host: ns.getHostname(),
+		haveHacknetServers: ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9),
 		contractor: true,
+		upgradeRam: true,
+		upgradeCores: true,
+		ram: ns.getServerMaxRam('home'),
+		cores: ns.getServer('home').cpuCores,
 		stock: false,
 		gang: false,
 		corp: false,
@@ -37,12 +38,9 @@ export async function main(ns) {
 		sleeve: false,
 		backdoorWorldDaemon: false,
 		factions: [],
-		upgradeRamTime: upgradeRamTimer,
-		upgradeCoresTime: upgradeCoresTimer,
 		pattern: 'starter',
 		chargerThreads: 1000
 	};
-	// Cortex
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const player = ns.getPlayer();
@@ -66,31 +64,49 @@ export async function main(ns) {
 		// Backdoor servers
 		for (let server of getAccessibleServers(ns)) {
 			if (!ns.getServer(server).backdoorInstalled &&
-				!ns.isRunning(scripts.backdoor, host, server) &&
-				server !== 'home' && server !== 'w0r1d_d43m0n') { // TODO: prompt backdooring world daemon
-				ns.print(`Installing backdoor on ${server}`);
-				ns.exec(scripts.backdoor, host, 1, server);
+				!ns.isRunning(scripts.backdoor, vars.host, server) &&
+				server !== 'home') {
+				if (server === 'w0r1d_d43m0n' && !vars.backdoorWorldDaemon) {
+					if (await ns.prompt(`Install backdoor on w0r1d_d43m0n and finish Bitnode?`)) {
+						ns.print(`Installing backdoor on ${server}`);
+						ns.exec(scripts.backdoor, vars.host, 1, server);
+					}
+					vars.backdoorWorldDaemon = true;
+				} else {
+					ns.print(`Installing backdoor on ${server}`);
+					ns.exec(scripts.backdoor, vars.host, 1, server);
+				}
 			}
 		}
+		// Check if we want to upgrade home server
+		const homeServer = ns.getServer('home');
+		const ram = homeServer.maxRam;
+		const cores = homeServer.cpuCores;
+		if (ram > vars.ram) {
+			vars.ram = ram;
+			vars.upgradeRam = true;
+		}
+		if (cores > vars.cores) {
+			vars.cores = cores;
+			vars.upgradeCores = true;
+		}
 		// Upgrade home RAM
-		if (ns.getUpgradeHomeRamCost() <= player.money &&
-			Date.now() - vars.upgradeRamTime > upgradeRamTimer &&
-			!promptScriptRunning(ns, host) && ns.getServerMaxRam('home') < 2 ** 30) {
-			ns.exec(scripts.upgradeHomeRam, host, 1);
-			vars.upgradeRamTime = Date.now();
+		if (ns.getUpgradeHomeRamCost() <= player.money && vars.upgradeRam &&
+			!promptScriptRunning(ns, vars.host) && ram < 2 ** 30) {
+			ns.exec(scripts.upgradeHomeRam, vars.host);
+			vars.upgradeRam = false;
 		}
 		// Upgrade home cores
-		if (ns.getUpgradeHomeCoresCost() <= player.money &&
-			Date.now() - vars.upgradeCoresTime > upgradeCoresTimer &&
-			!promptScriptRunning(ns, host) && ns.getServer('home').cpuCores < 8) {
-			ns.exec(scripts.upgradeHomeCores, host, 1);
-			vars.upgradeCoresTime = Date.now();
+		if (ns.getUpgradeHomeCoresCost() <= player.money && vars.upgradeCores &&
+			!promptScriptRunning(ns, vars.host) && cores < 8) {
+			ns.exec(scripts.upgradeHomeCores, vars.host);
+			vars.upgradeCores = false;
 		}
 		// Stock market manager
-		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, host) && !vars.stock &&
-			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
+		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, vars.host) && !vars.stock &&
+			enoughRam(ns, scripts.stock, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
-				ns.exec(scripts.stock, host);
+				ns.exec(scripts.stock, vars.host);
 				printBoth(ns, `Started stock market manager`);
 			}
 			vars.stock = true;
@@ -98,17 +114,17 @@ export async function main(ns) {
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
-			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !vars.gang && !promptScriptRunning(ns, host)) {
+			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !vars.gang && !promptScriptRunning(ns, vars.host)) {
 			if (ns.gang.getGangInformation().isHacking) {
-				if (!ns.isRunning(scripts.hackingGang, host) && enoughRam(ns, scripts.hackingGang, host) &&
+				if (!ns.isRunning(scripts.hackingGang, vars.host) && enoughRam(ns, scripts.hackingGang, vars.host) &&
 					await ns.prompt(`Start hacking gang manager?`)) {
-					ns.exec(scripts.hackingGang, host);
+					ns.exec(scripts.hackingGang, vars.host);
 					printBoth(ns, `Started hacking gang manager`);
 				}
 			} else {
-				if (!ns.isRunning(scripts.combatGang, host) && enoughRam(ns, scripts.combatGang, host) &&
+				if (!ns.isRunning(scripts.combatGang, vars.host) && enoughRam(ns, scripts.combatGang, vars.host) &&
 					await ns.prompt(`Start combat gang manager?`)) {
-					ns.exec(scripts.combatGang, host);
+					ns.exec(scripts.combatGang, vars.host);
 					printBoth(ns, `Started combat gang manager`);
 				}
 			}
@@ -116,10 +132,10 @@ export async function main(ns) {
 		}
 		// Corp manager
 		if ((player.bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3)) &&
-			player.hasCorporation && !ns.isRunning(scripts.corp, host) && !vars.corp &&
-			enoughRam(ns, scripts.corp, host) && !promptScriptRunning(ns, host)) {
+			player.hasCorporation && !ns.isRunning(scripts.corp, vars.host) && !vars.corp &&
+			enoughRam(ns, scripts.corp, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start corp manager?`)) {
-				ns.exec(scripts.corp, host);
+				ns.exec(scripts.corp, vars.host);
 				printBoth(ns, `Started corp manager`);
 			}
 			vars.corp = true;
@@ -127,45 +143,45 @@ export async function main(ns) {
 		// Bladeburner manager
 		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
 			ns.bladeburner.joinBladeburnerDivision() && !vars.bladeburner &&
-			!ns.isRunning(scripts.bladeburner, host) && enoughRam(ns, scripts.bladeburner, host) &&
-			!promptScriptRunning(ns, host)) {
+			!ns.isRunning(scripts.bladeburner, vars.host) && enoughRam(ns, scripts.bladeburner, vars.host) &&
+			!promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Bladeburner manager?`)) {
-				ns.exec(scripts.bladeburner, host);
+				ns.exec(scripts.bladeburner, vars.host);
 				printBoth(ns, `Started Bladeburner manager`);
 			}
 			vars.bladeburner = true;
 		}
 		// Hacknet manager
-		if (!vars.hacknet && !promptScriptRunning(ns, host) && !ns.isRunning(scripts.hacknet, host) &&
-			enoughRam(ns, scripts.hacknet, host)) {
+		if (!vars.hacknet && !promptScriptRunning(ns, vars.host) && !ns.isRunning(scripts.hacknet, vars.host) &&
+			enoughRam(ns, scripts.hacknet, vars.host)) {
 			if (await ns.prompt(`Start Hacknet manager?`)) {
-				ns.exec(scripts.hacknet, host);
+				ns.exec(scripts.hacknet, vars.host);
 				printBoth(ns, `Started Hacknet manager`);
 			}
 			vars.hacknet = true;
 		}
 		// Sleeve manager
 		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1)) &&
-			!vars.sleeve && !ns.isRunning(scripts.sleeve, host) &&
-			enoughRam(ns, scripts.sleeve, host) && !promptScriptRunning(ns, host)) {
+			!vars.sleeve && !ns.isRunning(scripts.sleeve, vars.host) &&
+			enoughRam(ns, scripts.sleeve, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
-				ns.exec(scripts.sleeve, host);
+				ns.exec(scripts.sleeve, vars.host);
 				printBoth(ns, `Started sleeve manager`);
 			}
 			vars.sleeve = true;
 		}
 		// Check faction invites
 		let factions = ns.checkFactionInvitations().filter(faction => !vars.factions.includes(faction));
-		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, host) &&
-			!promptScriptRunning(ns, host)) {
+		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, vars.host) &&
+			!promptScriptRunning(ns, vars.host)) {
 			ns.print(`Request to join ${factions}`);
-			ns.exec(scripts.joinFactions, host, 1, ...factions);
+			ns.exec(scripts.joinFactions, vars.host, 1, ...factions);
 			vars.factions = vars.factions.concat(factions); // Don't ask again
 		}
 		// Charge Stanek
-		ns.exec(scripts.stanek, host, 1, vars.pattern, vars.chargerThreads);
+		await charger(ns);
 		// Spend Hashes
-		if (haveHacknetServers) await spendHashes(ns, 'Sell for Money');
+		if (vars.haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons
 		deployDaemons(ns);
 		// Simple hack manager

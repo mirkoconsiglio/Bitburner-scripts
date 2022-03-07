@@ -71,7 +71,7 @@ sleeve/utils.js
 hacknet/hacknet-manager.js
 hacknet/utils.js
 hacknet/hash-spender.js
-stanek/charger.js
+stanek/controller.js
 stanek/utils.js
 stanek/charge.js
 stanek/save.js

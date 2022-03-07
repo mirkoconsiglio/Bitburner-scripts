@@ -35,7 +35,6 @@ export function getFragmentType() {
 		// Special fragments for the UI
 		None: 0,
 		Delete: 1,
-
 		// Stats boosting fragments
 		HackingChance: 2,
 		HackingSpeed: 3,
@@ -53,7 +52,6 @@ export function getFragmentType() {
 		WorkMoney: 15,
 		Crime: 16,
 		Bladeburner: 17,
-
 		// utility fragments.
 		Booster: 18
 	};
@@ -66,8 +64,9 @@ export function setupPattern(ns, pattern) {
 		const y = fragment.rootY;
 		const rot = fragment.rotation;
 		const id = fragment.fragmentID;
-		if (!st.canPlace(x, y, rot, id)) makeSpace(ns, x, y, rot, id);
-		st.place(x, y, rot, id);
+		if (st.get(x, y)?.id === id) continue; // Fragment already placed there
+		if (!st.canPlace(x, y, rot, id)) makeSpace(ns, x, y, rot, id); // Make space for fragment
+		st.place(x, y, rot, id); // Place fragment
 	}
 }
 
