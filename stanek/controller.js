@@ -1,15 +1,20 @@
-import {getFragmentType, setupPattern} from '/stanek/utils.js';
+import {getFragmentType, getPatterns, setupPattern} from '/stanek/utils.js';
 import {getScripts} from '/utils/utils.js';
 
 export async function main(ns) {
 	charger(ns, ...ns.args);
 }
 
-export async function charger(ns, pattern = 'starter', maxCharges = 100, host = 'home', reservedRam = 0) {
+export async function charger(ns, pattern, maxCharges = 100, host = 'home', reservedRam = 0) {
 	ns.disableLog('ALL');
 	const st = ns.stanek;
 	const scripts = getScripts();
-	setupPattern(ns, pattern);
+	// Set up pattern
+	if (pattern) {
+		const patterns = getPatterns(st.width(), st.height());
+		setupPattern(ns, patterns[pattern]);
+	}
+	// Charge fragments
 	while (true) {
 		const FragmentType = getFragmentType();
 		const fragments = st.activeFragments().filter(f => f.type !== FragmentType.None && f.type !== FragmentType.Delete && f.type !== FragmentType.Booster);

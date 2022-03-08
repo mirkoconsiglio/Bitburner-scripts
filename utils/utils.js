@@ -374,6 +374,7 @@ export function enoughRam(ns, script, server = ns.getHostname()) {
 
 export function getPorts() {
 	return {
-		sleeve: 10
+		sleeve: 10,
+		stanek: 13
 	};
 }
