@@ -4,6 +4,7 @@ import {contractor} from '/contracts/contractor.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
+import {charger} from '/stanek/controller.js';
 import {updateOverview} from '/ui/overview.js';
 import {
 	copyScriptsToAll,
@@ -14,7 +15,6 @@ import {
 	printBoth,
 	promptScriptRunning
 } from '/utils/utils.js';
-import {charger} from 'stanek/controller.js';
 
 export async function main(ns) {
 	ns.disableLog('ALL');

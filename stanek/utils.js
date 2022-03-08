@@ -59,7 +59,7 @@ export function getFragmentType() {
 
 export function setupPattern(ns, pattern) {
 	const st = ns.stanek;
-	for (let fragment of pattern) {
+	for (let fragment of getPatterns()[pattern]) {
 		const x = fragment.rootX;
 		const y = fragment.rootY;
 		const rot = fragment.rotation;

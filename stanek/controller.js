@@ -17,11 +17,11 @@ export async function charger(ns, pattern = 'starter', maxCharges = 100, host = 
 			ns.alert(`There are no chargeable fragments on Stanek's gift`);
 			return;
 		}
-		let statusUpdate = `Preparing to charge ${fragments.length} fragments to ${maxCharges}. Current charges:\n`;
+		let statusUpdate = `Preparing to charge ${fragments.length} fragments to ${maxCharges}\n`;
 		let minCharges = Number.MAX_SAFE_INTEGER;
 		for (const fragment of fragments) {
-			statusUpdate += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}] ` +
-				`charge num: ${fragment.numCharge} avg: ${ns.nFormat(fragment.avgCharge, '0.000a')}\n`;
+			statusUpdate += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +
+				`charge num: ${fragment.numCharge}, avg: ${ns.nFormat(fragment.avgCharge, '0.000a')}\n`;
 			minCharges = Math.min(minCharges, fragment.numCharge);
 		}
 		ns.print(statusUpdate);
@@ -39,7 +39,7 @@ export async function charger(ns, pattern = 'starter', maxCharges = 100, host = 
 				await ns.sleep(1000);
 				continue;
 			}
-			const pid = ns.exec(scripts.charge, host, threads);
+			const pid = ns.exec(scripts.charge, host, threads, fragment.x, fragment.y);
 			while (ns.isRunning(pid, host)) await ns.sleep(1000);
 		}
 	}
