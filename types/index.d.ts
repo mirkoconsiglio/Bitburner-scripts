@@ -6374,7 +6374,6 @@ export interface WarehouseAPI {
    * @param enabled - smart supply use leftovers enabled
    */
   setSmartSupplyUseLeftovers(divisionName: string, cityName: string, materialName: string, enabled: boolean): void;
-
   /**
    * Set material buy data
    * @param divisionName - Name of the division
@@ -6392,7 +6391,6 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   bulkPurchase(divisionName: string, cityName: string, materialName: string, amt: number): void;
-
   /**
    * Get warehouse data
    * @param divisionName - Name of the division
@@ -6400,7 +6398,6 @@ export interface WarehouseAPI {
    * @returns warehouse data
    */
   getWarehouse(divisionName: string, cityName: string): Warehouse;
-
   /**
    * Get product data
    * @param divisionName - Name of the division
@@ -6624,26 +6621,22 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param upgradeName - Name of the upgrade
    */
   unlockUpgrade(upgradeName: string): void;
-
   /**
    * Level an upgrade.
    * @param upgradeName - Name of the upgrade
    */
   levelUpgrade(upgradeName: string): void;
-
   /**
    * Issue dividends
    * @param percent - Percent of profit to issue as dividends.
    */
   issueDividends(percent: number): void;
-
   /**
    * Buyback Shares
    * @param amount - Amount of shares to buy back.
    *
    */
   buyBackShares(amount: number): void;
-
   /**
    * Sell Shares
    * @param amount -  Amount of shares to sell.

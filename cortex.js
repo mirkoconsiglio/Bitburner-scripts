@@ -10,13 +10,14 @@ import {
 	copyScriptsToAll,
 	enoughRam,
 	getAccessibleServers,
+	getPorts,
 	getScripts,
 	getUsefulPrograms,
 	printBoth,
 	promptScriptRunning
 } from '/utils/utils.js';
 
-export async function main(ns) {
+export async function main(ns: NS) {
 	ns.disableLog('ALL');
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
@@ -39,11 +40,13 @@ export async function main(ns) {
 		backdoorWorldDaemon: false,
 		factions: [],
 		pattern: 'starter',
-		chargerThreads: 1000
+		maxCharges: 100,
+		reservedRam: 0
 	};
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const player = ns.getPlayer();
+		const ports = getPorts();
 		// Heal player
 		if (player.hp < player.max_hp) {
 			let cost = ns.hospitalize();
@@ -179,7 +182,10 @@ export async function main(ns) {
 			vars.factions = vars.factions.concat(factions); // Don't ask again
 		}
 		// Charge Stanek
-		await charger(ns);
+		const port = ns.getPortHandle(ports.stanek);
+		const data = port.read();
+		if (data !== 'NULL PORT DATA') [vars.pattern, vars.maxCharges, vars.host, vars.reservedRam] = data;
+		await charger(ns, vars.pattern, vars.maxCharges, vars.host, vars.reservedRam);
 		// Spend Hashes
 		if (vars.haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons
