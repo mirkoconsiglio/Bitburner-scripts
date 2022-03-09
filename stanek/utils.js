@@ -1,3 +1,9 @@
+/**
+ *
+ * @param width
+ * @param height
+ * @returns {Array}
+ */
 export function getPatterns(width, height) {
 	const patterns = {};
 	switch (true) { // Sorted in descending order of size
@@ -36,6 +42,10 @@ export function getPatterns(width, height) {
 	return patterns;
 }
 
+/**
+ *
+ * @returns {{Delete: number, Charisma: number, Dexterity: number, HackingMoney: number, Booster: number, HackingChance: number, Hacking: number, HacknetCost: number, Defense: number, HackingSpeed: number, Agility: number, Crime: number, Rep: number, None: number, HacknetMoney: number, WorkMoney: number, Strength: number, HackingGrow: number, Bladeburner: number}}
+ */
 export function getFragmentType() {
 	return {
 		// Special fragments for the UI
@@ -63,6 +73,21 @@ export function getFragmentType() {
 	};
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {Number} fragmentID
+ * @returns {Fragment}
+ */
+export function getFragment(ns, fragmentID) {
+	return ns.stanek.fragmentDefinitions().find(f => f.id === fragmentID);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {String} pattern
+ */
 export function setupPattern(ns, pattern) {
 	const st = ns.stanek;
 	for (let fragment of pattern) {
@@ -91,62 +116,64 @@ function makeSpace(ns, rootX, rootY, rotation, fragmentID) {
 		if (st.canPlace(rootX, rootY, rotation, fragmentID)) return true;
 	}
 	// Check if we are colliding with another fragment
-	const coordinates = getCoordinates(ns, rootX, rootY, fragment.shape);
-	for (let entry of getActiveFragmentsCoordinates(ns)) {
-		if (coordinates.some(c => entry.coordinates.includes(c))) {
-			st.remove(entry.fragment.x, entry.fragment.y);
+	const currentFragmentCoordinates = getCoordinates(ns, rootX, rootY, fragment.shape, rotation);
+	for (let other of getActiveFragmentsAndCoordinates(ns)) {
+		// Check if there are colliding cells
+		if (currentFragmentCoordinates.some(c => other.coordinates.some(e => e[0] === c[0] && e[1] === c[1]))) {
+			st.remove(other.fragment.x, other.fragment.y);
 		}
 		// Check if we can place fragment now
 		if (st.canPlace(rootX, rootY, rotation, fragmentID)) return true;
 	}
 	// Something is stopping us from making space
-	return false;
+	throw new Error(`Could not make space for fragment`);
 }
 
-// noinspection JSUnusedLocalSymbols
-function fragmentHeight(ns, fragmentID, rotation) {
-	const shape = getFragment(ns, fragmentID).shape;
-	if (rotation % 2 === 0) return shape.length;
-	return shape[0].length;
+function getActiveFragmentsAndCoordinates(ns) {
+	return Array.from(ns.stanek.activeFragments(), f => {
+		return {
+			fragment: f,
+			coordinates: getCoordinates(ns, f.x, f.y, getFragment(ns, f.id).shape, f.rotation)
+		};
+	});
 }
 
-// noinspection JSUnusedLocalSymbols
-function fragmentWidth(ns, fragmentID, rotation) {
-	const shape = getFragment(ns, fragmentID).shape;
-	if (rotation % 2 === 0) return shape[0].length;
-	return shape.length;
-}
-
-export function getFragment(ns, fragmentID) {
-	return ns.stanek.fragmentDefinitions().find(f => f.id === fragmentID);
-}
-
-function getCoordinates(ns, rootX, rootY, shape) {
+function getCoordinates(ns, rootX, rootY, shape, rotation) {
 	const st = ns.stanek;
 	const coordinates = [];
-	for (let [i, row] of shape.entries()) {
+	for (let [i, row] of getRotatedShape(shape, rotation).entries()) {
 		for (let [j, cell] of row.entries()) {
 			// Check if fragment occupies the cell
 			if (cell === false) continue;
-			const x = rootX + i;
-			const y = rootY + j;
-			// If we are going over the gift's edges continue
-			if (x < 0 || y < 0 || x >= st.width() || y >= st.height()) continue;
+			const x = rootX + j;
+			const y = rootY + i;
+			// If we are going over the gift's edges throw an error
+			if (x < 0 || y < 0 || x >= st.width() || y >= st.height()) throw new Error(`Invalid placement`);
 			coordinates.push([x, y]);
 		}
 	}
 	return coordinates;
 }
 
-function getActiveFragmentsCoordinates(ns) {
-	const st = ns.stanek;
-	const activeFragments = st.activeFragments();
-	const data = [];
-	for (let activeFragment of activeFragments) {
-		data.push({
-			fragment: activeFragment,
-			coordinates: getCoordinates(ns, activeFragment.x, activeFragment.y, getFragment(ns, activeFragment.id).shape)
-		});
+function getRotatedShape(shape, rotation) {
+	switch (rotation) {
+		case 0: // No rotation
+			return shape;
+		case 1: // Rotate by 90 degrees
+			return reverse(transpose(shape));
+		case 2: // Rotate by 180 degrees
+			return reverse(transpose(reverse(transpose(shape))));
+		case 3: // Rotate by 270 degrees
+			return transpose(reverse(shape));
+		default:
+			throw new Error(`Invalid rotation`);
 	}
-	return data;
+}
+
+function transpose(shape) {
+	return Object.keys(shape[0]).map(c => shape.map(r => r[c]));
+}
+
+function reverse(shape) {
+	return shape.map(r => r.reverse());
 }

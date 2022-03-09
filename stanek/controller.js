@@ -10,10 +10,7 @@ export async function charger(ns, pattern, maxCharges = 100, host = 'home', rese
 	const st = ns.stanek;
 	const scripts = getScripts();
 	// Set up pattern
-	if (pattern) {
-		const patterns = getPatterns(st.width(), st.height());
-		setupPattern(ns, patterns[pattern]);
-	}
+	if (pattern) setupPattern(ns, getPatterns(st.width(), st.height())[pattern]);
 	// Charge fragments
 	while (true) {
 		const FragmentType = getFragmentType();

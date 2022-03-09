@@ -76,4 +76,5 @@ stanek/utils.js
 stanek/charge.js
 stanek/save.js
 stanek/set.js
+stanek/reset.js
 contracts/contractor.js
