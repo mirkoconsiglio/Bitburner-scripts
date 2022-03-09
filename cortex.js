@@ -17,7 +17,13 @@ import {
 	promptScriptRunning
 } from '/utils/utils.js';
 
-export async function main(ns: NS) {
+// TODO: Add JSDoc to every script
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
+export async function main(ns) {
 	ns.disableLog('ALL');
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
