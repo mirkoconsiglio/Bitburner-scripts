@@ -28,7 +28,7 @@ export async function main(ns) {
 	const foundFaction = getFactions().find(f => f.toLowerCase() === args.faction.toLowerCase());
 	if (!foundFaction) {
 		ns.tprint(`Could not find ${args.faction}`);
-		ns.exit();
+		return;
 	}
 
 	disableSleeveAutopilot(ns, sleeveNumber);

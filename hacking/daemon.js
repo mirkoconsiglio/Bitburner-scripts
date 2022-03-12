@@ -19,10 +19,8 @@ export async function main(ns) {
 			if (primed) ns.print(`${data.target} is primed`);
 			else continue;
 		}
-
 		let info = getInfo(ns, data);
-		if (!info) continue;
-
+		if (info === 'EXIT') return;
 		await hackTarget(ns, info, data);
 	}
 }
@@ -138,10 +136,10 @@ function getInfo(ns, data) {
 
 		if (data.drainPercent < 0.001) {
 			printBoth(ns, `Drain percent too low. Exiting daemon on ${data.host} targeting ${data.target}.`);
-			ns.exit();
+			return 'EXIT';
 		}
 
-		return;
+		return getInfo(ns, data);
 	}
 
 	ns.print(`Running ${cycleCount} cycles in ${(cycleCount * cycleDelay / 1000).toFixed(2)} seconds.`);

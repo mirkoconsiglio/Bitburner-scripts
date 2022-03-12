@@ -138,7 +138,7 @@ export async function main(ns) {
 					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${ns.nFormat(aug.price, '0.000a')}`);
 				} else {
 					ns.tprint(`Could not purchase ${aug.name} from ${aug.faction}`);
-					ns.exit();
+					return;
 				}
 			}
 		}
@@ -173,7 +173,7 @@ export async function main(ns) {
 				ns.tprint(`Purchased The Red Pill`);
 			} else {
 				ns.tprint(`Could not purchase The Red Pill`);
-				ns.exit();
+				return;
 			}
 		}
 	}

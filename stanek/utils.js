@@ -130,7 +130,7 @@ function getActiveFragmentsAndCoordinates(ns) {
  * @param {number} rootY
  * @param {boolean[][]} shape
  * @param {number} rotation
- * @returns {boolean}
+ * @returns {[number, number][]}
  */
 function getCoordinates(ns, rootX, rootY, shape, rotation) {
 	const st = ns.stanek;
@@ -201,7 +201,8 @@ export function getDefaultData() {
 	};
 }
 
-// TODO: if data changes then reset charger
+// TODO: If data changes then reset charger
+// TODO: wait until RAM is mostly free
 /**
  *
  * @param {NS} ns

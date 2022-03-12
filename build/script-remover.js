@@ -13,7 +13,7 @@ export async function main(ns) {
 		file.endsWith('.js') || file.endsWith('.txt'));
 	if (files.length === 0) {
 		ns.tprint(`There are no files to delete`);
-		ns.exit();
+		return;
 	}
 	for (let file of files) {
 		if (!scriptsToKeep.includes(file)) {

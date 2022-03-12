@@ -17,7 +17,7 @@ export async function main(ns) {
 	const foundCompany = getCompanies().find(c => c.toLowerCase() === args.company.toLowerCase());
 	if (!foundCompany) {
 		ns.tprint(`Could not find ${args.company}`);
-		ns.exit();
+		return;
 	}
 
 	disableSleeveAutopilot(ns, args.sleeve);
