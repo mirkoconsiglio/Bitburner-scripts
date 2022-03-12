@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const programs = ['ServerProfiler.exe', 'DeepscanV1.exe', 'DeepscanV2.exe', 'AutoLink.exe'];
 	for (let program of programs) {

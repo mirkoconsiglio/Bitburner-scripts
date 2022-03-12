@@ -1,14 +1,19 @@
 // noinspection DuplicatedCode
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 
 	if (!ns.gang.inGang()) {
 		ns.tprint(`You need to join a gang first.`);
-		ns.exit();
+		return;
 	} else if (!ns.gang.getGangInformation().isHacking) {
 		ns.tprint(`Not a hacking gang.`);
-		ns.exit();
+		return;
 	}
 
 	const gangJoined = ns.gang.getGangInformation().faction;
@@ -26,7 +31,7 @@ export async function main(ns) {
 		}
 		// Get gang info
 		const myGang = ns.gang.getGangInformation();
-		const gangRoster = Array.from(ns.gang.getMemberNames(), (name) => ns.gang.getMemberInformation(name));
+		const gangRoster = Array.from(ns.gang.getMemberNames(), name => ns.gang.getMemberInformation(name));
 		//Update Log
 		ns.clearLog();
 		ns.print(`Gang: ${gangJoined}`);
@@ -51,6 +56,12 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {GangMemberInfo[]} gangRoster
+ * @param {number} hack_level
+ */
 function purchaseEquipment(ns, gangRoster, hack_level) {
 	const allEquipment = ns.gang.getEquipmentNames();
 	const hackEquipment = allEquipment.filter(equipment => ns.gang.getEquipmentStats(equipment).hack).sort((a, b) => ns.gang.getEquipmentCost(a) - ns.gang.getEquipmentCost(b));
@@ -65,6 +76,11 @@ function purchaseEquipment(ns, gangRoster, hack_level) {
 	}
 }
 
+/**
+ *
+ * @param {GangMemberInfo} gangMember
+ * @returns {number}
+ */
 function asc_mult(gangMember) {
 	return Math.max(1.6 + (1 - gangMember.hack_asc_mult) / 58, 1.1);
 }

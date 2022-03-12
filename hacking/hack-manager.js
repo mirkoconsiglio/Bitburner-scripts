@@ -7,6 +7,11 @@ import {
 	getScripts
 } from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	await copyScriptsToAll(ns);
 	// noinspection InfiniteLoopJS
@@ -16,6 +21,10 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ */
 export function manageAndHack(ns) {
 	const scripts = getScripts();
 	const servers = getAccessibleServers(ns);
@@ -60,6 +69,13 @@ export function manageAndHack(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} servers
+ * @param {string[]} hackables
+ * @returns {Object<number, number, number>}
+ */
 function getHackStates(ns, servers, hackables) {
 	const scripts = getScripts();
 	const hackstates = new Map();

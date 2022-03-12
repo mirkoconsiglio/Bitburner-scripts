@@ -2,6 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const http = require('https');
 
+/**
+ *
+ * @param {string} dir
+ * @param {string[]} arrayOfFiles
+ * @returns {string[]}
+ */
 function getFilesRecursive(dir, arrayOfFiles) {
 	try {
 		let files = fs.readdirSync(dir);
@@ -20,6 +26,11 @@ function getFilesRecursive(dir, arrayOfFiles) {
 	}
 }
 
+/**
+ *
+ * @param {string} dir
+ * @returns {string[]}
+ */
 function getFiles(dir = __dirname) {
 	let files = getFilesRecursive(`${dir}`);
 	let relativeFiles = [];
@@ -27,6 +38,11 @@ function getFiles(dir = __dirname) {
 	return relativeFiles;
 }
 
+/**
+ *
+ * @param {string} filename
+ * @param {string} str
+ */
 function writeToFile(filename, str) {
 	fs.writeFile(filename, str, (err) => {
 		if (err) console.log(err);

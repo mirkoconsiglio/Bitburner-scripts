@@ -1,14 +1,19 @@
 // noinspection DuplicatedCode
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 
 	if (!ns.gang.inGang()) {
 		ns.tprint(`You need to join a gang first.`);
-		ns.exit();
+		return;
 	} else if (ns.gang.getGangInformation().isHacking) {
 		ns.tprint(`Not a combat gang.`);
-		ns.exit();
+		return;
 	}
 
 	const gangJoined = ns.gang.getGangInformation().faction;
@@ -27,7 +32,7 @@ export async function main(ns) {
 		}
 		// Get gang info
 		const myGang = ns.gang.getGangInformation();
-		const gangRoster = Array.from(ns.gang.getMemberNames(), (name) => ns.gang.getMemberInformation(name));
+		const gangRoster = Array.from(ns.gang.getMemberNames(), name => ns.gang.getMemberInformation(name));
 		//Update Log
 		ns.clearLog();
 		ns.print(`Gang: ${gangJoined}`);
@@ -60,6 +65,12 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {GangMemberInfo[]} gangRoster
+ * @param {number} strength_level
+ */
 function purchaseEquipment(ns, gangRoster, strength_level) {
 	const allEquipment = ns.gang.getEquipmentNames();
 	// purchase: first str and def; second dex and agi; third cha and hack
@@ -76,6 +87,12 @@ function purchaseEquipment(ns, gangRoster, strength_level) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} otherGangs
+ * @returns {boolean}
+ */
 function fightForTerritory(ns, otherGangs) {
 	let averageWinChance = 0;
 	for (let [faction, info] of otherGangs) {
@@ -84,6 +101,11 @@ function fightForTerritory(ns, otherGangs) {
 	return averageWinChance / (1 - ns.gang.getGangInformation().territory) >= 0.7;
 }
 
+/**
+ *
+ * @param {GangMemberInfo} gangMember
+ * @returns {number}
+ */
 function asc_mult(gangMember) {
 	return Math.max(1.6 + (1 - gangMember.str_asc_mult) / 58, 1.1);
 }

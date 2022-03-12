@@ -2,6 +2,11 @@
 import {getUpgrades} from '/hacknet/utils.js';
 import {printBoth} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const args = ns.flags([
@@ -22,6 +27,13 @@ export async function main(ns) {
 }
 
 // Will buy the most effective hacknet upgrade, so long as it will pay for itself in maxPayoffTimeSeconds
+/**
+ *
+ * @param {NS} ns
+ * @param {number} maxSpend
+ * @param {number} maxPayoffTimeSeconds
+ * @returns {number|boolean}
+ */
 export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 21600 /* 6 hours */) {
 	const hn = ns.hacknet;
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);

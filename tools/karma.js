@@ -1,6 +1,10 @@
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
-	const karma = ns.heart.break();
-	ns.tprint(karma.toFixed(2));
+	ns.tprint(ns.heart.break().toFixed(2));
 }

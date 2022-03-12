@@ -1,3 +1,7 @@
+/**
+ *
+ * @returns {[{max: number, bonus: number, name: string},{max: number, bonus: number, name: string},{max: number, bonus: number, name: string},{max: number, bonus: number, name: string},{max: number, bonus: number, name: string},null,null,null,null,null,null,null,null,null,null,null]}
+ */
 export function getSkillsData() {
 	return [
 		{
@@ -84,6 +88,10 @@ export function getSkillsData() {
 	];
 }
 
+/**
+ *
+ * @returns {[{rankGain: number, name: string, rewardFac: number, type: string},{rankGain: number, name: string, rewardFac: number, accuracy: string, type: string},{rankGain: number, name: string, rewardFac: number, type: string},{rankGain: number, name: string, rewardFac: number, type: string},{rankGain: number, name: string, rewardFac: number, type: string},null,null,null,null,null,null,null,null,null,null]}
+ */
 export function getActionData() {
 	return [
 		// General
@@ -188,6 +196,11 @@ export function getActionData() {
 	];
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {[string, string]}
+ */
 export function bestOpForImprovingAccuracy(ns) {
 	const bb = ns.bladeburner;
 	const improvingAccuracyActions = getActionData().filter(a => a.accuracy);
@@ -209,6 +222,11 @@ export function bestOpForImprovingAccuracy(ns) {
 	return [type, op];
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {number}
+ */
 function calculateEff(ns) {
 	const player = ns.getPlayer();
 	return (0.04 * Math.pow(player.hacking, 0.3) +

@@ -1,9 +1,19 @@
 import {getAccessibleServers, getOptimalHackable, getScripts} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	deployDaemons(ns);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {number} minimumRam
+ */
 export function deployDaemons(ns, minimumRam = 2 ** 14) {
 	const scripts = getScripts();
 	const servers = getAccessibleServers(ns);

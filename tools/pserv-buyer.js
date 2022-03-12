@@ -1,16 +1,14 @@
 import {getAccessibleServers, getOptimalHackable, getScripts, scriptsToCopy} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const power = ns.args[0];
-
-	if (power < 0 || power > 20) {
-		ns.tprint(`Invalid RAM amount.`);
-		ns.exit();
-	}
-
 	const servers = getAccessibleServers(ns);
 	const hackables = getOptimalHackable(ns, servers);
-
 	const targetRam = Math.pow(2, power);
 	for (let i = 0; i < ns.getPurchasedServerLimit(); i++) {
 		let server = 'pserv-' + i;

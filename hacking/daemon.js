@@ -1,5 +1,10 @@
 import {findPlaceToRun, getAccessibleServers, getFreeRam, getScripts, printBoth} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const data = packageData(ns);
@@ -22,6 +27,13 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {info} info
+ * @param {data} data
+ * @returns {Promise<void>}
+ */
 async function hackTarget(ns, info, data) {
 	let c = 0;
 	while (c < info.cycleCount) {
@@ -37,6 +49,14 @@ async function hackTarget(ns, info, data) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {number} sec
+ * @param {number} money
+ * @param {data} data
+ * @returns {Promise<boolean>}
+ */
 async function primeTarget(ns, sec, money, data) {
 	let growth = data.maxMoney / money;
 	let growThreads = Math.ceil(ns.growthAnalyze(data.target, growth !== Infinity ? growth : 10, data.cores));
@@ -83,6 +103,12 @@ async function primeTarget(ns, sec, money, data) {
 	return grown && weakened;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {data} data
+ * @returns {info}
+ */
 function getInfo(ns, data) {
 	let hackTime = ns.getHackTime(data.target);
 	let growTime = ns.getGrowTime(data.target);
@@ -146,6 +172,11 @@ function getInfo(ns, data) {
 	};
 }
 
+/**
+ *
+ * @param {ns} ns
+ * @returns {data}
+ */
 function packageData(ns) {
 	const target = ns.args[0];
 	const host = ns.getHostname();
@@ -187,6 +218,11 @@ function packageData(ns) {
 }
 
 // noinspection JSUnusedGlobalSymbols
+/**
+ *
+ * @param {*} data
+ * @returns {string[]}
+ */
 export function autocomplete(data) {
 	// noinspection JSUnresolvedVariable
 	return data.servers;

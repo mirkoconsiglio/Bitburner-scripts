@@ -1,5 +1,10 @@
 import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getScripts} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	await copyScriptsToAll(ns);
 	const threads = Number.MAX_VALUE;

@@ -1,5 +1,10 @@
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	// noinspection InfiniteLoopJS
@@ -9,6 +14,10 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ */
 export function updateOverview(ns) {
 	const doc = eval('document');
 	const hook0 = doc.getElementById('overview-extra-hook-0');

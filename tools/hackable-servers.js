@@ -1,5 +1,10 @@
 import {getAccessibleServers, getOptimalHackable, targetCost} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const args = ns.flags([['cores', 1], ['verbose', false]]);
 	const servers = getAccessibleServers(ns);

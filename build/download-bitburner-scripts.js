@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const url = 'https://raw.githubusercontent.com/mirkoconsiglio/Bitburner-scripts/master';
 	const listOfScripts = 'build/scripts.txt';

@@ -1,6 +1,11 @@
 import {bestOpForImprovingAccuracy, getActionData, getSkillsData} from '/bladeburner/utils.js';
 import {getCities, promptScriptRunning} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const bb = ns.bladeburner;
@@ -156,11 +161,24 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 async function improveAccuracy(ns) {
 	const [type, name] = bestOpForImprovingAccuracy(ns);
 	await doAction(ns, type, name);
 }
 
+// TODO: fix resetting action bug
+/**
+ *
+ * @param {NS} ns
+ * @param {string} type
+ * @param {string} name
+ * @returns {Promise<void>}
+ */
 async function doAction(ns, type, name) {
 	const bb = ns.bladeburner;
 	// If already doing the action go back

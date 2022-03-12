@@ -1,3 +1,9 @@
+/**
+ *
+ * @param {NS} ns
+ * @param {String} name
+ * @returns {boolean}
+ */
 export function isUsefulPrograms(ns, name) {
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful programs augmentations

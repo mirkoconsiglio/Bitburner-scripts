@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const cost = ns.getUpgradeHomeCoresCost();
 	if (await ns.prompt(`Upgrade home Cores for ${ns.nFormat(cost, '$0.000a')}?`)) {

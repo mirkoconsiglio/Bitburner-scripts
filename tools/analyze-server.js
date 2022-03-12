@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const server = ns.args[0];
 	const usedRam = ns.getServerUsedRam(server);
@@ -27,6 +32,11 @@ ${server}:
 }
 
 // noinspection JSUnusedGlobalSymbols
+/**
+ *
+ * @param {*} data
+ * @returns {string[]}
+ */
 export function autocomplete(data) {
 	// noinspection JSUnresolvedVariable
 	return data.servers;

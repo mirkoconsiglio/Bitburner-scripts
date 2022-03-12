@@ -1,5 +1,10 @@
 import {getFactions} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const file = '/texts/augmentations-list.txt';
 	const factions = getFactions();

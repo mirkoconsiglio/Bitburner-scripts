@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Object<string, function, function, function, function>[]}
+ */
 export function getUpgrades(ns) {
 	const hn = ns.hacknet;
 	return [
@@ -32,6 +37,13 @@ export function getUpgrades(ns) {
 	];
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} type
+ * @param {number} level
+ * @returns {number}
+ */
 function productionMult(ns, type, level) {
 	const hn = ns.hacknet;
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);

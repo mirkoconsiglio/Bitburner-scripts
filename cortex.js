@@ -4,20 +4,18 @@ import {contractor} from '/contracts/contractor.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
-import {charger} from '/stanek/controller.js';
+import {charger} from '/stanek/utils.js';
 import {updateOverview} from '/ui/overview.js';
 import {
 	copyScriptsToAll,
 	enoughRam,
 	getAccessibleServers,
-	getPorts,
 	getScripts,
 	getUsefulPrograms,
 	printBoth,
 	promptScriptRunning
 } from '/utils/utils.js';
 
-// TODO: Add JSDoc to every script
 /**
  *
  * @param {NS} ns
@@ -44,15 +42,11 @@ export async function main(ns) {
 		hacknet: false,
 		sleeve: false,
 		backdoorWorldDaemon: false,
-		factions: [],
-		pattern: 'starter',
-		maxCharges: 100,
-		reservedRam: 0
+		factions: []
 	};
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const player = ns.getPlayer();
-		const ports = getPorts();
 		// Heal player
 		if (player.hp < player.max_hp) {
 			let cost = ns.hospitalize();
@@ -67,23 +61,6 @@ export async function main(ns) {
 			for (let program of getUsefulPrograms()) {
 				if (!ns.fileExists(program.name) && player.hacking >= program.level) {
 					if (ns.purchaseProgram(program.name)) printBoth(ns, `Purchased ${program.name}`);
-				}
-			}
-		}
-		// Backdoor servers
-		for (let server of getAccessibleServers(ns)) {
-			if (!ns.getServer(server).backdoorInstalled &&
-				!ns.isRunning(scripts.backdoor, vars.host, server) &&
-				server !== 'home') {
-				if (server === 'w0r1d_d43m0n' && !vars.backdoorWorldDaemon) {
-					if (await ns.prompt(`Install backdoor on w0r1d_d43m0n and finish Bitnode?`)) {
-						ns.print(`Installing backdoor on ${server}`);
-						ns.exec(scripts.backdoor, vars.host, 1, server);
-					}
-					vars.backdoorWorldDaemon = true;
-				} else {
-					ns.print(`Installing backdoor on ${server}`);
-					ns.exec(scripts.backdoor, vars.host, 1, server);
 				}
 			}
 		}
@@ -111,6 +88,8 @@ export async function main(ns) {
 			ns.exec(scripts.upgradeHomeCores, vars.host);
 			vars.upgradeCores = false;
 		}
+		// Charge Stanek
+		await charger(ns);
 		// Stock market manager
 		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, vars.host) && !vars.stock &&
 			enoughRam(ns, scripts.stock, vars.host) && !promptScriptRunning(ns, vars.host)) {
@@ -187,11 +166,23 @@ export async function main(ns) {
 			ns.exec(scripts.joinFactions, vars.host, 1, ...factions);
 			vars.factions = vars.factions.concat(factions); // Don't ask again
 		}
-		// Charge Stanek
-		const port = ns.getPortHandle(ports.stanek);
-		const data = port.read();
-		if (data !== 'NULL PORT DATA') [vars.pattern, vars.maxCharges, vars.host, vars.reservedRam] = data;
-		await charger(ns, vars.pattern, vars.maxCharges, vars.host, vars.reservedRam);
+		// Backdoor servers
+		for (let server of getAccessibleServers(ns)) {
+			if (!ns.getServer(server).backdoorInstalled &&
+				!ns.isRunning(scripts.backdoor, vars.host, server) &&
+				server !== 'home') {
+				if (server === 'w0r1d_d43m0n' && !vars.backdoorWorldDaemon) {
+					if (await ns.prompt(`Install backdoor on w0r1d_d43m0n and finish Bitnode?`)) {
+						ns.print(`Installing backdoor on ${server}`);
+						ns.exec(scripts.backdoor, vars.host, 1, server);
+					}
+					vars.backdoorWorldDaemon = true;
+				} else {
+					ns.print(`Installing backdoor on ${server}`);
+					ns.exec(scripts.backdoor, vars.host, 1, server);
+				}
+			}
+		}
 		// Spend Hashes
 		if (vars.haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons

@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.tail();
 	ns.disableLog('ALL');
@@ -21,6 +26,11 @@ export async function main(ns) {
 }
 
 // noinspection JSUnusedGlobalSymbols
+/**
+ *
+ * @param {*} data
+ * @returns {string[]}
+ */
 export function autocomplete(data) {
 	// noinspection JSUnresolvedVariable
 	return data.servers;

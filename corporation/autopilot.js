@@ -19,6 +19,11 @@ import {
 } from '/corporation/utils.js';
 import {getCities} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
@@ -38,6 +43,14 @@ export async function main(ns) {
 	await autopilot(ns, cities, jobs, division2);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} cities
+ * @param {Object<string, string>} jobs
+ * @param {string} division
+ * @returns {Promise<void>}
+ */
 export async function part1(ns, cities, jobs, division) {
 	const corp = ns.corporation;
 	// Expand to Agriculture division
@@ -71,6 +84,14 @@ export async function part1(ns, cities, jobs, division) {
 	await hireAdVertUpto(ns, division, 1);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} cities
+ * @param {Object<string, string>} jobs
+ * @param {string }division
+ * @returns {Promise<void>}
+ */
 export async function part2(ns, cities, jobs, division) {
 	// Get upgrades
 	let upgrades = [
@@ -141,6 +162,15 @@ export async function part2(ns, cities, jobs, division) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} cities
+ * @param {Object<string, string>} jobs
+ * @param {string} division
+ * @param {string} mainCity
+ * @returns {Promise<void>}
+ */
 export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	// Expand into Tobacco industry
 	await expandIndustry(ns, 'Tobacco', division);
@@ -188,6 +218,15 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 // TODO: Go public
 // TODO: Issue new shares
 // TODO: Issue dividends
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} cities
+ * @param {Object<string, string>} jobs
+ * @param {string} division
+ * @param {string} mainCity
+ * @returns {Promise<void>}
+ */
 export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
 	const upgrades = getUpgrades();

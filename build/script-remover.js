@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const scriptsToKeep = ['/build/scripts.txt', '/build/download-bitburner-scripts.js'];
 	ns.read('/build/scripts.txt').split('\n').forEach((script) => {

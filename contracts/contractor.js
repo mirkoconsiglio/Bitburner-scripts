@@ -1,9 +1,19 @@
 import {getServers, printBoth} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	contractor(ns);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {boolean}
+ */
 export function contractor(ns) {
 	for (let server of getServers(ns)) {
 		const files = ns.ls(server, '.cct');
@@ -76,6 +86,11 @@ export function contractor(ns) {
 	return true;
 }
 
+/**
+ *
+ * @param {number} n
+ * @returns {number}
+ */
 function largestPrimeFactor(n) {
 	let maxPrime = 0;
 	while (n % 2 === 0) {
@@ -93,6 +108,11 @@ function largestPrimeFactor(n) {
 	return maxPrime;
 }
 
+/**
+ *
+ * @param {number[]} array
+ * @returns {number}
+ */
 function subarrayMaxSum(array) {
 	const sumReduce = (a, b) => a + b;
 	let maxSum = -Infinity;
@@ -106,6 +126,11 @@ function subarrayMaxSum(array) {
 	return maxSum;
 }
 
+/**
+ *
+ * @param {number[][]} matrix
+ * @returns {number[][]}
+ */
 function spiralizeMatrix(matrix) {
 	const rows = matrix.length;
 	const cols = matrix[0].length;
@@ -156,6 +181,11 @@ function spiralizeMatrix(matrix) {
 	return list;
 }
 
+/**
+ *
+ * @param {number[][]} data
+ * @returns {number}
+ */
 function minPathSum(data) {
 	const totalPaths = Math.pow(2, data.length - 1);
 	let minSum = Infinity;
@@ -178,6 +208,11 @@ function minPathSum(data) {
 	return minSum;
 }
 
+/**
+ *
+ * @param {[number, number]} data
+ * @returns {number}
+ */
 function uniquePathsI(data) {
 	const [m, n] = data;
 
@@ -195,6 +230,11 @@ function factorial(f, n) {
 	return f[n] = n * factorial(f, n - 1);
 }
 
+/**
+ *
+ * @param {number[][]} grid
+ * @returns {number}
+ */
 function uniquePathsII(grid) {
 	const gridSum = [];
 	for (let i of grid) {
@@ -214,6 +254,12 @@ function uniquePathsII(grid) {
 	return gridSum[gridSum.length - 1][gridSum[0].length - 1];
 }
 
+/**
+ *
+ * @param {number} maxTrades
+ * @param {number[]} stockPrices
+ * @returns {number}
+ */
 function stockTrader(maxTrades, stockPrices) {
 	let tempStr = '[0';
 	for (let i = 0; i < stockPrices.length - 1; i++) {
@@ -248,21 +294,26 @@ function stockTrader(maxTrades, stockPrices) {
 	return highestProfit[maxTrades - 1][stockPrices.length - 1];
 }
 
-function genIPAddresses(string) {
+/**
+ *
+ * @param {string} str
+ * @returns {string[]}
+ */
+function genIPAddresses(str) {
 	const ips = [];
-	for (let i = 1; i < string.length - 2; i++) {
-		for (let j = i + 1; j < string.length - 1; j++) {
-			for (let k = j + 1; k < string.length; k++) {
+	for (let i = 1; i < str.length - 2; i++) {
+		for (let j = i + 1; j < str.length - 1; j++) {
+			for (let k = j + 1; k < str.length; k++) {
 				const ip = [
-					string.slice(0, i),
-					string.slice(i, j),
-					string.slice(j, k),
-					string.slice(k)
+					str.slice(0, i),
+					str.slice(i, j),
+					str.slice(j, k),
+					str.slice(k)
 				];
 
 				let isValid = true;
 				ip.forEach(seg => {
-					isValid = isValid && isValidIpSegment(seg)
+					isValid = isValid && isValidIpSegment(seg);
 				});
 
 				if (isValid) ips.push(ip.join('.'));
@@ -272,10 +323,20 @@ function genIPAddresses(string) {
 	return ips;
 }
 
+/**
+ *
+ * @param {string[]} segment
+ * @returns {boolean}
+ */
 function isValidIpSegment(segment) {
 	return !((segment[0] === '0' && segment !== '0') || segment > 255);
 }
 
+/**
+ *
+ * @param {number[][]} array
+ * @returns {number[][]}
+ */
 function mergeOverlappingIntervals(array) {
 	array.sort((a, b) => a[0] - b[0]);
 
@@ -290,6 +351,11 @@ function mergeOverlappingIntervals(array) {
 	return intervals;
 }
 
+/**
+ *
+ * @param {number[]} array
+ * @returns {number}
+ */
 function arrayJumpingGame(array) {
 	const reachable = new Array(array.length).fill(0);
 	reachable[0] = 1;
@@ -303,6 +369,11 @@ function arrayJumpingGame(array) {
 	return reachable.includes(0) ? 0 : 1;
 }
 
+/**
+ *
+ * @param {number} n
+ * @returns {number}
+ */
 function totalWaysToSum(n) {
 	const table = [1];
 	for (let i = 0; i < n; i++) {
@@ -316,6 +387,11 @@ function totalWaysToSum(n) {
 	return table[n];
 }
 
+/**
+ *
+ * @param {[string, number]} data
+ * @returns {string[]}
+ */
 function validMathExpressions(data) {
 	const [digits, target] = data;
 
@@ -326,6 +402,16 @@ function validMathExpressions(data) {
 	return result;
 }
 
+/**
+ *
+ * @param {string} res
+ * @param {string} path
+ * @param {string} digits
+ * @param {number} target
+ * @param {number} pos
+ * @param {number} evaluated
+ * @param {number} multed
+ */
 function recursiveExpression(res, path, digits, target, pos, evaluated, multed) {
 	if (pos === digits.length) {
 		if (target === evaluated) res.push(path);
@@ -343,6 +429,11 @@ function recursiveExpression(res, path, digits, target, pos, evaluated, multed) 
 	}
 }
 
+/**
+ *
+ * @param {string} data
+ * @returns {string[]}
+ */
 function sanitizeParentheses(data) {
 	const valid = new Set('');
 	let min = data.length;

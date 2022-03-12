@@ -1,8 +1,10 @@
+import {getPorts, getScripts} from 'utils/utils.js';
+
 /**
  *
- * @param width
- * @param height
- * @returns {Array}
+ * @param {number} width
+ * @param {number} height
+ * @returns {Object<Object<number, number, number, number, number>[]>}
  */
 export function getPatterns(width, height) {
 	const patterns = {};
@@ -44,39 +46,8 @@ export function getPatterns(width, height) {
 
 /**
  *
- * @returns {{Delete: number, Charisma: number, Dexterity: number, HackingMoney: number, Booster: number, HackingChance: number, Hacking: number, HacknetCost: number, Defense: number, HackingSpeed: number, Agility: number, Crime: number, Rep: number, None: number, HacknetMoney: number, WorkMoney: number, Strength: number, HackingGrow: number, Bladeburner: number}}
- */
-export function getFragmentType() {
-	return {
-		// Special fragments for the UI
-		None: 0,
-		Delete: 1,
-		// Stats boosting fragments
-		HackingChance: 2,
-		HackingSpeed: 3,
-		HackingMoney: 4,
-		HackingGrow: 5,
-		Hacking: 6,
-		Strength: 7,
-		Defense: 8,
-		Dexterity: 9,
-		Agility: 10,
-		Charisma: 11,
-		HacknetMoney: 12,
-		HacknetCost: 13,
-		Rep: 14,
-		WorkMoney: 15,
-		Crime: 16,
-		Bladeburner: 17,
-		// utility fragments.
-		Booster: 18
-	};
-}
-
-/**
- *
  * @param {NS} ns
- * @param {Number} fragmentID
+ * @param {number} fragmentID
  * @returns {Fragment}
  */
 export function getFragment(ns, fragmentID) {
@@ -86,7 +57,7 @@ export function getFragment(ns, fragmentID) {
 /**
  *
  * @param {NS} ns
- * @param {String} pattern
+ * @param {string} pattern
  */
 export function setupPattern(ns, pattern) {
 	const st = ns.stanek;
@@ -101,6 +72,15 @@ export function setupPattern(ns, pattern) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {number} rootX
+ * @param {number} rootY
+ * @param {number} rotation
+ * @param {number} fragmentID
+ * @returns {boolean}
+ */
 function makeSpace(ns, rootX, rootY, rotation, fragmentID) {
 	const st = ns.stanek;
 	const fragment = getFragment(ns, fragmentID);
@@ -129,6 +109,11 @@ function makeSpace(ns, rootX, rootY, rotation, fragmentID) {
 	throw new Error(`Could not make space for fragment`);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Object<Fragment, [number, number][]>[]}
+ */
 function getActiveFragmentsAndCoordinates(ns) {
 	return Array.from(ns.stanek.activeFragments(), f => {
 		return {
@@ -138,6 +123,15 @@ function getActiveFragmentsAndCoordinates(ns) {
 	});
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {number} rootX
+ * @param {number} rootY
+ * @param {boolean[][]} shape
+ * @param {number} rotation
+ * @returns {boolean}
+ */
 function getCoordinates(ns, rootX, rootY, shape, rotation) {
 	const st = ns.stanek;
 	const coordinates = [];
@@ -155,6 +149,12 @@ function getCoordinates(ns, rootX, rootY, shape, rotation) {
 	return coordinates;
 }
 
+/**
+ *
+ * @param {boolean[][]} shape
+ * @param {number} rotation
+ * @returns {boolean[][]}
+ */
 function getRotatedShape(shape, rotation) {
 	switch (rotation) {
 		case 0: // No rotation
@@ -170,10 +170,84 @@ function getRotatedShape(shape, rotation) {
 	}
 }
 
+/**
+ *
+ * @param {boolean[][]} shape
+ * @returns {boolean[][]}
+ */
 function transpose(shape) {
 	return Object.keys(shape[0]).map(c => shape.map(r => r[c]));
 }
 
+/**
+ *
+ * @param {boolean[][]} shape
+ * @returns {boolean[][]}
+ */
 function reverse(shape) {
 	return shape.map(r => r.reverse());
+}
+
+/**
+ *
+ * @returns {Object<undefined, number, string, number>}
+ */
+export function getDefaultData() {
+	return {
+		pattern: undefined,
+		maxCharges: 100,
+		host: 'home',
+		reservedRam: 0
+	};
+}
+
+// TODO: if data changes then reset charger
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
+export async function charger(ns) {
+	const st = ns.stanek;
+	const scripts = getScripts();
+	// Get data
+	const port = ns.getPortHandle(getPorts().stanek);
+	let data = port.read();
+	if (data !== 'NULL PORT DATA') data = getDefaultData();
+	port.tryWrite(data);
+	// Set up pattern
+	if (data.pattern) setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
+	// Charge fragments
+	while (true) {
+		const fragments = st.activeFragments();
+		if (fragments.length === 0) {
+			ns.alert(`There are no chargeable fragments on Stanek's gift`);
+			return;
+		}
+		let statusUpdate = `Preparing to charge ${fragments.length} fragments to ${data.maxCharges}\n`;
+		let minCharges = Number.MAX_SAFE_INTEGER;
+		for (const fragment of fragments) {
+			statusUpdate += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +
+				`charge num: ${fragment.numCharge}, avg: ${ns.nFormat(fragment.avgCharge, '0.000a')}\n`;
+			minCharges = Math.min(minCharges, fragment.numCharge);
+		}
+		ns.print(statusUpdate);
+		if (minCharges >= data.maxCharges) break;
+		// Charge each fragment one at a time
+		for (const fragment of fragments.filter(f => f.numCharge < data.maxCharges)) {
+			let availableRam = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
+			const threads = Math.floor((availableRam - data.reservedRam) / ns.getScriptRam(scripts.charge));
+			// Only charge if we will not be bringing down the average
+			if (threads < fragment.avgCharge * 0.99) {
+				ns.print(`WARNING: The current average charge of fragment ${fragment.id} is ${ns.nFormat(fragment.avgCharge, '0.000a')}, ` +
+					`indicating that it has been charged while there was ${ns.nFormat(2 * fragment.avgCharge * 1000 ** 3, '0.00b')} or more free RAM on home, ` +
+					`but currently there is only ${ns.nFormat(availableRam * 1000 ** 3, '0.00b')} available, which would reduce the average charge and lower your stats. ` +
+					`This update will be skipped, and you should free up RAM on home to resume charging.`);
+				await ns.sleep(1000);
+				continue;
+			}
+			const pid = ns.exec(scripts.charge, data.host, threads, fragment.x, fragment.y);
+			while (ns.isRunning(pid, data.host)) await ns.sleep(1000);
+		}
+	}
 }

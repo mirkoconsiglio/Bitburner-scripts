@@ -1,5 +1,10 @@
 // noinspection JSUnresolvedVariable
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	if (!ns.getPlayer().bitNodeN === 9 && !ns.getOwnedSourceFiles().some(s => s.n === 9)) throw new Error(`Script requires Hacknet servers to be unlocked`);
@@ -20,6 +25,14 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} upgrade
+ * @param {string} target
+ * @param {boolean} liquidate
+ * @returns {Promise<void>}
+ */
 export async function spendHashes(ns, upgrade, target = undefined, liquidate = false) {
 	const hn = ns.hacknet;
 	const capacity = hn.hashCapacity();

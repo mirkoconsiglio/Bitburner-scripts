@@ -1,5 +1,10 @@
 import {getFragment} from '/stanek/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.tprintf(JSON.stringify(ns.stanek.activeFragments().map(f => ({
 		rootX: f.x,

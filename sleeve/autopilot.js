@@ -9,6 +9,11 @@ import {
 import {defineAutopilotData, getAutopilotData, getWorks} from '/sleeve/utils.js';
 import {getJobs} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const works = getWorks();

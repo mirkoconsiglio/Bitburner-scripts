@@ -1,6 +1,11 @@
 import {getCompanies} from '/utils/utils.js';
 import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const args = ns.flags([
 		['sleeve', -1],

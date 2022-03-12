@@ -1,5 +1,10 @@
 // noinspection JSUnresolvedVariable
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const args = ns.flags([
 		['university', 'ZB Institute of Technology'],

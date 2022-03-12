@@ -1,20 +1,36 @@
+/**
+ *
+ * @param {NS} ns
+ * @param {string} str
+ */
 export function printBoth(ns, str) {
 	ns.print(str);
 	ns.tprint(str);
 }
 
+/**
+ *
+ * @returns {string[]}
+ */
 export function getCities() {
 	return ['Aevum', 'Chongqing', 'Sector-12', 'New Tokyo', 'Ishima', 'Volhaven'];
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function copyScriptsToAll(ns) {
 	for (let server of getServers(ns)) {
-		if (server !== 'home') {
-			await ns.scp(scriptsToCopy(), 'home', server);
-		}
+		if (server !== 'home') await ns.scp(scriptsToCopy(), 'home', server);
 	}
 }
 
+/**
+ *
+ * @returns {Object<string[]>}
+ */
 export function getScripts() {
 	return {
 		hack: '/hacking/hack.js',
@@ -41,10 +57,18 @@ export function getScripts() {
 	}
 }
 
+/**
+ *
+ * @returns {string[]}
+ */
 export function scriptsToCopy() {
 	return Object.values(getScripts());
 }
 
+/**
+ *
+ * @returns {string[]}
+ */
 export function getFactions() {
 	return [
 		'CyberSec', 'Tian Di Hui', 'Netburners', 'Sector-12', 'Chongqing',
@@ -59,6 +83,10 @@ export function getFactions() {
 	];
 }
 
+/**
+ *
+ * @returns {string[]}
+ */
 export function getCompanies() {
 	return [
 		'ECorp', 'MegaCorp', 'Bachman and Associates', 'Blade Industries', 'NWO',
@@ -72,6 +100,10 @@ export function getCompanies() {
 	];
 }
 
+/**
+ *
+ * @returns {Object<Object<string, boolean, boolean, boolean>[]>}
+ */
 export function getJobs() {
 	return {
 		agent: {
@@ -137,6 +169,12 @@ export function getJobs() {
 	};
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @returns {null|string[]}
+ */
 export function routeFinder(ns, server) {
 	const route = [];
 	const found = recursiveRouteFinder(ns, '', ns.getHostname(), server, route);
@@ -144,6 +182,15 @@ export function routeFinder(ns, server) {
 	else return null;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} parent
+ * @param {string} host
+ * @param {string} server
+ * @param {string[]} route
+ * @returns {boolean}
+ */
 export function recursiveRouteFinder(ns, parent, host, server, route) {
 	const children = ns.scan(host);
 	for (let child of children) {
@@ -163,6 +210,11 @@ export function recursiveRouteFinder(ns, parent, host, server, route) {
 	return false;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {string[]}
+ */
 export function getServers(ns) {
 	const serverList = ['home'];
 	for (let s of serverList) {
@@ -171,6 +223,12 @@ export function getServers(ns) {
 	return serverList;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @returns {boolean}
+ */
 export function hackServer(ns, server) {
 	if (ns.hasRootAccess(server)) return true;
 
@@ -203,20 +261,32 @@ export function hackServer(ns, server) {
 	return false;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {string[]}
+ */
 export function getAccessibleServers(ns) {
 	return getServers(ns).filter(server => hackServer(ns, server) && !server.startsWith('hacknet-node-'));
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} script
+ * @param {number} threads
+ * @param {Object<string, number>[]} freeRams
+ * @param {*[]} scriptArgs
+ * @returns {boolean}
+ */
 export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
 	const scriptRam = ns.getScriptRam(script);
 	let remainingThread = threads;
 	while (freeRams.length > 0) {
 		let host = freeRams[0].host;
 		let ram = freeRams[0].freeRam;
-
-		if (ram < scriptRam) {
-			freeRams.shift();
-		} else if (ram < scriptRam * remainingThread) {
+		if (ram < scriptRam) freeRams.shift();
+		else if (ram < scriptRam * remainingThread) {
 			let threadForThisHost = Math.floor(ram / scriptRam);
 			ns.exec(script, host, threadForThisHost, ...scriptArgs);
 			remainingThread -= threadForThisHost;
@@ -230,6 +300,14 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
 	return false;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} servers
+ * @param {string[]} hackables
+ * @param {boolean} occupy
+ * @returns {Object<string, number>[] | [Object<string, number>[], string[]]}
+ */
 export function getFreeRam(ns, servers, hackables, occupy = false) {
 	const scripts = getScripts();
 	const freeRams = [];
@@ -252,10 +330,26 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 	} else return sortedFreeRams;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} servers
+ * @param {number} cores
+ * @returns {string[]}
+ */
 export function getOptimalHackable(ns, servers, cores = 1) {
 	return servers.filter(server => ns.getServerMaxMoney(server) > 0).sort((a, b) => targetCost(ns, b, cores)[0] - targetCost(ns, a, cores)[0]);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} target
+ * @param {number} cores
+ * @param {number} hackPercent
+ * @param {number} freeRam
+ * @returns {[number, number, number]}
+ */
 export function targetCost(ns, target, cores = 1, hackPercent = 0.5, freeRam = 2 ** 15) {
 	const form = ns.formulas.hacking;
 	const player = ns.getPlayer(); // Get player info
@@ -326,6 +420,12 @@ export function targetCost(ns, target, cores = 1, hackPercent = 0.5, freeRam = 2
 }
 
 // noinspection JSUnusedGlobalSymbols
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @returns {number}
+ */
 export function altTargetCost(ns, server) { // Doesn't use Formulas
 	const hack = ns.hackAnalyzeChance(server) * ns.hackAnalyze(server) * ns.getServerMaxMoney(server) ** 4 / ns.getHackTime(server);
 	const grow = ns.getGrowTime(server) * ns.growthAnalyze(server, 2) ** 2;
@@ -333,6 +433,10 @@ export function altTargetCost(ns, server) { // Doesn't use Formulas
 	return hack / (grow * weaken);
 }
 
+/**
+ *
+ * @returns {Object<string, number>[]}
+ */
 export function getUsefulPrograms() {
 	return [
 		{name: 'BruteSSH.exe', level: 50},
@@ -343,6 +447,12 @@ export function getUsefulPrograms() {
 	];
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @returns {boolean}
+ */
 export function promptScriptRunning(ns, server) {
 	for (let script of getPromptScripts()) {
 		if (ns.scriptRunning(script, server)) return true;
@@ -350,6 +460,10 @@ export function promptScriptRunning(ns, server) {
 	return false;
 }
 
+/**
+ *
+ * @returns {string[]}
+ */
 function getPromptScripts() {
 	return [
 		'/utils/join-factions.js',
@@ -368,10 +482,21 @@ function getPromptScripts() {
 	];
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} script
+ * @param {string} server
+ * @returns {boolean}
+ */
 export function enoughRam(ns, script, server = ns.getHostname()) {
 	return ns.getScriptRam(script, server) <= ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
 }
 
+/**
+ *
+ * @returns {Object<number>}
+ */
 export function getPorts() {
 	return {
 		sleeve: 10,

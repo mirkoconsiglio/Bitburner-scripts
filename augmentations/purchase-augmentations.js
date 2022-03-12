@@ -15,6 +15,11 @@ import {
 } from '/augmentations/utils.js';
 import {getFactions, getScripts} from '/utils/utils.js';
 
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
 export async function main(ns) {
 	const args = ns.flags([
 		['hacking', false],
@@ -189,6 +194,14 @@ export async function main(ns) {
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {String} augmentations
+ * @param {Array} tempAugs
+ * @param {Array} coveredIndices
+ * @param {Array} prereq
+ */
 function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq) {
 	let index = augmentations.findIndex(aug => aug.name === prereq);
 	if (index >= 0) { // Fit in aug before their prereq

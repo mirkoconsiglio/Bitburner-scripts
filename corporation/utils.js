@@ -1,3 +1,7 @@
+/**
+ *
+ * @returns {{operations: string, business: string, management: string, engineer: string, RAndD: string}} Jobs
+ */
 export function getJobs() {
 	return {
 		operations: 'Operations',
@@ -8,21 +12,41 @@ export function getJobs() {
 	};
 }
 
-// Function to wait for enough money
+
+/**
+ * Function to wait for enough money
+ *
+ * @param ns
+ * @param {function} func
+ * @param {*[]} args
+ * @returns {Promise<void>}
+ */
 async function moneyFor(ns, func, ...args) {
 	while (func(...args) > ns.corporation.getCorporation().funds) {
 		await ns.sleep(1000);
 	}
 }
 
-// Function to wait for enough money
+/**
+ * Function to wait for enough money
+ *
+ * @param {NS} ns
+ * @param {number} amount
+ * @returns {Promise<void>}
+ */
 async function moneyForAmount(ns, amount) {
 	while (amount > ns.corporation.getCorporation().funds) {
 		await ns.sleep(1000);
 	}
 }
 
-// Function to hire employees up to office size
+/**
+ * Function to hire employees up to office size
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ */
 export function hireMaxEmployees(ns, division, city) {
 	const corp = ns.corporation;
 	ns.print(`Hiring employees for ${division} (${city})`);
@@ -31,7 +55,13 @@ export function hireMaxEmployees(ns, division, city) {
 	}
 }
 
-// Function to upgrade list of upgrades upto a certain level
+/**
+ * Function to upgrade list of upgrades upto a certain level
+ *
+ * @param {NS} ns
+ * @param {Object<string, number>[]} upgrades
+ * @returns {Promise<void>}
+ */
 export async function upgradeUpto(ns, upgrades) {
 	const corp = ns.corporation;
 	for (let upgrade of upgrades) {
@@ -43,7 +73,15 @@ export async function upgradeUpto(ns, upgrades) {
 	}
 }
 
-// Function to buy materials upto a certain quantity
+/**
+ * Function to buy materials upto a certain quantity
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ * @param {Object<string, number>[]} materials
+ * @returns {Promise<void>}
+ */
 export async function buyMaterialsUpto(ns, division, city, materials) {
 	const corp = ns.corporation;
 	for (let material of materials) {
@@ -65,7 +103,15 @@ export async function buyMaterialsUpto(ns, division, city, materials) {
 	}
 }
 
-// Function to upgrade warehouse up to certain level
+/**
+ * Function to upgrade warehouse up to certain level
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ * @param {number} level
+ * @returns {Promise<void>}
+ */
 export async function upgradeWarehouseUpto(ns, division, city, level) {
 	const corp = ns.corporation;
 	while (corp.getWarehouse(division, city).level < level) {
@@ -75,7 +121,14 @@ export async function upgradeWarehouseUpto(ns, division, city, level) {
 	}
 }
 
-// Function to hire AdVert up to certain level
+/**
+ * Function to hire AdVert up to certain level
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {number} level
+ * @returns {Promise<void>}
+ */
 export async function hireAdVertUpto(ns, division, level) {
 	const corp = ns.corporation;
 	while (corp.getHireAdVertCount(division) < level) {
@@ -85,8 +138,17 @@ export async function hireAdVertUpto(ns, division, level) {
 	}
 }
 
-// Function to upgrade an office, hire maximum number of employees and assign them jobs
-export async function upgradeOffice(ns, division, city, size, settings) {
+/**
+ * Function to upgrade an office, hire maximum number of employees and assign them jobs
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ * @param {number} size
+ * @param {Object<string, number>[]} positions
+ * @returns {Promise<void>}
+ */
+export async function upgradeOffice(ns, division, city, size, positions) {
 	const corp = ns.corporation;
 	const upgradeSize = size - corp.getOffice(division, city).size;
 	if (upgradeSize > 0) {
@@ -95,12 +157,19 @@ export async function upgradeOffice(ns, division, city, size, settings) {
 		corp.upgradeOfficeSize(division, city, upgradeSize);
 	}
 	hireMaxEmployees(ns, division, city);
-	const positions = getPositions(ns, division, city);
-	for (let setting of settings) {
-		if (positions[setting.job] !== setting.num) await corp.setAutoJobAssignment(division, city, setting.job, setting.num);
+	const allPositions = getPositions(ns, division, city);
+	for (let position of positions) {
+		if (allPositions[position.job] !== position.num) await corp.setAutoJobAssignment(division, city, position.job, position.num);
 	}
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param division
+ * @param city
+ * @returns {Object<string, number>[]}
+ */
 function getPositions(ns, division, city) {
 	const corp = ns.corporation;
 	const positions = {};
@@ -112,7 +181,14 @@ function getPositions(ns, division, city) {
 	return positions;
 }
 
-// Function to wait for an investment offer of a certain amount
+/**
+ * Function to wait for an investment offer of a certain amount
+ *
+ * @param {NS} ns
+ * @param {number} amount
+ * @param {number} round
+ * @returns {Promise<void>}
+ */
 export async function investmentOffer(ns, amount, round = 5) {
 	const corp = ns.corporation;
 	if (corp.getInvestmentOffer().round > round) return;
@@ -124,7 +200,17 @@ export async function investmentOffer(ns, amount, round = 5) {
 	corp.acceptInvestmentOffer();
 }
 
-// Function to start making a product
+/**
+ * Function to start making a product
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ * @param {string} name
+ * @param {number} design
+ * @param {number} marketing
+ * @returns {Promise<void>}
+ */
 export async function makeProduct(ns, division, city, name, design = 0, marketing = 0) {
 	const corp = ns.corporation;
 	const products = corp.getDivision(division).products;
@@ -141,8 +227,15 @@ export async function makeProduct(ns, division, city, name, design = 0, marketin
 	} else ns.print(`Already making/made ${name} in ${division} (${city})`);
 }
 
-// Function to finish making a product
 // noinspection JSUnusedGlobalSymbols
+/**
+ * Function to wait for finishing making a product
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} name
+ * @returns {Promise<void>}
+ */
 export async function finishProduct(ns, division, name) {
 	ns.print(`Waiting for ${name} to finish in ${division}`);
 	while (ns.corporation.getProduct(division, name).developmentProgress < 100) {
@@ -162,7 +255,13 @@ export function getLatestVersion(ns, division) {
 	return latestVersion;
 }
 
-// Function to get earliest product version
+/**
+ * Function to get earliest product version
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @returns {number}
+ */
 export function getEarliestVersion(ns, division) {
 	const products = ns.corporation.getDivision(division).products;
 	let earliestVersion = Number.MAX_SAFE_INTEGER;
@@ -173,7 +272,12 @@ export function getEarliestVersion(ns, division) {
 	return earliestVersion;
 }
 
-// Function to parse product version from name
+/**
+ * Function to parse product version from name
+ *
+ * @param {string} name
+ * @returns {number}
+ */
 function parseVersion(name) {
 	let version = '';
 	for (let i = 1; i <= name.length; i++) {
@@ -184,7 +288,14 @@ function parseVersion(name) {
 	}
 }
 
-// Function to expand industry
+/**
+ * Function to expand industry
+ *
+ * @param {NS} ns
+ * @param {string} industry
+ * @param {string} division
+ * @returns {Promise<void>}
+ */
 export async function expandIndustry(ns, industry, division) {
 	const corp = ns.corporation;
 	if (!corp.getCorporation().divisions.some(d => d.type === industry || d.name === division)) {
@@ -194,7 +305,15 @@ export async function expandIndustry(ns, industry, division) {
 	} else ns.print(`Already expanded to ${industry} industry: ${division}`);
 }
 
-// Function to expand city
+
+/**
+ * Function to expand city
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ * @returns {Promise<void>}
+ */
 export async function expandCity(ns, division, city) {
 	const corp = ns.corporation;
 	if (!corp.getDivision(division).cities.includes(city)) {
@@ -204,7 +323,14 @@ export async function expandCity(ns, division, city) {
 	} else ns.print(`Already expanded to ${city} for ${division}`);
 }
 
-// Function to purchase warehouse
+/**
+ * Function to purchase warehouse
+ *
+ * @param {NS} ns
+ * @param {string} division
+ * @param {string} city
+ * @returns {Promise<void>}
+ */
 export async function purchaseWarehouse(ns, division, city) {
 	const corp = ns.corporation;
 	if (!corp.hasWarehouse(division, city)) {
@@ -214,7 +340,13 @@ export async function purchaseWarehouse(ns, division, city) {
 	} else ns.print(`Already purchased warehouse in ${city} for ${division}`);
 }
 
-// Function to unlock upgrade
+/**
+ * Function to unlock upgrade
+ *
+ * @param {NS} ns
+ * @param {string} upgrade
+ * @returns {Promise<void>}
+ */
 export async function unlockUpgrade(ns, upgrade) {
 	const corp = ns.corporation;
 	if (!corp.hasUnlockUpgrade(upgrade)) {
@@ -224,7 +356,11 @@ export async function unlockUpgrade(ns, upgrade) {
 	} else ns.print(`Already purchased ${upgrade}`);
 }
 
-// Function to return important upgrades
+/**
+ * Function to return important upgrades
+ *
+ * @returns {{market1: string, market2: string, capacity2: string, fulcrum: string, capacity1: string, lab: string}}
+ */
 export function getUpgrades() {
 	return {
 		lab: 'Hi-Tech R&D Laboratory',
