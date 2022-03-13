@@ -4,7 +4,6 @@ import {contractor} from '/contracts/contractor.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {manageAndHack} from '/hacking/hack-manager.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
-import {charger} from '/stanek/utils.js';
 import {updateOverview} from '/ui/overview.js';
 import {
 	copyScriptsToAll,
@@ -35,12 +34,13 @@ export async function main(ns) {
 		upgradeCores: true,
 		ram: ns.getServerMaxRam('home'),
 		cores: ns.getServer('home').cpuCores,
-		stock: false,
 		gang: false,
 		corp: false,
 		bladeburner: false,
+		stock: false,
 		hacknet: false,
 		sleeve: false,
+		stanek: false,
 		backdoorWorldDaemon: false,
 		factions: []
 	};
@@ -88,20 +88,9 @@ export async function main(ns) {
 			ns.exec(scripts.upgradeHomeCores, vars.host);
 			vars.upgradeCores = false;
 		}
-		// Charge Stanek
-		await charger(ns);
-		// Stock market manager
-		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, vars.host) && !vars.stock &&
-			enoughRam(ns, scripts.stock, vars.host) && !promptScriptRunning(ns, vars.host)) {
-			if (await ns.prompt(`Start stock market manager?`)) {
-				ns.exec(scripts.stock, vars.host);
-				printBoth(ns, `Started stock market manager`);
-			}
-			vars.stock = true;
-		}
 		// Gang manager
 		// noinspection JSUnresolvedFunction
-		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2 && s.lvl >= 1) &&
+		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) &&
 			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !vars.gang && !promptScriptRunning(ns, vars.host)) {
 			if (ns.gang.getGangInformation().isHacking) {
 				if (!ns.isRunning(scripts.hackingGang, vars.host) && enoughRam(ns, scripts.hackingGang, vars.host) &&
@@ -129,7 +118,7 @@ export async function main(ns) {
 			vars.corp = true;
 		}
 		// Bladeburner manager
-		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) &&
+		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7)) &&
 			ns.bladeburner.joinBladeburnerDivision() && !vars.bladeburner &&
 			!ns.isRunning(scripts.bladeburner, vars.host) && enoughRam(ns, scripts.bladeburner, vars.host) &&
 			!promptScriptRunning(ns, vars.host)) {
@@ -138,6 +127,15 @@ export async function main(ns) {
 				printBoth(ns, `Started Bladeburner manager`);
 			}
 			vars.bladeburner = true;
+		}
+		// Stock market manager
+		if (player.hasTixApiAccess && !ns.isRunning(scripts.stock, vars.host) && !vars.stock &&
+			enoughRam(ns, scripts.stock, vars.host) && !promptScriptRunning(ns, vars.host)) {
+			if (await ns.prompt(`Start stock market manager?`)) {
+				ns.exec(scripts.stock, vars.host);
+				printBoth(ns, `Started stock market manager`);
+			}
+			vars.stock = true;
 		}
 		// Hacknet manager
 		if (!vars.hacknet && !promptScriptRunning(ns, vars.host) && !ns.isRunning(scripts.hacknet, vars.host) &&
@@ -149,7 +147,7 @@ export async function main(ns) {
 			vars.hacknet = true;
 		}
 		// Sleeve manager
-		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10 && s.lvl >= 1)) &&
+		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10)) &&
 			!vars.sleeve && !ns.isRunning(scripts.sleeve, vars.host) &&
 			enoughRam(ns, scripts.sleeve, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
@@ -157,6 +155,16 @@ export async function main(ns) {
 				printBoth(ns, `Started sleeve manager`);
 			}
 			vars.sleeve = true;
+		}
+		// Stanek Manager
+		if ((player.bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13)) &&
+			!vars.stanek && !ns.isRunning(scripts.stanek, vars.host) &&
+			enoughRam(ns, scripts.stanek, vars.host) && !promptScriptRunning(ns, vars.host)) {
+			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
+				ns.exec(scripts.stanek, vars.host);
+				printBoth(ns, `Started Stanek's Gift manager`);
+			}
+			vars.stanek = true;
 		}
 		// Check faction invites
 		let factions = ns.checkFactionInvitations().filter(faction => !vars.factions.includes(faction));
