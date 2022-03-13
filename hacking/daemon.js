@@ -28,8 +28,8 @@ export async function main(ns) {
 /**
  *
  * @param {NS} ns
- * @param {info} info
- * @param {data} data
+ * @param {Object} info
+ * @param {Object} data
  * @returns {Promise<void>}
  */
 async function hackTarget(ns, info, data) {
@@ -52,7 +52,7 @@ async function hackTarget(ns, info, data) {
  * @param {NS} ns
  * @param {number} sec
  * @param {number} money
- * @param {data} data
+ * @param {Object} data
  * @returns {Promise<boolean>}
  */
 async function primeTarget(ns, sec, money, data) {
@@ -104,8 +104,8 @@ async function primeTarget(ns, sec, money, data) {
 /**
  *
  * @param {NS} ns
- * @param {data} data
- * @returns {info}
+ * @param {Object} data
+ * @returns {Object}
  */
 function getInfo(ns, data) {
 	let hackTime = ns.getHackTime(data.target);
@@ -172,8 +172,8 @@ function getInfo(ns, data) {
 
 /**
  *
- * @param {ns} ns
- * @returns {data}
+ * @param {NS} ns
+ * @returns {Object}
  */
 function packageData(ns) {
 	const target = ns.args[0];
@@ -209,9 +209,9 @@ function packageData(ns) {
 		growSec,
 		weakenSec,
 		scripts,
-		hackScriptRam: hackScriptRam,
-		growScriptRam: growScriptRam,
-		weakenScriptRam: weakenScriptRam
+		hackScriptRam,
+		growScriptRam,
+		weakenScriptRam
 	};
 }
 
