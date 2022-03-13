@@ -499,6 +499,14 @@ export function enoughRam(ns, script, server = ns.getHostname()) {
  */
 export function getPorts() {
 	return {
+		general: 1,
+		gang: 2,
+		corp: 3,
+		augmentations: 4,
+		hack: 5,
+		bladeburner: 7,
+		stock: 8,
+		hacknet: 9,
 		sleeve: 10,
 		stanek: 13
 	};
