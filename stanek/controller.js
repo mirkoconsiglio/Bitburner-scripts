@@ -11,10 +11,10 @@ export async function main(ns) {
 	// noinspection InfiniteLoopJS
 	while (true) {
 		await charger(ns);
+		await ns.sleep(1000);
 	}
 }
 
-// TODO: If data changes then reset charger
 /**
  *
  * @param {NS} ns
@@ -23,16 +23,17 @@ export async function main(ns) {
 async function charger(ns) {
 	const st = ns.stanek;
 	const scripts = getScripts();
-	// Get data
 	const port = ns.getPortHandle(getPorts().stanek);
-	let data = port.read();
-	if (data === 'NULL PORT DATA') data = getDefaultData();
-	port.tryWrite(data);
-	// Set up pattern
-	if (data.pattern) setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
 	// Charge fragments
 	while (true) {
-		const fragments = st.activeFragments();
+		// Get data
+		let data = port.read();
+		if (data === 'NULL PORT DATA') data = getDefaultData();
+		port.tryWrite(data);
+		// Set up pattern
+		if (data.pattern) setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
+		// Get chargeable fragments
+		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
 		if (fragments.length === 0) {
 			ns.alert(`There are no chargeable fragments on Stanek's gift`);
 			return;
@@ -47,7 +48,7 @@ async function charger(ns) {
 		ns.print(statusUpdate);
 		if (minCharges >= data.maxCharges) break;
 		// Charge each fragment one at a time
-		for (const fragment of fragments.filter(f => f.numCharge < data.maxCharges)) {
+		for (const fragment of fragments) {
 			let availableRam = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
 			const threads = Math.floor((availableRam - data.reservedRam) / ns.getScriptRam(scripts.charge));
 			// Only charge if we will not be bringing down the average
@@ -62,5 +63,6 @@ async function charger(ns) {
 			const pid = ns.exec(scripts.charge, data.host, threads, fragment.x, fragment.y);
 			while (ns.isRunning(pid, data.host)) await ns.sleep(100);
 		}
+		await ns.sleep(100);
 	}
 }

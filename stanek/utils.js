@@ -192,7 +192,7 @@ function reverse(shape) {
  */
 export function getDefaultData() {
 	return {
-		pattern: undefined,
+		pattern: 'starter',
 		maxCharges: 100,
 		host: 'home',
 		reservedRam: 0
