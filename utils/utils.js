@@ -46,8 +46,7 @@ export function getScripts() {
 		backdoor: '/hacking/backdoor.js',
 		share: '/hacking/share.js',
 		utils: '/utils/utils.js',
-		combatGang: '/gang/combat-gang.js',
-		hackingGang: '/gang/hacking-gang.js',
+		gang: '/gang/manager.js',
 		corp: '/corporation/autopilot.js',
 		bladeburner: '/bladeburner/autopilot.js',
 		stock: '/stock-market/autopilot.js',
@@ -66,8 +65,7 @@ export function getManagerScripts() {
 	const scripts = getScripts();
 	return [
 		scripts.cortex,
-		scripts.combatGang,
-		scripts.hackingGang,
+		scripts.gang,
 		scripts.corp,
 		scripts.bladeburner,
 		scripts.stock,
