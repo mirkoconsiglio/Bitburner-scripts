@@ -190,7 +190,7 @@ function reverse(shape) {
  *
  * @returns {Object<undefined, number, string, number>}
  */
-export function getDefaultData() {
+export function getDefaultStanekData() {
 	return {
 		pattern: 'starter',
 		maxCharges: 100,

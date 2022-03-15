@@ -33,6 +33,11 @@ export async function copyScriptsToAll(ns) {
  */
 export function getScripts() {
 	return {
+		cortex: 'cortex.js',
+		ui: '/ui/overview.js',
+		upgradeHomeRam: '/utils/upgrade-home-ram.js',
+		upgradeHomeCores: '/utils/upgrade-home-cores.js',
+		joinFactions: '/utils/join-factions.js',
 		hack: '/hacking/hack.js',
 		grow: '/hacking/grow.js',
 		weaken: '/hacking/weaken.js',
@@ -47,14 +52,29 @@ export function getScripts() {
 		bladeburner: '/bladeburner/autopilot.js',
 		stock: '/stock-market/autopilot.js',
 		hacknet: '/hacknet/hacknet-manager.js',
-		stanek: '/stanek/controller.js',
-		charge: '/stanek/charge.js',
 		sleeve: '/sleeve/autopilot.js',
-		ui: '/ui/overview.js',
-		upgradeHomeRam: '/utils/upgrade-home-ram.js',
-		upgradeHomeCores: '/utils/upgrade-home-cores.js',
-		joinFactions: '/utils/join-factions.js'
+		stanek: '/stanek/controller.js',
+		charge: '/stanek/charge.js'
 	}
+}
+
+/**
+ *
+ * @returns {string[]}
+ */
+export function getManagerScripts() {
+	const scripts = getScripts();
+	return [
+		scripts.cortex,
+		scripts.combatGang,
+		scripts.hackingGang,
+		scripts.corp,
+		scripts.bladeburner,
+		scripts.stock,
+		scripts.hacknet,
+		scripts.sleeve,
+		scripts.stanek
+	];
 }
 
 /**
@@ -231,25 +251,24 @@ export function getServers(ns) {
  */
 export function hackServer(ns, server) {
 	if (ns.hasRootAccess(server)) return true;
-
 	let portOpened = 0;
-	if (ns.fileExists('BruteSSH.exe')) {
+	if (ns.fileExists('BruteSSH.exe', 'home')) {
 		ns.brutessh(server);
 		portOpened++;
 	}
-	if (ns.fileExists('FTPCrack.exe')) {
+	if (ns.fileExists('FTPCrack.exe', 'home')) {
 		ns.ftpcrack(server);
 		portOpened++;
 	}
-	if (ns.fileExists('HTTPWorm.exe')) {
+	if (ns.fileExists('HTTPWorm.exe', 'home')) {
 		ns.httpworm(server);
 		portOpened++;
 	}
-	if (ns.fileExists('relaySMTP.exe')) {
+	if (ns.fileExists('relaySMTP.exe', 'home')) {
 		ns.relaysmtp(server);
 		portOpened++;
 	}
-	if (ns.fileExists('SQLInject.exe')) {
+	if (ns.fileExists('SQLInject.exe', 'home')) {
 		ns.sqlinject(server);
 		portOpened++;
 	}
@@ -281,19 +300,19 @@ export function getAccessibleServers(ns) {
  */
 export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
 	const scriptRam = ns.getScriptRam(script);
-	let remainingThread = threads;
+	let remainingThreads = threads;
 	while (freeRams.length > 0) {
-		let host = freeRams[0].host;
-		let ram = freeRams[0].freeRam;
+		const host = freeRams[0].host;
+		const ram = freeRams[0].freeRam;
 		if (ram < scriptRam) freeRams.shift();
-		else if (ram < scriptRam * remainingThread) {
-			let threadForThisHost = Math.floor(ram / scriptRam);
-			ns.exec(script, host, threadForThisHost, ...scriptArgs);
-			remainingThread -= threadForThisHost;
+		else if (ram < scriptRam * remainingThreads) { // Put as many threads as we can
+			let threadsForThisHost = Math.floor(ram / scriptRam);
+			ns.exec(script, host, threadsForThisHost, ...scriptArgs);
+			remainingThreads -= threadsForThisHost;
 			freeRams.shift();
-		} else {
-			ns.exec(script, host, remainingThread, ...scriptArgs);
-			freeRams[0].freeRam -= scriptRam * remainingThread;
+		} else { // All remaining threads were placed
+			ns.exec(script, host, remainingThreads, ...scriptArgs);
+			freeRams[0].freeRam -= scriptRam * remainingThreads;
 			return true;
 		}
 	}
@@ -310,24 +329,32 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
  */
 export function getFreeRam(ns, servers, hackables, occupy = false) {
 	const scripts = getScripts();
+	const port = ns.getPortHandle(getPorts().reserveRam);
+	let data = port.read();
+	if (data === 'NULL PORT DATA') data = getDefaultReservedRam();
+	port.tryWrite(data);
 	const freeRams = [];
 	const unhackables = [];
 	for (let server of servers) {
-		if (hackables && ns.scriptRunning(scripts.daemon, server)) {
-			for (let hackable of hackables) {
-				if (ns.getRunningScript(scripts.daemon, server, hackable)) unhackables.push(hackable);
-			}
-			if (!occupy) continue;
+		if (hackables && ns.scriptRunning(scripts.daemon, server)) { // Check if we have a daemon running on this server
+			const process = ns.ps(server).find(s => s.filename === scripts.daemon); // Find the process of the daemon
+			unhackables.push(process.args[0]); // Don't hack the target of the daemon
+			if (!occupy) continue; // Check if we want to run scripts on the host
 		}
-		let freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
-		if (server === 'home') freeRam -= 90;
-		if (freeRam > 1) freeRams.push({host: server, freeRam: freeRam});
+		const freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? 0);
+		if (freeRam >= 1.6) freeRams.push({host: server, freeRam: freeRam});
 	}
 	const sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
 	if (hackables) {
 		let filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
 		return [sortedFreeRams, filteredHackables];
 	} else return sortedFreeRams;
+}
+
+export function getDefaultReservedRam() {
+	return {
+		home: 128
+	};
 }
 
 /**
@@ -499,7 +526,7 @@ export function enoughRam(ns, script, server = ns.getHostname()) {
  */
 export function getPorts() {
 	return {
-		general: 1,
+		reserveRam: 1,
 		gang: 2,
 		corp: 3,
 		augmentations: 4,

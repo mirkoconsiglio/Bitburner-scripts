@@ -28,11 +28,10 @@ exploits/reality-alteration.js
 hacking/daemon.js
 hacking/deploy-daemons.js
 hacking/grow.js
-hacking/hack-manager.js
+hacking/controller.js
 hacking/hack.js
 hacking/weaken.js
 hacking/backdoor.js
-hacking/share.js
 stock-market/autopilot.js
 texts/augmentations-list.txt
 texts/bitnode-order.txt
@@ -52,6 +51,7 @@ utils/join-factions.js
 utils/upgrade-home-cores.js
 utils/upgrade-home-ram.js
 utils/utils.js
+utils/share.js
 corporation/autopilot.js
 corporation/utils.js
 ui/overview.js
