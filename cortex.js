@@ -1,8 +1,8 @@
 // noinspection JSUnresolvedVariable
 
 import {contractor} from '/contracts/contractor.js';
+import {manageAndHack} from '/hacking/controller.js';
 import {deployDaemons} from '/hacking/deploy-daemons.js';
-import {manageAndHack} from '/hacking/hack-manager.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
 import {updateOverview} from '/ui/overview.js';
 import {
