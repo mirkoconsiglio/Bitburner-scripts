@@ -55,8 +55,8 @@ utils/share.js
 corporation/autopilot.js
 corporation/utils.js
 ui/overview.js
-gang/combat-gang.js
-gang/hacking-gang.js
+gang/utils.js
+gang/manager.js
 bladeburner/autopilot.js
 bladeburner/utils.js
 sleeve/autopilot.js

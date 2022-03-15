@@ -90,20 +90,12 @@ export async function main(ns) {
 		}
 		// Gang manager
 		// noinspection JSUnresolvedFunction
-		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) &&
-			ns.heart.break() <= -54e3)) && ns.gang.inGang() && !vars.gang && !promptScriptRunning(ns, vars.host)) {
-			if (ns.gang.getGangInformation().isHacking) {
-				if (!ns.isRunning(scripts.hackingGang, vars.host) && enoughRam(ns, scripts.hackingGang, vars.host) &&
-					await ns.prompt(`Start hacking gang manager?`)) {
-					ns.exec(scripts.hackingGang, vars.host);
-					printBoth(ns, `Started hacking gang manager`);
-				}
-			} else {
-				if (!ns.isRunning(scripts.combatGang, vars.host) && enoughRam(ns, scripts.combatGang, vars.host) &&
-					await ns.prompt(`Start combat gang manager?`)) {
-					ns.exec(scripts.combatGang, vars.host);
-					printBoth(ns, `Started combat gang manager`);
-				}
+		if ((player.bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3)) &&
+			ns.gang.inGang() && !ns.isRunning(scripts.gang, vars.host) && !vars.gang &&
+			enoughRam(ns, scripts.gang, vars.host) && !promptScriptRunning(ns, vars.host)) {
+			if (await ns.prompt(`Start gang manager?`)) {
+				ns.exec(scripts.gang, vars.host);
+				printBoth(ns, `Started gang manager`);
 			}
 			vars.gang = true;
 		}
@@ -119,8 +111,8 @@ export async function main(ns) {
 		}
 		// Bladeburner manager
 		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7)) &&
-			ns.bladeburner.joinBladeburnerDivision() && !vars.bladeburner &&
-			!ns.isRunning(scripts.bladeburner, vars.host) && enoughRam(ns, scripts.bladeburner, vars.host) &&
+			ns.bladeburner.joinBladeburnerDivision() && !ns.isRunning(scripts.bladeburner, vars.host) &&
+			!vars.bladeburner && enoughRam(ns, scripts.bladeburner, vars.host) &&
 			!promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Bladeburner manager?`)) {
 				ns.exec(scripts.bladeburner, vars.host);
@@ -138,8 +130,8 @@ export async function main(ns) {
 			vars.stock = true;
 		}
 		// Hacknet manager
-		if (!vars.hacknet && !promptScriptRunning(ns, vars.host) && !ns.isRunning(scripts.hacknet, vars.host) &&
-			enoughRam(ns, scripts.hacknet, vars.host)) {
+		if (!ns.isRunning(scripts.hacknet, vars.host) && !vars.hacknet &&
+			enoughRam(ns, scripts.hacknet, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Hacknet manager?`)) {
 				ns.exec(scripts.hacknet, vars.host);
 				printBoth(ns, `Started Hacknet manager`);
@@ -148,7 +140,7 @@ export async function main(ns) {
 		}
 		// Sleeve manager
 		if ((player.bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10)) &&
-			!vars.sleeve && !ns.isRunning(scripts.sleeve, vars.host) &&
+			!ns.isRunning(scripts.sleeve, vars.host) && !vars.sleeve &&
 			enoughRam(ns, scripts.sleeve, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
 				ns.exec(scripts.sleeve, vars.host);
@@ -158,7 +150,7 @@ export async function main(ns) {
 		}
 		// Stanek Manager
 		if ((player.bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13)) &&
-			!vars.stanek && !ns.isRunning(scripts.stanek, vars.host) &&
+			!ns.isRunning(scripts.stanek, vars.host) && !vars.stanek &&
 			enoughRam(ns, scripts.stanek, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
 				ns.exec(scripts.stanek, vars.host);
