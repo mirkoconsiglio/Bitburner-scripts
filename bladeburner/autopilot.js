@@ -171,7 +171,6 @@ async function improveAccuracy(ns) {
 	await doAction(ns, type, name);
 }
 
-// TODO: fix resetting action bug
 /**
  *
  * @param {NS} ns
@@ -182,23 +181,23 @@ async function improveAccuracy(ns) {
 async function doAction(ns, type, name) {
 	const bb = ns.bladeburner;
 	// If already doing the action go back
-	if (bb.getCurrentAction().name === name) {
+	if (bb.getCurrentAction().name.toUpperCase() === name.toUpperCase()) {
 		await ns.sleep(100);
 		return;
 	}
 	// Take into account bonus time
-	let time = bb.getActionTime(type, name);
+	let actionTime = bb.getActionTime(type, name);
 	const bonusTime = bb.getBonusTime();
 	if (bonusTime > 0) {
 		if (bonusTime < time) {
-			let diff = time - bonusTime;
-			time = diff + bonusTime / 5;
-		} else time /= 5;
+			let diff = actionTime - bonusTime;
+			actionTime = diff + bonusTime / 5;
+		} else actionTime /= 5;
 	}
 	// Wait until the action finishes
 	const started = bb.startAction(type, name);
 	if (started) {
 		ns.print(`Carrying out ${name}`);
-		await ns.sleep(time + 100);
+		await ns.sleep(actionTime + 100);
 	}
 }
