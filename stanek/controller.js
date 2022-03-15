@@ -1,5 +1,5 @@
 import {getDefaultStanekData, getPatterns, setupPattern} from '/stanek/utils.js';
-import {getDefaultReservedRam, getManagerScripts, getPorts, getScripts} from '/utils/utils.js';
+import {getDataFromPort, getDefaultReservedRamData, getManagerScripts, getPorts, getScripts} from '/utils/utils.js';
 
 /**
  *
@@ -11,14 +11,15 @@ export async function main(ns) {
 	const st = ns.stanek;
 	const managerScripts = getManagerScripts();
 	const ports = getPorts();
+	const stanekPort = ns.getPortHandle(ports.stanek);
+	const reservedRamPort = ns.getPortHandle(ports.reservedRam);
 	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		// Get Stanek data
-		const stanekPort = ns.getPortHandle(ports.stanek);
-		let stanekData = stanekPort.read();
-		if (stanekData === 'NULL PORT DATA') stanekData = getDefaultStanekData();
-		stanekPort.tryWrite(stanekData);
+		const stanekData = getDataFromPort(stanekPort, getDefaultStanekData());
+		// Set up pattern
+		setupPattern(ns, getPatterns(st.width(), st.height())[stanekData.pattern]);
 		// Get chargeable fragment info
 		const fragments = st.activeFragments().filter(f => f.numCharge < stanekData.maxCharges);
 		if (fragments.length === 0) {
@@ -27,9 +28,7 @@ export async function main(ns) {
 			continue;
 		}
 		// Get reserved RAM data
-		const reservedRamPort = ns.getPortHandle(ports.reservedRam);
-		let reservedRamData = reservedRamPort.read();
-		if (reservedRamData === 'NULL PORT DATA') reservedRamData = getDefaultReservedRam();
+		const reservedRamData = getDataFromPort(reservedRamPort, getDefaultReservedRamData());
 		// Reserve RAM on host for charging
 		let managerScriptsRam = 0;
 		managerScripts.filter(s => ns.scriptRunning(s, stanekData.host)).forEach(s => managerScriptsRam += ns.getScriptRam(s, stanekData.host));
@@ -38,15 +37,16 @@ export async function main(ns) {
 		reservedRamPort.tryWrite(reservedRamData);
 		// Wait for RAM to free up
 		while (ns.getServerMaxRam(stanekData.host) - ns.getServerUsedRam(stanekData.host) < reservedRam) {
+			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up`);
 			await ns.sleep(1000);
 		}
 		// Charge Stanek
 		await charger(ns);
 		// Remove reserved RAM on host
-		reservedRamData = reservedRamPort.read();
-		reservedRamData[stanekData.host] = reservedRamData[stanekData.host] - reservedRam;
-		reservedRamPort.tryWrite(reservedRamData);
+		const updatedReservedRamData = getDataFromPort(reservedRamPort, getDefaultReservedRamData(), false);
+		updatedReservedRamData[stanekData.host] = updatedReservedRamData[stanekData.host] - reservedRam;
+		reservedRamPort.tryWrite(updatedReservedRamData);
 	}
 }
 
@@ -63,18 +63,12 @@ async function charger(ns) {
 	while (true) {
 		ns.clearLog();
 		// Get data
-		let data = port.read();
-		if (data === 'NULL PORT DATA') data = getDefaultStanekData();
-		port.tryWrite(data);
+		const data = getDataFromPort(port, getDefaultStanekData());
 		// Set up pattern
-		if (data.pattern) setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
+		setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
 		// Get chargeable fragments
 		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
-		if (fragments.length === 0) {
-			ns.print(`WARNING: There are no chargeable fragments on Stanek's gift`);
-			await ns.sleep(1000);
-			return;
-		}
+		if (fragments.length === 0) return; // All fragments charged to full
 		let statusUpdate = `Preparing to charge ${fragments.length} fragments to ${data.maxCharges}\n`;
 		let minCharges = Number.MAX_SAFE_INTEGER;
 		for (const fragment of fragments) {

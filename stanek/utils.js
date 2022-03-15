@@ -188,7 +188,7 @@ function reverse(shape) {
 
 /**
  *
- * @returns {Object<undefined, number, string, number>}
+ * @returns {Object<string, number, string, number>}
  */
 export function getDefaultStanekData() {
 	return {

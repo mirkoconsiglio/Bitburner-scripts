@@ -1,5 +1,5 @@
-import {getDefaultData} from '/stanek/utils.js';
-import {getPorts} from '/utils/utils.js';
+import {getDefaultStanekData} from '/stanek/utils.js';
+import {getDataFromPort, getPorts} from '/utils/utils.js';
 
 /**
  *
@@ -14,8 +14,7 @@ export async function main(ns) {
 		['reservedRam', undefined]
 	]);
 	const port = ns.getPortHandle(getPorts().stanek);
-	let data = port.read();
-	if (data === 'NULL PORT DATA') data = getDefaultData();
+	const data = getDataFromPort(port, getDefaultStanekData(), false);
 	if (args.pattern) data.pattern = args.pattern;
 	if (args.maxCharges) data.maxCharges = args.maxCharges;
 	if (args.host) data.host = args.host;

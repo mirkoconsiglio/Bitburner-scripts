@@ -329,10 +329,8 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
  */
 export function getFreeRam(ns, servers, hackables, occupy = false) {
 	const scripts = getScripts();
-	const port = ns.getPortHandle(getPorts().reserveRam);
-	let data = port.read();
-	if (data === 'NULL PORT DATA') data = getDefaultReservedRam();
-	port.tryWrite(data);
+	const port = ns.getPortHandle(getPorts().reservedRam);
+	const data = getDataFromPort(port, getDefaultReservedRamData());
 	const freeRams = [];
 	const unhackables = [];
 	for (let server of servers) {
@@ -351,7 +349,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 	} else return sortedFreeRams;
 }
 
-export function getDefaultReservedRam() {
+export function getDefaultReservedRamData() {
 	return {
 		home: 128
 	};
@@ -526,7 +524,7 @@ export function enoughRam(ns, script, server = ns.getHostname()) {
  */
 export function getPorts() {
 	return {
-		reserveRam: 1,
+		reservedRam: 1,
 		gang: 2,
 		corp: 3,
 		augmentations: 4,
@@ -537,4 +535,17 @@ export function getPorts() {
 		sleeve: 10,
 		stanek: 13
 	};
+}
+
+/**
+ *
+ * @param {NetscriptPort} port
+ * @param {*} defaultData
+ * @param {boolean} write
+ * @returns {*}
+ */
+export function getDataFromPort(port, defaultData = null, write = true) {
+	const data = port.empty() ? defaultData : port.read();
+	if (write) port.tryWrite(data);
+	return data;
 }
