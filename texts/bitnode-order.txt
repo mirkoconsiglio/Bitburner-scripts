@@ -15,3 +15,5 @@
 9.1  -> 9.2  -> 9.3     Max SF9 14% Hacknet, Hacknet Servers, 128 GiB RAM, Bitnode Server
 12.2                    NFG-2
 13.1 -> 13.2 -> 13.3    Max SF13 +3 size Stanek's Gift, Church of the Machine God
+12.3                    NFG-3
+8.1  -> 8.2  -> 8.3     Max SF8, 21% Grow, WSE Account and TIX API, Shorting Stocks, Limit/Stop Orders
