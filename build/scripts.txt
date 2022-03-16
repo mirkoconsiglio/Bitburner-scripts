@@ -69,7 +69,7 @@ sleeve/shock-recovery.js
 sleeve/synchronize.js
 sleeve/utils.js
 sleeve/reset.js
-hacknet/hacknet-manager.js
+hacknet/manager.js
 hacknet/utils.js
 hacknet/hash-spender.js
 stanek/utils.js

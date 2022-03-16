@@ -50,7 +50,7 @@ export function getScripts() {
 		corp: '/corporation/autopilot.js',
 		bladeburner: '/bladeburner/autopilot.js',
 		stock: '/stock-market/autopilot.js',
-		hacknet: '/hacknet/hacknet-manager.js',
+		hacknet: '/hacknet/manager.js',
 		sleeve: '/sleeve/autopilot.js',
 		stanek: '/stanek/controller.js',
 		charge: '/stanek/charge.js'
