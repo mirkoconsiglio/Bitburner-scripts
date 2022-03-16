@@ -45,7 +45,7 @@ export async function main(ns) {
 		await charger(ns);
 		// Remove reserved RAM on host
 		const updatedReservedRamData = getDataFromPort(reservedRamPort, getDefaultReservedRamData(), false);
-		updatedReservedRamData[stanekData.host] = updatedReservedRamData[stanekData.host] - reservedRam;
+		updatedReservedRamData[stanekData.host] = Math.max(0, (updatedReservedRamData[stanekData.host] ?? 0) - reservedRam);
 		reservedRamPort.tryWrite(updatedReservedRamData);
 	}
 }
