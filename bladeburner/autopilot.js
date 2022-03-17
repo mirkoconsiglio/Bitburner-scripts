@@ -189,7 +189,7 @@ async function doAction(ns, type, name) {
 	let actionTime = bb.getActionTime(type, name);
 	const bonusTime = bb.getBonusTime();
 	if (bonusTime > 0) {
-		if (bonusTime < time) {
+		if (bonusTime < actionTime) {
 			let diff = actionTime - bonusTime;
 			actionTime = diff + bonusTime / 5;
 		} else actionTime /= 5;
