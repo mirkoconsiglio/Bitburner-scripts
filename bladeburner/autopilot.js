@@ -170,7 +170,7 @@ async function improveAccuracy(ns) {
 	const [type, name] = bestOpForImprovingAccuracy(ns);
 	await doAction(ns, type, name);
 }
-// TODO: Fix bug restarting BlackOp
+
 /**
  *
  * @param {NS} ns
