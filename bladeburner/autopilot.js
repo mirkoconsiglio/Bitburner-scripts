@@ -170,7 +170,7 @@ async function improveAccuracy(ns) {
 	const [type, name] = bestOpForImprovingAccuracy(ns);
 	await doAction(ns, type, name);
 }
-
+// TODO: Fix bug restarting BlackOp
 /**
  *
  * @param {NS} ns
@@ -181,23 +181,18 @@ async function improveAccuracy(ns) {
 async function doAction(ns, type, name) {
 	const bb = ns.bladeburner;
 	// If already doing the action go back
-	if (bb.getCurrentAction().name.toUpperCase() === name.toUpperCase()) {
+	if (bb.getCurrentAction().name === name) {
 		await ns.sleep(100);
 		return;
 	}
 	// Take into account bonus time
-	let actionTime = bb.getActionTime(type, name);
+	const actionTime = bb.getActionTime(type, name);
 	const bonusTime = bb.getBonusTime();
-	if (bonusTime > 0) {
-		if (bonusTime < actionTime) {
-			let diff = actionTime - bonusTime;
-			actionTime = diff + bonusTime / 5;
-		} else actionTime /= 5;
-	}
+	const time = bonusTime > 0 ? (bonusTime > actionTime ? actionTime / 5 : actionTime - 0.8 * bonusTime) : actionTime;
 	// Wait until the action finishes
 	const started = bb.startAction(type, name);
 	if (started) {
 		ns.print(`Carrying out ${name}`);
-		await ns.sleep(actionTime + 100);
+		await ns.sleep(Math.ceil(time / 1e3) * 1e3 + 100);
 	}
 }
