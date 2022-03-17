@@ -94,6 +94,7 @@ interface Player {
   factions: string[];
   tor: boolean;
   hasCorporation: boolean;
+  inBladeburner: boolean;
 }
 
 /**
@@ -6384,6 +6385,7 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   buyMaterial(divisionName: string, cityName: string, materialName: string, amt: number): void;
+
   /**
    * Set material to bulk buy
    * @param divisionName - Name of the division

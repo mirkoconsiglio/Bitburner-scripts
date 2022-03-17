@@ -111,7 +111,7 @@ export async function main(ns) {
 		}
 		// Bladeburner manager
 		if ((player.bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7)) &&
-			ns.bladeburner.joinBladeburnerDivision() && !ns.isRunning(scripts.bladeburner, vars.host) &&
+			player.inBladeburner && !ns.isRunning(scripts.bladeburner, vars.host) &&
 			!vars.bladeburner && enoughRam(ns, scripts.bladeburner, vars.host) &&
 			!promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Bladeburner manager?`)) {
