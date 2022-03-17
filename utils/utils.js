@@ -540,10 +540,14 @@ export function getPorts() {
  * @param {NetscriptPort} port
  * @param {*} defaultData
  * @param {boolean} write
+ * @param {boolean} clear
  * @returns {*}
  */
-export function getDataFromPort(port, defaultData = null, write = true) {
+export function getDataFromPort(port, defaultData = null, write = true, clear = true) {
 	const data = port.empty() ? defaultData : port.read();
+	if (clear) port.clear();
 	if (write) port.tryWrite(data);
 	return data;
 }
+
+// TODO: Save port data to text file
