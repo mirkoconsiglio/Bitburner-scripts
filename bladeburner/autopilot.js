@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 import {bestOpForImprovingAccuracy, getActionData, getSkillsData} from '/bladeburner/utils.js';
 import {getCities, promptScriptRunning} from '/utils/utils.js';
 
