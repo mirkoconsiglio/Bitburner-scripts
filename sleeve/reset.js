@@ -1,4 +1,5 @@
-import {defineAutopilotData} from '/sleeve/utils.js';
+import {getDefaultSleeveData} from '/sleeve/utils.js';
+import {getPorts} from 'utils/utils.js';
 
 /**
  *
@@ -6,5 +7,7 @@ import {defineAutopilotData} from '/sleeve/utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	defineAutopilotData(ns);
+	const port = ns.getPortHandle(getPorts().sleeve);
+	port.clear();
+	port.write(getDefaultSleeveData());
 }
