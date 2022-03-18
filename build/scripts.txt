@@ -25,6 +25,8 @@ exploits/undocumented-function-call.js
 exploits/edit-save-file.js
 exploits/n00dles.js
 exploits/reality-alteration.js
+exploits/rainbow.js
+exploits/true-recursion.js
 hacking/daemon.js
 hacking/deploy-daemons.js
 hacking/grow.js
