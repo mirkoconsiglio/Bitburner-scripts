@@ -404,7 +404,7 @@ function validMathExpressions(data) {
 
 /**
  *
- * @param {string} res
+ * @param {string[]} res
  * @param {string} path
  * @param {string} digits
  * @param {number} target

@@ -197,10 +197,10 @@ export async function main(ns) {
 /**
  *
  * @param {NS} ns
- * @param {String} augmentations
- * @param {Array} tempAugs
- * @param {Array} coveredIndices
- * @param {Array} prereq
+ * @param {string[]} augmentations
+ * @param {string[]} tempAugs
+ * @param {number[]} coveredIndices
+ * @param {string[]} prereq
  */
 function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq) {
 	let index = augmentations.findIndex(aug => aug.name === prereq);
