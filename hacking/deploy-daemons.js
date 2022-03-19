@@ -21,13 +21,10 @@ export function deployDaemons(ns, minimumRam = 2 ** 14) {
 	// filter and sort servers according to RAM
 	const hosts = servers.filter(server => ns.getServerMaxRam(server) >= minimumRam).sort((a, b) => ns.getServerMaxRam(b) - ns.getServerMaxRam(a));
 	// Deploy daemons
-	let c = 0;
-	for (let host of hosts) {
-		if (c === hackables.length) break; // If we run out of hackable servers break
-		if (!ns.isRunning(scripts.daemon, host, hackables[c])) {
-			ns.scriptKill(scripts.daemon, host);
-			ns.exec(scripts.daemon, host, 1, hackables[c]);
-			c++;
+	for (let i = 0; i < Math.min(hosts.length, hackables.length); i++) {
+		if (!ns.isRunning(scripts.daemon, hosts[i], hackables[i])) {
+			ns.scriptKill(scripts.daemon, hosts[i]);
+			ns.exec(scripts.daemon, hosts[i], 1, hackables[i]);
 		}
 	}
 }
