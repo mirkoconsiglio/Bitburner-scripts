@@ -57,7 +57,7 @@ async function hackTarget(ns, info, data) {
  */
 async function primeTarget(ns, sec, money, data) {
 	let growth = data.maxMoney / money;
-	let growThreads = Math.ceil(ns.growthAnalyze(data.target, growth !== Infinity ? growth : 10, data.cores));
+	let growThreads = Math.ceil(ns.growthAnalyze(data.target, Math.max(growth !== Infinity ? growth : 10, 1), data.cores));
 	let weakenThreads = Math.ceil((sec - data.minSec + growThreads * data.growSec) / data.weakenSec);
 
 	let weakenTime = ns.getWeakenTime(data.target);
@@ -77,11 +77,11 @@ async function primeTarget(ns, sec, money, data) {
 		let freeRams = getFreeRam(ns, servers);
 
 		let growFound = true;
-		if (!grown) growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, data.target);
+		if (!grown && growThreads > 0) growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, data.target);
 		if (growFound) grown = true;
 
 		let weakenFound = true;
-		if (!weakened) weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, data.target);
+		if (!weakened && weakenThreads > 0) weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, data.target);
 		if (weakenFound) weakened = true;
 
 		if (!growFound) await ns.sleep(1000);
