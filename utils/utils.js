@@ -120,6 +120,15 @@ export function getCompanies() {
 
 /**
  *
+ * @returns {string[]}
+ */
+export function getGangs() {
+	return ['Slum Snakes', 'Tetrads', 'The Syndicate', 'The Dark Army', 'Speakers for the Dead',
+		'NiteSec', 'The Black Hand'];
+}
+
+/**
+ *
  * @returns {Object<Object<string, boolean, boolean, boolean>[]>}
  */
 export function getJobs() {
