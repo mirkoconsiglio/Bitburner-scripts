@@ -8,7 +8,7 @@ import {
 	isUsefulFaction,
 	isUsefulHackingSkill
 } from '/augmentations/utils.js';
-import {getDefaultSleeveData, getWorks} from '/sleeve/utils.js';
+import {getDefaultSleeveData} from '/sleeve/utils.js';
 import {getDataFromPort, getJobs, getPorts} from '/utils/utils.js';
 
 /**
@@ -19,7 +19,7 @@ import {getDataFromPort, getJobs, getPorts} from '/utils/utils.js';
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const port = ns.getPortHandle(getPorts().sleeve);
-	const works = getWorks();
+	const works = ['security', 'field', 'hacking'];
 	const jobs = getJobs();
 	const numSleeves = ns.sleeve.getNumSleeves();
 	const usefulCombat = Array.from({length: numSleeves}, _ => false);

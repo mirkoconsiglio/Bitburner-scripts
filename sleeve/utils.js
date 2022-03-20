@@ -1,13 +1,5 @@
 import {getDataFromPort, getPorts} from '/utils/utils.js';
 
-/**
- *
- * @returns {string[]}
- */
-export function getWorks() {
-	return ['security', 'field', 'hacking'];
-}
-
 // noinspection JSUnusedGlobalSymbols
 /**
  *

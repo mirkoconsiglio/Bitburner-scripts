@@ -55,12 +55,9 @@ utils/upgrade-home-ram.js
 utils/utils.js
 utils/share.js
 corporation/autopilot.js
-corporation/utils.js
 ui/overview.js
-gang/utils.js
 gang/manager.js
 bladeburner/autopilot.js
-bladeburner/utils.js
 sleeve/autopilot.js
 sleeve/gym.js
 sleeve/university.js
@@ -72,7 +69,6 @@ sleeve/synchronize.js
 sleeve/utils.js
 sleeve/reset.js
 hacknet/manager.js
-hacknet/utils.js
 hacknet/hash-spender.js
 stanek/utils.js
 stanek/charge.js
