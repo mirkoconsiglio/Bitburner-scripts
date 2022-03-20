@@ -41,9 +41,8 @@ export async function main(ns) {
 			// Check for augmentation purchases
 			const augmentations = ns.sleeve.getSleevePurchasableAugs(i);
 			for (let aug of augmentations) {
-				if (isUseful(ns, criterions, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost) {
-					ns.sleeve.purchaseSleeveAug(i, aug.name);
-				}
+				if (isUseful(ns, criterions, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost &&
+					ns.sleeve.getSleeveStats(i).shock === 0) ns.sleeve.purchaseSleeveAug(i, aug.name);
 			}
 			// Assign tasks
 			// Sleeve 0 copies player working for faction
