@@ -1506,6 +1506,20 @@ export interface TIX {
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketDataTixApi(): boolean;
+
+  /**
+   * Purchase WSE Account.
+   * @remarks RAM cost: 2.5 GB
+   * @returns True if you successfully purchased it or if you already have access, false otherwise.
+   */
+  purchaseWseAccount(): boolean;
+
+  /**
+   * Purchase TIX API Access
+   * @remarks RAM cost: 2.5 GB
+   * @returns True if you successfully purchased it or if you already have access, false otherwise.
+   */
+  purchaseTixApi(): boolean;
 }
 
 /**
@@ -6391,7 +6405,6 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   buyMaterial(divisionName: string, cityName: string, materialName: string, amt: number): void;
-
   /**
    * Set material to bulk buy
    * @param divisionName - Name of the division
