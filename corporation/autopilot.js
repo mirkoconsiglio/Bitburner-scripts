@@ -214,10 +214,9 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	await upgradeUpto(ns, upgrades);
 }
 
-// TODO: Buy tax reduction upgrades
-// TODO: Go public
-// TODO: Issue new shares
-// TODO: Issue dividends
+// TODO: go public
+// TODO: issue dividends
+// TODO: buy other upgrades
 /**
  *
  * @param {NS} ns
@@ -250,9 +249,12 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			// Update current version
 			version++;
 		}
+		// Use hashes to boost research
+		if (ns.hacknet.numHashes() >= ns.hacknet.hashCost('Exchange for Corporation Research') &&
+			corp.getDivision(division).research < 3 * minResearch) ns.hacknet.spendHashes('Exchange for Corporation Research');
 		// Check research progress for lab
 		if (!corp.hasResearched(division, upgrades.lab) &&
-			corp.getDivision(division).research - corp.getResearchCost(division, upgrades.lab) >= 50e3) {
+			corp.getDivision(division).research - corp.getResearchCost(division, upgrades.lab) >= minResearch) {
 			corp.research(division, upgrades.lab);
 		}
 		// Check research progress for Market TAs
@@ -302,6 +304,24 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 		}
 		// Hire advert
 		else if (corp.getCorporation().funds >= corp.getHireAdVertCost(division)) corp.hireAdVert(division);
+		// If public
+		if (corp.getCorporation().public) {
+			// Sell a small amount of shares when they amount to more cash than we have on hand
+			if (corp.getCorporation().shareSaleCooldown <= 0 &&
+				corp.getCorporation().sharePrice * 1e6 > ns.getPlayer().money) corp.sellShares(1e6);
+			// Buyback shares when we can
+			else if (corp.getCorporation().issuedShares > 0) {
+				if (ns.getPlayer().money > 2 * corp.getCorporation().issuedShares * corp.getCorporation().sharePrice * 1.1) {
+					corp.buyBackShares(corp.getCorporation().issuedShares);
+				}
+			}
+			// Check if we can unlock Shady Accounting
+			if (corp.getCorporation().funds >= corp.getUnlockUpgradeCost('Shady Accounting') &&
+				!corp.hasUnlockUpgrade('Shady Accounting')) corp.unlockUpgrade('Shady Accounting');
+			// Check if we can unlock Government Partnership
+			if (corp.getCorporation().funds >= corp.getUnlockUpgradeCost('Government Partnership') &&
+				!corp.hasUnlockUpgrade('Government Partnership')) corp.unlockUpgrade('Government Partnership');
+		}
 		// Update every second
 		await ns.sleep(1000);
 	}

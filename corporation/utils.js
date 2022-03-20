@@ -193,8 +193,14 @@ export async function investmentOffer(ns, amount, round = 5) {
 	const corp = ns.corporation;
 	if (corp.getInvestmentOffer().round > round) return;
 	ns.print(`Waiting for investment offer of ${ns.nFormat(amount, '$0.000a')}`);
+	// Wait for investment
 	while (corp.getInvestmentOffer().funds < amount) {
-		await ns.sleep(1000);
+		// Pump in corp funds if we have hashes
+		if (ns.hacknet.numHashes() >= ns.hacknet.hashCost('Sell for Corporation Funds')) {
+			ns.hacknet.spendHashes('Sell for Corporation Funds');
+			amount -= 1e9;
+			await ns.sleep(10000);
+		} else await ns.sleep(1000);
 	}
 	if (corp.getInvestmentOffer().round > round) return; // In case investment offer is accepted manually
 	corp.acceptInvestmentOffer();
@@ -223,7 +229,7 @@ export async function makeProduct(ns, division, city, name, design = 0, marketin
 	if (proposedVersion > currentBestVersion) {
 		await moneyForAmount(ns, design + marketing);
 		corp.makeProduct(division, city, name, design, marketing);
-		ns.print(`Started to make a ${name} in ${division} (${city}) with ${ns.nFormat(design, '$0.000a')} for design and ${ns.nFormat(marketing, '$0.000a')} for marketing`);
+		ns.print(`Started to make ${name} in ${division} (${city}) with ${ns.nFormat(design, '$0.000a')} for design and ${ns.nFormat(marketing, '$0.000a')} for marketing`);
 	} else ns.print(`Already making/made ${name} in ${division} (${city})`);
 }
 
