@@ -47,6 +47,7 @@ export async function main(ns) {
 		const updatedReservedRamData = getDataFromPort(reservedRamPort, getDefaultReservedRamData(), false);
 		updatedReservedRamData[stanekData.host] = Math.max(0, (updatedReservedRamData[stanekData.host] ?? 0) - reservedRam);
 		reservedRamPort.tryWrite(updatedReservedRamData);
+		await ns.sleep(10000);
 	}
 }
 
