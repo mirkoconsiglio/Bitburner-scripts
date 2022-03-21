@@ -1,5 +1,5 @@
 // Requires access to the TIX API. Purchases access to the 4S Mkt Data API as soon as it can
-import {printBoth} from '/utils/utils.js';
+import {printBoth} from '/utils.js';
 
 let disableShorts = false;
 let commission = 100000; // Buy/sell commission. Expected profit must exceed this to buy anything.

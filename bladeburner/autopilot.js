@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedVariable
 
-import {getCities, promptScriptRunning} from '/utils/utils.js';
+import {getCities, promptScriptRunning} from '/utils.js';
 
 /**
  *

@@ -1,4 +1,4 @@
-import {getDataFromPort, getPorts} from '/utils/utils.js';
+import {getDataFromPort, getPorts} from '/utils.js';
 
 // noinspection JSUnusedGlobalSymbols
 /**

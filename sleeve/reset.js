@@ -1,5 +1,5 @@
 import {getDefaultSleeveData} from '/sleeve/utils.js';
-import {getPorts} from 'utils/utils.js';
+import {getPorts} from 'utils.js';
 
 /**
  *

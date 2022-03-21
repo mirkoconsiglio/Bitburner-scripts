@@ -1,4 +1,4 @@
-import {getServers, printBoth} from '/utils/utils.js';
+import {getServers, printBoth} from '/utils.js';
 
 /**
  *

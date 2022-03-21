@@ -13,7 +13,7 @@ import {
 	isUsefulHacknet,
 	isUsefulPrograms
 } from '/augmentations/utils.js';
-import {getFactions, getScripts} from '/utils/utils.js';
+import {getFactions, getScripts} from '/utils.js';
 
 /**
  *

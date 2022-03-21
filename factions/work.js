@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedVariable
 
-import {getFactions} from '/utils/utils.js';
+import {getFactions} from '/My Drive/Games/Bitburner/utils.js';
 
 /**
  *

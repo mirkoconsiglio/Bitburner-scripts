@@ -1,4 +1,4 @@
-import {getCompanies} from '/utils/utils.js';
+import {getCompanies} from '/utils.js';
 import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 /**

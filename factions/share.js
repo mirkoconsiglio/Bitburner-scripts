@@ -1,4 +1,10 @@
-import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getScripts} from '/utils/utils.js';
+import {
+	copyScriptsToAll,
+	findPlaceToRun,
+	getAccessibleServers,
+	getFreeRam,
+	getScripts
+} from '/My Drive/Games/Bitburner/utils.js';
 
 /**
  *
@@ -7,7 +13,7 @@ import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getS
  */
 export async function main(ns) {
 	await copyScriptsToAll(ns);
-	const threads = Number.MAX_VALUE;
+	const threads = Number.MAX_SAFE_INTEGER;
 	const scripts = getScripts();
 	let i = 0;
 	// noinspection InfiniteLoopJS

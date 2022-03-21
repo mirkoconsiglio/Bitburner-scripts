@@ -1,21 +1,22 @@
 // noinspection JSUnresolvedVariable
 
 import {contractor} from '/contracts/contractor.js';
-import {manageAndHack} from '/hacking/controller.js';
-import {deployDaemons} from '/hacking/deploy-daemons.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
-import {updateOverview} from '/ui/overview.js';
 import {
 	copyScriptsToAll,
+	deployBatchers,
 	enoughRam,
 	getAccessibleServers,
 	getGangs,
 	getScripts,
 	getUsefulPrograms,
+	manageAndHack,
 	printBoth,
-	promptScriptRunning
-} from '/utils/utils.js';
+	promptScriptRunning,
+	updateOverview
+} from '/utils.js';
 
+// TODO: purchase WSE account and TIX API
 /**
  *
  * @param {NS} ns
@@ -88,6 +89,7 @@ export async function main(ns) {
 			ns.exec(scripts.upgradeHomeCores, vars.host);
 			vars.upgradeCores = false;
 		}
+		// Purchase WSE account
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		const hasGangs = ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3);
@@ -218,7 +220,7 @@ export async function main(ns) {
 		// Spend Hashes
 		if (vars.haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons
-		deployDaemons(ns);
+		deployBatchers(ns);
 		// Simple hack manager
 		manageAndHack(ns);
 		// Update overview

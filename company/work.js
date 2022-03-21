@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedVariable
 
-import {getCompanies, getJobs} from '/utils/utils.js';
+import {getCompanies, getJobs} from '/My Drive/Games/Bitburner/utils.js';
 
 /**
  *

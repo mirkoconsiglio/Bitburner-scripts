@@ -34,18 +34,16 @@ export async function copyScriptsToAll(ns) {
 export function getScripts() {
 	return {
 		cortex: 'cortex.js',
-		ui: '/ui/overview.js',
-		upgradeHomeRam: '/utils/upgrade-home-ram.js',
-		upgradeHomeCores: '/utils/upgrade-home-cores.js',
-		joinFactions: '/utils/join-factions.js',
-		hack: '/hacking/hack.js',
-		grow: '/hacking/grow.js',
-		weaken: '/hacking/weaken.js',
-		daemon: '/hacking/daemon.js',
-		deployDaemons: '/hacking/deploy-daemons.js',
+		upgradeHomeRam: '/player/upgrade-home-ram.js',
+		upgradeHomeCores: '/player/upgrade-home-cores.js',
+		joinFactions: '/factions/join-factions.js',
+		hack: '/daemons/hack.js',
+		grow: '/daemons/grow.js',
+		weaken: '/daemons/weaken.js',
+		batcher: '/hacking/batcher.js',
 		backdoor: '/hacking/backdoor.js',
-		share: '/hacking/share.js',
-		utils: '/utils/utils.js',
+		share: '/daemons/share.js',
+		utils: '/utils.js',
 		gang: '/gang/manager.js',
 		corp: '/corporation/autopilot.js',
 		bladeburner: '/bladeburner/autopilot.js',
@@ -194,6 +192,127 @@ export function getJobs() {
 			charisma: true
 		}
 	};
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} minimumRam
+ */
+export function deployBatchers(ns, minimumRam = 2 ** 14) {
+	const scripts = getScripts();
+	const servers = getAccessibleServers(ns);
+	const hackables = getOptimalHackable(ns, servers);
+	// filter and sort servers according to RAM
+	const hosts = servers.filter(server => ns.getServerMaxRam(server) >= minimumRam).sort((a, b) => ns.getServerMaxRam(b) - ns.getServerMaxRam(a));
+	// Deploy daemons
+	for (let i = 0; i < Math.min(hosts.length, hackables.length); i++) {
+		if (!ns.isRunning(scripts.daemon, hosts[i], hackables[i])) {
+			ns.scriptKill(scripts.daemon, hosts[i]);
+			ns.exec(scripts.daemon, hosts[i], 1, hackables[i]);
+		}
+	}
+}
+
+/**
+ *
+ * @param {NS} ns
+ */
+export function manageAndHack(ns) {
+	const scripts = getScripts();
+	const servers = getAccessibleServers(ns);
+	const hackables = getOptimalHackable(ns, servers);
+	const [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
+	const hackstates = getHackStates(ns, servers, filteredHackables);
+	for (let target of filteredHackables) {
+		let money = ns.getServerMoneyAvailable(target);
+		let maxMoney = ns.getServerMaxMoney(target);
+		let minSec = ns.getServerMinSecurityLevel(target);
+		let sec = ns.getServerSecurityLevel(target);
+
+		let secDiff = sec - minSec;
+		if (secDiff > 0) {
+			let threads = Math.ceil(secDiff * 20) - hackstates.get(target).weaken;
+			if (threads > 0) {
+				if (!findPlaceToRun(ns, scripts.weaken, threads, freeRams, target)) {
+					return;
+				}
+			}
+		}
+
+		let moneyPercent = money / maxMoney;
+		if (moneyPercent === 0) moneyPercent = 0.1;
+		if (moneyPercent < 0.9) {
+			let threads = Math.ceil(ns.growthAnalyze(target, 1 / moneyPercent)) - hackstates.get(target).grow;
+			if (threads > 0) {
+				if (!findPlaceToRun(ns, scripts.grow, threads, freeRams, target)) {
+					return;
+				}
+			}
+		}
+
+		if (moneyPercent > 0.75 && secDiff < 50) {
+			let threads = Math.floor(ns.hackAnalyzeThreads(target, money - (0.4 * maxMoney))) - hackstates.get(target).hack;
+			if (threads > 0) {
+				if (!findPlaceToRun(ns, scripts.hack, threads, freeRams, target)) {
+					return;
+				}
+			}
+		}
+	}
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string[]} servers
+ * @param {string[]} hackables
+ * @returns {Object<number, number, number>}
+ */
+function getHackStates(ns, servers, hackables) {
+	const scripts = getScripts();
+	const hackstates = new Map();
+	for (let server of servers.values()) {
+		for (let hackable of hackables.values()) {
+			let weakenScript = ns.getRunningScript(scripts.weaken, server, hackable);
+			let growScript = ns.getRunningScript(scripts.grow, server, hackable);
+			let hackScript = ns.getRunningScript(scripts.hack, server, hackable);
+			if (hackstates.has(hackable)) {
+				hackstates.get(hackable).weaken += !weakenScript ? 0 : weakenScript.threads;
+				hackstates.get(hackable).grow += !growScript ? 0 : growScript.threads;
+				hackstates.get(hackable).hack += !hackScript ? 0 : hackScript.threads;
+			} else {
+				hackstates.set(hackable, {
+					weaken: !weakenScript ? 0 : weakenScript.threads,
+					grow: !growScript ? 0 : growScript.threads,
+					hack: !hackScript ? 0 : hackScript.threads
+				});
+			}
+		}
+	}
+	return hackstates;
+}
+
+/**
+ *
+ * @param {NS} ns
+ */
+export function updateOverview(ns) {
+	const doc = eval('document');
+	const hook0 = doc.getElementById('overview-extra-hook-0');
+	const hook1 = doc.getElementById('overview-extra-hook-1');
+	try {
+		const headers = [];
+		const values = [];
+		headers.push(`Income\u00A0`);
+		values.push(`${ns.nFormat(ns.getScriptIncome()[0], '$0.000a')}`);
+		headers.push(`Karma`);
+		values.push(`${ns.nFormat(ns.heart.break(), '0.000a')}`);
+		hook0.innerText = headers.join('\n');
+		hook1.innerText = values.join('\n');
+	} catch (err) {
+		ns.print(`ERROR: Update Skipped: ${String(err)}`);
+	}
 }
 
 /**

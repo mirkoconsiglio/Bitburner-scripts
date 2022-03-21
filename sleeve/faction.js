@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedVariable
 
-import {getFactions} from '/utils/utils.js';
+import {getFactions} from '/utils.js';
 import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 /**

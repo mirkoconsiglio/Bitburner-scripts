@@ -1,5 +1,5 @@
 import {getDefaultStanekData} from '/stanek/utils.js';
-import {getDataFromPort, getPorts} from '/utils/utils.js';
+import {getDataFromPort, getPorts} from '/utils.js';
 
 /**
  *

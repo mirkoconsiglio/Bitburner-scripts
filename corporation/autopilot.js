@@ -1,5 +1,5 @@
 // Requires WarehouseAPI and OfficeAPI
-import {getCities} from '/utils/utils.js';
+import {getCities} from '/utils.js';
 
 /**
  *

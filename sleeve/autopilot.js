@@ -9,7 +9,7 @@ import {
 	isUsefulHackingSkill
 } from '/augmentations/utils.js';
 import {getDefaultSleeveData} from '/sleeve/utils.js';
-import {getDataFromPort, getJobs, getPorts} from '/utils/utils.js';
+import {getDataFromPort, getJobs, getPorts} from '/utils.js';
 
 /**
  *

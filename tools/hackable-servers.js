@@ -1,4 +1,4 @@
-import {getAccessibleServers, getOptimalHackable, targetCost} from '/utils/utils.js';
+import {getAccessibleServers, getOptimalHackable, targetCost} from '/utils.js';
 
 /**
  *

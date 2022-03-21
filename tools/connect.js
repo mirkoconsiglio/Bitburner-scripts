@@ -1,4 +1,4 @@
-import {routeFinder} from '/utils/utils.js';
+import {routeFinder} from '/utils.js';
 
 /**
  *

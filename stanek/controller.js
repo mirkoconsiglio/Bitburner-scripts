@@ -1,5 +1,5 @@
 import {getDefaultStanekData, getPatterns, setupPattern} from '/stanek/utils.js';
-import {getDataFromPort, getDefaultReservedRamData, getManagerScripts, getPorts, getScripts} from '/utils/utils.js';
+import {getDataFromPort, getDefaultReservedRamData, getManagerScripts, getPorts, getScripts} from '/utils.js';
 
 /**
  *

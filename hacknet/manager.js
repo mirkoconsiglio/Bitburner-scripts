@@ -1,5 +1,5 @@
 // Requires formulas
-import {printBoth} from '/utils/utils.js';
+import {printBoth} from '/utils.js';
 
 /**
  *
@@ -45,7 +45,7 @@ export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 2
 	let bestUpgrade;
 	let cost;
 	let upgradedValue;
-	let worstNodeProduction = Number.MAX_VALUE; // Used to hold how productive a newly purchased node might be
+	let worstNodeProduction = Number.MAX_SAFE_INTEGER; // Used to hold how productive a newly purchased node might be
 	for (let i = 0; i < hn.numNodes(); i++) {
 		const nodeStats = hn.getNodeStats(i);
 		// When a hacknet server runs scripts, nodeStats.production lags behind what it should be for current ram usage
