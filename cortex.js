@@ -16,7 +16,6 @@ import {
 	updateOverview
 } from '/utils.js';
 
-// TODO: purchase WSE account and TIX API
 /**
  *
  * @param {NS} ns
@@ -36,6 +35,8 @@ export async function main(ns) {
 		upgradeCores: true,
 		ram: ns.getServerMaxRam('home'),
 		cores: ns.getServer('home').cpuCores,
+		wse: true,
+		tix: true,
 		gang: true,
 		corp: true,
 		bladeburner: true,
@@ -78,18 +79,33 @@ export async function main(ns) {
 			vars.upgradeCores = true;
 		}
 		// Upgrade home RAM
-		if (ns.getUpgradeHomeRamCost() <= ns.getPlayer().money && vars.upgradeRam &&
+		if (ns.getPlayer().money >= ns.getUpgradeHomeRamCost() && vars.upgradeRam &&
 			!promptScriptRunning(ns, vars.host) && ram < 2 ** 30) {
 			ns.exec(scripts.upgradeHomeRam, vars.host);
 			vars.upgradeRam = false;
 		}
 		// Upgrade home cores
-		if (ns.getUpgradeHomeCoresCost() <= ns.getPlayer().money && vars.upgradeCores &&
+		if (ns.getPlayer().money >= ns.getUpgradeHomeCoresCost() && vars.upgradeCores &&
 			!promptScriptRunning(ns, vars.host) && cores < 8) {
 			ns.exec(scripts.upgradeHomeCores, vars.host);
 			vars.upgradeCores = false;
 		}
 		// Purchase WSE account
+		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 && vars.wse &&
+			!promptScriptRunning(ns, vars.host)) {
+			if (await ns.prompt(`Purchase WSE account?`)) {
+				ns.stock.purchaseWseAccount();
+				printBoth(ns, `Purchased WSE account`);
+			} else vars.wse = false;
+		}
+		// Purchase TIX API
+		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 && vars.tix &&
+			!promptScriptRunning(ns, vars.host)) {
+			if (await ns.prompt(`Purchase TIX API?`)) {
+				ns.stock.purchaseTixApi();
+				printBoth(ns, `Purchased TIX API`);
+			} else vars.tix = false;
+		}
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		const hasGangs = ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3);
