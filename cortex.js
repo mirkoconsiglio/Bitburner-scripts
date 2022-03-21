@@ -36,14 +36,14 @@ export async function main(ns) {
 		upgradeCores: true,
 		ram: ns.getServerMaxRam('home'),
 		cores: ns.getServer('home').cpuCores,
-		gang: false,
-		corp: false,
-		bladeburner: false,
-		stock: false,
-		hacknet: false,
-		sleeve: false,
-		stanek: false,
-		backdoorWorldDaemon: false,
+		gang: true,
+		corp: true,
+		bladeburner: true,
+		stock: true,
+		hacknet: true,
+		sleeve: true,
+		stanek: true,
+		backdoorWorldDaemon: true,
 		factions: []
 	};
 	// noinspection InfiniteLoopJS
@@ -93,107 +93,109 @@ export async function main(ns) {
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		const hasGangs = ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3);
-		if (hasGangs && !ns.gang.inGang() && !vars.gang && !ns.isRunning(scripts.gang, vars.host) &&
+		if (hasGangs && !ns.gang.inGang() && vars.gang && !ns.isRunning(scripts.gang, vars.host) &&
 			!promptScriptRunning(ns, vars.host)) {
-			const gangs = getGangs().filter(g => ns.getPlayer().factions.includes(g)).push('No');
-			const gang = await ns.prompt(`Create a gang?`, {'type': select, 'choices': gangs});
+			const gangs = getGangs().filter(g => ns.getPlayer().factions.includes(g));
+			gangs.push('No');
+			const gang = await ns.prompt(`Create a gang?`, {'type': 'select', 'choices': gangs});
 			if (gang !== 'No') {
 				ns.gang.createGang(gang);
 				printBoth(ns, `Created a gang with ${gang}`);
 			} else vars.gang = false;
 		}
-		if (hasGangs && ns.gang.inGang() && !vars.gang && !ns.isRunning(scripts.gang, vars.host) &&
+		if (hasGangs && ns.gang.inGang() && vars.gang && !ns.isRunning(scripts.gang, vars.host) &&
 			enoughRam(ns, scripts.gang, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start gang manager?`)) {
 				ns.exec(scripts.gang, vars.host);
 				printBoth(ns, `Started gang manager`);
 			}
-			vars.gang = true;
+			vars.gang = false;
 		}
 		// Corp manager
 		const hasCorps = ns.getPlayer().bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3);
-		if (hasCorps && !ns.getPlayer().hasCorporation && !vars.corp && !ns.isRunning(scripts.corp, vars.host) &&
-			!promptScriptRunning(ns, vars.host)) {
-			const name = await ns.prompt(`Create a Corporation? (Leave empty if no)`);
+		if (hasCorps && !ns.getPlayer().hasCorporation && ns.getPlayer().money >= 150e9 && vars.corp
+			&& !ns.isRunning(scripts.corp, vars.host) && !promptScriptRunning(ns, vars.host)) {
+			const name = await ns.prompt(`Create a Corporation? (Leave empty if no)`, {'type': 'text'});
 			if (name !== '') {
-				ns.corporation.createCorporation(name);
+				const corp = eval('ns.corporation'); // Cheating here because using 1 TiB of RAM to start a corporation is overkill
+				corp.createCorporation(name);
 				printBoth(ns, `Started a corporation: ${name}`);
 			} else vars.corp = false;
 		}
-		if (hasCorps && ns.getPlayer().hasCorporation && !vars.corp && !ns.isRunning(scripts.corp, vars.host) &&
+		if (hasCorps && ns.getPlayer().hasCorporation && vars.corp && !ns.isRunning(scripts.corp, vars.host) &&
 			enoughRam(ns, scripts.corp, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start corp manager?`)) {
 				ns.exec(scripts.corp, vars.host);
 				printBoth(ns, `Started corp manager`);
 			}
-			vars.corp = true;
+			vars.corp = false;
 		}
 		// Bladeburner manager
 		const hasBladeburner = ns.getPlayer().bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7);
-		if (hasBladeburner && !ns.getPlayer().inBladeburner && !vars.bladeburner &&
+		if (hasBladeburner && !ns.getPlayer().inBladeburner && vars.bladeburner &&
 			!ns.isRunning(scripts.bladeburner, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Join Bladeburner Division?`)) {
 				ns.bladeburner.joinBladeburnerDivision();
 				printBoth(ns, `Joined Bladeburner Division`);
-			} else vars.bladeburner = true;
+			} else vars.bladeburner = false;
 		}
-		if (hasBladeburner && ns.getPlayer().inBladeburner && !vars.bladeburner && !ns.isRunning(scripts.bladeburner, vars.host) &&
+		if (hasBladeburner && ns.getPlayer().inBladeburner && vars.bladeburner && !ns.isRunning(scripts.bladeburner, vars.host) &&
 			enoughRam(ns, scripts.bladeburner, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Bladeburner manager?`)) {
 				ns.exec(scripts.bladeburner, vars.host);
 				printBoth(ns, `Started Bladeburner manager`);
 			}
-			vars.bladeburner = true;
+			vars.bladeburner = false;
 		}
 		// Stock market manager
-		if (ns.getPlayer().hasTixApiAccess && !vars.stock && !ns.isRunning(scripts.stock, vars.host) &&
+		if (ns.getPlayer().hasTixApiAccess && vars.stock && !ns.isRunning(scripts.stock, vars.host) &&
 			enoughRam(ns, scripts.stock, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
 				ns.exec(scripts.stock, vars.host);
 				printBoth(ns, `Started stock market manager`);
 			}
-			vars.stock = true;
+			vars.stock = false;
 		}
 		// Hacknet manager
-		if (!vars.hacknet && !ns.isRunning(scripts.hacknet, vars.host) &&
+		if (vars.hacknet && !ns.isRunning(scripts.hacknet, vars.host) &&
 			enoughRam(ns, scripts.hacknet, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Hacknet manager?`)) {
 				ns.exec(scripts.hacknet, vars.host);
 				printBoth(ns, `Started Hacknet manager`);
 			}
-			vars.hacknet = true;
+			vars.hacknet = false;
 		}
 		// Sleeve manager
 		if ((ns.getPlayer().bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10)) &&
-			!vars.sleeve && !ns.isRunning(scripts.sleeve, vars.host) &&
+			vars.sleeve && !ns.isRunning(scripts.sleeve, vars.host) &&
 			enoughRam(ns, scripts.sleeve, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
 				ns.exec(scripts.sleeve, vars.host);
 				printBoth(ns, `Started sleeve manager`);
 			}
-			vars.sleeve = true;
+			vars.sleeve = false;
 		}
 		// Stanek Manager
 		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === 1 &&
-			ns.getPlayer().money >= 2e5 && !vars.stanek && !ns.isRunning(scripts.stanek, vars.host) &&
+		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
+			ns.getPlayer().money >= 200e3 && vars.stanek && !ns.isRunning(scripts.stanek, vars.host) &&
 			!promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Accept Stanek's Gift?`)) {
 				acceptStanek(ns);
 				printBoth(ns, `Accepted Stanek's Gift`);
-			} else vars.stanek = true;
+			} else vars.stanek = false;
 		}
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== 1 &&
-			!ns.isRunning(scripts.stanek, vars.host) && !vars.stanek &&
+		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
+			!ns.isRunning(scripts.stanek, vars.host) && vars.stanek &&
 			enoughRam(ns, scripts.stanek, vars.host) && !promptScriptRunning(ns, vars.host)) {
 			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
 				ns.exec(scripts.stanek, vars.host);
 				printBoth(ns, `Started Stanek's Gift manager`);
 			}
-			vars.stanek = true;
+			vars.stanek = false;
 		}
 		// Check faction invites
-		let factions = ns.checkFactionInvitations().filter(faction => !vars.factions.includes(faction));
+		let factions = ns.checkFactionInvitations().filter(faction => vars.factions.includes(faction));
 		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, vars.host) &&
 			!promptScriptRunning(ns, vars.host)) {
 			ns.print(`Request to join ${factions}`);
@@ -205,12 +207,12 @@ export async function main(ns) {
 			if (!ns.getServer(server).backdoorInstalled &&
 				!ns.isRunning(scripts.backdoor, vars.host, server) &&
 				server !== 'home') {
-				if (server === 'w0r1d_d43m0n' && !vars.backdoorWorldDaemon) {
+				if (server === 'w0r1d_d43m0n' && vars.backdoorWorldDaemon) {
 					if (await ns.prompt(`Install backdoor on w0r1d_d43m0n and finish Bitnode?`)) {
 						ns.print(`Installing backdoor on ${server}`);
 						ns.exec(scripts.backdoor, vars.host, 1, server);
 					}
-					vars.backdoorWorldDaemon = true;
+					vars.backdoorWorldDaemon = false;
 				} else {
 					ns.print(`Installing backdoor on ${server}`);
 					ns.exec(scripts.backdoor, vars.host, 1, server);
