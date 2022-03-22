@@ -27,27 +27,25 @@ export async function main(ns) {
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
 	const scripts = getScripts();
+	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
 	// Variables
-	const vars = {
-		host: ns.getHostname(),
-		haveHacknetServers: ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9),
-		contractor: true,
-		upgradeRam: true,
-		upgradeCores: true,
-		ram: ns.getServerMaxRam('home'),
-		cores: ns.getServer('home').cpuCores,
-		wse: true,
-		tix: true,
-		gang: true,
-		corp: true,
-		bladeburner: true,
-		stock: true,
-		hacknet: true,
-		sleeve: true,
-		stanek: true,
-		backdoorWorldDaemon: true,
-		factions: []
-	};
+	let host = ns.getHostname();
+	let contractorOnline = true;
+	let upgradeRam = true;
+	let upgradeCores = true;
+	let homeRam = ns.getServerMaxRam('home');
+	let homeCores = ns.getServer('home').cpuCores;
+	let wse = true;
+	let tix = true;
+	let gang = true;
+	let corp = true;
+	let bladeburner = true;
+	let stock = true;
+	let hacknet = true;
+	let sleeve = true;
+	let stanek = true;
+	let backdoorWorldDaemon = true;
+	let factions = [];
 	// noinspection InfiniteLoopJS
 	while (true) {
 		// Heal player
@@ -56,7 +54,7 @@ export async function main(ns) {
 			ns.print(`Player hospitalized for ${ns.nFormat(cost, '$0.000a')}`);
 		}
 		// Contract solver (disables itself if any solution was incorrect)
-		if (vars.contractor) vars.contractor = contractor(ns);
+		if (contractorOnline) contractorOnline = contractor(ns);
 		// Purchase TOR
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
@@ -69,175 +67,175 @@ export async function main(ns) {
 		}
 		// Check if we want to upgrade home server
 		const homeServer = ns.getServer('home');
-		const ram = homeServer.maxRam;
-		const cores = homeServer.cpuCores;
-		if (ram > vars.ram) {
-			vars.ram = ram;
-			vars.upgradeRam = true;
+		const currentHomeRam = homeServer.maxRam;
+		const currentHomeCores = homeServer.cpuCores;
+		if (currentHomeRam > homeRam) {
+			homeRam = currentHomeRam;
+			upgradeRam = true;
 		}
-		if (cores > vars.cores) {
-			vars.cores = cores;
-			vars.upgradeCores = true;
+		if (currentHomeCores > homeCores) {
+			homeCores = currentHomeCores;
+			upgradeCores = true;
 		}
 		// Upgrade home RAM
-		if (ns.getPlayer().money >= ns.getUpgradeHomeRamCost() && vars.upgradeRam &&
-			!promptScriptRunning(ns, vars.host) && ram < 2 ** 30) {
-			ns.exec(scripts.upgradeHomeRam, vars.host);
-			vars.upgradeRam = false;
+		if (ns.getPlayer().money >= ns.getUpgradeHomeRamCost() && upgradeRam &&
+			!promptScriptRunning(ns, host) && ram < 2 ** 30) {
+			ns.exec(scripts.upgradeHomeRam, host);
+			upgradeRam = false;
 		}
 		// Upgrade home cores
-		if (ns.getPlayer().money >= ns.getUpgradeHomeCoresCost() && vars.upgradeCores &&
-			!promptScriptRunning(ns, vars.host) && cores < 8) {
-			ns.exec(scripts.upgradeHomeCores, vars.host);
-			vars.upgradeCores = false;
+		if (ns.getPlayer().money >= ns.getUpgradeHomeCoresCost() && upgradeCores &&
+			!promptScriptRunning(ns, host) && cores < 8) {
+			ns.exec(scripts.upgradeHomeCores, host);
+			upgradeCores = false;
 		}
 		// Purchase WSE account
-		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 && vars.wse &&
-			!promptScriptRunning(ns, vars.host)) {
+		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 && wse &&
+			!promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Purchase WSE account?`)) {
 				ns.stock.purchaseWseAccount();
 				printBoth(ns, `Purchased WSE account`);
-			} else vars.wse = false;
+			} else wse = false;
 		}
 		// Purchase TIX API
-		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 && vars.tix &&
-			!promptScriptRunning(ns, vars.host)) {
+		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 && tix &&
+			!promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Purchase TIX API?`)) {
 				ns.stock.purchaseTixApi();
 				printBoth(ns, `Purchased TIX API`);
-			} else vars.tix = false;
+			} else tix = false;
 		}
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		const hasGangs = ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3);
-		if (hasGangs && !ns.gang.inGang() && vars.gang && !ns.isRunning(scripts.gang, vars.host) &&
-			!promptScriptRunning(ns, vars.host)) {
+		if (hasGangs && !ns.gang.inGang() && gang && !ns.isRunning(scripts.gang, host) &&
+			!promptScriptRunning(ns, host)) {
 			const gangs = getGangs().filter(g => ns.getPlayer().factions.includes(g));
 			gangs.push('No');
-			const gang = await ns.prompt(`Create a gang?`, {'type': 'select', 'choices': gangs});
-			if (gang !== 'No') {
-				ns.gang.createGang(gang);
-				printBoth(ns, `Created a gang with ${gang}`);
-			} else vars.gang = false;
+			const gangName = await ns.prompt(`Create a gang?`, {'type': 'select', 'choices': gangs});
+			if (gangName !== 'No') {
+				ns.gang.createGang(gangName);
+				printBoth(ns, `Created a gang with ${gangName}`);
+			} else gang = false;
 		}
-		if (hasGangs && ns.gang.inGang() && vars.gang && !ns.isRunning(scripts.gang, vars.host) &&
-			enoughRam(ns, scripts.gang, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (hasGangs && ns.gang.inGang() && gang && !ns.isRunning(scripts.gang, host) &&
+			enoughRam(ns, scripts.gang, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start gang manager?`)) {
-				ns.exec(scripts.gang, vars.host);
+				ns.exec(scripts.gang, host);
 				printBoth(ns, `Started gang manager`);
 			}
-			vars.gang = false;
+			gang = false;
 		}
 		// Corp manager
 		const hasCorps = ns.getPlayer().bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3);
-		if (hasCorps && !ns.getPlayer().hasCorporation && ns.getPlayer().money >= 150e9 && vars.corp
-			&& !ns.isRunning(scripts.corp, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (hasCorps && !ns.getPlayer().hasCorporation && ns.getPlayer().money >= 150e9 && corp
+			&& !ns.isRunning(scripts.corp, host) && !promptScriptRunning(ns, host)) {
 			const name = await ns.prompt(`Create a Corporation? (Leave empty if no)`, {'type': 'text'});
 			if (name !== '') {
 				const corp = eval('ns.corporation'); // Cheating here because using 1 TiB of RAM to start a corporation is overkill
 				corp.createCorporation(name);
 				printBoth(ns, `Started a corporation: ${name}`);
-			} else vars.corp = false;
+			} else corp = false;
 		}
-		if (hasCorps && ns.getPlayer().hasCorporation && vars.corp && !ns.isRunning(scripts.corp, vars.host) &&
-			enoughRam(ns, scripts.corp, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (hasCorps && ns.getPlayer().hasCorporation && corp && !ns.isRunning(scripts.corp, host) &&
+			enoughRam(ns, scripts.corp, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start corp manager?`)) {
-				ns.exec(scripts.corp, vars.host);
+				ns.exec(scripts.corp, host);
 				printBoth(ns, `Started corp manager`);
 			}
-			vars.corp = false;
+			corp = false;
 		}
 		// Bladeburner manager
 		const hasBladeburner = ns.getPlayer().bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7);
-		if (hasBladeburner && !ns.getPlayer().inBladeburner && vars.bladeburner &&
-			!ns.isRunning(scripts.bladeburner, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (hasBladeburner && !ns.getPlayer().inBladeburner && bladeburner &&
+			!ns.isRunning(scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Join Bladeburner Division?`)) {
 				ns.bladeburner.joinBladeburnerDivision();
 				printBoth(ns, `Joined Bladeburner Division`);
-			} else vars.bladeburner = false;
+			} else bladeburner = false;
 		}
-		if (hasBladeburner && ns.getPlayer().inBladeburner && vars.bladeburner && !ns.isRunning(scripts.bladeburner, vars.host) &&
-			enoughRam(ns, scripts.bladeburner, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (hasBladeburner && ns.getPlayer().inBladeburner && bladeburner && !ns.isRunning(scripts.bladeburner, host) &&
+			enoughRam(ns, scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Bladeburner manager?`)) {
-				ns.exec(scripts.bladeburner, vars.host);
+				ns.exec(scripts.bladeburner, host);
 				printBoth(ns, `Started Bladeburner manager`);
 			}
-			vars.bladeburner = false;
+			bladeburner = false;
 		}
 		// Stock market manager
-		if (ns.getPlayer().hasTixApiAccess && vars.stock && !ns.isRunning(scripts.stock, vars.host) &&
-			enoughRam(ns, scripts.stock, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (ns.getPlayer().hasTixApiAccess && stock && !ns.isRunning(scripts.stock, host) &&
+			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
-				ns.exec(scripts.stock, vars.host);
+				ns.exec(scripts.stock, host);
 				printBoth(ns, `Started stock market manager`);
 			}
-			vars.stock = false;
+			stock = false;
 		}
 		// Hacknet manager
-		if (vars.hacknet && !ns.isRunning(scripts.hacknet, vars.host) &&
-			enoughRam(ns, scripts.hacknet, vars.host) && !promptScriptRunning(ns, vars.host)) {
+		if (hacknet && !ns.isRunning(scripts.hacknet, host) &&
+			enoughRam(ns, scripts.hacknet, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Hacknet manager?`)) {
-				ns.exec(scripts.hacknet, vars.host);
+				ns.exec(scripts.hacknet, host);
 				printBoth(ns, `Started Hacknet manager`);
 			}
-			vars.hacknet = false;
+			hacknet = false;
 		}
 		// Sleeve manager
 		if ((ns.getPlayer().bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10)) &&
-			vars.sleeve && !ns.isRunning(scripts.sleeve, vars.host) &&
-			enoughRam(ns, scripts.sleeve, vars.host) && !promptScriptRunning(ns, vars.host)) {
+			sleeve && !ns.isRunning(scripts.sleeve, host) &&
+			enoughRam(ns, scripts.sleeve, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
-				ns.exec(scripts.sleeve, vars.host);
+				ns.exec(scripts.sleeve, host);
 				printBoth(ns, `Started sleeve manager`);
 			}
-			vars.sleeve = false;
+			sleeve = false;
 		}
 		// Stanek Manager
 		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
 		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
-			ns.getPlayer().money >= 200e3 && vars.stanek && !ns.isRunning(scripts.stanek, vars.host) &&
-			!promptScriptRunning(ns, vars.host)) {
+			ns.getPlayer().money >= 200e3 && stanek && !ns.isRunning(scripts.stanek, host) &&
+			!promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Accept Stanek's Gift?`)) {
 				acceptStanek(ns);
 				printBoth(ns, `Accepted Stanek's Gift`);
-			} else vars.stanek = false;
+			} else stanek = false;
 		}
 		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
-			!ns.isRunning(scripts.stanek, vars.host) && vars.stanek &&
-			enoughRam(ns, scripts.stanek, vars.host) && !promptScriptRunning(ns, vars.host)) {
+			!ns.isRunning(scripts.stanek, host) && stanek &&
+			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
-				ns.exec(scripts.stanek, vars.host);
+				ns.exec(scripts.stanek, host);
 				printBoth(ns, `Started Stanek's Gift manager`);
 			}
-			vars.stanek = false;
+			stanek = false;
 		}
 		// Check faction invites
-		let factions = ns.checkFactionInvitations().filter(faction => vars.factions.includes(faction));
-		if (factions.length > 0 && enoughRam(ns, scripts.joinFactions, vars.host) &&
-			!promptScriptRunning(ns, vars.host)) {
-			ns.print(`Request to join ${factions}`);
-			ns.exec(scripts.joinFactions, vars.host, 1, ...factions);
-			vars.factions = vars.factions.concat(factions); // Don't ask again
+		let factionInvitations = ns.checkFactionInvitations().filter(faction => factions.includes(faction));
+		if (factionInvitations.length > 0 && enoughRam(ns, scripts.joinFactions, host) &&
+			!promptScriptRunning(ns, host)) {
+			ns.print(`Request to join ${factionInvitations}`);
+			ns.exec(scripts.joinFactions, host, 1, ...factionInvitations);
+			factions = factions.concat(factionInvitations); // Don't ask again
 		}
 		// Backdoor servers
 		for (let server of getAccessibleServers(ns)) {
 			if (!ns.getServer(server).backdoorInstalled &&
-				!ns.isRunning(scripts.backdoor, vars.host, server) &&
+				!ns.isRunning(scripts.backdoor, host, server) &&
 				server !== 'home') {
-				if (server === 'w0r1d_d43m0n' && vars.backdoorWorldDaemon) {
+				if (server === 'w0r1d_d43m0n' && backdoorWorldDaemon) {
 					if (await ns.prompt(`Install backdoor on w0r1d_d43m0n and finish Bitnode?`)) {
 						ns.print(`Installing backdoor on ${server}`);
-						ns.exec(scripts.backdoor, vars.host, 1, server);
+						ns.exec(scripts.backdoor, host, 1, server);
 					}
-					vars.backdoorWorldDaemon = false;
+					backdoorWorldDaemon = false;
 				} else {
 					ns.print(`Installing backdoor on ${server}`);
-					ns.exec(scripts.backdoor, vars.host, 1, server);
+					ns.exec(scripts.backdoor, host, 1, server);
 				}
 			}
 		}
 		// Spend Hashes
-		if (vars.haveHacknetServers) await spendHashes(ns, 'Sell for Money');
+		if (haveHacknetServers) await spendHashes(ns, 'Sell for Money');
 		// Deploy daemons
 		deployBatchers(ns);
 		// Simple hack manager
