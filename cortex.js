@@ -2,6 +2,7 @@
 
 import {contractor} from '/contracts/contractor.js';
 import {spendHashes} from '/hacknet/hash-spender.js';
+import {acceptStanek} from '/stanek/accept.js';
 import {
 	copyScriptsToAll,
 	deployBatchers,
@@ -246,14 +247,4 @@ export async function main(ns) {
 		// Update every second
 		await ns.sleep(1000);
 	}
-}
-
-/**
- *
- * @param {NS} ns
- */
-function acceptStanek(ns) {
-	ns.travelToCity('Chongqing');
-	ns.goToLocation('Church of the Machine God');
-	[...eval('document').getElementsByTagName('*')].find(e => e.innerText === 'Accept Stanek\'s Gift').click();
 }

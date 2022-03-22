@@ -57,6 +57,7 @@ stanek/save.js
 stanek/set.js
 stanek/reset-charges.js
 stanek/controller.js
+stanek/accept.js
 contracts/contractor.js
 factions/work.js
 factions/join-factions.js
