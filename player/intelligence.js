@@ -11,8 +11,7 @@ export async function main(ns) {
 		while (ns.getPlayer().money > moneyThreshold) {
 			ns.travelToCity('Aevum');
 			ns.travelToCity('Sector-12');
-			await ns.sleep(100);
+			await ns.asleep(1);
 		}
-		await ns.sleep(1000);
 	}
 }
