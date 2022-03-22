@@ -56,7 +56,5 @@ const str = files.join('\n');
 writeToFile('scripts.txt', str);
 
 const index = fs.createWriteStream('../types/index.d.ts');
-http.get('https://raw.githubusercontent.com/danielyxie/bitburner/dev/src/ScriptEditor/NetscriptDefinitions.d.ts',
-	function (response) {
-		response.pipe(index);
-	});
+const url = 'https://raw.githubusercontent.com/danielyxie/bitburner/dev/src/ScriptEditor/NetscriptDefinitions.d.ts';
+http.get(url, response => response.pipe(index));
