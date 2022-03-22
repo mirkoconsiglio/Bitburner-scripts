@@ -51,7 +51,7 @@ export function getScripts() {
 		hacknet: '/hacknet/manager.js',
 		sleeve: '/sleeve/autopilot.js',
 		stanek: '/stanek/controller.js',
-		charge: '/stanek/charge.js'
+		charge: '/daemons/charge.js'
 	};
 }
 

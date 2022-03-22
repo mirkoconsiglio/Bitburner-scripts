@@ -52,7 +52,6 @@ sleeve/reset.js
 hacknet/manager.js
 hacknet/hash-spender.js
 stanek/utils.js
-stanek/charge.js
 stanek/save.js
 stanek/set.js
 stanek/reset-charges.js
@@ -75,3 +74,4 @@ daemons/grow.js
 daemons/hack.js
 daemons/weaken.js
 daemons/share.js
+daemons/charge.js
