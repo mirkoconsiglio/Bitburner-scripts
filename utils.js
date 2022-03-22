@@ -455,14 +455,13 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
  */
 export function getFreeRam(ns, servers, hackables, occupy = false) {
 	const scripts = getScripts();
-	const port = ns.getPortHandle(getPortNumbers().reservedRam);
-	const data = getDataFromPort(port);
+	const data = readFromFile(ns, getPortNumbers().reservedRam);
 	const freeRams = [];
 	const unhackables = [];
-	for (let server of servers) {
-		if (hackables && ns.scriptRunning(scripts.daemon, server)) { // Check if we have a daemon running on this server
-			const process = ns.ps(server).find(s => s.filename === scripts.daemon); // Find the process of the daemon
-			unhackables.push(process.args[0]); // Don't hack the target of the daemon
+	for (const server of servers) {
+		if (hackables && ns.scriptRunning(scripts.batcher, server)) { // Check if we have a batcher running on this server
+			const process = ns.ps(server).find(s => s.filename === scripts.batcher); // Find the process of the batcher
+			unhackables.push(process.args[0]); // Don't hack the target of the batcher
 			if (!occupy) continue; // Check if we want to run scripts on the host
 		}
 		const freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? 0);
@@ -470,7 +469,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 	}
 	const sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
 	if (hackables) {
-		let filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
+		const filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
 		return [sortedFreeRams, filteredHackables];
 	} else return sortedFreeRams;
 }
