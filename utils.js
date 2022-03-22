@@ -716,6 +716,18 @@ export function defaultPortData(portNumber) {
 /**
  *
  * @param {NS} ns
+ * @returns {Promise<void>}
+ */
+export async function initData(ns) {
+	for (let i = 1; i <= 20; i++) {
+		const data = readFromFile(ns, i);
+		await writeToFile(ns, getFileHandle(i), data);
+	}
+}
+
+/**
+ *
+ * @param {NS} ns
  * @param {number} portNumber
  * @param {boolean} write
  * @param {boolean} clear

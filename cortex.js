@@ -11,6 +11,7 @@ import {
 	getGangs,
 	getScripts,
 	getUsefulPrograms,
+	initData,
 	manageAndHack,
 	printBoth,
 	promptScriptRunning,
@@ -26,6 +27,9 @@ export async function main(ns) {
 	ns.disableLog('ALL');
 	// Copy necessary scripts to all servers
 	await copyScriptsToAll(ns);
+	// Initialise data
+	await initData(ns);
+	// Constants
 	const scripts = getScripts();
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
 	// Variables
