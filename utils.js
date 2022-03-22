@@ -770,7 +770,7 @@ async function writeToFile(ns, handle, data, mode = 'w') {
  * @param {string} mode
  * @returns {Object<*>}
  */
-export async function readFromFile(ns, portNumber) {
+export function readFromFile(ns, portNumber) {
 	const data = ns.read(getFileHandle(portNumber));
 	return data ? JSON.parse(data) : defaultPortData(portNumber);
 }
@@ -784,7 +784,7 @@ export async function readFromFile(ns, portNumber) {
  * @returns {Promise<void>}
  */
 export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
-	const data = await getDataFromFile(ns, portNumber, false);
+	const data = readFromFile(ns, portNumber);
 	for (const [key, val] of Object.entries(dataToModify)) data[key] = val;
 	await writeToFile(ns, getFileHandle(portNumber), data, mode);
 }
