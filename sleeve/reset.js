@@ -1,5 +1,4 @@
-import {getDefaultSleeveData} from '/sleeve/utils.js';
-import {getPorts} from 'utils.js';
+import {defaultPortData, getPortNumbers, modifyFile} from '/utils.js';
 
 /**
  *
@@ -7,7 +6,6 @@ import {getPorts} from 'utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const port = ns.getPortHandle(getPorts().sleeve);
-	port.clear();
-	port.write(getDefaultSleeveData());
+	const portNumber = getPortNumbers().sleeve;
+	await modifyFile(ns, portNumber, defaultPortData(portNumber));
 }

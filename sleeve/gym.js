@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedVariable
 
-import {disableSleeveAutopilot} from 'sleeve/utils.js';
+import {disableSleeveAutopilot} from '/sleeve/utils.js';
 
 /**
  *
@@ -9,7 +9,7 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
  */
 export async function main(ns) {
 	const args = ns.flags([
-		['sleeve', -1],
+		['sleeve', undefined],
 		['str', false],
 		['def', false],
 		['dex', false],
@@ -35,11 +35,11 @@ export async function main(ns) {
 	if (args.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			if (city) ns.sleeve.travel(i, city);
-			disableSleeveAutopilot(ns, i);
+			await disableSleeveAutopilot(ns, i);
 			ns.sleeve.setToGymWorkout(i, args.gym, stat);
 		}
 	} else {
-		disableSleeveAutopilot(ns, args.sleeve);
+		await disableSleeveAutopilot(ns, args.sleeve);
 		ns.sleeve.setToGymWorkout(args.sleeve, args.gym, stat);
 	}
 }

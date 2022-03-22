@@ -1,7 +1,7 @@
 // noinspection JSUnresolvedVariable
 
+import {disableSleeveAutopilot} from '/sleeve/utils.js';
 import {getFactions} from '/utils.js';
-import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 /**
  *
@@ -10,13 +10,13 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
  */
 export async function main(ns) {
 	const args = ns.flags([
-		['sleeve', -1],
-		['faction', ''],
+		['sleeve', undefined],
+		['faction', undefined],
 		['hacking', false],
 		['field', false],
 		['security', false]
 	]);
-	if (args.sleeve === -1) throw new Error(`Need to specify --sleeve number`);
+	if (!args.sleeve) throw new Error(`Need to specify --sleeve number`);
 	if (!args.faction) throw new Error(`Need to specify --faction`);
 
 	let workType;
@@ -31,6 +31,6 @@ export async function main(ns) {
 		return;
 	}
 
-	disableSleeveAutopilot(ns, sleeveNumber);
+	await disableSleeveAutopilot(ns, sleeveNumber);
 	ns.sleeve.setToFactionWork(sleeveNumber, foundFaction, workType);
 }

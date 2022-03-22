@@ -52,7 +52,7 @@ export function getScripts() {
 		sleeve: '/sleeve/autopilot.js',
 		stanek: '/stanek/controller.js',
 		charge: '/stanek/charge.js'
-	}
+	};
 }
 
 /**
@@ -205,11 +205,11 @@ export function deployBatchers(ns, minimumRam = 2 ** 14) {
 	const hackables = getOptimalHackable(ns, servers);
 	// filter and sort servers according to RAM
 	const hosts = servers.filter(server => ns.getServerMaxRam(server) >= minimumRam).sort((a, b) => ns.getServerMaxRam(b) - ns.getServerMaxRam(a));
-	// Deploy daemons
+	// Deploy batchers
 	for (let i = 0; i < Math.min(hosts.length, hackables.length); i++) {
-		if (!ns.isRunning(scripts.daemon, hosts[i], hackables[i])) {
-			ns.scriptKill(scripts.daemon, hosts[i]);
-			ns.exec(scripts.daemon, hosts[i], 1, hackables[i]);
+		if (!ns.isRunning(scripts.batcher, hosts[i], hackables[i])) {
+			ns.scriptKill(scripts.batcher, hosts[i]);
+			ns.exec(scripts.batcher, hosts[i], 1, hackables[i]);
 		}
 	}
 }
@@ -455,8 +455,8 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
  */
 export function getFreeRam(ns, servers, hackables, occupy = false) {
 	const scripts = getScripts();
-	const port = ns.getPortHandle(getPorts().reservedRam);
-	const data = getDataFromPort(port, getDefaultReservedRamData());
+	const port = ns.getPortHandle(getPortNumbers().reservedRam);
+	const data = getDataFromPort(port);
 	const freeRams = [];
 	const unhackables = [];
 	for (let server of servers) {
@@ -473,12 +473,6 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 		let filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
 		return [sortedFreeRams, filteredHackables];
 	} else return sortedFreeRams;
-}
-
-export function getDefaultReservedRamData() {
-	return {
-		home: 128
-	};
 }
 
 /**
@@ -648,7 +642,7 @@ export function enoughRam(ns, script, server = ns.getHostname()) {
  *
  * @returns {Object<number>}
  */
-export function getPorts() {
+export function getPortNumbers() {
 	return {
 		reservedRam: 1,
 		gang: 2,
@@ -665,17 +659,121 @@ export function getPorts() {
 
 /**
  *
- * @param {NetscriptPort} port
- * @param {*} defaultData
+ * @param {number} portNumber
+ * @returns {Object<*>}
+ */
+export function defaultPortData(portNumber) {
+	switch (portNumber) {
+		case 1:
+			return {home: 128};
+		case 2:
+			return undefined;
+		case 3:
+			return undefined;
+		case 4:
+			return undefined;
+		case 5:
+			return undefined;
+		case 6:
+			return undefined;
+		case 7:
+			return undefined;
+		case 8:
+			return undefined;
+		case 9:
+			return undefined;
+		case 10:
+			return Object.fromEntries(Array.from({length: 8}, (_, i) => [i, true]));
+		case 11:
+			return undefined;
+		case 12:
+			return undefined;
+		case 13:
+			return {
+				pattern: 'starter',
+				maxCharges: 100,
+				host: 'home',
+				reservedRam: 0
+			};
+		case 14:
+			return undefined;
+		case 15:
+			return undefined;
+		case 16:
+			return undefined;
+		case 17:
+			return undefined;
+		case 18:
+			return undefined;
+		case 19:
+			return undefined;
+		case 20:
+			return undefined;
+		default:
+			throw new Error(`Trying to use an invalid port: ${portNumber}. Only ports 1-20 are valid.`);
+	}
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} portNumber
  * @param {boolean} write
  * @param {boolean} clear
- * @returns {*}
+ * @returns {Object<*>}
  */
-export function getDataFromPort(port, defaultData = null, write = true, clear = true) {
-	const data = port.empty() ? defaultData : port.read();
+export function getDataFromPort(ns, portNumber, write = true, clear = true) {
+	const port = ns.getPortHandle(portNumber);
+	const data = port.empty() ? defaultPortData(portNumber) : port.read();
 	if (clear) port.clear();
-	if (write) port.tryWrite(data);
+	if (write) port.write(data);
 	return data;
 }
 
-// TODO: Save port data to text file
+/**
+ *
+ * @param {number} portNumber
+ * @returns {string}
+ */
+export function getFileHandle(portNumber) {
+	return `/data/${portNumber}.txt`;
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} handle
+ * @param {*} data
+ * @param {string} mode
+ */
+async function writeToFile(ns, handle, data, mode = 'w') {
+	if (typeof data !== 'string') data = JSON.stringify(data);
+	await ns.write(handle, data, mode);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} portNumber
+ * @param {boolean} saveToFile
+ * @param {string} mode
+ * @returns {Object<*>}
+ */
+export async function readFromFile(ns, portNumber) {
+	const data = ns.read(getFileHandle(portNumber));
+	return data ? JSON.parse(data) : defaultPortData(portNumber);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} portNumber
+ * @param {Object<*>} data
+ * @param {string} mode
+ * @returns {Promise<void>}
+ */
+export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
+	const data = await getDataFromFile(ns, portNumber, false);
+	for (const [key, val] of Object.entries(dataToModify)) data[key] = val;
+	await writeToFile(ns, getFileHandle(portNumber), data, mode);
+}

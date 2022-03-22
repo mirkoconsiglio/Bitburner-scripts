@@ -1,7 +1,6 @@
 // noinspection JSUnresolvedVariable
-// noinspection JSUnresolvedVariable
 
-import {disableSleeveAutopilot} from 'sleeve/utils.js';
+import {disableSleeveAutopilot} from '/sleeve/utils.js';
 
 /**
  *
@@ -10,12 +9,12 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
  */
 export async function main(ns) {
 	const args = ns.flags([
-		['sleeve', -1],
+		['sleeve', undefined],
 		['university', 'ZB Institute of Technology'],
 		['course', 'Leadership'],
 		['all', false]
 	]);
-	if (!args.all && args.sleeve === -1) throw new Error(`Need to specify --sleeve number or --all`);
+	if (!args.all && !args.sleeve) throw new Error(`Need to specify --sleeve number or --all`);
 
 	let city;
 	if (args.university === 'Summit University') city = 'Aevum';
@@ -26,11 +25,11 @@ export async function main(ns) {
 	if (args.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			if (city) ns.sleeve.travel(i, city);
-			disableSleeveAutopilot(ns, i);
+			await disableSleeveAutopilot(ns, i);
 			ns.sleeve.setToUniversityCourse(i, args.university, args.course);
 		}
 	} else {
-		disableSleeveAutopilot(ns, args.sleeve);
+		await disableSleeveAutopilot(ns, args.sleeve);
 		ns.sleeve.setToUniversityCourse(args.sleeve, args.university, args.course);
 	}
 }

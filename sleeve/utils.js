@@ -1,16 +1,12 @@
-import {getDataFromPort, getPorts} from '/utils.js';
+import {getPortNumbers, modifyFile} from '/utils.js';
 
-// noinspection JSUnusedGlobalSymbols
 /**
  *
  * @param {NS} ns
  * @param {number} sleeveNumber
  */
-export function enableSleeveAutopilot(ns, sleeveNumber) {
-	const port = ns.getPortHandle(getPorts().sleeve);
-	const data = getDataFromPort(port, getDefaultSleeveData(ns), false);
-	data[sleeveNumber] = true;
-	port.tryWrite(data);
+export async function enableSleeveAutopilot(ns, sleeveNumber) {
+	await modifyFile(ns, getPortNumbers().sleeve, {[sleeveNumber]: true});
 }
 
 /**
@@ -18,18 +14,6 @@ export function enableSleeveAutopilot(ns, sleeveNumber) {
  * @param {NS} ns
  * @param {number} sleeveNumber
  */
-export function disableSleeveAutopilot(ns, sleeveNumber) {
-	const port = ns.getPortHandle(getPorts().sleeve);
-	const data = getDataFromPort(port, getDefaultSleeveData(ns), false);
-	data[sleeveNumber] = false;
-	port.tryWrite(data);
-}
-
-/**
- *
- * @param {NS} ns
- * @returns {boolean[]}
- */
-export function getDefaultSleeveData(ns) {
-	return Array.from({length: ns.sleeve.getNumSleeves()}, _ => true);
+export async function disableSleeveAutopilot(ns, sleeveNumber) {
+	await modifyFile(ns, getPortNumbers().sleeve, {[sleeveNumber]: false});
 }

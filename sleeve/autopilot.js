@@ -8,8 +8,7 @@ import {
 	isUsefulFaction,
 	isUsefulHackingSkill
 } from '/augmentations/utils.js';
-import {getDefaultSleeveData} from '/sleeve/utils.js';
-import {getDataFromPort, getJobs, getPorts} from '/utils.js';
+import {getJobs, getPortNumbers, readFromFile} from '/utils.js';
 
 /**
  *
@@ -18,7 +17,6 @@ import {getDataFromPort, getJobs, getPorts} from '/utils.js';
  */
 export async function main(ns) {
 	ns.disableLog('ALL');
-	const port = ns.getPortHandle(getPorts().sleeve);
 	const works = ['security', 'field', 'hacking'];
 	const jobs = getJobs();
 	const numSleeves = ns.sleeve.getNumSleeves();
@@ -30,18 +28,18 @@ export async function main(ns) {
 	while (true) {
 		ns.clearLog();
 		const player = ns.getPlayer();
-		const data = getDataFromPort(port, getDefaultSleeveData(ns));
+		const data = readFromFile(ns, getPortNumbers().sleeve);
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			// Check for useful augmentations
-			const criterions = [isUsefulCrime];
-			if (usefulCombat[i]) criterions.push(isUsefulCombat);
-			if (usefulHacking[i]) criterions.push(isUsefulHackingSkill);
-			if (usefulFaction[i]) criterions.push(isUsefulFaction);
-			if (usefulCompany[i]) criterions.push(isUsefulCompany);
+			const criteria = [isUsefulCrime];
+			if (usefulCombat[i]) criteria.push(isUsefulCombat);
+			if (usefulHacking[i]) criteria.push(isUsefulHackingSkill);
+			if (usefulFaction[i]) criteria.push(isUsefulFaction);
+			if (usefulCompany[i]) criteria.push(isUsefulCompany);
 			// Check for augmentation purchases
 			const augmentations = ns.sleeve.getSleevePurchasableAugs(i);
 			for (let aug of augmentations) {
-				if (isUseful(ns, criterions, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost &&
+				if (isUseful(ns, criteria, aug.name) && ns.getServerMoneyAvailable('home') >= aug.cost &&
 					ns.sleeve.getSleeveStats(i).shock === 0) ns.sleeve.purchaseSleeveAug(i, aug.name);
 			}
 			// Assign tasks

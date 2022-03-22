@@ -1,5 +1,5 @@
+import {disableSleeveAutopilot} from '/sleeve/utils.js';
 import {getCompanies} from '/utils.js';
-import {disableSleeveAutopilot} from 'sleeve/utils.js';
 
 /**
  *
@@ -8,11 +8,11 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
  */
 export async function main(ns) {
 	const args = ns.flags([
-		['sleeve', -1],
-		['company', '']
+		['sleeve', undefined],
+		['company', undefined]
 	]);
-	if (!args.sleeve) throw new Error(`Need to specify --sleeve number`);
-	if (!args.company) throw new Error(`Need to specify --company`);
+	if (!args.sleeve) throw new Error(`Need to specify --sleeve "number"`);
+	if (!args.company) throw new Error(`Need to specify --company "name"`);
 
 	const foundCompany = getCompanies().find(c => c.toLowerCase() === args.company.toLowerCase());
 	if (!foundCompany) {
@@ -20,6 +20,6 @@ export async function main(ns) {
 		return;
 	}
 
-	disableSleeveAutopilot(ns, args.sleeve);
+	await disableSleeveAutopilot(ns, args.sleeve);
 	ns.sleeve.setToCompanyWork(args.sleeve, foundCompany);
 }

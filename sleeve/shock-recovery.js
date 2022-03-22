@@ -1,4 +1,4 @@
-import {disableSleeveAutopilot} from 'sleeve/utils.js';
+import {disableSleeveAutopilot} from '/sleeve/utils.js';
 
 /**
  *
@@ -7,18 +7,18 @@ import {disableSleeveAutopilot} from 'sleeve/utils.js';
  */
 export async function main(ns) {
 	const args = ns.flags([
-		['sleeve', -1],
+		['sleeve', undefined],
 		['all', false]
 	]);
-	if (!args.all && args.sleeve === -1) throw new Error(`Need to specify a sleeve number or --all`);
+	if (!args.all && !args.sleeve) throw new Error(`Need to specify a sleeve number or --all`);
 
 	if (args.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
-			disableSleeveAutopilot(ns, i);
+			await disableSleeveAutopilot(ns, i);
 			ns.sleeve.setToShockRecovery(i);
 		}
 	} else {
-		disableSleeveAutopilot(ns, args.sleeve);
+		await disableSleeveAutopilot(ns, args.sleeve);
 		ns.sleeve.setToShockRecovery(args.sleeve);
 	}
 }

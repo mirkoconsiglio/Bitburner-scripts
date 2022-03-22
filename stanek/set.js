@@ -1,5 +1,4 @@
-import {getDefaultStanekData} from '/stanek/utils.js';
-import {getDataFromPort, getPorts} from '/utils.js';
+import {getPortNumbers, modifyFile} from '/utils.js';
 
 /**
  *
@@ -13,11 +12,10 @@ export async function main(ns) {
 		['host', undefined],
 		['reservedRam', undefined]
 	]);
-	const port = ns.getPortHandle(getPorts().stanek);
-	const data = getDataFromPort(port, getDefaultStanekData(), false);
-	if (args.pattern) data.pattern = args.pattern;
-	if (args.maxCharges) data.maxCharges = args.maxCharges;
-	if (args.host) data.host = args.host;
-	if (args.reservedRam) data.reservedRam = args.reservedRam;
-	port.tryWrite(data);
+	const dataToModify = {};
+	if (args.pattern) dataToModify.pattern = args.pattern;
+	if (args.maxCharges) dataToModify.maxCharges = args.maxCharges;
+	if (args.host) dataToModify.host = args.host;
+	if (args.reservedRam) dataToModify.reservedRam = args.reservedRam;
+	await modifyFile(ns, getPortNumbers().stanek, dataToModify);
 }
