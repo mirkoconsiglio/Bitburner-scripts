@@ -69,7 +69,8 @@ export function getManagerScripts() {
 		scripts.stock,
 		scripts.hacknet,
 		scripts.sleeve,
-		scripts.stanek
+		scripts.stanek,
+		scripts.batcher
 	];
 }
 
@@ -598,9 +599,7 @@ export function getUsefulPrograms() {
  * @returns {boolean}
  */
 export function promptScriptRunning(ns, server) {
-	for (let script of getPromptScripts()) {
-		if (ns.scriptRunning(script, server)) return true;
-	}
+	for (const script of getPromptScripts()) if (ns.scriptRunning(script, server)) return true;
 	return false;
 }
 
@@ -616,13 +615,6 @@ function getPromptScripts() {
 		'/augmentations/install-augmentations.js',
 		'/augmentations/purchase-augmentations.js',
 		'/build/script-remover.js',
-		'/sleeve/company.js',
-		'/sleeve/crime.js',
-		'/sleeve/faction.js',
-		'/sleeve/gym.js',
-		'/sleeve/shock-recovery.js',
-		'/sleeve/synchronize.js',
-		'/sleeve/university.js'
 	];
 }
 
