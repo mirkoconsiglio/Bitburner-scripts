@@ -682,9 +682,7 @@ export function defaultPortData(portNumber) {
 		case 13:
 			return {
 				pattern: 'starter',
-				maxCharges: 100,
-				host: 'home',
-				reservedRam: 0
+				maxCharges: 100
 			};
 		case 14:
 			return undefined;
