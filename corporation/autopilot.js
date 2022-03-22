@@ -243,7 +243,8 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 		let researchCost = 0;
 		if (!corp.hasResearched(division, upgrades.market1)) researchCost += corp.getResearchCost(division, upgrades.market1);
 		if (!corp.hasResearched(division, upgrades.market2)) researchCost += corp.getResearchCost(division, upgrades.market2);
-		if (researchCost > 0 && corp.getDivision(division).research - researchCost >= minResearch) {
+		if (corp.hasResearched(division, upgrades.lab) && researchCost > 0 &&
+			corp.getDivision(division).research - researchCost >= minResearch) {
 			if (!corp.hasResearched(division, upgrades.market1)) corp.research(division, upgrades.market1);
 			if (!corp.hasResearched(division, upgrades.market2)) {
 				corp.research(division, upgrades.market2);
@@ -253,18 +254,18 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			}
 		}
 		// Check research progress for Fulcrum
-		if (!corp.hasResearched(division, upgrades.fulcrum) &&
+		if (corp.hasResearched(division, upgrades.market2) && !corp.hasResearched(division, upgrades.fulcrum) &&
 			corp.getDivision(division).research - corp.getResearchCost(division, upgrades.fulcrum) >= minResearch) {
 			corp.research(division, upgrades.fulcrum);
 		}
 		// Check research progress for Capacity I
-		if (!corp.hasResearched(division, upgrades.capacity1) &&
+		if (corp.hasResearched(division, upgrades.fulcrum) && !corp.hasResearched(division, upgrades.capacity1) &&
 			corp.getDivision(division).research - corp.getResearchCost(division, upgrades.capacity1) >= minResearch) {
 			corp.research(division, upgrades.capacity1);
 			maxProducts++;
 		}
 		// Check research progress for Capacity II
-		if (!corp.hasResearched(division, upgrades.capacity2) &&
+		if (corp.hasResearched(division, upgrades.capacity1) && !corp.hasResearched(division, upgrades.capacity2) &&
 			corp.getDivision(division).research - corp.getResearchCost(division, upgrades.capacity2) >= minResearch) {
 			corp.research(division, upgrades.capacity2);
 			maxProducts++;
@@ -676,7 +677,7 @@ export async function unlockUpgrade(ns, upgrade) {
 /**
  * Function to return important upgrades
  *
- * @returns {{market1: string, market2: string, capacity2: string, fulcrum: string, capacity1: string, lab: string}}
+ * @returns {Object<string>}
  */
 export function getUpgrades() {
 	return {
