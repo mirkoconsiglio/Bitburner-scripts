@@ -22,14 +22,12 @@ export function getCities() {
  * @returns {Promise<void>}
  */
 export async function copyScriptsToAll(ns) {
-	for (let server of getServers(ns)) {
-		if (server !== 'home') await ns.scp(scriptsToCopy(), 'home', server);
-	}
+	for (let server of getServers(ns)) if (server !== 'home') await ns.scp(scriptsToCopy(), 'home', server);
 }
 
 /**
  *
- * @returns {Object<string[]>}
+ * @returns {Object<string>}
  */
 export function getScripts() {
 	return {
@@ -43,7 +41,7 @@ export function getScripts() {
 		batcher: '/hacking/batcher.js',
 		backdoor: '/hacking/backdoor.js',
 		share: '/daemons/share.js',
-		utils: '/utils.js',
+		utils: 'utils.js',
 		gang: '/gang/manager.js',
 		corp: '/corporation/autopilot.js',
 		bladeburner: '/bladeburner/autopilot.js',
@@ -107,12 +105,12 @@ export function getFactions() {
 export function getCompanies() {
 	return [
 		'ECorp', 'MegaCorp', 'Bachman and Associates', 'Blade Industries', 'NWO',
-		'Clarke Incorporated', 'OmniTek Incorporated', 'Four Sigma', 'KuaiGong International', 'Fulcrum Technologies',
-		'Storm Technologies', 'DefComm', 'Helios Labs', 'VitaLife', 'Icarus Microsystems',
-		'Universal Energy', 'Galactic Cybersystems', 'AeroCorp', 'Omnia Cybersystems',
-		'Solaris Space Systems', 'DeltaOne', 'Global Pharmaceuticals', 'Nova Medical',
-		'CIA', 'NSA', 'Watchdog Security', 'LexoCorp', 'Rho Construction', 'Alpha Enterprises',
-		'Aevum Police', 'SysCore Securities', 'CompuTek', 'NetLink Technologies',
+		'Clarke Incorporated', 'OmniTek Incorporated', 'Four Sigma', 'KuaiGong International',
+		'Fulcrum Technologies', 'Storm Technologies', 'DefComm', 'Helios Labs', 'VitaLife',
+		'Icarus Microsystems', 'Universal Energy', 'Galactic Cybersystems', 'AeroCorp',
+		'Omnia Cybersystems', 'Solaris Space Systems', 'DeltaOne', 'Global Pharmaceuticals',
+		'Nova Medical', 'CIA', 'NSA', 'Watchdog Security', 'LexoCorp', 'Rho Construction',
+		'Alpha Enterprises', 'Aevum Police', 'SysCore Securities', 'CompuTek', 'NetLink Technologies',
 		'Carmichael Security', 'FoodNStuff', 'JoesGuns', 'Ishima Omega Software', 'Noodle Bar'
 	];
 }
@@ -225,40 +223,25 @@ export function manageAndHack(ns) {
 	const hackables = getOptimalHackable(ns, servers);
 	const [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
 	const hackstates = getHackStates(ns, servers, filteredHackables);
-	for (let target of filteredHackables) {
-		let money = ns.getServerMoneyAvailable(target);
-		let maxMoney = ns.getServerMaxMoney(target);
-		let minSec = ns.getServerMinSecurityLevel(target);
-		let sec = ns.getServerSecurityLevel(target);
-
-		let secDiff = sec - minSec;
+	for (const target of filteredHackables) {
+		const money = ns.getServerMoneyAvailable(target);
+		const maxMoney = ns.getServerMaxMoney(target);
+		const minSec = ns.getServerMinSecurityLevel(target);
+		const sec = ns.getServerSecurityLevel(target);
+		const secDiff = sec - minSec;
 		if (secDiff > 0) {
-			let threads = Math.ceil(secDiff * 20) - hackstates.get(target).weaken;
-			if (threads > 0) {
-				if (!findPlaceToRun(ns, scripts.weaken, threads, freeRams, target)) {
-					return;
-				}
-			}
+			const threads = Math.ceil(secDiff * 20) - hackstates.get(target).weaken;
+			if (threads > 0 && !findPlaceToRun(ns, scripts.weaken, threads, freeRams, target)) return;
 		}
-
 		let moneyPercent = money / maxMoney;
 		if (moneyPercent === 0) moneyPercent = 0.1;
 		if (moneyPercent < 0.9) {
-			let threads = Math.ceil(ns.growthAnalyze(target, 1 / moneyPercent)) - hackstates.get(target).grow;
-			if (threads > 0) {
-				if (!findPlaceToRun(ns, scripts.grow, threads, freeRams, target)) {
-					return;
-				}
-			}
+			const threads = Math.ceil(ns.growthAnalyze(target, 1 / moneyPercent)) - hackstates.get(target).grow;
+			if (threads > 0 && !findPlaceToRun(ns, scripts.grow, threads, freeRams, target)) return;
 		}
-
 		if (moneyPercent > 0.75 && secDiff < 50) {
 			let threads = Math.floor(ns.hackAnalyzeThreads(target, money - (0.4 * maxMoney))) - hackstates.get(target).hack;
-			if (threads > 0) {
-				if (!findPlaceToRun(ns, scripts.hack, threads, freeRams, target)) {
-					return;
-				}
-			}
+			if (threads > 0 && !findPlaceToRun(ns, scripts.hack, threads, freeRams, target)) return;
 		}
 	}
 }
@@ -466,7 +449,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 			if (!occupy) continue; // Check if we want to run scripts on the host
 		}
 		const freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? 0);
-		if (freeRam >= 1.6) freeRams.push({host: server, freeRam: freeRam});
+		if (freeRam > 0) freeRams.push({host: server, freeRam: freeRam});
 	}
 	const sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
 	if (hackables) {
@@ -608,13 +591,14 @@ export function promptScriptRunning(ns, server) {
  * @returns {string[]}
  */
 function getPromptScripts() {
+	const scripts = getScripts();
 	return [
-		'/utils/join-factions.js',
-		'/utils/upgrade-home-ram.js',
-		'/utils/upgrade-home-cores.js',
+		scripts.joinFactions,
+		scripts.upgradeHomeRam,
+		scripts.upgradeHomeCores,
 		'/augmentations/install-augmentations.js',
 		'/augmentations/purchase-augmentations.js',
-		'/build/script-remover.js',
+		'/build/script-remover.js'
 	];
 }
 
