@@ -38,6 +38,8 @@ export function getScripts() {
 		hack: '/daemons/hack.js',
 		grow: '/daemons/grow.js',
 		weaken: '/daemons/weaken.js',
+		charge: '/daemons/charge.js',
+		intelligence: '/daemons/intelligence.js',
 		batcher: '/hacking/batcher.js',
 		backdoor: '/hacking/backdoor.js',
 		share: '/daemons/share.js',
@@ -49,7 +51,6 @@ export function getScripts() {
 		hacknet: '/hacknet/manager.js',
 		sleeve: '/sleeve/autopilot.js',
 		stanek: '/stanek/controller.js',
-		charge: '/daemons/charge.js'
 	};
 }
 

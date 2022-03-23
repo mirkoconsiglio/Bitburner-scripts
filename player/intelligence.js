@@ -1,17 +1,16 @@
+import {getScripts} from 'utils.js';
+
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const moneyThreshold = 1e9;
-	// noinspection InfiniteLoopJS
-	while (true) {
-		ns.tail();
-		while (ns.getPlayer().money > moneyThreshold) {
-			ns.travelToCity('Aevum');
-			ns.travelToCity('Sector-12');
-			await ns.asleep(1);
-		}
-	}
+	const args = ns.flags([
+		[moneyThreshold, 1e9],
+		[threads, 1],
+		[host, ns.getHostname()]
+	]);
+	const scripts = getScripts();
+	for (let i = 0; i < args.threads; i++) ns.exec(scripts.intelligence, args.host, 1, args.moneyThreshold, i);
 }
