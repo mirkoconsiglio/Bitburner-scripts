@@ -88,10 +88,16 @@ export async function main(ns) {
 	let myStocks = [];
 	let allStocks = [];
 
-	if (!ns.getPlayer().hasTixApiAccess) // You cannot use the autopilot until you have API access
+	if (!ns.getPlayer().hasTixApiAccess) { // You cannot use the autopilot until you have API access
 		return printBoth(ns, `ERROR: You have to buy WSE account and TIX API access before you can run this script`);
+	}
 
-	if (!disableShorts && ns.getPlayer().bitNodeN !== 8 && ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl < 2)) {
+	if (options.l || options.liquidate) { // If given the "liquidate" command, try to kill the version of ourselves trading in stocks
+		ns.ps().filter(p => p.filename === ns.getScriptName() && !p.args.includes('--l') &&
+			!p.args.includes('--liquidate')).forEach(p => ns.kill(p.pid));
+	}
+
+	if (!disableShorts && ns.getPlayer().bitNodeN !== 8 && !ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
 		ns.print(`INFO: Shorting stocks has been disabled (you have not yet unlocked access to shorting)`);
 		disableShorts = true;
 	}
