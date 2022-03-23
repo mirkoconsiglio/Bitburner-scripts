@@ -1,4 +1,4 @@
-import {getScripts} from 'utils.js';
+import {getScripts} from '/utils.js';
 
 /**
  *
@@ -7,10 +7,13 @@ import {getScripts} from 'utils.js';
  */
 export async function main(ns) {
 	const args = ns.flags([
-		[moneyThreshold, 1e9],
-		[threads, 1],
-		[host, ns.getHostname()]
+		['moneyThreshold', 1e9],
+		['threads', 1],
+		['host', ns.getHostname()]
 	]);
-	const scripts = getScripts();
-	for (let i = 0; i < args.threads; i++) ns.exec(scripts.intelligence, args.host, 1, args.moneyThreshold, i);
+	const moneyThreshold = args.moneyThreshold;
+	const threads = args.threads;
+	const host = args.host;
+	const script = getScripts().intelligence;
+	for (let i = 0; i < threads; i++) ns.exec(script, host, 1, moneyThreshold, i);
 }
