@@ -83,13 +83,13 @@ export async function main(ns) {
 		}
 		// Upgrade home RAM
 		if (ns.getPlayer().money >= ns.getUpgradeHomeRamCost() && upgradeRam &&
-			!promptScriptRunning(ns, host) && ram < 2 ** 30) {
+			!promptScriptRunning(ns, host) && homeRam < 2 ** 30) {
 			ns.exec(scripts.upgradeHomeRam, host);
 			upgradeRam = false;
 		}
 		// Upgrade home cores
 		if (ns.getPlayer().money >= ns.getUpgradeHomeCoresCost() && upgradeCores &&
-			!promptScriptRunning(ns, host) && cores < 8) {
+			!promptScriptRunning(ns, host) && homeCores < 8) {
 			ns.exec(scripts.upgradeHomeCores, host);
 			upgradeCores = false;
 		}
