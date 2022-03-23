@@ -203,7 +203,7 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
  *
  * @param {NS} ns
  * @param {string[]} cities
- * @param {Object<string, string>} jobs
+ * @param {Object<string>} jobs
  * @param {string} division
  * @param {string} mainCity
  * @returns {Promise<void>}
@@ -213,10 +213,10 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 	const upgrades = getUpgrades();
 	const minResearch = 50e3;
 	let maxProducts = 3;
-	// Start making next version of Tobacco if it has not already started
+	if (corp.hasResearched(division, upgrades.capacity1)) maxProducts++;
+	if (corp.hasResearched(division, upgrades.capacity2)) maxProducts++;
+	// Get latest version
 	let version = getLatestVersion(ns, division);
-	await makeProduct(ns, division, mainCity, 'Tobacco v' + version, 1e9 * 2 ** (version - 1), 1e9 * 2 ** (version - 1));
-	// Check tobacco progress
 	// noinspection InfiniteLoopJS
 	while (true) {
 		if (corp.getProduct(division, 'Tobacco v' + version).developmentProgress >= 100) {
