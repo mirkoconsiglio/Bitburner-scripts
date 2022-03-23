@@ -1,7 +1,6 @@
 // noinspection JSUnresolvedVariable
 
 import {
-	isPurchasable,
 	isUseful,
 	isUsefulBladeburner,
 	isUsefulCombat,
@@ -35,17 +34,17 @@ export async function main(ns) {
 		['install', false]
 	]);
 	const scripts = getScripts();
-	// Check criterions for determining what augmentations are useful
-	const criterions = [];
-	if (args.hacking || args.all) criterions.push(isUsefulHacking);
-	if (args.combat || args.all) criterions.push(isUsefulCombat);
-	if (args.crime || args.all) criterions.push(isUsefulCrime);
-	if (args.company || args.all) criterions.push(isUsefulCompany);
-	if (args.hacknet || args.all) criterions.push(isUsefulHacknet);
-	if (args.programs || args.all) criterions.push(isUsefulPrograms);
-	if (args.faction || args.all) criterions.push(isUsefulFaction);
-	if (args.bladeburner || args.all) criterions.push(isUsefulBladeburner);
-	if (args.focus || args.all) criterions.push(isUsefulFocus);
+	// Check criteria for determining what augmentations are useful
+	const criteria = [];
+	if (args.hacking || args.all) criteria.push(isUsefulHacking);
+	if (args.combat || args.all) criteria.push(isUsefulCombat);
+	if (args.crime || args.all) criteria.push(isUsefulCrime);
+	if (args.company || args.all) criteria.push(isUsefulCompany);
+	if (args.hacknet || args.all) criteria.push(isUsefulHacknet);
+	if (args.programs || args.all) criteria.push(isUsefulPrograms);
+	if (args.faction || args.all) criteria.push(isUsefulFaction);
+	if (args.bladeburner || args.all) criteria.push(isUsefulBladeburner);
+	if (args.focus || args.all) criteria.push(isUsefulFocus);
 	// Augmentation price increase
 	let mult = 0;
 	for (let i = 0; i < (ns.getOwnedSourceFiles().find(s => s.n === 11) ?? {lvl: 0}).lvl; i++) {
@@ -56,7 +55,7 @@ export async function main(ns) {
 	let augmentations = [];
 	for (let faction of getFactions()) {
 		for (let aug of ns.getAugmentationsFromFaction(faction)) {
-			if (isUseful(ns, criterions, aug) && isPurchasable(ns, faction, aug, augmentations)) {
+			if (isUseful(ns, criteria, aug) && isPurchasable(ns, faction, aug, augmentations)) {
 				augmentations.push(
 					{
 						faction: faction,
@@ -79,17 +78,7 @@ export async function main(ns) {
 			}
 		}
 		// Ask if player wants to sell stocks
-		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) {
-			// Kill stock script
-			ns.scriptKill(scripts.stock, 'home');
-			// Sell all stocks
-			for (let sym of ns.stock.getSymbols()) {
-				ns.stock.sell(sym, ns.stock.getMaxShares(sym));
-				if (ns.getPlayer().bitNodeN === 8 || ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
-					ns.stock.sellShort(sym, ns.stock.getMaxShares(sym));
-				}
-			}
-		}
+		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) ns.exec(scripts.stock, 'home', 1, '--l');
 	}
 	// Sell hashes before buying augmentations
 	if (ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9)) { // Check if player has hacknet servers
@@ -169,23 +158,11 @@ export async function main(ns) {
 		ns.getFactionRep('Daedalus') >= 2.5e6 &&
 		!ns.getOwnedAugmentations(true).includes('The Red Pill')) {
 		if (await ns.prompt(`Purchase The Red Pill?`)) {
-			if (ns.purchaseAugmentation('Daedalus', 'The Red Pill')) {
-				ns.tprint(`Purchased The Red Pill`);
-			} else {
+			if (ns.purchaseAugmentation('Daedalus', 'The Red Pill')) ns.tprint(`Purchased The Red Pill`);
+			else {
 				ns.tprint(`Could not purchase The Red Pill`);
 				return;
 			}
-		}
-	}
-	// Ask to purchase 4S market data and its TIX API
-	if (ns.getPlayer().hasTixApiAccess) {
-		let cost = 25e9 * ns.getBitNodeMultipliers().FourSigmaMarketDataApiCost;
-		if (!ns.getPlayer().has4SDataTixApi && ns.getServerMoneyAvailable('home') >= cost) {
-			if (await ns.prompt(`Purchase 4S Data TIX API?`)) ns.stock.purchase4SMarketDataTixApi();
-		}
-		cost = 1e9 * ns.getBitNodeMultipliers().FourSigmaMarketDataCost;
-		if (!ns.getPlayer().has4SData && ns.getServerMoneyAvailable('home') >= cost) {
-			if (await ns.prompt(`Purchase 4S Data?`)) ns.stock.purchase4SMarketData();
 		}
 	}
 	// Ask to install augmentations
@@ -207,7 +184,26 @@ function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq) {
 	if (index >= 0) { // Fit in aug before their prereq
 		coveredIndices.push(index);
 		let prereq = ns.getAugmentationPrereq(augmentations[index].name);
-		if (prereq.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq[0])
+		if (prereq.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq[0]);
 		tempAugs.push(augmentations[index]);
 	}
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} faction
+ * @param {string} name
+ * @param {string[]} augmentations
+ * @returns {boolean}
+ */
+function isPurchasable(ns, faction, name, augmentations) {
+	let facRep = ns.getFactionRep(faction);
+	let price = ns.getAugmentationPrice(name);
+	let repReq = ns.getAugmentationRepReq(name);
+	return !(facRep < repReq || // Faction reputation prerequisite
+		ns.getServerMoneyAvailable('home') < price || // Check if it is able to be bought
+		augmentations.some(aug => aug.name === name) || // Check to see if it can be bought from another faction
+		ns.getOwnedAugmentations(true).includes(name) // Check if already bought
+	);
 }

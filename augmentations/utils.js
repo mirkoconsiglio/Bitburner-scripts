@@ -1,7 +1,7 @@
 /**
  *
  * @param {NS} ns
- * @param {String} name
+ * @param {string} name
  * @returns {boolean}
  */
 export function isUsefulPrograms(ns, name) {
@@ -13,12 +13,24 @@ export function isUsefulPrograms(ns, name) {
 		);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulFaction(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		stats.faction_rep_mult; // Useful faction augmentations
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulFocus(ns, name) {
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
 		( 	// Useful focus augmentations
@@ -28,6 +40,12 @@ export function isUsefulFocus(ns, name) {
 
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulHacking(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -41,6 +59,12 @@ export function isUsefulHacking(ns, name) {
 		)
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulHackingSkill(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -50,6 +74,12 @@ export function isUsefulHackingSkill(ns, name) {
 		);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulCombat(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -65,6 +95,12 @@ export function isUsefulCombat(ns, name) {
 		);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulCrime(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -74,6 +110,12 @@ export function isUsefulCrime(ns, name) {
 		);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulCompany(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -85,6 +127,12 @@ export function isUsefulCompany(ns, name) {
 		);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulHacknet(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -97,6 +145,12 @@ export function isUsefulHacknet(ns, name) {
 		);
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
 export function isUsefulBladeburner(ns, name) {
 	const stats = ns.getAugmentationStats(name);
 	return name !== 'NeuroFlux Governor' && // Ignore NFG
@@ -108,22 +162,15 @@ export function isUsefulBladeburner(ns, name) {
 		);
 }
 
-export function isUseful(ns, criterions, name) {
-	for (let criterion of criterions) {
-		if (criterion(ns, name)) return true;
-	}
+/**
+ *
+ * @param {NS} ns
+ * @param {function} criteria
+ * @param {string} name
+ * @returns {boolean}
+ */
+export function isUseful(ns, criteria, name) {
+	for (let criterion of criteria) if (criterion(ns, name)) return true;
 	return false;
-}
-
-export function isPurchasable(ns, faction, name, augmentations) {
-	let facRep = ns.getFactionRep(faction);
-	let price = ns.getAugmentationPrice(name);
-	let repReq = ns.getAugmentationRepReq(name);
-
-	return !(facRep < repReq || // Faction reputation prerequisite
-		ns.getServerMoneyAvailable('home') < price || // Check if it is able to be bought
-		augmentations.some(aug => aug.name === name) || // Check to see if it can be bought from another faction
-		ns.getOwnedAugmentations(true).includes(name) // Check if already bought
-	);
 }
 
