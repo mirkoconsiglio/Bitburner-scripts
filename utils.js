@@ -216,6 +216,57 @@ export function deployBatchers(ns, minimumRam = 2 ** 14) {
 
 /**
  *
+ * @returns {Object<Object<string, string>>}
+ */
+export function getOrganisations() {
+	return {
+		ECorp: {stockSymbol: 'ECP', serverName: 'ecorp'},
+		MegaCorp: {stockSymbol: 'MGCP', serverName: 'megacorp'},
+		'Blade Industries': {stockSymbol: 'BLD', serverName: 'blade'},
+		'Clarke Incorporated': {stockSymbol: 'CLRK', serverName: 'clarkinc'},
+		'OmniTek Incorporated': {stockSymbol: 'OMTK', serverName: 'omnitek'},
+		'Four Sigma': {stockSymbol: 'FSIG', serverName: '4sigma'},
+		'KuaiGong International': {stockSymbol: 'KGI', serverName: 'kuai-gong'},
+		'Fulcrum Technologies': {stockSymbol: 'FLCM', serverName: 'fulcrumtech'},
+		'Storm Technologies': {stockSymbol: 'STM', serverName: 'stormtech'},
+		DefComm: {stockSymbol: 'DCOMM', serverName: 'defcomm'},
+		'Helios Labs': {stockSymbol: 'HLS', serverName: 'helios'},
+		VitaLife: {stockSymbol: 'VITA', serverName: 'vitalife'},
+		'Icarus Microsystems': {stockSymbol: 'ICRS', serverName: 'icarus'},
+		'Universal Energy': {stockSymbol: 'UNV', serverName: 'univ-energy'},
+		AeroCorp: {stockSymbol: 'AERO', serverName: 'aerocorp'},
+		'Omnia Cybersystems': {stockSymbol: 'OMN', serverName: 'omnia'},
+		'Solaris Space Systems': {stockSymbol: 'SLRS', serverName: 'solaris'},
+		'Global Pharmaceuticals': {stockSymbol: 'GPH', serverName: 'global-pharm'},
+		'Nova Medical': {stockSymbol: 'NVMD', serverName: 'nova-med'},
+		'Watchdog Security': {stockSymbol: 'WDS'},
+		LexoCorp: {stockSymbol: 'LXO', serverName: 'lexo-corp'},
+		'Rho Construction': {stockSymbol: 'RHOC', serverName: 'rho-construction'},
+		'Alpha Enterprises': {stockSymbol: 'APHE', serverName: 'alpha-ent'},
+		'SysCore Securities': {stockSymbol: 'SYSC', serverName: 'syscore'},
+		CompuTek: {stockSymbol: 'CTK', serverName: 'comptek'},
+		'NetLink Technologies': {stockSymbol: 'NTLK', serverName: 'netlink'},
+		'Omega Software': {stockSymbol: 'OMGA', serverName: 'omega-net'},
+		FoodNStuff: {stockSymbol: 'FNS', serverName: 'foodnstuff'},
+		'Sigma Cosmetics': {stockSymbol: 'SGC', serverName: 'sigma-cosmetics'},
+		'Joe\'s Guns': {stockSymbol: 'JGN', serverName: 'joesguns'},
+		'Catalyst Ventures': {stockSymbol: 'CTYS', serverName: 'catalyst'},
+		'Microdyne Technologies': {stockSymbol: 'MDYN', serverName: 'microdyne'},
+		'Titan Laboratories': {stockSymbol: 'TITN', serverName: 'titan-labs'}
+	};
+}
+
+/**
+ *
+ * @param {string} symbol
+ * @returns {string}
+ */
+export function symbolToServer(symbol) {
+	for (const org of Object.values(getOrganisations())) if (org.stockSymbol === symbol) return org.serverName;
+}
+
+/**
+ *
  * @param {NS} ns
  */
 export function manageAndHack(ns) {
@@ -696,7 +747,7 @@ export function defaultPortData(portNumber) {
 export async function initData(ns) {
 	for (let i = 1; i <= 20; i++) {
 		const data = readFromFile(ns, i);
-		await writeToFile(ns, getFileHandle(i), data);
+		await writeToFile(ns, i, data);
 	}
 }
 
@@ -732,9 +783,9 @@ export function getFileHandle(portNumber) {
  * @param {*} data
  * @param {string} mode
  */
-async function writeToFile(ns, handle, data, mode = 'w') {
+export async function writeToFile(ns, portNumber, data, mode = 'w') {
 	if (typeof data !== 'string') data = JSON.stringify(data);
-	await ns.write(handle, data, mode);
+	await ns.write(getFileHandle(portNumber), data, mode);
 }
 
 /**
@@ -761,5 +812,5 @@ export function readFromFile(ns, portNumber) {
 export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
 	const data = readFromFile(ns, portNumber);
 	for (const [key, val] of Object.entries(dataToModify)) data[key] = val;
-	await writeToFile(ns, getFileHandle(portNumber), data, mode);
+	await writeToFile(ns, portNumber, data, mode);
 }

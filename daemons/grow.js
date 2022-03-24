@@ -1,9 +1,14 @@
+import {getPortNumbers, readFromFile} from '/utils.js';
+
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	if (ns.args[1]) await ns.sleep(ns.args[1]);
-	await ns.grow(ns.args[0]);
+	const [target, delay] = ns.args;
+	const data = readFromFile(ns, getPortNumbers().stock).long;
+	const stock = data.includes(target);
+	if (delay) await ns.sleep(delay);
+	await ns.grow(target, {stock: stock});
 }

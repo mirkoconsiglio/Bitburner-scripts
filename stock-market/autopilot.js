@@ -1,12 +1,11 @@
 // Requires access to the TIX API. Purchases access to the 4S Mkt Data API as soon as it can
-import {printBoth} from '/utils.js';
+import {getPortNumbers, printBoth, symbolToServer, writeToFile} from '/utils.js';
 
 let disableShorts = false;
 let commission = 100000; // Buy/sell commission. Expected profit must exceed this to buy anything.
 let totalProfit = 0.0; // We can keep track of how much we've earned since start.
 let mock = false; // If set to true, will "mock" buy/sell but not actually buy/sell anything
 // Pre-4S configuration (influences how we play the stock market before we have 4S data, after which everything's fool-proof)
-let showMarketSummary = false;  // If set to true, will always generate and display the pre-4s forecast table in a separate tail window
 let minTickHistory; // This much history must be gathered before we will offer a stock forecast.
 let longTermForecastWindowLength; // This much history will be used to determine the historical probability of the stock (so long as no inversions are detected)
 let nearTermForecastWindowLength; // This much history will be used to detect recent negative trends and act on them immediately.
@@ -24,13 +23,14 @@ const expectedTickTime = 6000;
 const catchUpTickTime = 4000;
 let lastTick = 0;
 let sleepInterval = 1000;
+const portNumber = getPortNumbers().stock;
 
 const argsSchema = [
 	['l', false], // Stop any other running instances and sell all stocks
 	['liquidate', false],
 	['mock', false], // If set to true, will "mock" buy/sell but not actually buy/sell anything
 	['disable-shorts', false], // If set to true, will "mock" buy/sell but not actually buy/sell anything
-	['reserve', null], // A fixed amount of money to not spend
+	['reserve', 0], // A fixed amount of money to not spend
 	['fracB', 0.4], // Fraction of assets to have as liquid before we consider buying more stock
 	['fracH', 0.2], // Fraction of assets to retain as cash in hand when buying
 	['buy-threshold', 0.0001], // Buy only stocks forecasted to earn better than a 0.01% return (1 Basis Point)
@@ -38,8 +38,6 @@ const argsSchema = [
 	['diversification', 0.34], // Before we have 4S data, we will not hold more than this fraction of our portfolio as a single stock
 	['disableHud', false], // Disable showing stock value in the HUD panel
 	// The following settings are related only to tweaking pre-4s stock-market logic
-	['show-pre-4s-forecast', false], // If set to true, will always generate and display the pre-4s forecast (if false, it's only shown while we hold no stocks)
-	['show-market-summary', false], // Same effect as "show-pre-4s-forecast", this market summary has become so informative, it's valuable even with 4s
 	['pre-4s-buy-threshold-probability', 0.15], // Before we have 4S data, only buy stocks whose probability is more than this far away from 0.5, to account for imprecision
 	['pre-4s-buy-threshold-return', 0.0015], // Before we have 4S data, Buy only stocks forecasted to earn better than this return (default 0.25% or 25 Basis Points)
 	['pre-4s-sell-threshold-return', 0.0005], // Before we have 4S data, Sell stocks forecasted to earn less than this return (default 0.15% or 15 Basis Points)
@@ -77,7 +75,6 @@ export async function main(ns) {
 	minTickHistory = options['pre-4s-min-tick-history'] || 21;
 	nearTermForecastWindowLength = options['pre-4s-inversion-detection-window'] || 10;
 	longTermForecastWindowLength = options['pre-4s-forecast-window'] || (marketCycleLength + 1);
-	showMarketSummary = options['show-pre-4s-forecast'] || options['show-market-summary'];
 	// Other global values must be reset at start lest they be left in memory from a prior run
 	lastTick = 0;
 	totalProfit = 0;
@@ -113,8 +110,6 @@ export async function main(ns) {
 	const bitnodeMults = ns.getPlayer().bitNodeN === 5 || ns.getOwnedSourceFiles().includes(s => s.n === 5) ?
 		ns.getBitNodeMultipliers() : {FourSigmaMarketDataCost: 1, FourSigmaMarketDataApiCost: 1};
 
-	if (showMarketSummary) await launchSummaryTail(ns); // Opens a separate script / window to continuously display the Pre4S forecast
-
 	let hudElement = null;
 	if (!disableHud) {
 		hudElement = initializeHud();
@@ -125,7 +120,7 @@ export async function main(ns) {
 	while (true) {
 		const playerStats = ns.getPlayer();
 		const pre4s = !playerStats.has4SDataTixApi;
-		corpus = refresh(ns, playerStats, allStocks, myStocks);
+		corpus = await refresh(ns, playerStats, allStocks, myStocks);
 		if (pre4s && !mock && tryGet4SApi(ns, playerStats, bitnodeMults, corpus))
 			continue; // Start the loop over if we just bought 4S API access
 		// Be more conservative with our decisions if we don't have 4S data
@@ -154,7 +149,7 @@ export async function main(ns) {
 		}
 		if (sales > 0) continue; // If we sold anything, loop immediately (no need to sleep) and refresh stats immediately before making purchasing decisions.
 
-		let cash = playerStats.money - (options['reserve'] ?? 0);
+		let cash = playerStats.money - options['reserve'];
 		let liquidity = cash / corpus;
 		// If we haven't gone above a certain liquidity threshold, don't attempt to buy more stock
 		// Avoids death-by-a-thousand-commissions before we get super-rich, stocks are capped, and this is no longer an issue
@@ -343,9 +338,9 @@ const purchaseOrder = (a, b) => (Math.ceil(a.timeToCoverTheSpread()) - Math.ceil
  * @param {Player} playerStats
  * @param {Object[]} allStocks
  * @param {Object[]} myStocks
- * @returns {number}
+ * @returns {Promise<number>}
  */
-function refresh(ns, playerStats, allStocks, myStocks) {
+async function refresh(ns, playerStats, allStocks, myStocks) {
 	const has4s = playerStats.has4SDataTixApi;
 	let corpus = playerStats.money;
 	const dictAskPrices = getStockInfoDict(ns, ns.stock.getAskPrice);
@@ -390,7 +385,7 @@ function refresh(ns, playerStats, allStocks, myStocks) {
 		if (ticked) // Increment ticksHeld, or reset it if we have no position in this stock or reversed our position last tick.
 			stk.ticksHeld = !stk.owned() || (priorLong > 0 && stk.sharesLong === 0) || (priorShort > 0 && stk.sharesShort === 0) ? 0 : 1 + (stk.ticksHeld || 0);
 	}
-	if (ticked) updateForecast(ns, allStocks, has4s); // Logic below only required on market tick
+	if (ticked) await updateForecast(ns, allStocks, has4s); // Logic below only required on market tick
 	return corpus;
 }
 
@@ -407,10 +402,11 @@ const detectInversion = (p1, p2) => ((p1 >= 0.5 + tol2) && (p2 <= 0.5 - tol2) &&
  * @param {NS} ns
  * @param {Object[]} allStocks
  * @param {boolean} has4s
+ * @returns {Promise<void>}
  */
-function updateForecast(ns, allStocks, has4s) {
+async function updateForecast(ns, allStocks, has4s) {
 	const currentHistory = allStocks[0].priceHistory.length;
-	const prepSummary = showMarketSummary || mock || (!has4s && (currentHistory < minTickHistory || allStocks.filter(stk => stk.owned()).length === 0)); // Decide whether to display the market summary table.
+	const prepSummary = mock || (!has4s && (currentHistory < minTickHistory || allStocks.filter(stk => stk.owned()).length === 0)); // Decide whether to display the market summary table.
 	const inversionsDetected = []; // Keep track of individual stocks whose probability has inverted (45% chance of happening each "cycle")
 	detectedCycleTick = (detectedCycleTick + 1) % marketCycleLength; // Keep track of stock market cycle (which occurs every 75 ticks)
 	for (const stk of allStocks) {
@@ -434,9 +430,10 @@ function updateForecast(ns, allStocks, has4s) {
 		summary += `${inversionsDetected.length} Stocks appear to be reversing their outlook: ${inversionsDetected.map(s => s.sym).join(', ')} (threshold: ${inversionAgreementThreshold})\n`;
 		if (inversionsDetected.length >= inversionAgreementThreshold && (has4s || currentHistory >= minTickHistory)) { // We believe we have detected the stock market cycle!
 			const newPredictedCycleTick = has4s ? 0 : nearTermForecastWindowLength; // By the time we've detected it, we're this many ticks past the cycle start
-			if (detectedCycleTick !== newPredictedCycleTick)
+			if (detectedCycleTick !== newPredictedCycleTick) {
 				ns.print(`Threshold for changing predicted market cycle met (${inversionsDetected.length} >= ${inversionAgreementThreshold}). ` +
 					`Changing current market tick from ${detectedCycleTick} to ${newPredictedCycleTick}.`);
+			}
 			marketCycleDetected = true;
 			detectedCycleTick = newPredictedCycleTick;
 			// Don't adjust this in the future unless we see another day with as much or even more agreement (capped at 14, it seems sometimes our cycles get out of sync with
@@ -448,10 +445,10 @@ function updateForecast(ns, allStocks, has4s) {
 	for (const stk of allStocks) {
 		// Don't "trust" (act on) a detected inversion unless it's near the time when we're capable of detecting market cycle start. Avoids most false-positives.
 		if (stk.possibleInversionDetected && (has4s && detectedCycleTick === 0 ||
-			(!has4s && (detectedCycleTick > nearTermForecastWindowLength / 2 - 1) && (detectedCycleTick <= nearTermForecastWindowLength + inversionLagTolerance))))
+			(!has4s && (detectedCycleTick > nearTermForecastWindowLength / 2 - 1) &&
+				(detectedCycleTick <= nearTermForecastWindowLength + inversionLagTolerance)))) {
 			stk.lastInversion = detectedCycleTick; // If we "trust" a probability inversion has occurred, probability will be calculated based on only history since the last inversion.
-		else
-			stk.lastInversion++;
+		} else stk.lastInversion++;
 		// Only take the stock history since after the last inversion to compute the probability of the stock.
 		const probWindowLength = Math.min(longTermForecastWindowLength, stk.lastInversion);
 		stk.longTermForecast = forecast(stk.priceHistory.slice(0, probWindowLength));
@@ -477,13 +474,14 @@ function updateForecast(ns, allStocks, has4s) {
 			`Current Stock Summary and Pre-4S Forecasts (by best payoff-time):\n` + allStocks.sort(purchaseOrder).map(s => s.debugLog).join('\n');
 		ns.print(summary);
 	}
-	// // Write out a file of stock probabilities so that other scripts can make use of this (e.g. hack orchestrator can manipulate the stock market)
-	// await ns.write('/Temp/stock-probabilities.txt', JSON.stringify(Object.fromEntries(
-	// 	allStocks.map(stk => [stk.sym, {
-	// 		prob: stk.prob,
-	// 		sharesLong: stk.sharesLong,
-	// 		sharesShort: stk.sharesShort
-	// 	}]))), 'w');
+	// Write out a file of stock information so that other scripts can make use of this (e.g. hacks and grows can manipulate the stock market)
+	const long = [];
+	const short = [];
+	allStocks.forEach(stk => {
+		if (stk.sharesLong > 0) long.append(symbolToServer(stk.sym));
+		if (stk.sharesShort > 0) short.append(symbolToServer(stk.sym));
+	});
+	await writeToFile(ns, portNumber, {long: long, short: short});
 }
 
 /**

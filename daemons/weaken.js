@@ -4,6 +4,7 @@
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	if (ns.args[1]) await ns.sleep(ns.args[1]);
-	await ns.weaken(ns.args[0]);
+	const [target, delay] = ns.args;
+	if (delay) await ns.sleep(delay);
+	await ns.weaken(target);
 }
