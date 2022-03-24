@@ -38,7 +38,7 @@ export async function main(ns) {
 		// Reserve RAM on host for charging
 		await modifyFile(ns, reservedRamPortNumber, {[host]: ram});
 		// Wait for RAM to free up
-		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < reservedRam) {
+		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
 			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up on ${host}`);
 			await ns.sleep(1000);
