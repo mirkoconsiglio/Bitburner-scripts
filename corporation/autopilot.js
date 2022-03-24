@@ -8,8 +8,9 @@ import {getCities} from '/utils.js';
  */
 export async function main(ns) {
 	ns.disableLog('ALL');
-	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
-	if (!ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3) && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
+	const unlocked = ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3);
+	if (!unlocked && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
+	if (!unlocked && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
 	// Set up
 	const cities = getCities();
 	const jobs = getJobs();
@@ -29,7 +30,7 @@ export async function main(ns) {
  *
  * @param {NS} ns
  * @param {string[]} cities
- * @param {Object<string, string>} jobs
+ * @param {Object<string>} jobs
  * @param {string} division
  * @returns {Promise<void>}
  */
@@ -70,7 +71,7 @@ export async function part1(ns, cities, jobs, division) {
  *
  * @param {NS} ns
  * @param {string[]} cities
- * @param {Object<string, string>} jobs
+ * @param {Object<string>} jobs
  * @param {string }division
  * @returns {Promise<void>}
  */
@@ -148,7 +149,7 @@ export async function part2(ns, cities, jobs, division) {
  *
  * @param {NS} ns
  * @param {string[]} cities
- * @param {Object<string, string>} jobs
+ * @param {Object<string>} jobs
  * @param {string} division
  * @param {string} mainCity
  * @returns {Promise<void>}
