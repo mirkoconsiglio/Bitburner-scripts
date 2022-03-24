@@ -63,10 +63,9 @@ export async function main(ns) {
 		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
 		if (ns.getPlayer().tor) {
-			for (let program of getUsefulPrograms()) {
-				if (!ns.fileExists(program.name) && ns.getPlayer().hacking >= program.level) {
-					if (ns.purchaseProgram(program.name)) printBoth(ns, `Purchased ${program.name}`);
-				}
+			for (const program of getUsefulPrograms()) {
+				if (!ns.fileExists(program.name) && ns.getPlayer().hacking >= program.level && ns.purchaseProgram(program.name))
+					printBoth(ns, `Purchased ${program.name}`);
 			}
 		}
 		// Check if we want to upgrade home server
@@ -151,7 +150,9 @@ export async function main(ns) {
 		}
 		// Bladeburner manager
 		const hasBladeburner = ns.getPlayer().bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7);
-		if (hasBladeburner && !ns.getPlayer().inBladeburner && bladeburner &&
+		const hasCombatStats = ns.getPlayer().strength === 100 && ns.getPlayer().defense === 100 &&
+			ns.getPlayer().dexterity === 100 && ns.getPlayer().agility === 100;
+		if (hasBladeburner && hasCombatStats && !ns.getPlayer().inBladeburner && bladeburner &&
 			!ns.isRunning(scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Join Bladeburner Division?`)) {
 				ns.bladeburner.joinBladeburnerDivision();
@@ -222,7 +223,7 @@ export async function main(ns) {
 			factions = factions.concat(factionInvitations); // Don't ask again
 		}
 		// Backdoor servers
-		for (let server of getAccessibleServers(ns)) {
+		for (const server of getAccessibleServers(ns)) {
 			if (!ns.getServer(server).backdoorInstalled &&
 				!ns.isRunning(scripts.backdoor, host, server) &&
 				server !== 'home') {
@@ -232,10 +233,7 @@ export async function main(ns) {
 						ns.exec(scripts.backdoor, host, 1, server);
 					}
 					backdoorWorldDaemon = false;
-				} else {
-					ns.print(`Installing backdoor on ${server}`);
-					ns.exec(scripts.backdoor, host, 1, server);
-				}
+				} else if (ns.exec(scripts.backdoor, host, 1, server) !== 0) ns.print(`Installing backdoor on ${server}`);
 			}
 		}
 		// Spend Hashes
