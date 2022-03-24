@@ -95,7 +95,7 @@ export function getFactions() {
 		'Clarke Incorporated', 'Fulcrum Secret Technologies',
 		'Slum Snakes', 'Tetrads', 'Silhouette', 'Speakers for the Dead',
 		'The Dark Army', 'The Syndicate', 'The Covenant', 'Daedalus',
-		'Illuminati', 'Bladeburners'
+		'Illuminati', 'Bladeburners', 'Church of the Machine God'
 	];
 }
 
