@@ -75,4 +75,3 @@ daemons/hack.js
 daemons/weaken.js
 daemons/share.js
 daemons/charge.js
-daemons/intelligence.js
