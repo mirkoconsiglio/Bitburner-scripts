@@ -1,7 +1,7 @@
 cortex.js
-augmentations/augmentation-lister.js
-augmentations/install-augmentations.js
-augmentations/purchase-augmentations.js
+augmentations/lister.js
+augmentations/install.js
+augmentations/purchase.js
 augmentations/utils.js
 build/download-bitburner-scripts.js
 build/script-remover.js
