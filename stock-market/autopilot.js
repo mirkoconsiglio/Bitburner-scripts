@@ -3,7 +3,7 @@ import {getPortNumbers, printBoth, symbolToServer, writeToFile} from '/utils.js'
 
 let disableShorts = false;
 let commission = 100000; // Buy/sell commission. Expected profit must exceed this to buy anything.
-let totalProfit = 0.0; // We can keep track of how much we've earned since start.
+let totalProfit = 0; // We can keep track of how much we've earned since start.
 let mock = false; // If set to true, will "mock" buy/sell but not actually buy/sell anything
 // Pre-4S configuration (influences how we play the stock market before we have 4S data, after which everything's fool-proof)
 let minTickHistory; // This much history must be gathered before we will offer a stock forecast.
@@ -12,7 +12,7 @@ let nearTermForecastWindowLength; // This much history will be used to detect re
 // The following pre-4s constants are hard-coded (not configurable via command line) but may require tweaking
 const marketCycleLength = 75; // Every this many ticks, all stocks have a 45% chance of "reversing" their probability. Something we must detect and act on quick to not lose profits.
 const maxTickHistory = 151; // This much history will be kept for purposes of determining volatility and perhaps one day pinpointing the market cycle tick
-const inversionDetectionTolerance = 0.10; // If the near-term forecast is within this distance of (1 - long-term forecast), consider it a potential "inversion"
+const inversionDetectionTolerance = 0.1; // If the near-term forecast is within this distance of (1 - long-term forecast), consider it a potential "inversion"
 const inversionLagTolerance = 5; // An inversion is "trusted" up to this many ticks after the normal nearTermForecastWindowLength expected detection time
 // (Note: 33 total stocks * 45% inversion chance each cycle = ~15 expected inversions per cycle)
 // The following pre-4s values are set during the lifetime of the program
@@ -26,8 +26,7 @@ let sleepInterval = 1000;
 const portNumber = getPortNumbers().stock;
 
 const argsSchema = [
-	['l', false], // Stop any other running instances and sell all stocks
-	['liquidate', false],
+	['liquidate', false], // Stop any other running instances and sell all stocks
 	['mock', false], // If set to true, will "mock" buy/sell but not actually buy/sell anything
 	['disable-shorts', false], // If set to true, will "mock" buy/sell but not actually buy/sell anything
 	['reserve', 0], // A fixed amount of money to not spend
@@ -89,7 +88,7 @@ export async function main(ns) {
 		return printBoth(ns, `ERROR: You have to buy WSE account and TIX API access before you can run this script`);
 	}
 
-	if (options.l || options.liquidate) { // If given the "liquidate" command, try to kill the version of ourselves trading in stocks
+	if (options.liquidate) { // If given the "liquidate" command, try to kill the version of ourselves trading in stocks
 		ns.ps().filter(p => p.filename === ns.getScriptName() && !p.args.includes('--l') &&
 			!p.args.includes('--liquidate')).forEach(p => ns.kill(p.pid));
 	}
@@ -101,7 +100,7 @@ export async function main(ns) {
 
 	allStocks = initAllStocks(ns);
 
-	if (options.l || options.liquidate) {
+	if (options.liquidate) {
 		liquidate(ns); // Sell all stocks
 		return;
 	}
