@@ -9,6 +9,7 @@ import {
 	isUsefulFaction,
 	isUsefulFocus,
 	isUsefulHacking,
+	isUsefulHackingSkill,
 	isUsefulHacknet,
 	isUsefulPrograms
 } from '/augmentations/utils.js';
@@ -30,6 +31,7 @@ export async function main(ns) {
 		['faction', false],
 		['bladeburner', false],
 		['focus', false],
+		['hacking-skill', false],
 		['all', false],
 		['install', false]
 	]);
@@ -45,6 +47,7 @@ export async function main(ns) {
 	if (args.faction || args.all) criteria.push(isUsefulFaction);
 	if (args.bladeburner || args.all) criteria.push(isUsefulBladeburner);
 	if (args.focus || args.all) criteria.push(isUsefulFocus);
+	if (args['hacking-skill'] || args.all) criteria.push(isUsefulHackingSkill);
 	// Augmentation price increase
 	let mult = 0;
 	for (let i = 0; i < (ns.getOwnedSourceFiles().find(s => s.n === 11) ?? {lvl: 0}).lvl; i++) {
