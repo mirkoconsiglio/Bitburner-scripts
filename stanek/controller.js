@@ -87,7 +87,6 @@ async function charger(ns, host) {
 	const stanekPortNumber = getPortNumbers().stanek;
 	// Charge fragments
 	while (true) {
-		ns.clearLog();
 		// Get data
 		const data = readFromFile(ns, stanekPortNumber);
 		// Set up pattern
@@ -123,6 +122,7 @@ async function charger(ns, host) {
  * @param {Object} data
  */
 function statusUpdate(ns, fragments, data) {
+	ns.clearLog();
 	let status = `Charging ${fragments.length} fragments to ${data.maxCharges}\n`;
 	for (const fragment of fragments) {
 		status += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +
@@ -140,7 +140,7 @@ function statusUpdate(ns, fragments, data) {
 function getPatterns(width, height) {
 	const patterns = {};
 	switch (true) { // Sorted in descending order of size
-		case (width >= 6 && height >= 5) :
+		case width >= 6 && height >= 5:
 			patterns.starter = [
 				{rootX: 0, rootY: 0, rotation: 0, fragmentID: 20, type: 12},
 				{rootX: 4, rootY: 0, rotation: 0, fragmentID: 21, type: 13},
@@ -167,6 +167,16 @@ function getPatterns(width, height) {
 				{rootX: 0, rootY: 0, rotation: 1, fragmentID: 16, type: 10},
 				{rootX: 2, rootY: 3, rotation: 2, fragmentID: 14, type: 9},
 				{rootX: 0, rootY: 2, rotation: 1, fragmentID: 18, type: 11}
+			];
+			break;
+		case width >= 3 && height >= 3:
+			patterns.starter = [
+				{rootX: 0, rootY: 1, rotation: 0, fragmentID: 7, type: 5},
+				{rootX: 0, rootY: 0, rotation: 0, fragmentID: 1, type: 6}
+			];
+			patterns.hack = [
+				{rootX: 0, rootY: 1, rotation: 0, fragmentID: 7, type: 5},
+				{rootX: 0, rootY: 0, rotation: 0, fragmentID: 1, type: 6}
 			];
 			break;
 		default:

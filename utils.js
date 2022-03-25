@@ -692,7 +692,7 @@ export function getPortNumbers() {
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
 		case 1:
-			return {home: 128};
+			return {home: 64};
 		case 2:
 			return undefined;
 		case 3:
@@ -706,7 +706,7 @@ export function defaultPortData(portNumber) {
 		case 7:
 			return undefined;
 		case 8:
-			return undefined;
+			return {long: [], short: []};
 		case 9:
 			return undefined;
 		case 10:
@@ -745,10 +745,7 @@ export function defaultPortData(portNumber) {
  * @returns {Promise<void>}
  */
 export async function initData(ns) {
-	for (let i = 1; i <= 20; i++) {
-		const data = readFromFile(ns, i);
-		await writeToFile(ns, i, data);
-	}
+	for (let i = 1; i <= 20; i++) await writeToFile(ns, i, defaultPortData(i));
 }
 
 /**
