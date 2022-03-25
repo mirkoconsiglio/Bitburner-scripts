@@ -477,8 +477,8 @@ async function updateForecast(ns, allStocks, has4s) {
 	const long = [];
 	const short = [];
 	allStocks.forEach(stk => {
-		if (stk.sharesLong > 0) long.append(symbolToServer(stk.sym));
-		if (stk.sharesShort > 0) short.append(symbolToServer(stk.sym));
+		if (stk.sharesLong > 0) long.push(symbolToServer(stk.sym));
+		if (stk.sharesShort > 0) short.push(symbolToServer(stk.sym));
 	});
 	await writeToFile(ns, portNumber, {long: long, short: short});
 }
