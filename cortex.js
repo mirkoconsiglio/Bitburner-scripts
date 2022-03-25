@@ -37,7 +37,7 @@ export async function main(ns) {
 	let contractorOnline = true;
 	let upgradeRam = true;
 	let upgradeCores = true;
-	let homeRam = ns.getServerMaxRam('home');
+	let homeRam = ns.getServer('home').maxRam;
 	let homeCores = ns.getServer('home').cpuCores;
 	let wse = true;
 	let tix = true;
@@ -93,16 +93,16 @@ export async function main(ns) {
 			upgradeCores = false;
 		}
 		// Purchase WSE account
-		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 && wse &&
-			!promptScriptRunning(ns, host)) {
+		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 &&
+			wse && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Purchase WSE account?`)) {
 				ns.stock.purchaseWseAccount();
 				printBoth(ns, `Purchased WSE account`);
 			} else wse = false;
 		}
 		// Purchase TIX API
-		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 && tix &&
-			!promptScriptRunning(ns, host)) {
+		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 &&
+			tix && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Purchase TIX API?`)) {
 				ns.stock.purchaseTixApi();
 				printBoth(ns, `Purchased TIX API`);
@@ -238,7 +238,7 @@ export async function main(ns) {
 		}
 		// Spend Hashes
 		if (haveHacknetServers) await spendHashes(ns, 'Sell for Money');
-		// Deploy daemons
+		// Deploy batchers
 		deployBatchers(ns);
 		// Simple hack manager
 		manageAndHack(ns);
