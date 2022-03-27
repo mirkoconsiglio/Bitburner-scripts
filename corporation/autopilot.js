@@ -197,9 +197,6 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	await upgradeUpto(ns, upgrades);
 }
 
-// TODO: go public
-// TODO: issue dividends
-// TODO: buy other upgrades
 /**
  *
  * @param {NS} ns
@@ -211,7 +208,7 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
  */
 export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') {
 	const corp = ns.corporation;
-	const upgrades = getUpgrades();
+	const upgrades = getResearch();
 	const minResearch = 50e3;
 	let maxProducts = 3;
 	if (corp.hasResearched(division, upgrades.capacity1)) maxProducts++;
@@ -271,8 +268,6 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			corp.research(division, upgrades.capacity2);
 			maxProducts++;
 		}
-		// Upgrade Wilson analytics if we can
-		if (corp.getCorporation().funds >= corp.getUpgradeLevelCost('Wilson Analytics')) corp.levelUpgrade('Wilson Analytics');
 		// Check what is cheaper
 		if (corp.getOfficeSizeUpgradeCost(division, mainCity, 15) < corp.getHireAdVertCost(division)) {
 			// Upgrade office size in Aevum
@@ -288,6 +283,10 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 		}
 		// Hire advert
 		else if (corp.getCorporation().funds >= corp.getHireAdVertCost(division)) corp.hireAdVert(division);
+		// Level upgrades
+		levelUpgrades(ns, 0.1);
+		// Go public
+		if (corp.getCorporation().revenue >= 1e18) corp.goPublic(0);
 		// If public
 		if (corp.getCorporation().public) {
 			// Sell a small amount of shares when they amount to more cash than we have on hand
@@ -305,6 +304,8 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			// Check if we can unlock Government Partnership
 			if (corp.getCorporation().funds >= corp.getUnlockUpgradeCost('Government Partnership') &&
 				!corp.hasUnlockUpgrade('Government Partnership')) corp.unlockUpgrade('Government Partnership');
+			// Issue dividends
+			corp.issueDividends(dividendsPercentage(ns));
 		}
 		// Update every second
 		await ns.sleep(1000);
@@ -312,10 +313,59 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 }
 
 /**
+ * Function to level the cheapest upgrade if under a certain percentage of the corp funds
+ *
+ * @param {NS} ns
+ * @param {number} percent
+ */
+function levelUpgrades(ns, percent) {
+	const corp = ns.corporation;
+	let cheapestCost = Number.MAX_SAFE_INTEGER;
+	let cheapestUpgrade;
+	for (const upgrade of getUpgrades()) {
+		const cost = corp.getUpgradeLevelCost(upgrade);
+		if (cost < cheapestCost) {
+			cheapestUpgrade = upgrade;
+			cheapestCost = cost;
+		}
+	}
+	if (percent * corp.getCorporation().funds >= cheapestCost) corp.levelUpgrade(cheapestUpgrade);
+}
+
+/**
+ * Function to return a list of upgrades
+ *
+ * @return {string[]}
+ */
+function getUpgrades() {
+	return [
+		'Smart Factories',
+		'Smart Storage',
+		'Dream Sense',
+		'Wilson Analytics',
+		'Nuoptimal Nootropic Injector Implants',
+		'Speech Processor Implants',
+		'Neural Accelerators',
+		'FocusWires',
+		'ABC SalesBots',
+		'Project Insight'
+	];
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @returns {number}
+ */
+function dividendsPercentage(ns) {
+	return 5 * Math.log(ns.corporation.getCorporation().revenue) / Math.log(1000);
+}
+
+/**
  *
  * @returns {Object<string>} Jobs
  */
-export function getJobs() {
+function getJobs() {
 	return {
 		operations: 'Operations',
 		engineer: 'Engineer',
@@ -360,7 +410,7 @@ async function moneyForAmount(ns, amount) {
  * @param {string} division
  * @param {string} city
  */
-export function hireMaxEmployees(ns, division, city) {
+function hireMaxEmployees(ns, division, city) {
 	const corp = ns.corporation;
 	ns.print(`Hiring employees for ${division} (${city})`);
 	while (corp.getOffice(division, city).employees.length < corp.getOffice(division, city).size) {
@@ -375,7 +425,7 @@ export function hireMaxEmployees(ns, division, city) {
  * @param {Object<string, number>[]} upgrades
  * @returns {Promise<void>}
  */
-export async function upgradeUpto(ns, upgrades) {
+async function upgradeUpto(ns, upgrades) {
 	const corp = ns.corporation;
 	for (let upgrade of upgrades) {
 		while (corp.getUpgradeLevel(upgrade.name) < upgrade.level) {
@@ -395,7 +445,7 @@ export async function upgradeUpto(ns, upgrades) {
  * @param {Object<string, number>[]} materials
  * @returns {Promise<void>}
  */
-export async function buyMaterialsUpto(ns, division, city, materials) {
+async function buyMaterialsUpto(ns, division, city, materials) {
 	const corp = ns.corporation;
 	for (let material of materials) {
 		const curQty = corp.getMaterial(division, city, material.name).qty;
@@ -425,7 +475,7 @@ export async function buyMaterialsUpto(ns, division, city, materials) {
  * @param {number} level
  * @returns {Promise<void>}
  */
-export async function upgradeWarehouseUpto(ns, division, city, level) {
+async function upgradeWarehouseUpto(ns, division, city, level) {
 	const corp = ns.corporation;
 	while (corp.getWarehouse(division, city).level < level) {
 		await moneyFor(ns, corp.getUpgradeWarehouseCost, division, city);
@@ -442,7 +492,7 @@ export async function upgradeWarehouseUpto(ns, division, city, level) {
  * @param {number} level
  * @returns {Promise<void>}
  */
-export async function hireAdVertUpto(ns, division, level) {
+async function hireAdVertUpto(ns, division, level) {
 	const corp = ns.corporation;
 	while (corp.getHireAdVertCount(division) < level) {
 		await moneyFor(ns, corp.getHireAdVertCost, division);
@@ -461,7 +511,7 @@ export async function hireAdVertUpto(ns, division, level) {
  * @param {Object<string, number>[]} positions
  * @returns {Promise<void>}
  */
-export async function upgradeOffice(ns, division, city, size, positions) {
+async function upgradeOffice(ns, division, city, size, positions) {
 	const corp = ns.corporation;
 	const upgradeSize = size - corp.getOffice(division, city).size;
 	if (upgradeSize > 0) {
@@ -502,7 +552,7 @@ function getPositions(ns, division, city) {
  * @param {number} round
  * @returns {Promise<void>}
  */
-export async function investmentOffer(ns, amount, round = 5) {
+async function investmentOffer(ns, amount, round = 5) {
 	const corp = ns.corporation;
 	if (corp.getInvestmentOffer().round > round) return;
 	ns.print(`Waiting for investment offer of ${ns.nFormat(amount, '$0.000a')}`);
@@ -530,7 +580,7 @@ export async function investmentOffer(ns, amount, round = 5) {
  * @param {number} marketing
  * @returns {Promise<void>}
  */
-export async function makeProduct(ns, division, city, name, design = 0, marketing = 0) {
+async function makeProduct(ns, division, city, name, design = 0, marketing = 0) {
 	const corp = ns.corporation;
 	const products = corp.getDivision(division).products;
 	const proposedVersion = parseVersion(name);
@@ -546,25 +596,14 @@ export async function makeProduct(ns, division, city, name, design = 0, marketin
 	} else ns.print(`Already making/made ${name} in ${division} (${city})`);
 }
 
-// noinspection JSUnusedGlobalSymbols
 /**
- * Function to wait for finishing making a product
+ * Function to get latest product version
  *
  * @param {NS} ns
  * @param {string} division
- * @param {string} name
- * @returns {Promise<void>}
+ * @return {number}
  */
-export async function finishProduct(ns, division, name) {
-	ns.print(`Waiting for ${name} to finish in ${division}`);
-	while (ns.corporation.getProduct(division, name).developmentProgress < 100) {
-		await ns.sleep(1000);
-	}
-	ns.print(`Finished making ${name} in ${division}`);
-}
-
-// Function to get latest product version
-export function getLatestVersion(ns, division) {
+function getLatestVersion(ns, division) {
 	const products = ns.corporation.getDivision(division).products;
 	let latestVersion = 0;
 	for (let product of products) {
@@ -581,7 +620,7 @@ export function getLatestVersion(ns, division) {
  * @param {string} division
  * @returns {number}
  */
-export function getEarliestVersion(ns, division) {
+function getEarliestVersion(ns, division) {
 	const products = ns.corporation.getDivision(division).products;
 	let earliestVersion = Number.MAX_SAFE_INTEGER;
 	for (let product of products) {
@@ -615,7 +654,7 @@ function parseVersion(name) {
  * @param {string} division
  * @returns {Promise<void>}
  */
-export async function expandIndustry(ns, industry, division) {
+async function expandIndustry(ns, industry, division) {
 	const corp = ns.corporation;
 	if (!corp.getCorporation().divisions.some(d => d.type === industry || d.name === division)) {
 		ns.print(`Expanding to ${industry} industry: ${division}`);
@@ -633,7 +672,7 @@ export async function expandIndustry(ns, industry, division) {
  * @param {string} city
  * @returns {Promise<void>}
  */
-export async function expandCity(ns, division, city) {
+async function expandCity(ns, division, city) {
 	const corp = ns.corporation;
 	if (!corp.getDivision(division).cities.includes(city)) {
 		await moneyFor(ns, corp.getExpandCityCost);
@@ -650,7 +689,7 @@ export async function expandCity(ns, division, city) {
  * @param {string} city
  * @returns {Promise<void>}
  */
-export async function purchaseWarehouse(ns, division, city) {
+async function purchaseWarehouse(ns, division, city) {
 	const corp = ns.corporation;
 	if (!corp.hasWarehouse(division, city)) {
 		await moneyFor(ns, corp.getPurchaseWarehouseCost);
@@ -666,7 +705,7 @@ export async function purchaseWarehouse(ns, division, city) {
  * @param {string} upgrade
  * @returns {Promise<void>}
  */
-export async function unlockUpgrade(ns, upgrade) {
+async function unlockUpgrade(ns, upgrade) {
 	const corp = ns.corporation;
 	if (!corp.hasUnlockUpgrade(upgrade)) {
 		await moneyFor(ns, corp.getUnlockUpgradeCost, upgrade);
@@ -676,11 +715,11 @@ export async function unlockUpgrade(ns, upgrade) {
 }
 
 /**
- * Function to return important upgrades
+ * Function to return important research
  *
  * @returns {Object<string>}
  */
-export function getUpgrades() {
+function getResearch() {
 	return {
 		lab: 'Hi-Tech R&D Laboratory',
 		market1: 'Market-TA.I',
