@@ -19,6 +19,7 @@ export async function main(ns) {
 		}
 		while (ns.getFactionRep(faction) < rep) {
 			ns.workForFaction(faction, worktype, ns.isFocused());
+			await ns.sleep(1000);
 		}
 	}
 }
