@@ -7,8 +7,8 @@ import {getFactionWorktypes} from '/utils.js';
  */
 export async function main(ns) {
 	while (true) {
-		const factions = ns.getPlayer().factions.filter(f => f !== 'Church of the Machine God' &&
-			f !== 'Bladeburner' && f !== ns.gang.getGangInformation().faction);
+		let factions = ns.getPlayer().factions.filter(f => f !== 'Church of the Machine God' && f !== 'Bladeburner');
+		if (ns.gang.inGang()) factions = factions.filter(f => ns.gang.getGangInformation().faction !== f);
 		const faction = await ns.prompt(`Work for faction?`, {type: 'select', choices: ['None', ...factions]});
 		if (faction === 'None') break;
 		const worktype = await ns.prompt(`Type of Work?`, {type: 'select', choices: getFactionWorktypes(faction)});
