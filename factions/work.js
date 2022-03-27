@@ -1,6 +1,4 @@
-// noinspection JSUnresolvedVariable
-
-import {getFactions} from '/My Drive/Games/Bitburner/utils.js';
+import {getFactionWorktypes} from '/utils.js';
 
 /**
  *
@@ -8,29 +6,19 @@ import {getFactions} from '/My Drive/Games/Bitburner/utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	ns.disableLog('ALL');
-
-	const factions = getFactions();
-	const args = ns.flags([
-		['hacking', false],
-		['field', false],
-		['security', false]
-	]);
-
-	let workType;
-	if (args.hacking) workType = 'Hacking Contracts';
-	else if (args.field) workType = 'Field Work';
-	else if (args.security) workType = 'Security Work';
-	else throw new Error(`Invalid work type`);
-
-	for (let i = 0; i < args._.length; i += 2) {
-		const faction = factions.find(faction => faction.toLowerCase() === args._[i].toLowerCase());
-		if (faction) {
-			ns.tprint(`Working for ${faction}`);
-			while (ns.getFactionRep(faction) < args._[i + 1]) {
-				ns.workForFaction(faction, workType, ns.isFocused());
-				await ns.sleep(1000);
-			}
-		} else ns.tprint(`Could not find ${args._[i]}`);
+	while (true) {
+		const factions = ns.getPlayer().factions.filter(f => f !== 'Church of the Machine God' &&
+			f !== 'Bladeburner' && f !== ns.gang.getGangInformation().faction);
+		const faction = await ns.prompt(`Work for faction?`, {type: 'select', choices: ['None', ...factions]});
+		if (faction === 'None') break;
+		const worktype = await ns.prompt(`Type of Work?`, {type: 'select', choices: getFactionWorktypes(faction)});
+		const rep = Number(await ns.prompt(`Work until how much reputation? (Leave empty to work indefinitely)`, {type: 'text'}));
+		if (!rep) {
+			ns.workForFaction(faction, worktype, ns.isFocused());
+			break;
+		}
+		while (ns.getFactionRep(faction) < rep) {
+			ns.workForFaction(faction, worktype, ns.isFocused());
+		}
 	}
 }

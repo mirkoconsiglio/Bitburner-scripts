@@ -83,46 +83,182 @@ export function scriptsToCopy() {
 
 /**
  *
- * @returns {string[]}
+ * @returns {Object<Object>}
+ */
+export function getOrganisations() {
+	return {
+		'ECorp': {
+			stockSymbol: 'ECP',
+			server: 'ecorp',
+			faction: 'Ecorp',
+			company: 'Ecorp',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'MegaCorp': {
+			stockSymbol: 'MGCP',
+			server: 'megacorp',
+			faction: 'MegaCorp',
+			company: 'MegaCorp',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'Blade Industries': {
+			stockSymbol: 'BLD',
+			server: 'blade',
+			faction: 'Blade Industries',
+			company: 'Blade Industries',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'Clarke Incorporated': {
+			stockSymbol: 'CLRK',
+			server: 'clarkinc',
+			faction: 'Clarke Incorporated',
+			company: 'Clarke Incorporated',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'OmniTek Incorporated': {
+			stockSymbol: 'OMTK',
+			server: 'omnitek',
+			faction: 'OmniTek Incorporated',
+			company: 'OmniTek Incorporated',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'Four Sigma': {
+			stockSymbol: 'FSIG',
+			server: '4sigma',
+			faction: 'Four Sigma',
+			company: 'Four Sigma',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'KuaiGong International': {
+			stockSymbol: 'KGI',
+			server: 'kuai-gong',
+			faction: 'KuaiGong International',
+			company: 'KuaiGong International',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'Fulcrum Technologies': {stockSymbol: 'FLCM', server: 'fulcrumtech', company: 'Fulcrum Technologies'},
+		'Storm Technologies': {stockSymbol: 'STM', server: 'stormtech', company: 'Storm Technologies'},
+		'DefComm': {stockSymbol: 'DCOMM', server: 'defcomm', company: 'DefComm'},
+		'Helios Labs': {stockSymbol: 'HLS', server: 'helios', company: 'Helios Labs'},
+		'VitaLife': {stockSymbol: 'VITA', server: 'vitalife', company: 'VitaLife'},
+		'Icarus Microsystems': {stockSymbol: 'ICRS', server: 'icarus', company: 'Icarus Microsystems'},
+		'Universal Energy': {stockSymbol: 'UNV', server: 'univ-energy', company: 'Universal Energy'},
+		'AeroCorp': {stockSymbol: 'AERO', server: 'aerocorp', company: 'AeroCorp'},
+		'Omnia Cybersystems': {stockSymbol: 'OMN', server: 'omnia', company: 'Omnia Cybersystems'},
+		'Solaris Space Systems': {stockSymbol: 'SLRS', server: 'solaris', company: 'Solaris Space Systems'},
+		'Global Pharmaceuticals': {stockSymbol: 'GPH', server: 'global-pharm', company: 'Global Pharmaceuticals'},
+		'Nova Medical': {stockSymbol: 'NVMD', server: 'nova-med', company: 'Nova Medical'},
+		'Watchdog Security': {stockSymbol: 'WDS', company: 'Watchdog Security'},
+		'LexoCorp': {stockSymbol: 'LXO', server: 'lexo-corp', company: 'LexoCorp'},
+		'Rho Construction': {stockSymbol: 'RHOC', server: 'rho-construction', company: 'Rho Construction'},
+		'Alpha Enterprises': {stockSymbol: 'APHE', server: 'alpha-ent', company: 'Alpha Enterprises'},
+		'SysCore Securities': {stockSymbol: 'SYSC', server: 'syscore', company: 'SysCore Securities'},
+		'CompuTek': {stockSymbol: 'CTK', server: 'comptek', company: 'CompuTek'},
+		'NetLink Technologies': {stockSymbol: 'NTLK', server: 'netlink', company: 'NetLink Technologies'},
+		'Omega Software': {stockSymbol: 'OMGA', server: 'omega-net', company: 'Omega Software'},
+		'FoodNStuff': {stockSymbol: 'FNS', server: 'foodnstuff', company: 'FoodNStuff'},
+		'Sigma Cosmetics': {stockSymbol: 'SGC', server: 'sigma-cosmetics'},
+		'Joe\'s Guns': {stockSymbol: 'JGN', server: 'joesguns', company: 'Joe\'s Guns'},
+		'Catalyst Ventures': {stockSymbol: 'CTYS', server: 'catalyst'},
+		'Microdyne Technologies': {stockSymbol: 'MDYN', server: 'microdyne'},
+		'Titan Laboratories': {stockSymbol: 'TITN', server: 'titan-labs'},
+		'CyberSec': {server: 'CSEC', faction: 'CyberSec', factionWorkTypes: ['Hacking']},
+		'The Runners': {server: 'run4theh111z', faction: 'BitRunners', factionWorkTypes: ['Hacking']},
+		'Bachman & Associates': {
+			server: 'b-and-a',
+			faction: 'Bachman & Associates',
+			company: 'Bachman & Associates',
+			factionWorkTypes: ['Hacking', 'Field', 'Security']
+		},
+		'Fulcrum Secret Technologies': {
+			server: 'fulcrumassets',
+			faction: 'Fulcrum Secret Technologies',
+			factionWorkTypes: ['Hacking', 'Security']
+		},
+		'NiteSec': {server: 'avmnite-02h', faction: 'NiteSec', factionWorkTypes: ['Hacking'], gang: true},
+		'I.I.I.I': {server: 'I.I.I.I', faction: 'The Black Hand', factionWorkTypes: ['Hacking', 'Field'], gang: true},
+		'Slum Snakes': {faction: 'Slum Snakes', factionWorkTypes: ['Field', 'Security'], gang: true},
+		'Tetrads': {faction: 'Tetrads', factionWorkTypes: ['Field', 'Security'], gang: true},
+		'Speakers for the Dead': {
+			faction: 'Speakers for the Dead',
+			factionWorkTypes: ['Hacking', 'Field', 'Security'],
+			gang: true
+		},
+		'.': {server: '.', faction: 'The Dark Army', factionWorkTypes: ['Hacking', 'Field'], gang: true},
+		'The Syndicate': {faction: 'The Syndicate', factionWorkTypes: ['Hacking', 'Field', 'Security'], gang: true},
+		'Rothman University': {server: 'rothman-uni', university: true},
+		'ZB Institute of Technology': {server: 'zb-institute', university: true},
+		'Summit University': {server: 'summit-university', university: true},
+		'Crush Fitness': {server: 'crush-fitness', gym: true},
+		'Millenium Fitness Network': {server: 'millenium-fitness', gym: true},
+		'Iron Gym Network': {server: 'iron-gym', gym: true},
+		'Powerhouse Fitness': {server: 'powerhouse-fitness', gym: true},
+		'Snap Fitness': {server: 'snap-fitness', gym: true},
+		'Silhouette': {faction: 'Silhouette', factionWorkTypes: ['Hacking', 'Field']},
+		'Tian Di Hui': {faction: 'Tian Di Hui', factionWorkTypes: ['Hacking', 'Security']},
+		'Netburners': {faction: 'Netburners', factionWorkTypes: ['Hacking']},
+		'Aevum': {faction: 'Aevum', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'Sector-12': {faction: 'Sector-12', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'Chongqing': {faction: 'Chongqing', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'New Tokyo': {faction: 'New Tokyo', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'Ishima': {faction: 'Ishima', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'Volhaven': {faction: 'Volhaven', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'NWO': {server: 'nwo', faction: 'NWO', company: 'NWO', factionWorkTypes: ['Hacking', 'Field', 'Security']},
+		'Delta One': {server: 'deltaone', company: 'Delta One'},
+		'CIA': {company: 'CIA'},
+		'NSA': {company: 'NSA'},
+		'Aevum Police Headquarters': {server: 'aevum-police', company: 'Aevum Police Headquarters'},
+		'Carmichael Security': {company: 'Carmichael Security'},
+		'Galactic Cybersystems': {server: 'galactic-cyber', company: 'Galactic Cybersystems'},
+		'Noodle Bar': {server: 'n00dles', company: 'Noodle Bar'},
+		'InfoComm': {server: 'infocomm'},
+		'Taiyang Digital': {server: 'taiyang-digital'},
+		'ZB Defense Industries': {server: 'zb-def'},
+		'Applied Energetics': {server: 'applied-energetics'},
+		'Zeus Medical': {server: 'zeus-med'},
+		'UnitaLife Group': {server: 'unitalife'},
+		'The Hub': {server: 'the-hub'},
+		'Johnson Orthopedics': {server: 'johnson-ortho'},
+		'ZER0 Nightclub': {server: 'zero'},
+		'Nectar Nightclub Network': {server: 'nectar-net'},
+		'Neo Nightclub Network': {server: 'neo-net'},
+		'Silver Helix': {server: 'silver-helix'},
+		'HongFang Teahouse': {server: 'hong-fang-tea'},
+		'HaraKiri Sushi Bar Network': {server: 'harakiri-sushi'},
+		'Phantasy Club': {server: 'phantasy'},
+		'Max Hardware Store': {server: 'max-hardware'},
+		'Helios': {server: 'The-Cave'},
+		'w0r1d_d43m0n': {server: 'w0r1d_d43m0n'},
+		'The Covenant': {faction: 'The Covenant', factionWorkTypes: ['Hacking', 'Field']},
+		'Daedalus': {faction: 'Daedalus', factionWorkTypes: ['Hacking', 'Field']},
+		'Illuminati': {faction: 'Illuminati', factionWorkTypes: ['Hacking', 'Field']},
+		'Bladeburners': {faction: 'Bladeburners'},
+		'Church of the Machine God': {faction: 'Church of the Machine God'}
+	};
+}
+
+/**
+ *
+ * @return {string[]}
  */
 export function getFactions() {
-	return [
-		'CyberSec', 'Tian Di Hui', 'Netburners', 'Sector-12', 'Chongqing',
-		'New Tokyo', 'Ishima', 'Aevum', 'Volhaven', 'NiteSec',
-		'The Black Hand', 'BitRunners', 'ECorp', 'MegaCorp',
-		'KuaiGong International', 'Four Sigma', 'NWO', 'Blade Industries',
-		'OmniTek Incorporated', 'Bachman & Associates',
-		'Clarke Incorporated', 'Fulcrum Secret Technologies',
-		'Slum Snakes', 'Tetrads', 'Silhouette', 'Speakers for the Dead',
-		'The Dark Army', 'The Syndicate', 'The Covenant', 'Daedalus',
-		'Illuminati', 'Bladeburners', 'Church of the Machine God'
-	];
+	return Object.values(getOrganisations()).filter(v => v.faction).map(v => v.faction);
 }
 
 /**
  *
- * @returns {string[]}
+ * @return {string[]}
  */
 export function getCompanies() {
-	return [
-		'ECorp', 'MegaCorp', 'Bachman and Associates', 'Blade Industries', 'NWO',
-		'Clarke Incorporated', 'OmniTek Incorporated', 'Four Sigma', 'KuaiGong International',
-		'Fulcrum Technologies', 'Storm Technologies', 'DefComm', 'Helios Labs', 'VitaLife',
-		'Icarus Microsystems', 'Universal Energy', 'Galactic Cybersystems', 'AeroCorp',
-		'Omnia Cybersystems', 'Solaris Space Systems', 'DeltaOne', 'Global Pharmaceuticals',
-		'Nova Medical', 'CIA', 'NSA', 'Watchdog Security', 'LexoCorp', 'Rho Construction',
-		'Alpha Enterprises', 'Aevum Police', 'SysCore Securities', 'CompuTek', 'NetLink Technologies',
-		'Carmichael Security', 'FoodNStuff', 'JoesGuns', 'Ishima Omega Software', 'Noodle Bar'
-	];
+	return Object.values(getOrganisations()).filter(v => v.company).map(v => v.company);
 }
 
 /**
  *
- * @returns {string[]}
+ * @return {string[]}
  */
 export function getGangs() {
-	return ['Slum Snakes', 'Tetrads', 'The Syndicate', 'The Dark Army', 'Speakers for the Dead',
-		'NiteSec', 'The Black Hand'];
+	return Object.values(getOrganisations()).filter(v => v.gang).map(v => v.faction);
 }
 
 /**
@@ -196,6 +332,24 @@ export function getJobs() {
 
 /**
  *
+ * @param {string} faction
+ * @returns {string[]}
+ */
+export function getFactionWorktypes(faction) {
+	return Object.values(getOrganisations()).find(v => v.faction === faction).factionWorkTypes;
+}
+
+/**
+ *
+ * @param {string} symbol
+ * @returns {string}
+ */
+export function symbolToServer(symbol) {
+	for (const org of Object.values(getOrganisations())) if (org.stockSymbol === symbol) return org.server;
+}
+
+/**
+ *
  * @param {NS} ns
  * @param {number} minimumRam
  */
@@ -212,57 +366,6 @@ export function deployBatchers(ns, minimumRam = 2 ** 14) {
 			ns.exec(scripts.batcher, hosts[i], 1, hackables[i]);
 		}
 	}
-}
-
-/**
- *
- * @returns {Object<Object<string, string>>}
- */
-export function getOrganisations() {
-	return {
-		ECorp: {stockSymbol: 'ECP', serverName: 'ecorp'},
-		MegaCorp: {stockSymbol: 'MGCP', serverName: 'megacorp'},
-		'Blade Industries': {stockSymbol: 'BLD', serverName: 'blade'},
-		'Clarke Incorporated': {stockSymbol: 'CLRK', serverName: 'clarkinc'},
-		'OmniTek Incorporated': {stockSymbol: 'OMTK', serverName: 'omnitek'},
-		'Four Sigma': {stockSymbol: 'FSIG', serverName: '4sigma'},
-		'KuaiGong International': {stockSymbol: 'KGI', serverName: 'kuai-gong'},
-		'Fulcrum Technologies': {stockSymbol: 'FLCM', serverName: 'fulcrumtech'},
-		'Storm Technologies': {stockSymbol: 'STM', serverName: 'stormtech'},
-		DefComm: {stockSymbol: 'DCOMM', serverName: 'defcomm'},
-		'Helios Labs': {stockSymbol: 'HLS', serverName: 'helios'},
-		VitaLife: {stockSymbol: 'VITA', serverName: 'vitalife'},
-		'Icarus Microsystems': {stockSymbol: 'ICRS', serverName: 'icarus'},
-		'Universal Energy': {stockSymbol: 'UNV', serverName: 'univ-energy'},
-		AeroCorp: {stockSymbol: 'AERO', serverName: 'aerocorp'},
-		'Omnia Cybersystems': {stockSymbol: 'OMN', serverName: 'omnia'},
-		'Solaris Space Systems': {stockSymbol: 'SLRS', serverName: 'solaris'},
-		'Global Pharmaceuticals': {stockSymbol: 'GPH', serverName: 'global-pharm'},
-		'Nova Medical': {stockSymbol: 'NVMD', serverName: 'nova-med'},
-		'Watchdog Security': {stockSymbol: 'WDS'},
-		LexoCorp: {stockSymbol: 'LXO', serverName: 'lexo-corp'},
-		'Rho Construction': {stockSymbol: 'RHOC', serverName: 'rho-construction'},
-		'Alpha Enterprises': {stockSymbol: 'APHE', serverName: 'alpha-ent'},
-		'SysCore Securities': {stockSymbol: 'SYSC', serverName: 'syscore'},
-		CompuTek: {stockSymbol: 'CTK', serverName: 'comptek'},
-		'NetLink Technologies': {stockSymbol: 'NTLK', serverName: 'netlink'},
-		'Omega Software': {stockSymbol: 'OMGA', serverName: 'omega-net'},
-		FoodNStuff: {stockSymbol: 'FNS', serverName: 'foodnstuff'},
-		'Sigma Cosmetics': {stockSymbol: 'SGC', serverName: 'sigma-cosmetics'},
-		'Joe\'s Guns': {stockSymbol: 'JGN', serverName: 'joesguns'},
-		'Catalyst Ventures': {stockSymbol: 'CTYS', serverName: 'catalyst'},
-		'Microdyne Technologies': {stockSymbol: 'MDYN', serverName: 'microdyne'},
-		'Titan Laboratories': {stockSymbol: 'TITN', serverName: 'titan-labs'}
-	};
-}
-
-/**
- *
- * @param {string} symbol
- * @returns {string}
- */
-export function symbolToServer(symbol) {
-	for (const org of Object.values(getOrganisations())) if (org.stockSymbol === symbol) return org.serverName;
 }
 
 /**
@@ -399,9 +502,7 @@ export function recursiveRouteFinder(ns, parent, host, server, route) {
  */
 export function getServers(ns) {
 	const serverList = ['home'];
-	for (let s of serverList) {
-		ns.scan(s).filter(n => !serverList.includes(n)).forEach(n => serverList.push(n));
-	}
+	for (let s of serverList) ns.scan(s).filter(n => !serverList.includes(n)).forEach(n => serverList.push(n));
 	return serverList;
 }
 
@@ -745,7 +846,17 @@ export function defaultPortData(portNumber) {
  * @returns {Promise<void>}
  */
 export async function initData(ns) {
-	for (let i = 1; i <= 20; i++) await writeToFile(ns, i, defaultPortData(i));
+	for (let i = 1; i <= 20; i++) await resetData(ns, i);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} portNumber
+ * @return {Promise<void>}
+ */
+export async function resetData(ns, portNumber) {
+	await writeToFile(ns, portNumber, defaultPortData(portNumber));
 }
 
 /**
