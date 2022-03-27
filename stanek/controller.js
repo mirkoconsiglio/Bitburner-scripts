@@ -45,7 +45,8 @@ export async function main(ns) {
 		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
 			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up on ${host}: ` +
-				`${ns.nFormat(ns.getServerMaxRam(host) - ns.getServerUsedRam(host), '0.000b')}/${ns.nFormat(ram, '0.000b')}`);
+				`${ns.nFormat((ns.getServerMaxRam(host) - ns.getServerUsedRam(host)) * 1e9, '0.000b')} ` +
+				`/ ${ns.nFormat(ram * 1e9, '0.000b')}`);
 			await ns.sleep(1000);
 		}
 		// Charge Stanek
@@ -78,7 +79,7 @@ function getBestHost(ns) {
 			maxRam = maxRamAvailable;
 		}
 	}
-	return {host: bestHost, threads, maxThreads, ram: maxRam};
+	return {host: bestHost, threads: maxThreads, ram: maxRam};
 }
 
 /**
@@ -104,9 +105,9 @@ async function charger(ns) {
 			if (getBestHost(ns)[1] > threads) return; // Reset Charging
 			statusUpdate(ns, fragments, data);
 			let availableRam = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
-			const threads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
+			const availableThreads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
 			// Only charge if we will not be bringing down the average
-			if (threads < fragment.avgCharge * 0.99) {
+			if (availableThreads < fragment.avgCharge * 0.99) {
 				ns.print(`WARNING: The current average charge of fragment ${fragment.id} is ${ns.nFormat(fragment.avgCharge, '0.000a')}, ` +
 					`indicating that it has been charged while there was ${ns.nFormat(2 * fragment.avgCharge * 1000 ** 3, '0.00b')} or more free RAM on home, ` +
 					`but currently there is only ${ns.nFormat(availableRam * 1000 ** 3, '0.00b')} available, which would reduce the average charge and lower your stats. ` +
