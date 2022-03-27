@@ -1,53 +1,28 @@
 // noinspection JSUnresolvedVariable
 
-import {getCompanies, getJobs} from '/utils.js';
+import {getCompanies, getCompanyPositions} from '/utils.js';
 
-// TODO: update to use prompt scripts
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	ns.disableLog('ALL');
-
-	const companies = getCompanies();
-	const jobs = getJobs();
-	const args = ns.flags([
-		['agent', false],
-		['business', false],
-		['it', false],
-		['security', false],
-		['software', false],
-		['software_consultant', false],
-		['employee', false],
-		['part_time_employee', false],
-		['waiter', false],
-		['part_time_waiter', false]
-	]);
-
-	let workType;
-	if (args.agent) workType = jobs.agent.name;
-	else if (args.business) workType = jobs.business.name;
-	else if (args.it) workType = jobs.it.name;
-	else if (args.security) workType = jobs.security.name;
-	else if (args.software) workType = jobs.software.name;
-	else if (args.software_consultant) workType = jobs.software_consultant.name;
-	else if (args.employee) workType = jobs.employee.name;
-	else if (args.part_time_employee) workType = jobs.part_time_employee.name;
-	else if (args.waiter) workType = jobs.waiter.name;
-	else if (args.part_time_waiter) workType = jobs.waiter.name;
-	else throw new Error(`Invalid work type`);
-
-	for (let i = 0; i < args._.length; i += 2) {
-		let company = companies.find(company => company.toLowerCase() === args._[i].toLowerCase());
-		if (company) {
-			ns.tprint(`Working for ${company}`);
-			while (ns.getCompanyRep(company) < args._[i + 1]) {
-				ns.applyToCompany(company, workType);
-				ns.workForCompany(company, ns.isFocused());
-				await ns.sleep(1000);
-			}
-		} else ns.tprint(`Could not find ${args._[i]}`);
+	while (true) {
+		const companies = getCompanies();
+		const company = await ns.prompt(`Work for company?`, {type: 'select', choices: ['None', ...companies]});
+		if (company === 'None') break;
+		const position = await ns.prompt(`Company position?`, {type: 'select', choices: getCompanyPositions(company)});
+		const rep = Number(await ns.prompt(`Work until how much reputation? (Leave empty to work indefinitely)`, {type: 'text'}));
+		if (!rep) {
+			ns.applyToCompany(company, position);
+			if (!ns.workForCompany(company, ns.isFocused())) throw new Error(`Could not work for company (Not enough qualifications?)`);
+			break;
+		}
+		while (ns.getCompanyRep(company) < rep) {
+			ns.applyToCompany(company, position);
+			if (!ns.workForCompany(company, ns.isFocused())) throw new Error(`Could not work for company (Not enough qualifications?)`);
+			await ns.sleep(1000);
+		}
 	}
 }
