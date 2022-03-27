@@ -26,7 +26,7 @@ After an update you can do
 
 > run /build/script-remover.js
 
-to remove **ALL** scripts. Useful after an update.
+to ask you to remove scripts which are not in the repo. Useful after an update.
 
 # Disclaimer
 
