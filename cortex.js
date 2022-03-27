@@ -92,21 +92,24 @@ export async function main(ns) {
 			ns.exec(scripts.upgradeHomeCores, host);
 			upgradeCores = false;
 		}
-		// Purchase WSE account
-		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 &&
-			wse && !promptScriptRunning(ns, host)) {
-			if (await ns.prompt(`Purchase WSE account?`)) {
-				ns.stock.purchaseWseAccount();
-				printBoth(ns, `Purchased WSE account`);
-			} else wse = false;
+		// Stanek Manager
+		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
+		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
+			ns.getPlayer().money >= 200e3 && stanek && !ns.isRunning(scripts.stanek, host) &&
+			!promptScriptRunning(ns, host)) {
+			if (await ns.prompt(`Accept Stanek's Gift?`)) {
+				acceptStanek(ns);
+				printBoth(ns, `Accepted Stanek's Gift`);
+			} else stanek = false;
 		}
-		// Purchase TIX API
-		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 &&
-			tix && !promptScriptRunning(ns, host)) {
-			if (await ns.prompt(`Purchase TIX API?`)) {
-				ns.stock.purchaseTixApi();
-				printBoth(ns, `Purchased TIX API`);
-			} else tix = false;
+		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
+			!ns.isRunning(scripts.stanek, host) && stanek &&
+			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
+			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
+				ns.exec(scripts.stanek, host);
+				printBoth(ns, `Started Stanek's Gift manager`);
+			}
+			stanek = false;
 		}
 		// Gang manager
 		// noinspection JSUnresolvedFunction
@@ -167,6 +170,22 @@ export async function main(ns) {
 			}
 			bladeburner = false;
 		}
+		// Purchase WSE account
+		if (!ns.getPlayer().hasWseAccount && ns.getPlayer().money >= 200e6 &&
+			wse && !promptScriptRunning(ns, host)) {
+			if (await ns.prompt(`Purchase WSE account?`)) {
+				ns.stock.purchaseWseAccount();
+				printBoth(ns, `Purchased WSE account`);
+			} else wse = false;
+		}
+		// Purchase TIX API
+		if (!ns.getPlayer().hasTixApiAccess && ns.getPlayer().money >= 5e9 &&
+			tix && !promptScriptRunning(ns, host)) {
+			if (await ns.prompt(`Purchase TIX API?`)) {
+				ns.stock.purchaseTixApi();
+				printBoth(ns, `Purchased TIX API`);
+			} else tix = false;
+		}
 		// Stock market manager
 		if (ns.getPlayer().hasTixApiAccess && stock && !ns.isRunning(scripts.stock, host) &&
 			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
@@ -194,25 +213,6 @@ export async function main(ns) {
 				printBoth(ns, `Started sleeve manager`);
 			}
 			sleeve = false;
-		}
-		// Stanek Manager
-		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
-			ns.getPlayer().money >= 200e3 && stanek && !ns.isRunning(scripts.stanek, host) &&
-			!promptScriptRunning(ns, host)) {
-			if (await ns.prompt(`Accept Stanek's Gift?`)) {
-				acceptStanek(ns);
-				printBoth(ns, `Accepted Stanek's Gift`);
-			} else stanek = false;
-		}
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
-			!ns.isRunning(scripts.stanek, host) && stanek &&
-			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
-			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
-				ns.exec(scripts.stanek, host);
-				printBoth(ns, `Started Stanek's Gift manager`);
-			}
-			stanek = false;
 		}
 		// Check faction invites
 		let factionInvitations = ns.checkFactionInvitations().filter(faction => factions.includes(faction));

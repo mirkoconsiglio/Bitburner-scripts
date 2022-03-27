@@ -966,7 +966,7 @@ export function getPortNumbers() {
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
 		case 1:
-			return {home: 64};
+			return {};
 		case 2:
 			return undefined;
 		case 3:
