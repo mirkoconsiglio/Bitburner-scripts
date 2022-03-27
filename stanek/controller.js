@@ -1,6 +1,11 @@
 import {getFragment} from '/stanek/utils.js';
 import {getAccessibleServers, getManagerScripts, getPortNumbers, getScripts, modifyFile, readFromFile} from '/utils.js';
 
+// Variables
+let host;
+let threads = 0;
+let ram = 0;
+
 /**
  *
  * @param {NS} ns
@@ -12,19 +17,18 @@ export async function main(ns) {
 	const portNumbers = getPortNumbers();
 	const stanekPortNumber = portNumbers.stanek;
 	const reservedRamPortNumber = portNumbers.reservedRam;
-	let host, threads = 0, ram = 0;
 	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		// Get Stanek data
 		const data = readFromFile(ns, stanekPortNumber);
 		// Get best host and the max RAM we can reserve for charging
-		const [bestHost, maxThreads, maxRam] = getBestHost(ns);
-		if (maxThreads > threads) {
+		const bestHost = getBestHost(ns);
+		if (bestHost.threads > threads) {
 			ns.stanek.clear(); // Reset charges
-			host = bestHost;
-			threads = maxThreads;
-			ram = maxRam;
+			host = bestHost.host;
+			threads = bestHost.threads;
+			ram = bestHost.ram;
 		}
 		// Set up pattern
 		setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
@@ -40,11 +44,12 @@ export async function main(ns) {
 		// Wait for RAM to free up
 		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
 			ns.clearLog();
-			ns.print(`INFO: Waiting for RAM to free up on ${host}`);
+			ns.print(`INFO: Waiting for RAM to free up on ${host}: ` +
+				`${ns.nFormat(ns.getServerMaxRam(host) - ns.getServerUsedRam(host), '0.000b')}/${ns.nFormat(ram, '0.000b')}`);
 			await ns.sleep(1000);
 		}
 		// Charge Stanek
-		await charger(ns, host);
+		await charger(ns);
 		// Remove reserved RAM on host
 		const currentReservedRam = readFromFile(ns, reservedRamPortNumber)[host] ?? 0;
 		await modifyFile(ns, reservedRamPortNumber, {[host]: currentReservedRam - ram});
@@ -73,7 +78,7 @@ function getBestHost(ns) {
 			maxRam = maxRamAvailable;
 		}
 	}
-	return [bestHost, maxThreads, maxRam];
+	return {host: bestHost, threads, maxThreads, ram: maxRam};
 }
 
 /**
@@ -81,7 +86,7 @@ function getBestHost(ns) {
  * @param {NS} ns
  * @returns {Promise<void>}
  */
-async function charger(ns, host) {
+async function charger(ns) {
 	const st = ns.stanek;
 	const scripts = getScripts();
 	const stanekPortNumber = getPortNumbers().stanek;
@@ -96,6 +101,7 @@ async function charger(ns, host) {
 		if (fragments.length === 0) return; // All fragments charged to full
 		// Charge each fragment one at a time
 		for (const fragment of fragments) {
+			if (getBestHost(ns)[1] > threads) return; // Reset Charging
 			statusUpdate(ns, fragments, data);
 			let availableRam = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
 			const threads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
