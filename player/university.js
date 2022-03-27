@@ -1,41 +1,66 @@
 // noinspection JSUnresolvedVariable
 
+import {getUniversityLocation} from 'utils.js';
+
+let level;
+let course;
+let university;
+
+const argsSchema = [
+	['university', 'ZB Institute of Technology'],
+	['course', 'Leadership'],
+	['level', 100]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, options) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const args = ns.flags([
-		['university', 'ZB Institute of Technology'],
-		['course', 'Leadership']
-	]);
-
-	if (args.university === 'Summit University') ns.travelToCity('Aevum');
-	else if (args.university === 'Rothman University') ns.travelToCity('Sector-12');
-	else if (args.university === 'ZB Institute of Technology') ns.travelToCity('Volhaven');
-	else throw new Error(`Invalid university`);
-
-	if (args.course === 'Computer Science' ||
-		args.course === 'Data Structures' ||
-		args.course === 'Networks' ||
-		args.course === 'Algorithms') await studyHack(ns, args.university, args.course, args._[0]);
-	else if (args.course === 'Management' ||
-		args.course === 'Leadership') await studyCha(ns, args.university, args.course, args._[0]);
+	const options = ns.flags(argsSchema);
+	level = options.level;
+	course = options.course;
+	university = options.university;
+	ns.travelToCity(getUniversityLocation(university));
+	if (options.course === 'Computer Science' ||
+		options.course === 'Data Structures' ||
+		options.course === 'Networks' ||
+		options.course === 'Algorithms') await studyHack(ns);
+	else if (options.course === 'Management' ||
+		options.course === 'Leadership') await studyCha(ns);
 	else throw new Error(`Invalid course`);
 }
 
-async function studyHack(ns, university, course, level) {
+/**
+ *
+ * @param {NS} ns
+ * @return {Promise<void>}
+ */
+async function studyHack(ns) {
 	ns.universityCourse(university, course);
 	while (ns.getPlayer().hacking < level) {
+		if (ns.getPlayer().workType !== 'Studying or Taking a class at university') break;
 		await ns.sleep(1000);
 	}
 	ns.stopAction();
 }
 
-async function studyCha(ns, university, course, level) {
+/**
+ *
+ * @param {NS} ns
+ * @return {Promise<void>}
+ */
+async function studyCha(ns) {
 	ns.universityCourse(university, course);
 	while (ns.getPlayer().charisma < level) {
+		if (ns.getPlayer().workType !== 'Studying or Taking a class at university') break;
 		await ns.sleep(1000);
 	}
 	ns.stopAction();
