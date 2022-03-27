@@ -5,12 +5,7 @@ const argsSchema = [
 	['money-threshold', 1e12]
 ];
 
-/**
- *
- * @param {*} data
- * @param {*} args
- * @returns {*[]}
- */
+// noinspection JSUnusedLocalSymbols
 export function autocomplete(data, args) {
 	data.flags(argsSchema);
 	return [];

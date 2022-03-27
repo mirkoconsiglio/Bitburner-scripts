@@ -15,49 +15,56 @@ import {
 } from '/augmentations/utils.js';
 import {getFactions, getScripts} from '/utils.js';
 
+const argsSchema = [
+	['hacking', false],
+	['combat', false],
+	['crime', false],
+	['company', false],
+	['hacknet', false],
+	['programs', false],
+	['faction', false],
+	['bladeburner', false],
+	['focus', false],
+	['hacking-skill', false],
+	['all', false],
+	['install', false]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, args) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const args = ns.flags([
-		['hacking', false],
-		['combat', false],
-		['crime', false],
-		['company', false],
-		['hacknet', false],
-		['programs', false],
-		['faction', false],
-		['bladeburner', false],
-		['focus', false],
-		['hacking-skill', false],
-		['all', false],
-		['install', false]
-	]);
+	const options = ns.flags(argsSchema);
 	const scripts = getScripts();
 	// Check criteria for determining what augmentations are useful
 	const criteria = [];
-	if (args.hacking || args.all) criteria.push(isUsefulHacking);
-	if (args.combat || args.all) criteria.push(isUsefulCombat);
-	if (args.crime || args.all) criteria.push(isUsefulCrime);
-	if (args.company || args.all) criteria.push(isUsefulCompany);
-	if (args.hacknet || args.all) criteria.push(isUsefulHacknet);
-	if (args.programs || args.all) criteria.push(isUsefulPrograms);
-	if (args.faction || args.all) criteria.push(isUsefulFaction);
-	if (args.bladeburner || args.all) criteria.push(isUsefulBladeburner);
-	if (args.focus || args.all) criteria.push(isUsefulFocus);
-	if (args['hacking-skill'] || args.all) criteria.push(isUsefulHackingSkill);
+	if (options.hacking || options.all) criteria.push(isUsefulHacking);
+	if (options.combat || options.all) criteria.push(isUsefulCombat);
+	if (options.crime || options.all) criteria.push(isUsefulCrime);
+	if (options.company || options.all) criteria.push(isUsefulCompany);
+	if (options.hacknet || options.all) criteria.push(isUsefulHacknet);
+	if (options.programs || options.all) criteria.push(isUsefulPrograms);
+	if (options.faction || options.all) criteria.push(isUsefulFaction);
+	if (options.bladeburner || options.all) criteria.push(isUsefulBladeburner);
+	if (options.focus || options.all) criteria.push(isUsefulFocus);
+	if (options['hacking-skill'] || options.all) criteria.push(isUsefulHackingSkill);
 	// Augmentation price increase
+	const sf11Level = ns.getOwnedSourceFiles().find(s => s.n === 11)?.lvl;
 	let mult = 0;
-	for (let i = 0; i < (ns.getOwnedSourceFiles().find(s => s.n === 11) ?? {lvl: 0}).lvl; i++) {
-		mult += 4 / Math.pow(2, i);
-	}
+	if (sf11Level) for (let i = 0; i < sf11Level; i++) mult += 4 / Math.pow(2, i);
 	const inc = 1.9 * (1 - mult / 100);
 	// Get all useful and purchasable augmentations
 	let augmentations = [];
-	for (let faction of getFactions()) {
-		for (let aug of ns.getAugmentationsFromFaction(faction)) {
+	for (const faction of getFactions()) {
+		for (const aug of ns.getAugmentationsFromFaction(faction)) {
 			if (isUseful(ns, criteria, aug) && isPurchasable(ns, faction, aug, augmentations)) {
 				augmentations.push(
 					{
@@ -81,7 +88,7 @@ export async function main(ns) {
 			}
 		}
 		// Ask if player wants to sell stocks
-		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) ns.exec(scripts.stock, 'home', 1, '--l');
+		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) ns.exec(scripts.stock, 'home', 1, '--liquidate');
 	}
 	// Sell hashes before buying augmentations
 	if (ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9)) { // Check if player has hacknet servers
@@ -169,7 +176,7 @@ export async function main(ns) {
 		}
 	}
 	// Ask to install augmentations
-	if (args.install && await ns.prompt('Install augmentations?')) {
+	if (options.install && await ns.prompt('Install augmentations?')) {
 		ns.installAugmentations('cortex.js');
 	}
 }

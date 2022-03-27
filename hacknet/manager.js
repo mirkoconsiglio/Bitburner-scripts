@@ -1,6 +1,17 @@
 // Requires formulas
 import {printBoth} from '/utils.js';
 
+const argsSchema = [
+	['max-spend', Infinity],
+	['max-payoff-time', Infinity]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, args) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
@@ -8,12 +19,9 @@ import {printBoth} from '/utils.js';
  */
 export async function main(ns) {
 	ns.disableLog('ALL');
-	const args = ns.flags([
-		['max-spend', Infinity],
-		['max-payoff-time', Infinity]
-	]);
-	let maxSpend = args['max-spend'];
-	const maxPayoffTime = args['max-payoff-time'];
+	const options = ns.flags(argsSchema);
+	let maxSpend = options['max-spend'];
+	const maxPayoffTime = options['max-payoff-time'];
 	while (true) {
 		const spend = upgradeHacknet(ns, maxSpend, maxPayoffTime);
 		if (typeof spend === 'string') {

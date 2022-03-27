@@ -1,5 +1,18 @@
 // noinspection JSUnresolvedVariable
 
+const argsSchema = [
+	['upgrade', 'Sell for Money'],
+	['target', undefined],
+	['liquidate', false],
+	['continuous', false]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, args) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
@@ -8,16 +21,11 @@
 export async function main(ns) {
 	ns.disableLog('ALL');
 	if (!ns.getPlayer().bitNodeN === 9 && !ns.getOwnedSourceFiles().some(s => s.n === 9)) throw new Error(`Script requires Hacknet servers to be unlocked`);
-	const args = ns.flags([
-		['l', false],
-		['liquidate', false],
-		['c', false],
-		['continuous', false]
-	]);
-	const upgrade = args._[0] ?? 'Sell for Money';
-	const target = args._[1] ?? undefined;
-	const liquidate = args.l || args.liquidate;
-	const continuous = args.c || args.continuous;
+	const options = ns.flags(argsSchema);
+	const upgrade = options.upgrade;
+	const target = options.target;
+	const liquidate = options.liquidate;
+	const continuous = options.continuous;
 	while (true) {
 		await spendHashes(ns, upgrade, target, liquidate);
 		if (!continuous) break;
