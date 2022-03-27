@@ -35,6 +35,7 @@ tools/monitor.js
 tools/pserv-buyer.js
 tools/reputation.js
 tools/player.js
+tools/reset-port.js
 utils.js
 corporation/autopilot.js
 gang/manager.js
