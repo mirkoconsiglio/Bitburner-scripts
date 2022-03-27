@@ -1,7 +1,8 @@
 // noinspection JSUnresolvedVariable
 
-import {getCompanies, getJobs} from '/My Drive/Games/Bitburner/utils.js';
+import {getCompanies, getJobs} from '/utils.js';
 
+// TODO: update to use prompt scripts
 /**
  *
  * @param {NS} ns

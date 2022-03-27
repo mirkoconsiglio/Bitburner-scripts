@@ -1,10 +1,4 @@
-import {
-	copyScriptsToAll,
-	findPlaceToRun,
-	getAccessibleServers,
-	getFreeRam,
-	getScripts
-} from '/My Drive/Games/Bitburner/utils.js';
+import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRam, getScripts} from '/utils.js';
 
 /**
  *
