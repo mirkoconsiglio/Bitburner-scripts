@@ -8,7 +8,7 @@ import {
 	isUsefulFaction,
 	isUsefulHackingSkill
 } from '/augmentations/utils.js';
-import {getJobs, getPortNumbers, readFromFile} from '/utils.js';
+import {getPortNumbers, readFromFile} from '/utils.js';
 
 /**
  *
@@ -85,4 +85,73 @@ export async function main(ns) {
 		}
 		await ns.sleep(1000);
 	}
+}
+
+/**
+ *
+ * @returns {Object<Object<string, boolean, boolean, boolean>[]>}
+ */
+function getJobs() {
+	return {
+		agent: {
+			name: 'Agent',
+			hacking: true,
+			combat: true,
+			charisma: true
+		},
+		business: {
+			name: 'Business',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		it: {
+			name: 'IT',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		security: {
+			name: 'Security',
+			hacking: true,
+			combat: true,
+			charisma: true
+		},
+		software: {
+			name: 'Software',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		software_consultant: {
+			name: 'Software Consultant',
+			hacking: true,
+			combat: false,
+			charisma: true
+		},
+		employee: {
+			name: 'Employee',
+			hacking: false,
+			combat: true,
+			charisma: true
+		},
+		part_time_employee: {
+			name: 'part-time Employee',
+			hacking: false,
+			combat: true,
+			charisma: true
+		},
+		waiter: {
+			name: 'Employee',
+			hacking: false,
+			combat: true,
+			charisma: true
+		},
+		part_time_waiter: {
+			name: 'part-time Waiter',
+			hacking: false,
+			combat: true,
+			charisma: true
+		}
+	};
 }
