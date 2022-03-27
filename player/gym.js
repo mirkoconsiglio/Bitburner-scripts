@@ -1,58 +1,93 @@
 // noinspection JSUnresolvedVariable
 
+import {getGymLocation} from 'utils.js';
+
+let level;
+let gym;
+
+const argsSchema = [
+	['str', false],
+	['def', false],
+	['dex', false],
+	['agi', false],
+	['all', false],
+	['level', 100],
+	['gym', 'Powerhouse Gym']
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, options) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const args = ns.flags([
-		['str', false],
-		['def', false],
-		['dex', false],
-		['agi', false],
-		['all', false],
-		['gym', 'Powerhouse Gym']
-	]);
-
-	if (args.gym === 'Crush Fitness Gym' || args.gym === 'Snap Fitness Gym') ns.travelToCity('Aevum');
-	else if (args.gym === 'Iron Gym' || args.gym === 'Powerhouse Gym') ns.travelToCity('Sector-12');
-	else if (args.gym === 'Millenium Fitness Gym') ns.travelToCity('Volhaven');
-	else throw new Error(`Invalid gym`);
-
-	if (args.str || args.all) await workOutStr(ns, args.gym, args._[0]);
-	if (args.def || args.all) await workOutDef(ns, args.gym, args._[0]);
-	if (args.dex || args.all) await workOutDex(ns, args.gym, args._[0]);
-	if (args.agi || args.all) await workOutAgi(ns, args.gym, args._[0]);
+	const options = ns.flags(argsSchema);
+	level = options.level;
+	gym = options.gym;
+	ns.travelToCity(getGymLocation(options.gym));
+	if (options.str || options.all) await workOutStr(ns);
+	if (options.def || options.all) await workOutDef(ns);
+	if (options.dex || options.all) await workOutDex(ns);
+	if (options.agi || options.all) await workOutAgi(ns);
 }
 
-async function workOutStr(ns, gym, level) {
+/**
+ *
+ * @param {NS} ns
+ * @return {Promise<void>}
+ */
+async function workOutStr(ns) {
 	ns.gymWorkout(gym, 'str');
 	while (ns.getPlayer().strength < level) {
+		if (ns.getPlayer().className !== 'training your strength at a gym') break;
 		await ns.sleep(1000);
 	}
 	ns.stopAction();
 }
 
-async function workOutDef(ns, gym, level) {
+/**
+ *
+ * @param {NS} ns
+ * @return {Promise<void>}
+ */
+async function workOutDef(ns) {
 	ns.gymWorkout(gym, 'def');
 	while (ns.getPlayer().defense < level) {
+		if (ns.getPlayer().className !== 'training your defense at a gym') break;
 		await ns.sleep(1000);
 	}
 	ns.stopAction();
 }
 
-async function workOutDex(ns, gym, level) {
+/**
+ *
+ * @param {NS} ns
+ * @return {Promise<void>}
+ */
+async function workOutDex(ns) {
 	ns.gymWorkout(gym, 'dex');
 	while (ns.getPlayer().dexterity < level) {
+		if (ns.getPlayer().className !== 'training your dexterity at a gym') break;
 		await ns.sleep(1000);
 	}
 	ns.stopAction();
 }
 
-async function workOutAgi(ns, gym, level) {
+/**
+ *
+ * @param {NS} ns
+ * @return {Promise<void>}
+ */
+async function workOutAgi(ns) {
 	ns.gymWorkout(gym, 'agi');
 	while (ns.getPlayer().agility < level) {
+		if (ns.getPlayer().className !== 'training your agility at a gym') break;
 		await ns.sleep(1000);
 	}
 	ns.stopAction();
