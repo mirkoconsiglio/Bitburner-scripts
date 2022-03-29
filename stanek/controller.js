@@ -25,13 +25,13 @@ export async function main(ns) {
 		// Get best host and the max RAM we can reserve for charging
 		const bestHost = getBestHost(ns);
 		if (bestHost.threads > threads) {
-			ns.stanek.clear(); // Reset charges
+			ns.stanek.clearGift(); // Reset charges
 			host = bestHost.host;
 			threads = bestHost.threads;
 			ram = bestHost.ram;
 		}
 		// Set up pattern
-		setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
+		setupPattern(ns, getPatterns(st.giftWidth(), st.giftHeight())[data.pattern]);
 		// Get chargeable fragment info
 		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
 		if (fragments.length === 0) {
@@ -96,7 +96,7 @@ async function charger(ns) {
 		// Get data
 		const data = readFromFile(ns, stanekPortNumber);
 		// Set up pattern
-		setupPattern(ns, getPatterns(st.width(), st.height())[data.pattern]);
+		setupPattern(ns, getPatterns(st.giftWidth(), st.giftHeight())[data.pattern]);
 		// Get chargeable fragments
 		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
 		if (fragments.length === 0) return; // All fragments charged to full
@@ -204,9 +204,9 @@ function setupPattern(ns, pattern) {
 		const y = fragment.rootY;
 		const rot = fragment.rotation;
 		const id = fragment.fragmentID;
-		if (st.get(x, y)?.id === id) continue; // Fragment already placed there
-		if (!st.canPlace(x, y, rot, id)) makeSpace(ns, x, y, rot, id); // Make space for fragment
-		st.place(x, y, rot, id); // Place fragment
+		if (st.getFragment(x, y)?.id === id) continue; // Fragment already placed there
+		if (!st.canPlaceFragment(x, y, rot, id)) makeSpace(ns, x, y, rot, id); // Make space for fragment
+		st.placeFragment(x, y, rot, id); // Place fragment
 	}
 }
 
@@ -228,20 +228,20 @@ function makeSpace(ns, rootX, rootY, rotation, fragmentID) {
 	if (sameActiveFragments.length + 1 > fragment.limit) {
 		// Remove any fragments with the same ID
 		for (let sameActiveFragment of sameActiveFragments) {
-			st.remove(sameActiveFragment.x, sameActiveFragment.y);
+			st.removeFragment(sameActiveFragment.x, sameActiveFragment.y);
 		}
 		// Check if we can place fragment now
-		if (st.canPlace(rootX, rootY, rotation, fragmentID)) return true;
+		if (st.canPlaceFragment(rootX, rootY, rotation, fragmentID)) return true;
 	}
 	// Check if we are colliding with another fragment
 	const currentFragmentCoordinates = getCoordinates(ns, rootX, rootY, fragment.shape, rotation);
 	for (let other of getActiveFragmentsAndCoordinates(ns)) {
 		// Check if there are colliding cells
 		if (currentFragmentCoordinates.some(c => other.coordinates.some(e => e[0] === c[0] && e[1] === c[1]))) {
-			st.remove(other.fragment.x, other.fragment.y);
+			st.removeFragment(other.fragment.x, other.fragment.y);
 		}
 		// Check if we can place fragment now
-		if (st.canPlace(rootX, rootY, rotation, fragmentID)) return true;
+		if (st.canPlaceFragment(rootX, rootY, rotation, fragmentID)) return true;
 	}
 	// Something is stopping us from making space
 	throw new Error(`Could not make space for fragment`);
@@ -280,7 +280,7 @@ function getCoordinates(ns, rootX, rootY, shape, rotation) {
 			const x = rootX + j;
 			const y = rootY + i;
 			// If we are going over the gift's edges throw an error
-			if (x < 0 || y < 0 || x >= st.width() || y >= st.height()) throw new Error(`Invalid placement`);
+			if (x < 0 || y < 0 || x >= st.giftWidth() || y >= st.giftHeight()) throw new Error(`Invalid placement`);
 			coordinates.push([x, y]);
 		}
 	}

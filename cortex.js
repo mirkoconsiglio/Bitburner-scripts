@@ -60,7 +60,7 @@ export async function main(ns) {
 		// Contract solver (disables itself if any solution was incorrect)
 		if (contractorOnline) contractorOnline = contractor(ns);
 		// Purchase TOR
-		if (ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
+		if (!ns.getPlayer().tor && ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
 		if (ns.getPlayer().tor) {
 			for (const program of getUsefulPrograms()) {
@@ -215,7 +215,7 @@ export async function main(ns) {
 			sleeve = false;
 		}
 		// Check faction invites
-		let factionInvitations = ns.checkFactionInvitations().filter(faction => factions.includes(faction));
+		const factionInvitations = ns.checkFactionInvitations().filter(faction => !factions.includes(faction));
 		if (factionInvitations.length > 0 && enoughRam(ns, scripts.joinFactions, host) &&
 			!promptScriptRunning(ns, host)) {
 			ns.print(`Request to join ${factionInvitations}`);
