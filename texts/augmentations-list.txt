@@ -1,579 +1,5 @@
 
 
------ CyberSec -----
-
---- BitWire ---
-hacking_mult: 1.05
-Price: $10.000m
-Rep: 3.750k
-
---- Synaptic Enhancement Implant ---
-hacking_speed_mult: 1.03
-Price: $7.500m
-Rep: 2.000k
-
---- Cranial Signal Processors - Gen I ---
-hacking_mult: 1.05
-hacking_speed_mult: 1.01
-Price: $70.000m
-Rep: 10.000k
-
---- Cranial Signal Processors - Gen II ---
-hacking_mult: 1.07
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.02
-Price: $125.000m
-Rep: 18.750k
-Prereq: Cranial Signal Processors - Gen I
-
---- Neurotrainer I ---
-hacking_exp_mult: 1.1
-strength_exp_mult: 1.1
-defense_exp_mult: 1.1
-dexterity_exp_mult: 1.1
-agility_exp_mult: 1.1
-charisma_exp_mult: 1.1
-Price: $4.000m
-Rep: 1.000k
-
-
------ Tian Di Hui -----
-
---- Nanofiber Weave ---
-strength_mult: 1.2
-defense_mult: 1.2
-Price: $125.000m
-Rep: 37.500k
-
---- Wired Reflexes ---
-dexterity_mult: 1.05
-agility_mult: 1.05
-Price: $2.500m
-Rep: 1.250k
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- Nuoptimal Nootropic Injector Implant ---
-company_rep_mult: 1.2
-Price: $20.000m
-Rep: 5.000k
-
---- Speech Enhancement ---
-charisma_mult: 1.1
-company_rep_mult: 1.1
-Price: $12.500m
-Rep: 2.500k
-
---- ADR-V1 Pheromone Gene ---
-company_rep_mult: 1.1
-faction_rep_mult: 1.1
-Price: $17.500m
-Rep: 3.750k
-
---- Social Negotiation Assistant (S.N.A) ---
-company_rep_mult: 1.15
-faction_rep_mult: 1.15
-work_money_mult: 1.1
-Price: $30.000m
-Rep: 6.250k
-
---- Neuroreceptor Management Implant ---
-Special
-Price: $550.000m
-Rep: 75.000k
-
-
------ Netburners -----
-
---- Hacknet Node CPU Architecture Neural-Upload ---
-hacknet_node_money_mult: 1.15
-hacknet_node_purchase_cost_mult: 0.85
-Price: $11.000m
-Rep: 3.750k
-
---- Hacknet Node Cache Architecture Neural-Upload ---
-hacknet_node_money_mult: 1.1
-hacknet_node_level_cost_mult: 0.85
-Price: $5.500m
-Rep: 2.500k
-
---- Hacknet Node NIC Architecture Neural-Upload ---
-hacknet_node_money_mult: 1.1
-hacknet_node_purchase_cost_mult: 0.9
-Price: $4.500m
-Rep: 1.875k
-
---- Hacknet Node Kernel Direct-Neural Interface ---
-hacknet_node_money_mult: 1.25
-Price: $40.000m
-Rep: 7.500k
-
---- Hacknet Node Core Direct-Neural Interface ---
-hacknet_node_money_mult: 1.45
-Price: $60.000m
-Rep: 12.500k
-
-
------ Sector-12 -----
-
---- Augmented Targeting I ---
-dexterity_mult: 1.1
-Price: $15.000m
-Rep: 5.000k
-
---- Augmented Targeting II ---
-dexterity_mult: 1.2
-Price: $42.500m
-Rep: 8.750k
-Prereq: Augmented Targeting I
-
---- Wired Reflexes ---
-dexterity_mult: 1.05
-agility_mult: 1.05
-Price: $2.500m
-Rep: 1.250k
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- CashRoot Starter Kit ---
-Special
-Price: $125.000m
-Rep: 12.500k
-
-
------ Chongqing -----
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- DataJack ---
-hacking_money_mult: 1.25
-Price: $450.000m
-Rep: 112.500k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Nuoptimal Nootropic Injector Implant ---
-company_rep_mult: 1.2
-Price: $20.000m
-Rep: 5.000k
-
---- Neuregen Gene Modification ---
-hacking_exp_mult: 1.4
-Price: $375.000m
-Rep: 37.500k
-
-
------ New Tokyo -----
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- DataJack ---
-hacking_money_mult: 1.25
-Price: $450.000m
-Rep: 112.500k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Nuoptimal Nootropic Injector Implant ---
-company_rep_mult: 1.2
-Price: $20.000m
-Rep: 5.000k
-
---- NutriGen Implant ---
-strength_exp_mult: 1.2
-defense_exp_mult: 1.2
-dexterity_exp_mult: 1.2
-agility_exp_mult: 1.2
-Price: $2.500m
-Rep: 6.250k
-
-
------ Ishima -----
-
---- Augmented Targeting I ---
-dexterity_mult: 1.1
-Price: $15.000m
-Rep: 5.000k
-
---- Combat Rib I ---
-strength_mult: 1.1
-defense_mult: 1.1
-Price: $23.750m
-Rep: 7.500k
-
---- Wired Reflexes ---
-dexterity_mult: 1.05
-agility_mult: 1.05
-Price: $2.500m
-Rep: 1.250k
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- INFRARET Enhancement ---
-dexterity_mult: 1.1
-crime_money_mult: 1.1
-crime_success_mult: 1.25
-Price: $30.000m
-Rep: 7.500k
-
-
------ Aevum -----
-
---- Wired Reflexes ---
-dexterity_mult: 1.05
-agility_mult: 1.05
-Price: $2.500m
-Rep: 1.250k
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- Synaptic Enhancement Implant ---
-hacking_speed_mult: 1.03
-Price: $7.500m
-Rep: 2.000k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Neurotrainer I ---
-hacking_exp_mult: 1.1
-strength_exp_mult: 1.1
-defense_exp_mult: 1.1
-dexterity_exp_mult: 1.1
-agility_exp_mult: 1.1
-charisma_exp_mult: 1.1
-Price: $4.000m
-Rep: 1.000k
-
---- PCMatrix ---
-charisma_mult: 1.0777
-charisma_exp_mult: 1.0777
-company_rep_mult: 1.0777
-faction_rep_mult: 1.0777
-crime_money_mult: 1.0777
-crime_success_mult: 1.0777
-work_money_mult: 1.777
-Price: $2.000b
-Rep: 100.000k
-
-
------ Volhaven -----
-
---- Combat Rib I ---
-strength_mult: 1.1
-defense_mult: 1.1
-Price: $23.750m
-Rep: 7.500k
-
---- Combat Rib II ---
-strength_mult: 1.14
-defense_mult: 1.14
-Price: $65.000m
-Rep: 18.750k
-Prereq: Combat Rib I
-
---- Wired Reflexes ---
-dexterity_mult: 1.05
-agility_mult: 1.05
-Price: $2.500m
-Rep: 1.250k
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Nuoptimal Nootropic Injector Implant ---
-company_rep_mult: 1.2
-Price: $20.000m
-Rep: 5.000k
-
---- DermaForce Particle Barrier ---
-defense_mult: 1.4
-Price: $50.000m
-Rep: 15.000k
-
-
------ NiteSec -----
-
---- BitWire ---
-hacking_mult: 1.05
-Price: $10.000m
-Rep: 3.750k
-
---- Artificial Synaptic Potentiation ---
-hacking_exp_mult: 1.05
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.02
-Price: $80.000m
-Rep: 6.250k
-
---- Neural-Retention Enhancement ---
-hacking_exp_mult: 1.25
-Price: $250.000m
-Rep: 20.000k
-
---- DataJack ---
-hacking_money_mult: 1.25
-Price: $450.000m
-Rep: 112.500k
-
---- Embedded Netburner Module ---
-hacking_mult: 1.08
-Price: $250.000m
-Rep: 15.000k
-
---- Cranial Signal Processors - Gen II ---
-hacking_mult: 1.07
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.02
-Price: $125.000m
-Rep: 18.750k
-Prereq: Cranial Signal Processors - Gen I
-
---- Cranial Signal Processors - Gen III ---
-hacking_mult: 1.09
-hacking_speed_mult: 1.02
-hacking_money_mult: 1.15
-Price: $550.000m
-Rep: 50.000k
-Prereq: Cranial Signal Processors - Gen II
-
---- Neurotrainer II ---
-hacking_exp_mult: 1.15
-strength_exp_mult: 1.15
-defense_exp_mult: 1.15
-dexterity_exp_mult: 1.15
-agility_exp_mult: 1.15
-charisma_exp_mult: 1.15
-Price: $45.000m
-Rep: 10.000k
-
---- CRTX42-AA Gene Modification ---
-hacking_mult: 1.08
-hacking_exp_mult: 1.15
-Price: $225.000m
-Rep: 45.000k
-
-
------ The Black Hand -----
-
---- Artificial Synaptic Potentiation ---
-hacking_exp_mult: 1.05
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.02
-Price: $80.000m
-Rep: 6.250k
-
---- Enhanced Myelin Sheathing ---
-hacking_mult: 1.08
-hacking_exp_mult: 1.1
-hacking_speed_mult: 1.03
-Price: $1.375b
-Rep: 100.000k
-
---- DataJack ---
-hacking_money_mult: 1.25
-Price: $450.000m
-Rep: 112.500k
-
---- Embedded Netburner Module ---
-hacking_mult: 1.08
-Price: $250.000m
-Rep: 15.000k
-
---- Embedded Netburner Module Core Implant ---
-hacking_mult: 1.07
-hacking_exp_mult: 1.07
-hacking_chance_mult: 1.03
-hacking_speed_mult: 1.03
-hacking_money_mult: 1.1
-Price: $2.500b
-Rep: 175.000k
-Prereq: Embedded Netburner Module
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Cranial Signal Processors - Gen III ---
-hacking_mult: 1.09
-hacking_speed_mult: 1.02
-hacking_money_mult: 1.15
-Price: $550.000m
-Rep: 50.000k
-Prereq: Cranial Signal Processors - Gen II
-
---- Cranial Signal Processors - Gen IV ---
-hacking_speed_mult: 1.02
-hacking_money_mult: 1.2
-hacking_grow_mult: 1.25
-Price: $1.100b
-Rep: 125.000k
-Prereq: Cranial Signal Processors - Gen III
-
---- The Black Hand ---
-hacking_mult: 1.1
-strength_mult: 1.15
-dexterity_mult: 1.15
-hacking_speed_mult: 1.02
-hacking_money_mult: 1.1
-Price: $550.000m
-Rep: 100.000k
-
-
------ BitRunners -----
-
---- Artificial Bio-neural Network Implant ---
-hacking_mult: 1.12
-hacking_speed_mult: 1.03
-hacking_money_mult: 1.15
-Price: $3.000b
-Rep: 275.000k
-
---- Enhanced Myelin Sheathing ---
-hacking_mult: 1.08
-hacking_exp_mult: 1.1
-hacking_speed_mult: 1.03
-Price: $1.375b
-Rep: 100.000k
-
---- DataJack ---
-hacking_money_mult: 1.25
-Price: $450.000m
-Rep: 112.500k
-
---- Embedded Netburner Module ---
-hacking_mult: 1.08
-Price: $250.000m
-Rep: 15.000k
-
---- Embedded Netburner Module Core Implant ---
-hacking_mult: 1.07
-hacking_exp_mult: 1.07
-hacking_chance_mult: 1.03
-hacking_speed_mult: 1.03
-hacking_money_mult: 1.1
-Price: $2.500b
-Rep: 175.000k
-Prereq: Embedded Netburner Module
-
---- Embedded Netburner Module Core V2 Upgrade ---
-hacking_mult: 1.08
-hacking_exp_mult: 1.15
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.05
-hacking_money_mult: 1.3
-Price: $4.500b
-Rep: 1.000m
-Prereq: Embedded Netburner Module Core Implant
-
---- Neural Accelerator ---
-hacking_mult: 1.1
-hacking_exp_mult: 1.15
-hacking_money_mult: 1.2
-Price: $1.750b
-Rep: 200.000k
-
---- Cranial Signal Processors - Gen III ---
-hacking_mult: 1.09
-hacking_speed_mult: 1.02
-hacking_money_mult: 1.15
-Price: $550.000m
-Rep: 50.000k
-Prereq: Cranial Signal Processors - Gen II
-
---- Cranial Signal Processors - Gen IV ---
-hacking_speed_mult: 1.02
-hacking_money_mult: 1.2
-hacking_grow_mult: 1.25
-Price: $1.100b
-Rep: 125.000k
-Prereq: Cranial Signal Processors - Gen III
-
---- Cranial Signal Processors - Gen V ---
-hacking_mult: 1.3
-hacking_money_mult: 1.25
-hacking_grow_mult: 1.75
-Price: $2.250b
-Rep: 250.000k
-Prereq: Cranial Signal Processors - Gen IV
-
---- Neurotrainer II ---
-hacking_exp_mult: 1.15
-strength_exp_mult: 1.15
-defense_exp_mult: 1.15
-dexterity_exp_mult: 1.15
-agility_exp_mult: 1.15
-charisma_exp_mult: 1.15
-Price: $45.000m
-Rep: 10.000k
-
---- BitRunners Neurolink ---
-hacking_mult: 1.15
-hacking_exp_mult: 1.2
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.05
-Price: $4.375b
-Rep: 875.000k
-
-
 ----- ECorp -----
 
 --- Graphene Bionic Spine Upgrade ---
@@ -733,302 +159,6 @@ Price: $5.000b
 Rep: 1.125m
 
 
------ KuaiGong International -----
-
---- Augmented Targeting I ---
-dexterity_mult: 1.1
-Price: $15.000m
-Rep: 5.000k
-
---- Augmented Targeting II ---
-dexterity_mult: 1.2
-Price: $42.500m
-Rep: 8.750k
-Prereq: Augmented Targeting I
-
---- Augmented Targeting III ---
-dexterity_mult: 1.3
-Price: $115.000m
-Rep: 27.500k
-Prereq: Augmented Targeting II
-
---- Synthetic Heart ---
-strength_mult: 1.5
-agility_mult: 1.5
-Price: $2.875b
-Rep: 750.000k
-
---- Synfibril Muscle ---
-strength_mult: 1.3
-defense_mult: 1.3
-Price: $1.125b
-Rep: 437.500k
-
---- Combat Rib I ---
-strength_mult: 1.1
-defense_mult: 1.1
-Price: $23.750m
-Rep: 7.500k
-
---- Combat Rib II ---
-strength_mult: 1.14
-defense_mult: 1.14
-Price: $65.000m
-Rep: 18.750k
-Prereq: Combat Rib I
-
---- Combat Rib III ---
-strength_mult: 1.18
-defense_mult: 1.18
-Price: $120.000m
-Rep: 35.000k
-Prereq: Combat Rib II
-
---- Bionic Spine ---
-strength_mult: 1.15
-defense_mult: 1.15
-dexterity_mult: 1.15
-agility_mult: 1.15
-Price: $125.000m
-Rep: 45.000k
-
---- Bionic Legs ---
-agility_mult: 1.6
-Price: $375.000m
-Rep: 150.000k
-
---- Embedded Netburner Module Core V2 Upgrade ---
-hacking_mult: 1.08
-hacking_exp_mult: 1.15
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.05
-hacking_money_mult: 1.3
-Price: $4.500b
-Rep: 1.000m
-Prereq: Embedded Netburner Module Core Implant
-
---- Speech Enhancement ---
-charisma_mult: 1.1
-company_rep_mult: 1.1
-Price: $12.500m
-Rep: 2.500k
-
---- FocusWire ---
-hacking_exp_mult: 1.05
-strength_exp_mult: 1.05
-defense_exp_mult: 1.05
-dexterity_exp_mult: 1.05
-agility_exp_mult: 1.05
-charisma_exp_mult: 1.05
-company_rep_mult: 1.1
-work_money_mult: 1.2
-Price: $900.000m
-Rep: 75.000k
-
---- HyperSight Corneal Implant ---
-dexterity_mult: 1.4
-hacking_speed_mult: 1.03
-hacking_money_mult: 1.1
-Price: $2.750b
-Rep: 150.000k
-
---- Photosynthetic Cells ---
-strength_mult: 1.4
-defense_mult: 1.4
-agility_mult: 1.4
-Price: $2.750b
-Rep: 562.500k
-
-
------ Four Sigma -----
-
---- Enhanced Social Interaction Implant ---
-charisma_mult: 1.6
-charisma_exp_mult: 1.6
-Price: $1.375b
-Rep: 375.000k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Nuoptimal Nootropic Injector Implant ---
-company_rep_mult: 1.2
-Price: $20.000m
-Rep: 5.000k
-
---- Speech Enhancement ---
-charisma_mult: 1.1
-company_rep_mult: 1.1
-Price: $12.500m
-Rep: 2.500k
-
---- FocusWire ---
-hacking_exp_mult: 1.05
-strength_exp_mult: 1.05
-defense_exp_mult: 1.05
-dexterity_exp_mult: 1.05
-agility_exp_mult: 1.05
-charisma_exp_mult: 1.05
-company_rep_mult: 1.1
-work_money_mult: 1.2
-Price: $900.000m
-Rep: 75.000k
-
---- PC Direct-Neural Interface ---
-hacking_mult: 1.08
-company_rep_mult: 1.3
-Price: $3.750b
-Rep: 375.000k
-
---- ADR-V1 Pheromone Gene ---
-company_rep_mult: 1.1
-faction_rep_mult: 1.1
-Price: $17.500m
-Rep: 3.750k
-
---- ADR-V2 Pheromone Gene ---
-company_rep_mult: 1.2
-faction_rep_mult: 1.2
-Price: $550.000m
-Rep: 62.500k
-
---- Neurotrainer III ---
-hacking_exp_mult: 1.2
-strength_exp_mult: 1.2
-defense_exp_mult: 1.2
-dexterity_exp_mult: 1.2
-agility_exp_mult: 1.2
-charisma_exp_mult: 1.2
-Price: $130.000m
-Rep: 25.000k
-
-
------ NWO -----
-
---- Synthetic Heart ---
-strength_mult: 1.5
-agility_mult: 1.5
-Price: $2.875b
-Rep: 750.000k
-
---- Synfibril Muscle ---
-strength_mult: 1.3
-defense_mult: 1.3
-Price: $1.125b
-Rep: 437.500k
-
---- Enhanced Social Interaction Implant ---
-charisma_mult: 1.6
-charisma_exp_mult: 1.6
-Price: $1.375b
-Rep: 375.000k
-
---- Embedded Netburner Module ---
-hacking_mult: 1.08
-Price: $250.000m
-Rep: 15.000k
-
---- Embedded Netburner Module Core Implant ---
-hacking_mult: 1.07
-hacking_exp_mult: 1.07
-hacking_chance_mult: 1.03
-hacking_speed_mult: 1.03
-hacking_money_mult: 1.1
-Price: $2.500b
-Rep: 175.000k
-Prereq: Embedded Netburner Module
-
---- Embedded Netburner Module Core V2 Upgrade ---
-hacking_mult: 1.08
-hacking_exp_mult: 1.15
-hacking_chance_mult: 1.05
-hacking_speed_mult: 1.05
-hacking_money_mult: 1.3
-Price: $4.500b
-Rep: 1.000m
-Prereq: Embedded Netburner Module Core Implant
-
---- Embedded Netburner Module Core V3 Upgrade ---
-hacking_mult: 1.1
-hacking_exp_mult: 1.25
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.05
-hacking_money_mult: 1.4
-Price: $7.500b
-Rep: 1.750m
-Prereq: Embedded Netburner Module Core V2 Upgrade
-
---- Embedded Netburner Module Analyze Engine ---
-hacking_speed_mult: 1.1
-Price: $6.000b
-Rep: 625.000k
-Prereq: Embedded Netburner Module
-
---- Embedded Netburner Module Direct Memory Access Upgrade ---
-hacking_chance_mult: 1.2
-hacking_money_mult: 1.4
-Price: $7.000b
-Rep: 1.000m
-Prereq: Embedded Netburner Module
-
---- ADR-V1 Pheromone Gene ---
-company_rep_mult: 1.1
-faction_rep_mult: 1.1
-Price: $17.500m
-Rep: 3.750k
-
---- Neurotrainer III ---
-hacking_exp_mult: 1.2
-strength_exp_mult: 1.2
-defense_exp_mult: 1.2
-dexterity_exp_mult: 1.2
-agility_exp_mult: 1.2
-charisma_exp_mult: 1.2
-Price: $130.000m
-Rep: 25.000k
-
---- Power Recirculation Core ---
-hacking_mult: 1.05
-strength_mult: 1.05
-defense_mult: 1.05
-dexterity_mult: 1.05
-agility_mult: 1.05
-charisma_mult: 1.05
-hacking_exp_mult: 1.1
-strength_exp_mult: 1.1
-defense_exp_mult: 1.1
-dexterity_exp_mult: 1.1
-agility_exp_mult: 1.1
-charisma_exp_mult: 1.1
-Price: $180.000m
-Rep: 25.000k
-
---- Xanipher ---
-hacking_mult: 1.2
-strength_mult: 1.2
-defense_mult: 1.2
-dexterity_mult: 1.2
-agility_mult: 1.2
-charisma_mult: 1.2
-hacking_exp_mult: 1.15
-strength_exp_mult: 1.15
-defense_exp_mult: 1.15
-dexterity_exp_mult: 1.15
-agility_exp_mult: 1.15
-charisma_exp_mult: 1.15
-Price: $4.250b
-Rep: 875.000k
-
---- Hydroflame Left Arm ---
-strength_mult: 2.7
-Price: $2.500t
-Rep: 1.250m
-
-
 ----- Blade Industries -----
 
 --- Augmented Targeting I ---
@@ -1145,6 +275,68 @@ Price: $2.875b
 Rep: 562.500k
 
 
+----- Clarke Incorporated -----
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+Price: $1.375b
+Rep: 375.000k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Neuronal Densification ---
+hacking_mult: 1.15
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+Price: $1.375b
+Rep: 187.500k
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+Price: $12.500m
+Rep: 2.500k
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+Price: $900.000m
+Rep: 75.000k
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+Price: $550.000m
+Rep: 62.500k
+
+--- nextSENS Gene Modification ---
+hacking_mult: 1.2
+strength_mult: 1.2
+defense_mult: 1.2
+dexterity_mult: 1.2
+agility_mult: 1.2
+charisma_mult: 1.2
+Price: $1.925b
+Rep: 437.500k
+
+
 ----- OmniTek Incorporated -----
 
 --- Augmented Targeting I ---
@@ -1232,6 +424,313 @@ Price: $2.875b
 Rep: 625.000k
 
 
+----- Four Sigma -----
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+Price: $1.375b
+Rep: 375.000k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+Price: $12.500m
+Rep: 2.500k
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+Price: $900.000m
+Rep: 75.000k
+
+--- PC Direct-Neural Interface ---
+hacking_mult: 1.08
+company_rep_mult: 1.3
+Price: $3.750b
+Rep: 375.000k
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+Price: $17.500m
+Rep: 3.750k
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+Price: $550.000m
+Rep: 62.500k
+
+--- Neurotrainer III ---
+hacking_exp_mult: 1.2
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+charisma_exp_mult: 1.2
+Price: $130.000m
+Rep: 25.000k
+
+
+----- KuaiGong International -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+Price: $15.000m
+Rep: 5.000k
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+Price: $42.500m
+Rep: 8.750k
+Prereq: Augmented Targeting I
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+Price: $115.000m
+Rep: 27.500k
+Prereq: Augmented Targeting II
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+Price: $2.875b
+Rep: 750.000k
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+Price: $1.125b
+Rep: 437.500k
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+Price: $23.750m
+Rep: 7.500k
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+Price: $65.000m
+Rep: 18.750k
+Prereq: Combat Rib I
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+Price: $120.000m
+Rep: 35.000k
+Prereq: Combat Rib II
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+Price: $125.000m
+Rep: 45.000k
+
+--- Bionic Legs ---
+agility_mult: 1.6
+Price: $375.000m
+Rep: 150.000k
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+Price: $4.500b
+Rep: 1.000m
+Prereq: Embedded Netburner Module Core Implant
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+Price: $12.500m
+Rep: 2.500k
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+Price: $900.000m
+Rep: 75.000k
+
+--- HyperSight Corneal Implant ---
+dexterity_mult: 1.4
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+Price: $2.750b
+Rep: 150.000k
+
+--- Photosynthetic Cells ---
+strength_mult: 1.4
+defense_mult: 1.4
+agility_mult: 1.4
+Price: $2.750b
+Rep: 562.500k
+
+
+----- CyberSec -----
+
+--- BitWire ---
+hacking_mult: 1.05
+Price: $10.000m
+Rep: 3.750k
+
+--- Synaptic Enhancement Implant ---
+hacking_speed_mult: 1.03
+Price: $7.500m
+Rep: 2.000k
+
+--- Cranial Signal Processors - Gen I ---
+hacking_mult: 1.05
+hacking_speed_mult: 1.01
+Price: $70.000m
+Rep: 10.000k
+
+--- Cranial Signal Processors - Gen II ---
+hacking_mult: 1.07
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+Price: $125.000m
+Rep: 18.750k
+Prereq: Cranial Signal Processors - Gen I
+
+--- Neurotrainer I ---
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+Price: $4.000m
+Rep: 1.000k
+
+
+----- BitRunners -----
+
+--- Artificial Bio-neural Network Implant ---
+hacking_mult: 1.12
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.15
+Price: $3.000b
+Rep: 275.000k
+
+--- Enhanced Myelin Sheathing ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+Price: $1.375b
+Rep: 100.000k
+
+--- DataJack ---
+hacking_money_mult: 1.25
+Price: $450.000m
+Rep: 112.500k
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+Price: $250.000m
+Rep: 15.000k
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+Price: $2.500b
+Rep: 175.000k
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+Price: $4.500b
+Rep: 1.000m
+Prereq: Embedded Netburner Module Core Implant
+
+--- Neural Accelerator ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.15
+hacking_money_mult: 1.2
+Price: $1.750b
+Rep: 200.000k
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+Price: $550.000m
+Rep: 50.000k
+Prereq: Cranial Signal Processors - Gen II
+
+--- Cranial Signal Processors - Gen IV ---
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.2
+hacking_grow_mult: 1.25
+Price: $1.100b
+Rep: 125.000k
+Prereq: Cranial Signal Processors - Gen III
+
+--- Cranial Signal Processors - Gen V ---
+hacking_mult: 1.3
+hacking_money_mult: 1.25
+hacking_grow_mult: 1.75
+Price: $2.250b
+Rep: 250.000k
+Prereq: Cranial Signal Processors - Gen IV
+
+--- Neurotrainer II ---
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+Price: $45.000m
+Rep: 10.000k
+
+--- BitRunners Neurolink ---
+hacking_mult: 1.15
+hacking_exp_mult: 1.2
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+Price: $4.375b
+Rep: 875.000k
+
+
 ----- Bachman & Associates -----
 
 --- Enhanced Social Interaction Implant ---
@@ -1283,68 +782,6 @@ company_rep_mult: 1.25
 faction_rep_mult: 1.25
 Price: $2.750b
 Rep: 375.000k
-
-
------ Clarke Incorporated -----
-
---- Enhanced Social Interaction Implant ---
-charisma_mult: 1.6
-charisma_exp_mult: 1.6
-Price: $1.375b
-Rep: 375.000k
-
---- Neuralstimulator ---
-hacking_exp_mult: 1.12
-hacking_chance_mult: 1.1
-hacking_speed_mult: 1.02
-Price: $3.000b
-Rep: 50.000k
-
---- Neuronal Densification ---
-hacking_mult: 1.15
-hacking_exp_mult: 1.1
-hacking_speed_mult: 1.03
-Price: $1.375b
-Rep: 187.500k
-
---- Nuoptimal Nootropic Injector Implant ---
-company_rep_mult: 1.2
-Price: $20.000m
-Rep: 5.000k
-
---- Speech Enhancement ---
-charisma_mult: 1.1
-company_rep_mult: 1.1
-Price: $12.500m
-Rep: 2.500k
-
---- FocusWire ---
-hacking_exp_mult: 1.05
-strength_exp_mult: 1.05
-defense_exp_mult: 1.05
-dexterity_exp_mult: 1.05
-agility_exp_mult: 1.05
-charisma_exp_mult: 1.05
-company_rep_mult: 1.1
-work_money_mult: 1.2
-Price: $900.000m
-Rep: 75.000k
-
---- ADR-V2 Pheromone Gene ---
-company_rep_mult: 1.2
-faction_rep_mult: 1.2
-Price: $550.000m
-Rep: 62.500k
-
---- nextSENS Gene Modification ---
-hacking_mult: 1.2
-strength_mult: 1.2
-defense_mult: 1.2
-dexterity_mult: 1.2
-agility_mult: 1.2
-charisma_mult: 1.2
-Price: $1.925b
-Rep: 437.500k
 
 
 ----- Fulcrum Secret Technologies -----
@@ -1471,6 +908,137 @@ Rep: 1.500m
 Prereq: PC Direct-Neural Interface
 
 
+----- NiteSec -----
+
+--- BitWire ---
+hacking_mult: 1.05
+Price: $10.000m
+Rep: 3.750k
+
+--- Artificial Synaptic Potentiation ---
+hacking_exp_mult: 1.05
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+Price: $80.000m
+Rep: 6.250k
+
+--- Neural-Retention Enhancement ---
+hacking_exp_mult: 1.25
+Price: $250.000m
+Rep: 20.000k
+
+--- DataJack ---
+hacking_money_mult: 1.25
+Price: $450.000m
+Rep: 112.500k
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+Price: $250.000m
+Rep: 15.000k
+
+--- Cranial Signal Processors - Gen II ---
+hacking_mult: 1.07
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+Price: $125.000m
+Rep: 18.750k
+Prereq: Cranial Signal Processors - Gen I
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+Price: $550.000m
+Rep: 50.000k
+Prereq: Cranial Signal Processors - Gen II
+
+--- Neurotrainer II ---
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+Price: $45.000m
+Rep: 10.000k
+
+--- CRTX42-AA Gene Modification ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+Price: $225.000m
+Rep: 45.000k
+
+
+----- The Black Hand -----
+
+--- Artificial Synaptic Potentiation ---
+hacking_exp_mult: 1.05
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+Price: $80.000m
+Rep: 6.250k
+
+--- Enhanced Myelin Sheathing ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+Price: $1.375b
+Rep: 100.000k
+
+--- DataJack ---
+hacking_money_mult: 1.25
+Price: $450.000m
+Rep: 112.500k
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+Price: $250.000m
+Rep: 15.000k
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+Price: $2.500b
+Rep: 175.000k
+Prereq: Embedded Netburner Module
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+Price: $550.000m
+Rep: 50.000k
+Prereq: Cranial Signal Processors - Gen II
+
+--- Cranial Signal Processors - Gen IV ---
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.2
+hacking_grow_mult: 1.25
+Price: $1.100b
+Rep: 125.000k
+Prereq: Cranial Signal Processors - Gen III
+
+--- The Black Hand ---
+hacking_mult: 1.1
+strength_mult: 1.15
+dexterity_mult: 1.15
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.1
+Price: $550.000m
+Rep: 100.000k
+
+
 ----- Slum Snakes -----
 
 --- Augmented Targeting I ---
@@ -1559,34 +1127,11 @@ Price: $275.000m
 Rep: 62.500k
 
 
------ Silhouette -----
-
---- Speech Processor Implant ---
-charisma_mult: 1.2
-Price: $50.000m
-Rep: 7.500k
-
---- TITN-41 Gene-Modification Injection ---
-charisma_mult: 1.15
-charisma_exp_mult: 1.15
-Price: $190.000m
-Rep: 25.000k
-
---- ADR-V2 Pheromone Gene ---
-company_rep_mult: 1.2
-faction_rep_mult: 1.2
-Price: $550.000m
-Rep: 62.500k
-
-
 ----- Speakers for the Dead -----
 
 --- Unstable Circadian Modulator ---
-hacknet_node_money_mult: 1.2
-hacknet_node_purchase_cost_mult: 0.85
-hacknet_node_ram_cost_mult: 0.85
-hacknet_node_core_cost_mult: 0.85
-hacknet_node_level_cost_mult: 0.85
+charisma_mult: 1.5
+charisma_exp_mult: 2
 Price: $5.000b
 Rep: 362.500k
 
@@ -1850,6 +1395,458 @@ crime_money_mult: 1.15
 crime_success_mult: 1.1
 Price: $90.000m
 Rep: 12.500k
+
+
+----- Silhouette -----
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- TITN-41 Gene-Modification Injection ---
+charisma_mult: 1.15
+charisma_exp_mult: 1.15
+Price: $190.000m
+Rep: 25.000k
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+Price: $550.000m
+Rep: 62.500k
+
+
+----- Tian Di Hui -----
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+Price: $125.000m
+Rep: 37.500k
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+Price: $2.500m
+Rep: 1.250k
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+Price: $12.500m
+Rep: 2.500k
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+Price: $17.500m
+Rep: 3.750k
+
+--- Social Negotiation Assistant (S.N.A) ---
+company_rep_mult: 1.15
+faction_rep_mult: 1.15
+work_money_mult: 1.1
+Price: $30.000m
+Rep: 6.250k
+
+--- Neuroreceptor Management Implant ---
+Special
+Price: $550.000m
+Rep: 75.000k
+
+
+----- Netburners -----
+
+--- Hacknet Node CPU Architecture Neural-Upload ---
+hacknet_node_money_mult: 1.15
+hacknet_node_purchase_cost_mult: 0.85
+Price: $11.000m
+Rep: 3.750k
+
+--- Hacknet Node Cache Architecture Neural-Upload ---
+hacknet_node_money_mult: 1.1
+hacknet_node_level_cost_mult: 0.85
+Price: $5.500m
+Rep: 2.500k
+
+--- Hacknet Node NIC Architecture Neural-Upload ---
+hacknet_node_money_mult: 1.1
+hacknet_node_purchase_cost_mult: 0.9
+Price: $4.500m
+Rep: 1.875k
+
+--- Hacknet Node Kernel Direct-Neural Interface ---
+hacknet_node_money_mult: 1.25
+Price: $40.000m
+Rep: 7.500k
+
+--- Hacknet Node Core Direct-Neural Interface ---
+hacknet_node_money_mult: 1.45
+Price: $60.000m
+Rep: 12.500k
+
+
+----- Aevum -----
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+Price: $2.500m
+Rep: 1.250k
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- Synaptic Enhancement Implant ---
+hacking_speed_mult: 1.03
+Price: $7.500m
+Rep: 2.000k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Neurotrainer I ---
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+Price: $4.000m
+Rep: 1.000k
+
+--- PCMatrix ---
+charisma_mult: 1.0777
+charisma_exp_mult: 1.0777
+company_rep_mult: 1.0777
+faction_rep_mult: 1.0777
+crime_money_mult: 1.0777
+crime_success_mult: 1.0777
+work_money_mult: 1.777
+Price: $2.000b
+Rep: 100.000k
+
+
+----- Sector-12 -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+Price: $15.000m
+Rep: 5.000k
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+Price: $42.500m
+Rep: 8.750k
+Prereq: Augmented Targeting I
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+Price: $2.500m
+Rep: 1.250k
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- CashRoot Starter Kit ---
+Special
+Price: $125.000m
+Rep: 12.500k
+
+
+----- Chongqing -----
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- DataJack ---
+hacking_money_mult: 1.25
+Price: $450.000m
+Rep: 112.500k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- Neuregen Gene Modification ---
+hacking_exp_mult: 1.4
+Price: $375.000m
+Rep: 37.500k
+
+
+----- New Tokyo -----
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- DataJack ---
+hacking_money_mult: 1.25
+Price: $450.000m
+Rep: 112.500k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- NutriGen Implant ---
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+Price: $2.500m
+Rep: 6.250k
+
+
+----- Ishima -----
+
+--- Augmented Targeting I ---
+dexterity_mult: 1.1
+Price: $15.000m
+Rep: 5.000k
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+Price: $23.750m
+Rep: 7.500k
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+Price: $2.500m
+Rep: 1.250k
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- INFRARET Enhancement ---
+dexterity_mult: 1.1
+crime_money_mult: 1.1
+crime_success_mult: 1.25
+Price: $30.000m
+Rep: 7.500k
+
+
+----- Volhaven -----
+
+--- Combat Rib I ---
+strength_mult: 1.1
+defense_mult: 1.1
+Price: $23.750m
+Rep: 7.500k
+
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+Price: $65.000m
+Rep: 18.750k
+Prereq: Combat Rib I
+
+--- Wired Reflexes ---
+dexterity_mult: 1.05
+agility_mult: 1.05
+Price: $2.500m
+Rep: 1.250k
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- DermaForce Particle Barrier ---
+defense_mult: 1.4
+Price: $50.000m
+Rep: 15.000k
+
+
+----- NWO -----
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+Price: $2.875b
+Rep: 750.000k
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+Price: $1.125b
+Rep: 437.500k
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+Price: $1.375b
+Rep: 375.000k
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+Price: $250.000m
+Rep: 15.000k
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+Price: $2.500b
+Rep: 175.000k
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+Price: $4.500b
+Rep: 1.000m
+Prereq: Embedded Netburner Module Core Implant
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+Price: $7.500b
+Rep: 1.750m
+Prereq: Embedded Netburner Module Core V2 Upgrade
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+Price: $6.000b
+Rep: 625.000k
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+Price: $7.000b
+Rep: 1.000m
+Prereq: Embedded Netburner Module
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+Price: $17.500m
+Rep: 3.750k
+
+--- Neurotrainer III ---
+hacking_exp_mult: 1.2
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+charisma_exp_mult: 1.2
+Price: $130.000m
+Rep: 25.000k
+
+--- Power Recirculation Core ---
+hacking_mult: 1.05
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+agility_mult: 1.05
+charisma_mult: 1.05
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+Price: $180.000m
+Rep: 25.000k
+
+--- Xanipher ---
+hacking_mult: 1.2
+strength_mult: 1.2
+defense_mult: 1.2
+dexterity_mult: 1.2
+agility_mult: 1.2
+charisma_mult: 1.2
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+Price: $4.250b
+Rep: 875.000k
+
+--- Hydroflame Left Arm ---
+strength_mult: 2.7
+Price: $2.500t
+Rep: 1.250m
 
 
 ----- The Covenant -----
@@ -2145,3 +2142,98 @@ Prereq: BLADE-51b Tesla Armor
 Special
 Price: $150.000b
 Rep: 1.250k
+
+
+----- Church of the Machine God -----
+
+--- Stanek's Gift - Genesis ---
+hacking_mult: 0.9
+strength_mult: 0.9
+defense_mult: 0.9
+dexterity_mult: 0.9
+agility_mult: 0.9
+charisma_mult: 0.9
+hacking_exp_mult: 0.9
+strength_exp_mult: 0.9
+defense_exp_mult: 0.9
+dexterity_exp_mult: 0.9
+agility_exp_mult: 0.9
+charisma_exp_mult: 0.9
+hacking_chance_mult: 0.9
+hacking_speed_mult: 0.9
+hacking_money_mult: 0.9
+hacking_grow_mult: 0.9
+company_rep_mult: 0.9
+faction_rep_mult: 0.9
+crime_money_mult: 0.9
+crime_success_mult: 0.9
+work_money_mult: 0.9
+hacknet_node_money_mult: 0.9
+hacknet_node_purchase_cost_mult: 1.1
+hacknet_node_ram_cost_mult: 1.1
+hacknet_node_core_cost_mult: 1.1
+hacknet_node_level_cost_mult: 1.1
+Price: $0.000
+Rep: 0.000
+
+--- Stanek's Gift - Awakening ---
+hacking_mult: 1.0555555555555556
+strength_mult: 1.0555555555555556
+defense_mult: 1.0555555555555556
+dexterity_mult: 1.0555555555555556
+agility_mult: 1.0555555555555556
+charisma_mult: 1.0555555555555556
+hacking_exp_mult: 1.0555555555555556
+strength_exp_mult: 1.0555555555555556
+defense_exp_mult: 1.0555555555555556
+dexterity_exp_mult: 1.0555555555555556
+agility_exp_mult: 1.0555555555555556
+charisma_exp_mult: 1.0555555555555556
+hacking_chance_mult: 1.0555555555555556
+hacking_speed_mult: 1.0555555555555556
+hacking_money_mult: 1.0555555555555556
+hacking_grow_mult: 1.0555555555555556
+company_rep_mult: 1.0555555555555556
+faction_rep_mult: 1.0555555555555556
+crime_money_mult: 1.0555555555555556
+crime_success_mult: 1.0555555555555556
+work_money_mult: 1.0555555555555556
+hacknet_node_money_mult: 1.0555555555555556
+hacknet_node_purchase_cost_mult: 0.9545454545454545
+hacknet_node_ram_cost_mult: 0.9545454545454545
+hacknet_node_core_cost_mult: 0.9545454545454545
+hacknet_node_level_cost_mult: 0.9545454545454545
+Price: $0.000
+Rep: 1.000m
+Prereq: Stanek's Gift - Genesis
+
+--- Stanek's Gift - Serenity ---
+hacking_mult: 1.0526315789473684
+strength_mult: 1.0526315789473684
+defense_mult: 1.0526315789473684
+dexterity_mult: 1.0526315789473684
+agility_mult: 1.0526315789473684
+charisma_mult: 1.0526315789473684
+hacking_exp_mult: 1.0526315789473684
+strength_exp_mult: 1.0526315789473684
+defense_exp_mult: 1.0526315789473684
+dexterity_exp_mult: 1.0526315789473684
+agility_exp_mult: 1.0526315789473684
+charisma_exp_mult: 1.0526315789473684
+hacking_chance_mult: 1.0526315789473684
+hacking_speed_mult: 1.0526315789473684
+hacking_money_mult: 1.0526315789473684
+hacking_grow_mult: 1.0526315789473684
+company_rep_mult: 1.0526315789473684
+faction_rep_mult: 1.0526315789473684
+crime_money_mult: 1.0526315789473684
+crime_success_mult: 1.0526315789473684
+work_money_mult: 1.0526315789473684
+hacknet_node_money_mult: 1.0526315789473684
+hacknet_node_purchase_cost_mult: 0.9523809523809523
+hacknet_node_ram_cost_mult: 0.9523809523809523
+hacknet_node_core_cost_mult: 0.9523809523809523
+hacknet_node_level_cost_mult: 0.9523809523809523
+Price: $0.000
+Rep: 100.000m
+Prereq: Stanek's Gift - Awakening

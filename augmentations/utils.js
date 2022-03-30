@@ -5,7 +5,7 @@
  * @returns {boolean}
  */
 export function isUsefulPrograms(ns, name) {
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful programs augmentations
 			name === 'CashRoot Starter Kit' || // Starting money and programs
 			name === 'BitRunners Neurolink' || // Programs
@@ -21,7 +21,7 @@ export function isUsefulPrograms(ns, name) {
  */
 export function isUsefulFaction(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		stats.faction_rep_mult; // Useful faction augmentations
 }
 
@@ -32,7 +32,7 @@ export function isUsefulFaction(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulFocus(ns, name) {
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful focus augmentations
 			name === 'Neuroreceptor Management Implant' || // No simultaneous penalty
 			name === 'The Blade\'s Simulacrum' // Bladeburner and working
@@ -48,7 +48,7 @@ export function isUsefulFocus(ns, name) {
  */
 export function isUsefulHacking(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful hacking augmentations
 			stats.hacking_mult ||
 			stats.hacking_exp_mult ||
@@ -56,7 +56,7 @@ export function isUsefulHacking(ns, name) {
 			stats.hacking_speed_mult ||
 			stats.hacking_money_mult ||
 			stats.hacking_grow_mult
-		)
+		);
 }
 
 /**
@@ -67,7 +67,7 @@ export function isUsefulHacking(ns, name) {
  */
 export function isUsefulHackingSkill(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful hacking skill augmentations
 			stats.hacking_mult ||
 			stats.hacking_exp_mult
@@ -82,7 +82,7 @@ export function isUsefulHackingSkill(ns, name) {
  */
 export function isUsefulCombat(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful combat augmentations
 			stats.agility_exp_mult ||
 			stats.agility_mult ||
@@ -103,7 +103,7 @@ export function isUsefulCombat(ns, name) {
  */
 export function isUsefulCrime(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful crime augmentations
 			stats.crime_money_mult ||
 			stats.crime_success_mult
@@ -118,7 +118,7 @@ export function isUsefulCrime(ns, name) {
  */
 export function isUsefulCompany(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful company augmentations
 			stats.charisma_exp_mult ||
 			stats.charisma_mult ||
@@ -135,7 +135,7 @@ export function isUsefulCompany(ns, name) {
  */
 export function isUsefulHacknet(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful hacknet augmentations
 			stats.hacknet_node_core_cost_mult ||
 			stats.hacknet_node_level_cost_mult ||
@@ -153,7 +153,7 @@ export function isUsefulHacknet(ns, name) {
  */
 export function isUsefulBladeburner(ns, name) {
 	const stats = ns.getAugmentationStats(name);
-	return name !== 'NeuroFlux Governor' && // Ignore NFG
+	return ignore(name) &&
 		( 	// Useful bladeburner augmentations
 			stats.bladeburner_analysis_mult ||
 			stats.bladeburner_max_stamina_mult ||
@@ -164,13 +164,22 @@ export function isUsefulBladeburner(ns, name) {
 
 /**
  *
+ * @param {string} name
+ * @return {boolean}
+ */
+function ignore(name) {
+	return name !== 'NeuroFlux Governor' && !name.includes('Stanek\'s Gift');
+}
+
+/**
+ *
  * @param {NS} ns
  * @param {function} criteria
  * @param {string} name
  * @returns {boolean}
  */
 export function isUseful(ns, criteria, name) {
-	for (let criterion of criteria) if (criterion(ns, name)) return true;
+	for (const criterion of criteria) if (criterion(ns, name)) return true;
 	return false;
 }
 
