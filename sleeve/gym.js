@@ -1,6 +1,21 @@
-// noinspection JSUnresolvedVariable
-
 import {disableSleeveAutopilot} from '/sleeve/utils.js';
+import {getGymLocation, getGyms} from '/utils.js';
+
+const argsSchema = [
+	['sleeve', undefined],
+	['str', false],
+	['def', false],
+	['dex', false],
+	['agi', false],
+	['gym', 'Powerhouse Gym'],
+	['all', false]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, options) {
+	data.flags(argsSchema);
+	return [...getGyms()];
+}
 
 /**
  *
@@ -8,38 +23,23 @@ import {disableSleeveAutopilot} from '/sleeve/utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const args = ns.flags([
-		['sleeve', undefined],
-		['str', false],
-		['def', false],
-		['dex', false],
-		['agi', false],
-		['gym', 'Powerhouse Gym'],
-		['all', false]
-	]);
-	if (!args.all && args.sleeve === -1) throw new Error(`Need to specify --sleeve number or --all`);
-
-	let city;
-	if (args.gym === 'Crush Fitness Gym' || args.gym === 'Snap Fitness Gym') city = 'Aevum';
-	else if (args.gym === 'Iron Gym' || args.gym === 'Powerhouse Gym') city = 'Sector-12';
-	else if (args.gym === 'Millenium Fitness Gym') city = 'Volhaven';
-	else throw new Error(`Invalid gym`);
-
-	let stat;
-	if (args.str) stat = 'Strength';
-	else if (args.def) stat = 'Defense';
-	else if (args.dex) stat = 'Dexterity';
-	else if (args.agi) stat = 'Agility';
-	else throw new Error('Invalid stat');
-
-	if (args.all) {
+	const options = ns.flags(argsSchema);
+	if (!options.all && !options.sleeve) throw new Error(`Need to specify --sleeve 'number' or --all`);
+	// Get gym location
+	const location = getGymLocation(gym);
+	// Get stat to train
+	if (!options.str && !options.def && !options.dex && !options.agi)
+		throw new Error(`Specify --str, --def, --dex or --agi for stat to train`);
+	const stat = options.str ? 'Strength' : options.def ? 'Defense' : options.dex ? 'Dexterity' : 'Agility';
+	if (options.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
-			if (city) ns.sleeve.travel(i, city);
+			if (!ns.sleeve.travel(i, location)) throw new Error(`Could not travel sleeve to correct location`);
 			await disableSleeveAutopilot(ns, i);
-			ns.sleeve.setToGymWorkout(i, args.gym, stat);
+			ns.sleeve.setToGymWorkout(i, options.gym, stat);
 		}
 	} else {
-		await disableSleeveAutopilot(ns, args.sleeve);
-		ns.sleeve.setToGymWorkout(args.sleeve, args.gym, stat);
+		if (!ns.sleeve.travel(options.sleeve, location)) throw new Error(`Could not travel sleeve to correct location`);
+		await disableSleeveAutopilot(ns, options.sleeve);
+		ns.sleeve.setToGymWorkout(options.sleeve, options.gym, stat);
 	}
 }

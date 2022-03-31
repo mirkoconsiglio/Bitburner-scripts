@@ -1,24 +1,32 @@
 import {disableSleeveAutopilot} from '/sleeve/utils.js';
 
+const argsSchema = [
+	['sleeve', undefined],
+	['all', false]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, options) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const args = ns.flags([
-		['sleeve', undefined],
-		['all', false]
-	]);
-	if (!args.all && !args.sleeve) throw new Error(`Need to specify a sleeve number or --all`);
+	const options = ns.flags(argsSchema);
+	if (!options.all && !options.sleeve) throw new Error(`Need to specify a sleeve number or --all`);
 
-	if (args.all) {
+	if (options.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			await disableSleeveAutopilot(ns, i);
 			ns.sleeve.setToShockRecovery(i);
 		}
 	} else {
-		await disableSleeveAutopilot(ns, args.sleeve);
-		ns.sleeve.setToShockRecovery(args.sleeve);
+		await disableSleeveAutopilot(ns, options.sleeve);
+		ns.sleeve.setToShockRecovery(options.sleeve);
 	}
 }
