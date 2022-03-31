@@ -488,6 +488,22 @@ export function getCities() {
 
 /**
  *
+ * @return {string[]}
+ */
+export function getGyms() {
+	return Object.values(getOrganisations()).filter(v => v.gym).map(v => v.gym);
+}
+
+/**
+ *
+ * @return {string[]}
+ */
+export function getUniversities() {
+	return Object.values(getOrganisations()).filter(v => v.university).map(v => v.university);
+}
+
+/**
+ *
  * @param {string} faction
  * @returns {string[]}
  */
@@ -513,12 +529,31 @@ export function symbolToServer(symbol) {
 	for (const v of Object.values(getOrganisations())) if (v.stockSymbol === symbol) return v.server;
 }
 
+/**
+ *
+ * @param {string} gym
+ * @return {string}
+ */
 export function getGymLocation(gym) {
 	for (const v of Object.values(getOrganisations())) if (v.gym === gym) return v.location;
 }
 
+/**
+ *
+ * @param {string} university
+ * @return {string}
+ */
 export function getUniversityLocation(university) {
 	for (const v of Object.values(getOrganisations())) if (v.university === university) return v.location;
+}
+
+/**
+ *
+ * @return {string[]}
+ */
+export function getCrimes() {
+	return ['shoplift', 'rob', 'mug', 'larceny', 'drugs', 'bond', 'traffic', 'homicide', 'grand', 'kidnap',
+		'assassinate', 'heist'];
 }
 
 /**

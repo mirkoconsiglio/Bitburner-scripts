@@ -30,7 +30,7 @@ export async function main(ns) {
 	const options = ns.flags(argsSchema);
 	level = options.level;
 	gym = options.gym;
-	ns.travelToCity(getGymLocation(options.gym));
+	if (!ns.travelToCity(getGymLocation(gym))) throw new Error(`Could not travel to correct location`);
 	if (options.str || options.all) await workOutStr(ns);
 	if (options.def || options.all) await workOutDef(ns);
 	if (options.dex || options.all) await workOutDex(ns);
