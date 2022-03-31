@@ -53,10 +53,7 @@ export async function main(ns) {
 	// noinspection InfiniteLoopJS
 	while (true) {
 		// Heal player
-		if (ns.getPlayer().hp < ns.getPlayer().max_hp) {
-			let cost = ns.hospitalize();
-			ns.print(`Player hospitalized for ${ns.nFormat(cost, '$0.000a')}`);
-		}
+		if (ns.getPlayer().hp < ns.getPlayer().max_hp) ns.hospitalize();
 		// Contract solver (disables itself if any solution was incorrect)
 		if (contractorOnline) contractorOnline = contractor(ns);
 		// Purchase TOR
@@ -92,32 +89,13 @@ export async function main(ns) {
 			ns.exec(scripts.upgradeHomeCores, host);
 			upgradeCores = false;
 		}
-		// Stanek Manager
-		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
-			ns.getPlayer().money >= 200e3 && stanek && !ns.isRunning(scripts.stanek, host) &&
-			!promptScriptRunning(ns, host)) {
-			if (await ns.prompt(`Accept Stanek's Gift?`)) {
-				acceptStanek(ns);
-				printBoth(ns, `Accepted Stanek's Gift`);
-			} else stanek = false;
-		}
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
-			!ns.isRunning(scripts.stanek, host) && stanek &&
-			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
-			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
-				ns.exec(scripts.stanek, host);
-				printBoth(ns, `Started Stanek's Gift manager`);
-			}
-			stanek = false;
-		}
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		const hasGangs = ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3);
 		if (hasGangs && !ns.gang.inGang() && gang && !ns.isRunning(scripts.gang, host) &&
 			!promptScriptRunning(ns, host)) {
 			const gangs = getGangs().filter(g => ns.getPlayer().factions.includes(g));
-			gangs.push('No');
+			gangs.unshift('No');
 			const gangName = await ns.prompt(`Create a gang?`, {'type': 'select', 'choices': gangs});
 			if (gangName !== 'No') {
 				ns.gang.createGang(gangName);
@@ -213,6 +191,25 @@ export async function main(ns) {
 				printBoth(ns, `Started sleeve manager`);
 			}
 			sleeve = false;
+		}
+		// Stanek Manager
+		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
+		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
+			ns.getPlayer().money >= 200e3 && stanek && !ns.isRunning(scripts.stanek, host) &&
+			!promptScriptRunning(ns, host)) {
+			if (await ns.prompt(`Accept Stanek's Gift?`)) {
+				acceptStanek(ns);
+				printBoth(ns, `Accepted Stanek's Gift`);
+			} else stanek = false;
+		}
+		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
+			!ns.isRunning(scripts.stanek, host) && stanek &&
+			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
+			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
+				ns.exec(scripts.stanek, host);
+				printBoth(ns, `Started Stanek's Gift manager`);
+			}
+			stanek = false;
 		}
 		// Check faction invites
 		const factionInvitations = ns.checkFactionInvitations().filter(faction => !factions.includes(faction));
