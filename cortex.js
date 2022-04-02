@@ -92,7 +92,7 @@ export async function main(ns) {
 		// Gang manager
 		// noinspection JSUnresolvedFunction
 		const hasGangs = ns.getPlayer().bitNodeN === 2 || (ns.getOwnedSourceFiles().some(s => s.n === 2) && ns.heart.break() <= -54e3);
-		if (hasGangs && !ns.gang.inGang() && gang && !ns.isRunning(scripts.gang, host) &&
+		if (hasGangs && !ns.gang.inGang() && gang && !ns.scriptRunning(scripts.gang, host) &&
 			!promptScriptRunning(ns, host)) {
 			const gangs = getGangs().filter(g => ns.getPlayer().factions.includes(g));
 			gangs.unshift('No');
@@ -102,7 +102,7 @@ export async function main(ns) {
 				printBoth(ns, `Created a gang with ${gangName}`);
 			} else gang = false;
 		}
-		if (hasGangs && ns.gang.inGang() && gang && !ns.isRunning(scripts.gang, host) &&
+		if (hasGangs && ns.gang.inGang() && gang && !ns.scriptRunning(scripts.gang, host) &&
 			enoughRam(ns, scripts.gang, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start gang manager?`)) {
 				ns.exec(scripts.gang, host);
@@ -113,7 +113,7 @@ export async function main(ns) {
 		// Corp manager
 		const hasCorps = ns.getPlayer().bitNodeN === 3 || ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3);
 		if (hasCorps && !ns.getPlayer().hasCorporation && ns.getPlayer().money >= 150e9 && corp
-			&& !ns.isRunning(scripts.corp, host) && !promptScriptRunning(ns, host)) {
+			&& !ns.scriptRunning(scripts.corp, host) && !promptScriptRunning(ns, host)) {
 			const name = await ns.prompt(`Create a Corporation? (Leave empty if no)`, {'type': 'text'});
 			if (name !== '') {
 				const corp = eval('ns.corporation'); // Cheating here because using 1 TiB of RAM to start a corporation is overkill
@@ -121,7 +121,7 @@ export async function main(ns) {
 				printBoth(ns, `Started a corporation: ${name}`);
 			} else corp = false;
 		}
-		if (hasCorps && ns.getPlayer().hasCorporation && corp && !ns.isRunning(scripts.corp, host) &&
+		if (hasCorps && ns.getPlayer().hasCorporation && corp && !ns.scriptRunning(scripts.corp, host) &&
 			enoughRam(ns, scripts.corp, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start corp manager?`)) {
 				ns.exec(scripts.corp, host);
@@ -134,13 +134,13 @@ export async function main(ns) {
 		const hasCombatStats = ns.getPlayer().strength === 100 && ns.getPlayer().defense === 100 &&
 			ns.getPlayer().dexterity === 100 && ns.getPlayer().agility === 100;
 		if (hasBladeburner && hasCombatStats && !ns.getPlayer().inBladeburner && bladeburner &&
-			!ns.isRunning(scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
+			!ns.scriptRunning(scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Join Bladeburner Division?`)) {
 				ns.bladeburner.joinBladeburnerDivision();
 				printBoth(ns, `Joined Bladeburner Division`);
 			} else bladeburner = false;
 		}
-		if (hasBladeburner && ns.getPlayer().inBladeburner && bladeburner && !ns.isRunning(scripts.bladeburner, host) &&
+		if (hasBladeburner && ns.getPlayer().inBladeburner && bladeburner && !ns.scriptRunning(scripts.bladeburner, host) &&
 			enoughRam(ns, scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Bladeburner manager?`)) {
 				ns.exec(scripts.bladeburner, host);
@@ -165,7 +165,7 @@ export async function main(ns) {
 			} else tix = false;
 		}
 		// Stock market manager
-		if (ns.getPlayer().hasTixApiAccess && stock && !ns.isRunning(scripts.stock, host) &&
+		if (ns.getPlayer().hasTixApiAccess && stock && !ns.scriptRunning(scripts.stock, host) &&
 			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
 				ns.exec(scripts.stock, host);
@@ -174,7 +174,7 @@ export async function main(ns) {
 			stock = false;
 		}
 		// Hacknet manager
-		if (hacknet && !ns.isRunning(scripts.hacknet, host) &&
+		if (hacknet && !ns.scriptRunning(scripts.hacknet, host) &&
 			enoughRam(ns, scripts.hacknet, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Hacknet manager?`)) {
 				ns.exec(scripts.hacknet, host);
@@ -184,7 +184,7 @@ export async function main(ns) {
 		}
 		// Sleeve manager
 		if ((ns.getPlayer().bitNodeN === 10 || ns.getOwnedSourceFiles().some(s => s.n === 10)) &&
-			sleeve && !ns.isRunning(scripts.sleeve, host) &&
+			sleeve && !ns.scriptRunning(scripts.sleeve, host) &&
 			enoughRam(ns, scripts.sleeve, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
 				ns.exec(scripts.sleeve, host);
@@ -195,7 +195,7 @@ export async function main(ns) {
 		// Stanek Manager
 		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.getOwnedSourceFiles().some(s => s.n === 13);
 		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
-			ns.getPlayer().money >= 200e3 && stanek && !ns.isRunning(scripts.stanek, host) &&
+			ns.getPlayer().money >= 200e3 && stanek && !ns.scriptRunning(scripts.stanek, host) &&
 			!promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Accept Stanek's Gift?`)) {
 				acceptStanek(ns);
@@ -203,7 +203,7 @@ export async function main(ns) {
 			} else stanek = false;
 		}
 		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
-			!ns.isRunning(scripts.stanek, host) && stanek &&
+			!ns.scriptRunning(scripts.stanek, host) && stanek &&
 			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Stanek's Gift manager?`)) {
 				ns.exec(scripts.stanek, host);
