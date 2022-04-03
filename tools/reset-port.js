@@ -17,5 +17,7 @@ export function autocomplete(data, args) {
  */
 export async function main(ns) {
 	const options = ns.flags(argsSchema);
-	options.all ? await initData(ns) : await resetData(ns, options_[0]);
+	ns.tprint(options._);
+	if (!options.all && options._.length === 0) throw new Error(`Must specify which port or --all`);
+	options.all ? await initData(ns) : await resetData(ns, options._[0]);
 }
