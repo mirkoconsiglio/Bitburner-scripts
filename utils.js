@@ -1019,7 +1019,14 @@ export function defaultPortData(portNumber) {
 		case 9:
 			return undefined;
 		case 10:
-			return Object.fromEntries(Array.from({length: 8}, (_, i) => [i, true]));
+			return Object.fromEntries(Array.from({length: 8}, (_, i) =>
+				[i, {
+					autopilot: true,
+					usefulCombat: false,
+					usefulHacking: false,
+					usefulFaction: false,
+					usefulCompany: false
+				}]));
 		case 11:
 			return undefined;
 		case 12:
@@ -1127,6 +1134,13 @@ export function readFromFile(ns, portNumber) {
  */
 export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
 	const data = readFromFile(ns, portNumber);
-	for (const [key, val] of Object.entries(dataToModify)) data[key] = val;
+	for (const [key, val] of Object.entries(dataToModify)) {
+		if (typeof val === 'object') {
+			const _data = data[key];
+			const [_key, _val] = Object.entries(val)[0];
+			_data[_key] = _val;
+			data[key] = _data;
+		} else data[key] = val;
+	}
 	await writeToFile(ns, portNumber, data, mode);
 }

@@ -18,7 +18,6 @@ export function autocomplete(data, options) {
 	return [];
 }
 
-
 /**
  *
  * @param {NS} ns
@@ -38,40 +37,46 @@ export async function main(ns) {
 	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
-		const player = ns.getPlayer();
 		const data = readFromFile(ns, getPortNumbers().sleeve);
-		const freeSleeves = Object.keys(data).filter(k => data[k]);
+		const freeSleeves = Object.keys(data).filter(k => data[k]).map(k => Number(k));
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			// Check for useful augmentations
 			const criteria = [isUsefulCrime];
-			if (usefulCombat[i]) criteria.push(isUsefulCombat);
-			if (usefulHacking[i]) criteria.push(isUsefulHackingSkill);
-			if (usefulFaction[i]) criteria.push(isUsefulFaction);
-			if (usefulCompany[i]) criteria.push(isUsefulCompany);
+			if (data[i].usefulCombat) criteria.push(isUsefulCombat);
+			if (data[i].usefulHacking) criteria.push(isUsefulHackingSkill);
+			if (data[i].usefulFaction) criteria.push(isUsefulFaction);
+			if (data[i].usefulCompany) criteria.push(isUsefulCompany);
 			// Check for augmentation purchases
 			ns.sleeve.getSleevePurchasableAugs(i).forEach(aug => {
 				if (!disableAugmentationBuying && isUseful(ns, criteria, aug.name) &&
-					ns.getServerMoneyAvailable('home') >= aug.cost &&
-					ns.sleeve.getSleeveStats(i).shock === 0) ns.sleeve.purchaseSleeveAug(i, aug.name);
+					ns.getPlayer().money >= aug.cost && ns.sleeve.getSleeveStats(i).shock === 0)
+					ns.sleeve.purchaseSleeveAug(i, aug.name);
 			});
 			// Assign tasks
+			const player = ns.getPlayer();
+			const factionName = player.currentWorkFactionName;
+			const companyName = player.companyName;
 			// Free sleeve copies player working for faction
-			if (freeSleeves.includes(i) && player.isWorking && player.workType === 'Working for Faction') {
-				const name = player.currentWorkFactionName;
-				if (data[i] && ns.sleeve.getTask(i).task !== 'Faction' || !works.includes(ns.sleeve.getTask(i).factionWorkType)) {
+			if (freeSleeves.includes(i) && player.isWorking && player.workType === 'Working for Faction' &&
+				!sameSleeveWork(ns, factionName)) {
+				if (data[i].autopilot && ns.sleeve.getTask(i).task !== 'Faction' || !works.includes(ns.sleeve.getTask(i).factionWorkType)) {
 					let j = 0;
-					while (!ns.sleeve.setToFactionWork(i, name, works[j])) j++;
+					while (!ns.sleeve.setToFactionWork(i, factionName, works[j])) j++;
+					freeSleeves.splice(freeSleeves.findIndex(s => s === i), 1);
 				}
 			}
 			// Free sleeve copies player working for company
-			else if (freeSleeves.includes(i) && player.isWorking && player.workType === 'Working for Company') {
-				const name = player.companyName;
-				if (data[i] && ns.sleeve.getTask(i).task !== 'Company') ns.sleeve.setToCompanyWork(i, name);
+			else if (freeSleeves.includes(i) && player.isWorking && player.workType === 'Working for Company' &&
+				!sameSleeveWork(ns, companyName)) {
+				if (data[i].autopilot && ns.sleeve.getTask(i).task !== 'Company') {
+					ns.sleeve.setToCompanyWork(i, companyName);
+					freeSleeves.splice(freeSleeves.findIndex(s => s === i), 1);
+				}
 			}
 			// Crime
-			else {
+			else if (!sleeveOtherWork(ns, i, factionName, companyName)) {
 				const crime = ns.sleeve.getSleeveStats(i).strength < 50 ? 'Mug' : 'Homicide';
-				if (data[i] && ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
+				if (data[i].autopilot && ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
 			}
 			// Make relevant augmentations purchasable for sleeves
 			const task = ns.sleeve.getTask(i);
@@ -94,6 +99,31 @@ export async function main(ns) {
 		}
 		await ns.sleep(1000);
 	}
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} organization
+ * @return {boolean}
+ */
+function sameSleeveWork(ns, organization) {
+	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) if (ns.sleeve.getTask(i).location === organization) return true;
+	return false;
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} sleeveNumber
+ * @param {string} factionName
+ * @param {string} companyName
+ * @return {boolean}
+ */
+function sleeveOtherWork(ns, sleeveNumber, factionName, companyName) {
+	const task = ns.sleeve.getTask(sleeveNumber);
+	return task.location === factionName || task.location === companyName;
+
 }
 
 /**

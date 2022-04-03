@@ -6,5 +6,5 @@ import {getPortNumbers, modifyFile} from '/utils.js';
  * @param {number} sleeveNumber
  */
 export async function disableSleeveAutopilot(ns, sleeveNumber) {
-	await modifyFile(ns, getPortNumbers().sleeve, {[sleeveNumber]: false});
+	await modifyFile(ns, getPortNumbers().sleeve, {[sleeveNumber]: {autopilot: false}});
 }
