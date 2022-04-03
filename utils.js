@@ -584,7 +584,7 @@ export function manageAndHack(ns) {
 	const scripts = getScripts();
 	const servers = getAccessibleServers(ns);
 	const hackables = getOptimalHackable(ns, servers);
-	const [freeRams, filteredHackables] = getFreeRam(ns, servers, hackables);
+	const [freeRams, filteredHackables] = getFreeRams(ns, servers, hackables);
 	const hackstates = getHackStates(ns, servers, filteredHackables);
 	for (const target of filteredHackables) {
 		const money = ns.getServerMoneyAvailable(target);
@@ -798,9 +798,8 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
  * @param {boolean} occupy
  * @returns {Object<string, number>[] | [Object<string, number>[], string[]]}
  */
-export function getFreeRam(ns, servers, hackables, occupy = false) {
+export function getFreeRams(ns, servers, hackables, occupy = false) {
 	const scripts = getScripts();
-	const data = readFromFile(ns, getPortNumbers().reservedRam);
 	const freeRams = [];
 	const unhackables = [];
 	for (const server of servers) {
@@ -809,7 +808,7 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 			unhackables.push(process.args[0]); // Don't hack the target of the batcher
 			if (!occupy) continue; // Check if we want to run scripts on the host
 		}
-		const freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? 0);
+		const freeRam = getFreeRam(ns, server);
 		if (freeRam > 0) freeRams.push({host: server, freeRam: freeRam});
 	}
 	const sortedFreeRams = freeRams.sort((a, b) => b.freeRam - a.freeRam);
@@ -817,6 +816,17 @@ export function getFreeRam(ns, servers, hackables, occupy = false) {
 		const filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
 		return [sortedFreeRams, filteredHackables];
 	} else return sortedFreeRams;
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @return {number}
+ */
+export function getFreeRam(ns, server) {
+	const data = readFromFile(ns, getPortNumbers().reservedRam);
+	return ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? 0);
 }
 
 /**
@@ -957,8 +967,8 @@ function getPromptScripts() {
 		scripts.joinFactions,
 		scripts.upgradeHomeRam,
 		scripts.upgradeHomeCores,
-		'/augmentations/install-augmentations.js',
-		'/augmentations/purchase-augmentations.js',
+		'/augmentations/install.js',
+		'/augmentations/purchase.js',
 		'/build/script-remover.js'
 	];
 }
@@ -971,7 +981,7 @@ function getPromptScripts() {
  * @returns {boolean}
  */
 export function enoughRam(ns, script, server = ns.getHostname()) {
-	return ns.getScriptRam(script, server) <= ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
+	return ns.getScriptRam(script, server) <= getFreeRam(ns, server);
 }
 
 /**
@@ -1034,7 +1044,7 @@ export function defaultPortData(portNumber) {
 		case 13:
 			return {
 				pattern: 'starter',
-				maxCharges: 100
+				maxCharges: 50
 			};
 		case 14:
 			return undefined;

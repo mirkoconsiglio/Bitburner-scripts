@@ -1,5 +1,13 @@
 import {getFragment} from '/stanek/utils.js';
-import {getAccessibleServers, getManagerScripts, getPortNumbers, getScripts, modifyFile, readFromFile} from '/utils.js';
+import {
+	getAccessibleServers,
+	getFreeRam,
+	getManagerScripts,
+	getPortNumbers,
+	getScripts,
+	modifyFile,
+	readFromFile
+} from '/utils.js';
 
 // Variables
 let host;
@@ -42,10 +50,10 @@ export async function main(ns) {
 		// Reserve RAM on host for charging
 		await modifyFile(ns, reservedRamPortNumber, {[host]: ram});
 		// Wait for RAM to free up
-		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
+		while (getFreeRam(ns, host) < ram) {
 			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up on ${host}: ` +
-				`${ns.nFormat((ns.getServerMaxRam(host) - ns.getServerUsedRam(host)) * 1e9, '0.000b')} ` +
+				`${ns.nFormat(getFreeRam(ns, host) * 1e9, '0.000b')} ` +
 				`/ ${ns.nFormat(ram * 1e9, '0.000b')}`);
 			await ns.sleep(1000);
 		}
@@ -104,12 +112,12 @@ async function charger(ns) {
 		for (const fragment of fragments) {
 			if (getBestHost(ns)[1] > threads) return; // Reset Charging
 			statusUpdate(ns, fragments, data);
-			let availableRam = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
+			let availableRam = getFreeRam(ns, host);
 			const availableThreads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
-			// Only charge if we will not be bringing down the average
-			if (availableThreads < fragment.avgCharge * 0.99) {
-				ns.print(`WARNING: The current average charge of fragment ${fragment.id} is ${ns.nFormat(fragment.avgCharge, '0.000a')}, ` +
-					`indicating that it has been charged while there was ${ns.nFormat(2 * fragment.avgCharge * 1000 ** 3, '0.00b')} or more free RAM on home, ` +
+			// Only charge if we will not be bringing down the highest
+			if (availableThreads < fragment.highestCharge * 0.99) {
+				ns.print(`WARNING: The highest average charge of fragment ${fragment.id} is ${ns.nFormat(fragment.highestCharge, '0.000a')}, ` +
+					`indicating that it has been charged while there was ${ns.nFormat(2 * fragment.highestCharge * 1000 ** 3, '0.00b')} or more free RAM on home, ` +
 					`but currently there is only ${ns.nFormat(availableRam * 1000 ** 3, '0.00b')} available, which would reduce the average charge and lower your stats. ` +
 					`This update will be skipped, and you should free up RAM on home to resume charging.`);
 				await ns.sleep(1000);
@@ -133,7 +141,7 @@ function statusUpdate(ns, fragments, data) {
 	let status = `Charging ${fragments.length} fragments to ${data.maxCharges}\n`;
 	for (const fragment of fragments) {
 		status += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +
-			`charge num: ${fragment.numCharge}, avg: ${ns.nFormat(fragment.avgCharge, '0.000a')}\n`;
+			`charge num: ${fragment.numCharge}, highest: ${ns.nFormat(fragment.highestCharge, '0.000a')}\n`;
 	}
 	ns.print(status);
 }
