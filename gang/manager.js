@@ -1,3 +1,13 @@
+const argsSchema = [
+	['disable-equipment-buying', false]
+];
+
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, options) {
+	data.flags(argsSchema);
+	return [];
+}
+
 /**
  *
  * @param {NS} ns
@@ -5,6 +15,8 @@
  */
 export async function main(ns) {
 	ns.disableLog('ALL');
+	const options = ns.flags(argsSchema);
+	const disableEquipmentBuying = options['disable-equipment-buying'];
 	if (!ns.gang.inGang()) {
 		ns.tprint(`You need to join a gang first`);
 		return;
@@ -24,7 +36,7 @@ export async function main(ns) {
 		// Check for ascensions
 		ascendMembers(ns, gangRoster);
 		// Check for equipment purchases
-		purchaseEquipment(ns, gangRoster);
+		if (!disableEquipmentBuying) purchaseEquipment(ns, gangRoster);
 		// Assign tasks
 		assignTasks(ns, gangRoster);
 		// Check for territory warfare
