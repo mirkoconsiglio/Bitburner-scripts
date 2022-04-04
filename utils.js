@@ -1155,7 +1155,6 @@ export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
 	await writeToFile(ns, portNumber, data, mode);
 }
 
-// TODO: use custom formatting functions
 /**
  *
  * @param {NS} ns

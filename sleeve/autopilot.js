@@ -121,8 +121,9 @@ function sameSleeveWork(ns, organization) {
  * @return {boolean}
  */
 function sleeveOtherWork(ns, sleeveNumber, factionName, companyName) {
-	const task = ns.sleeve.getTask(sleeveNumber);
-	return task.location === factionName || task.location === companyName;
+	const location = ns.sleeve.getTask(sleeveNumber).location;
+	if (location === '') return false;
+	return location === factionName || location === companyName;
 
 }
 
