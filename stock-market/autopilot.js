@@ -1,5 +1,14 @@
 // Requires access to the TIX API. Purchases access to the 4S Mkt Data API as soon as it can
-import {getPortNumbers, printBoth, symbolToServer, writeToFile} from '/utils.js';
+import {
+	formatMoney,
+	formatNumber,
+	formatPercentage,
+	formatTime,
+	getPortNumbers,
+	printBoth,
+	symbolToServer,
+	writeToFile
+} from '/utils.js';
 
 let disableShorts = false;
 let commission = 100000; // Buy/sell commission. Expected profit must exceed this to buy anything.
@@ -138,7 +147,7 @@ export async function main(ns) {
 		for (let stk of myStocks) {
 			if (stk.absReturn() <= thresholdToSell || stk.bullish() && stk.sharesShort > 0 || stk.bearish() && stk.sharesLong > 0) {
 				if (pre4s && stk.ticksHeld < pre4sMinHoldTime) {
-					if (!stk.warnedBadPurchase) ns.print(`WARNING: Thinking of selling ${stk.sym} with ER ${ns.nFormat(stk.absReturn(), '$0.000a')}, but holding out as it was purchased just ${stk.ticksHeld} ticks ago...`);
+					if (!stk.warnedBadPurchase) ns.print(`WARNING: Thinking of selling ${stk.sym} with ER ${formatMoney(ns, stk.absReturn())}, but holding out as it was purchased just ${stk.ticksHeld} ticks ago...`);
 					stk.warnedBadPurchase = true; // Hack to ensure we don't spam this warning
 				} else {
 					sales += doSellAll(ns, stk);
@@ -180,9 +189,9 @@ export async function main(ns) {
 				if (ticksBeforeCycleEnd < 1) continue; // We're cutting it too close to the market cycle, position might reverse before we break even on commission
 				let estEndOfCycleValue = numShares * purchasePrice * ((stk.absReturn() + 1) ** ticksBeforeCycleEnd - 1); // Expected difference in purchase price and value at next market cycle end
 				if (estEndOfCycleValue <= 2 * commission)
-					ns.print(`Despite attractive ER of ${ns.nFormat(stk.absReturn(), '$0.000a')}, ${stk.sym} was not bought. Budget: ${ns.nFormat(budget, '$0.000a')} can only buy ${numShares} shares @ ${ns.nFormat(purchasePrice, '$0.000a')}. ` +
-						`Given an estimated ${marketCycleLength - estTick} ticks left in market cycle, less ${stk.timeToCoverTheSpread().toFixed(1)} ticks to cover the spread (${(stk.spread_pct * 100).toFixed(2)}%), ` +
-						`remaining ${ticksBeforeCycleEnd.toFixed(1)} ticks would only generate ${ns.nFormat(estEndOfCycleValue, '$0.000a')}, which is less than 2x commission (${ns.nFormat(2 * commission, '$0.000a')})`);
+					ns.print(`Despite attractive ER of ${formatMoney(ns, stk.absReturn())}, ${stk.sym} was not bought. Budget: ${formatMoney(ns, budget)} can only buy ${numShares} shares @ ${formatMoney(ns, purchasePrice)}. ` +
+						`Given an estimated ${marketCycleLength - estTick} ticks left in market cycle, less ${stk.timeToCoverTheSpread().toFixed(1)} ticks to cover the spread (${formatPercentage(stk.spread_pct * 100)}), ` +
+						`remaining ${ticksBeforeCycleEnd.toFixed(1)} ticks would only generate ${formatMoney(ns, estEndOfCycleValue)}, which is less than 2x commission (${formatMoney(ns, 2 * commission)})`);
 				else cash -= doBuy(ns, stk, numShares);
 			}
 		}
@@ -270,8 +279,8 @@ function liquidate(ns) {
 		if (sharesLong > 0) totalRevenue += ns.stock.sell(sym, sharesLong) * sharesLong - commission;
 		if (sharesShort > 0) totalRevenue += (2 * avgShortCost - ns.stock.sellShort(sym, sharesShort)) * sharesShort - commission;
 	}
-	printBoth(ns, `Sold ${ns.nFormat(totalSharesLong, '0.000a')} long shares and ${ns.nFormat(totalSharesShort, '0.000a')} short shares ` +
-		`in ${totalStocks} stocks for ${ns.nFormat(totalRevenue, '$0.000a')}`);
+	printBoth(ns, `Sold ${formatNumber(ns, totalSharesLong)} long shares and ${formatNumber(ns, totalSharesShort)} short shares ` +
+		`in ${totalStocks} stocks for ${formatMoney(ns, totalRevenue)}`);
 }
 
 /**
@@ -291,11 +300,11 @@ function tryGet4SApi(ns, playerStats, bitnodeMults, corpus) {
 	if (totalCost > corpus * 0.9) return false;
 	if (playerStats.money < totalCost) liquidate(ns);
 	if (!playerStats.has4SData) {
-		if (ns.stock.purchase4SMarketData()) printBoth(ns, `Purchased 4SMarketData for ${ns.nFormat(cost4sData, '$0.000a')}`);
+		if (ns.stock.purchase4SMarketData()) printBoth(ns, `Purchased 4SMarketData for ${formatMoney(ns, cost4sData)}`);
 		else ns.print(`ERROR attempting to purchase 4SMarketData`);
 	}
 	if (ns.stock.purchase4SMarketDataTixApi()) {
-		printBoth(ns, `Purchased 4SMarketDataTixApi for ${ns.nFormat(cost4sApi, '$0.000a')}`);
+		printBoth(ns, `Purchased 4SMarketDataTixApi for ${formatMoney(ns, cost4sApi)}`);
 		return true;
 	} else {
 		ns.print(`ERROR attempting to purchase 4SMarketDataTixApi`);
@@ -323,9 +332,9 @@ function doStatusUpdate(ns, stocks, myStocks, hudElement = null) {
 	const liquidation_value = myStocks.reduce((sum, stk) => sum - (stk.owned() ? commission : 0) + stk.positionValue(), 0);
 	ns.print(`Long ${myStocks.filter(s => s.sharesLong > 0).length}, Short ${myStocks.filter(s => s.sharesShort > 0).length} of ${stocks.length} stocks ` +
 		(myStocks.length === 0 ? '' : `(ER ${minReturnBP.toFixed(1)}-${maxReturnBP.toFixed(1)} BP) `) +
-		`Profit: ${ns.nFormat(totalProfit, '$0.000a')} Holdings: ${ns.nFormat(liquidation_value, '$0.000a')} ` +
-		`(Cost: ${ns.nFormat(est_holdings_cost, '$0.000a')}) Net: ${ns.nFormat(totalProfit + liquidation_value - est_holdings_cost, '$0.000a')}`);
-	if (hudElement) hudElement.innerText = ns.nFormat(liquidation_value, '$0.000a');
+		`Profit: ${formatMoney(ns, totalProfit)} Holdings: ${formatMoney(ns, liquidation_value)} ` +
+		`(Cost: ${formatMoney(ns, est_holdings_cost)}) Net: ${formatMoney(ns, totalProfit + liquidation_value - est_holdings_cost)}`);
+	if (hudElement) hudElement.innerText = formatMoney(ns, liquidation_value);
 }
 
 /* A sorting function to put stocks in the order we should prioritize investing in them */
@@ -352,10 +361,10 @@ async function refresh(ns, playerStats, allStocks, myStocks) {
 		if (Date.now() - lastTick < expectedTickTime - sleepInterval) {
 			if (Date.now() - lastTick < catchUpTickTime - sleepInterval) {
 				const changedPrices = allStocks.filter(stk => stk.ask_price !== dictAskPrices[stk.sym]);
-				ns.print(`WARNING: Detected a stock market tick after only ${ns.tFormat(Date.now() - lastTick)}, but expected ~${ns.tFormat(expectedTickTime)}. ` +
+				ns.print(`WARNING: Detected a stock market tick after only ${formatTime(ns, Date.now() - lastTick)}, but expected ~${formatTime(ns, expectedTickTime)}. ` +
 					(changedPrices.length >= 33 ? '(All stocks updated)' : `The following ${changedPrices.length} stock prices changed: ${changedPrices.map(stk =>
-						`${stk.sym} ${ns.nFormat(stk.ask_price, '$0.000a')} -> ${ns.nFormat(dictAskPrices[stk.sym], '$0.000a')}`).join(', ')}`));
-			} else ns.print(`INFO: Detected a rapid stock market tick (${ns.tFormat(Date.now() - lastTick)}), likely to make up for lag / offline time.`);
+						`${stk.sym} ${formatMoney(ns, stk.ask_price)} -> ${formatMoney(ns, dictAskPrices[stk.sym])}`).join(', ')}`));
+			} else ns.print(`INFO: Detected a rapid stock market tick (${formatTime(ns, Date.now() - lastTick)}), likely to make up for lag / offline time.`);
 		}
 		lastTick = Date.now();
 	}
@@ -460,10 +469,10 @@ async function updateForecast(ns, allStocks, has4s) {
 			stk.debugLog = `${stk.sym.padEnd(5, ' ')} ${(stk.bullish() ? '+' : '-').repeat(signalStrength).padEnd(3)} ` +
 				`Prob:${(stk.prob * 100).toFixed(0).padStart(3)}% (t${probWindowLength.toFixed(0).padStart(2)}:${(stk.longTermForecast * 100).toFixed(0).padStart(3)}%, ` +
 				`t${Math.min(stk.priceHistory.length, nearTermForecastWindowLength).toFixed(0).padStart(2)}:${(stk.nearTermForecast * 100).toFixed(0).padStart(3)}%) ` +
-				`tLast⇄:${(stk.lastInversion + 1).toFixed(0).padStart(3)} Vol:${(stk.vol * 100).toFixed(2)}% ER:${ns.nFormat(stk.expectedReturn(), '$0.000a').padStart(8)} ` +
-				`Spread:${(stk.spread_pct * 100).toFixed(2)}% ttProfit:${stk.blackoutWindow().toFixed(0).padStart(3)}`;
-			if (stk.owned()) stk.debugLog += ` Pos: ${ns.nFormat(stk.ownedShares(), '$0.000a')} (${stk.ownedShares() === stk.maxShares ? 'max' :
-				((100 * stk.ownedShares() / stk.maxShares).toFixed(0).padStart(2) + '%')}) ${stk.sharesLong > 0 ? 'long ' : 'short'} (held ${stk.ticksHeld} ticks)`;
+				`tLast⇄:${(stk.lastInversion + 1).toFixed(0).padStart(3)} Vol:${formatPercentage(stk.vol * 100)} ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)} ` +
+				`Spread:${formatPercentage(stk.spread_pct * 100)} ttProfit:${stk.blackoutWindow().toFixed(0).padStart(3)}`;
+			if (stk.owned()) stk.debugLog += ` Pos: ${formatMoney(ns, stk.ownedShares())} (${stk.ownedShares() === stk.maxShares ? 'max' :
+				formatPercentage((100 * stk.ownedShares() / stk.maxShares).toFixed(0))}) ${stk.sharesLong > 0 ? 'long ' : 'short'} (held ${stk.ticksHeld} ticks)`;
 			if (stk.possibleInversionDetected) stk.debugLog += ' ⇄⇄⇄';
 		}
 	}
@@ -507,15 +516,15 @@ function doBuy(ns, stk, sharesBought) {
 		return 0;
 	}
 
-	ns.print(`INFO: ${long ? 'Bought ' : 'Shorted'} ${ns.nFormat(sharesBought, '0.000a').padStart(5)}${stk.maxShares === sharesBought + stk.ownedShares() ? ' (max shares)' : ''} ` +
-		`${stk.sym.padEnd(5)} @ ${ns.nFormat(price, '$0.000a').padStart(9)} for ${ns.nFormat(sharesBought * price, '$0.000a').padStart(9)} (Spread:${(stk.spread_pct * 100).toFixed(2)}% ` +
-		`ER:${ns.nFormat(stk.expectedReturn(), '$0.000a').padStart(8)}) Ticks to Profit: ${stk.timeToCoverTheSpread().toFixed(2)}`);
+	ns.print(`INFO: ${long ? 'Bought ' : 'Shorted'} ${formatNumber(ns, sharesBought).padStart(5)}${stk.maxShares === sharesBought + stk.ownedShares() ? ' (max shares)' : ''} ` +
+		`${stk.sym.padEnd(5)} @ ${formatMoney(ns, price).padStart(9)} for ${formatMoney(ns, sharesBought * price).padStart(9)} (Spread:${formatPercentage(stk.spread_pct * 100)} ` +
+		`ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)}) Ticks to Profit: ${stk.timeToCoverTheSpread().toFixed(2)}`);
 	// The rest of this work is for troubleshooting / mock-mode purposes
 	if (price === 0) {
-		printBoth(ns, `ERROR: Failed to ${long ? 'buy' : 'short'} ${stk.sym} @ ${ns.nFormat(expectedPrice, '$0.000a')} - 0 was returned`);
+		printBoth(ns, `ERROR: Failed to ${long ? 'buy' : 'short'} ${stk.sym} @ ${formatMoney(ns, expectedPrice)} - 0 was returned`);
 		return 0;
 	} else if (price !== expectedPrice) {
-		printBoth(ns, `WARNING: ${long ? 'Bought' : 'Shorted'} ${stk.sym} @ ${ns.nFormat(price, '$0.000a')} but expected ${ns.nFormat(expectedPrice, '$0.000a')} (spread: ${ns.nFormat(stk.spread, '$0.000a')})`);
+		printBoth(ns, `WARNING: ${long ? 'Bought' : 'Shorted'} ${stk.sym} @ ${formatMoney(ns, price)} but expected ${formatMoney(ns, expectedPrice)} (spread: ${formatMoney(ns, stk.spread)})`);
 		price = expectedPrice; // Known Bitburner bug for now, short returns "price" instead of "bit_price". Correct this so running profit calculations are correct.
 	}
 	if (mock && long) stk.boughtPrice = (stk.boughtPrice * stk.sharesLong + price * sharesBought) / (stk.sharesLong + sharesBought);
@@ -539,13 +548,13 @@ function doSellAll(ns, stk) {
 	let sharesSold = long ? stk.sharesLong : stk.sharesShort;
 	let price = mock ? expectedPrice : long ? ns.stock.sell(stk.sym, sharesSold) : ns.stock.sellShort(stk.sym, sharesSold);
 	const profit = (long ? stk.sharesLong * (price - stk.boughtPrice) : stk.sharesShort * (stk.boughtPriceShort - price)) - 2 * commission;
-	ns.print(`${profit > 0 ? 'SUCCESS' : 'WARNING'}: Sold all ${ns.nFormat(sharesSold, '$0.000a').padStart(5)} ${stk.sym.padEnd(5)} ${long ? ' long' : 'short'} positions ` +
-		`@ ${ns.nFormat(price, '$0.000a').padStart(9)} for a ` + (profit > 0 ? `PROFIT of ${ns.nFormat(profit, '$0.000a').padStart(9)}` : ` LOSS of ${ns.nFormat(-profit, '$0.000a').padStart(9)}`) + ` after ${stk.ticksHeld} ticks`);
+	ns.print(`${profit > 0 ? 'SUCCESS' : 'WARNING'}: Sold all ${formatMoney(ns, sharesSold).padStart(5)} ${stk.sym.padEnd(5)} ${long ? ' long' : 'short'} positions ` +
+		`@ ${formatMoney(ns, price).padStart(9)} for a ` + (profit > 0 ? `PROFIT of ${formatMoney(ns, profit).padStart(9)}` : ` LOSS of ${formatMoney(ns, -profit).padStart(9)}`) + ` after ${stk.ticksHeld} ticks`);
 	if (price === 0) {
-		printBoth(ns, `ERROR: Failed to sell ${sharesSold} ${stk.sym} ${long ? 'shares' : 'shorts'} @ ${ns.nFormat(expectedPrice, '$0.000a')} - 0 was returned`);
+		printBoth(ns, `ERROR: Failed to sell ${sharesSold} ${stk.sym} ${long ? 'shares' : 'shorts'} @ ${formatMoney(ns, expectedPrice)} - 0 was returned`);
 		return 0;
 	} else if (price !== expectedPrice) {
-		ns.print(`WARNING: Sold ${stk.sym} ${long ? 'shares' : 'shorts'} @ ${ns.nFormat(price, '$0.000a')} but expected ${ns.nFormat(expectedPrice, '$0.000a')} (spread: ${ns.nFormat(stk.spread, '$0.000a')})`);
+		ns.print(`WARNING: Sold ${stk.sym} ${long ? 'shares' : 'shorts'} @ ${formatMoney(ns, price)} but expected ${formatMoney(ns, expectedPrice)} (spread: ${formatMoney(ns, stk.spread)})`);
 		price = expectedPrice; // Known Bitburner bug for now, sellSort returns "price" instead of "ask_price". Correct this so running profit calculations are correct.
 	}
 	if (long) stk.sharesLong -= sharesSold;

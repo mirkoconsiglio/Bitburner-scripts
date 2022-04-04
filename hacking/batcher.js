@@ -11,11 +11,11 @@ export async function main(ns) {
 
 	// noinspection InfiniteLoopJS
 	while (true) {
-		let sec = ns.getServerSecurityLevel(data.target);
-		let money = ns.getServerMoneyAvailable(data.target);
-		if (!(money === data.maxMoney) || !(sec === data.minSec)) {
-			ns.print(`Priming ${data.target} in ${ns.getWeakenTime(data.target).toFixed(2)} seconds`);
-			let primed = await primeTarget(ns, sec, money, data);
+		const sec = ns.getServerSecurityLevel(data.target);
+		const money = ns.getServerMoneyAvailable(data.target);
+		if (money < data.maxMoney || sec > data.minSec) {
+			ns.print(`Priming ${data.target} in ${formatTime(ns, ns.getWeakenTime(data.target))} seconds`);
+			const primed = await primeTarget(ns, sec, money, data);
 			if (primed) ns.print(`${data.target} is primed`);
 			else continue;
 		}
@@ -70,7 +70,7 @@ async function primeTarget(ns, sec, money, data) {
 
 	if (primeRAM > freeRAM) {
 		ns.print(`Not enough RAM on ${data.host} to prime ${data.target}`);
-		ns.print(`Priming RAM: ${primeRAM.toFixed(2)}, available RAM: ${freeRAM.toFixed(2)}`);
+		ns.print(`Priming RAM: ${formatBinary(ns, primeRam)}, available RAM: ${formatBinary(ns, freeRam)}`);
 		ns.print(`Finding other hosts to prime ${data.target}`);
 
 		let servers = getAccessibleServers(ns);
@@ -130,10 +130,9 @@ function getInfo(ns, data) {
 
 	if (cycleRAM > freeRAM) {
 		ns.print(`Not enough RAM on ${data.host} to hack ${data.target}.`);
-		ns.print(`Cycle RAM: ${cycleRAM}. available RAM: ${freeRAM}.`);
-		data.drainPercent *= freeRAM / cycleRAM;
-		ns.print(`Reducing drain percent to ${data.drainPercent.toFixed(2)}.`);
-
+		ns.print(`Cycle RAM: ${cycleRAM}. available RAM: ${freeRam}.`);
+		data.drainPercent *= freeRam / cycleRAM;
+		ns.print(`Reducing drain percent to ${formatPercentage(data.drainPercent * 100)}.`);
 		if (data.drainPercent < 0.001) {
 			printBoth(ns, `Drain percent too low. Exiting daemon on ${data.host} targeting ${data.target}.`);
 			return 'EXIT';
@@ -141,6 +140,7 @@ function getInfo(ns, data) {
 
 		return getInfo(ns, data);
 	}
+	ns.print(`Running ${cycleCount} cycles in ${formatTime(ns, cycleCount * cycleDelay / 1000)} seconds.`);
 
 	ns.print(`Running ${cycleCount} cycles in ${(cycleCount * cycleDelay / 1000).toFixed(2)} seconds.`);
 

@@ -127,14 +127,14 @@ export async function main(ns) {
 		let totalPrice = 0;
 		for (let [i, aug] of augmentations.entries()) {
 			let updatedAugPrice = aug.price * inc ** i;
-			stringAugs += `${aug.name}: ${ns.nFormat(aug.price, '$0.000a')} (${ns.nFormat(updatedAugPrice, '$0.000a')}). `;
+			stringAugs += `${aug.name}: ${formatMoney(ns, aug.price)} (${formatMoney(ns, updatedAugPrice)}). `;
 			totalPrice += updatedAugPrice;
 		}
 		// Prompt user for buying augmentations
-		if (await ns.prompt(`${stringAugs}Buy augmentations for ${ns.nFormat(totalPrice, '0.000a')}?`)) {
+		if (await ns.prompt(`${stringAugs}Buy augmentations for ${formatMoney(ns, totalPrice)}?`)) {
 			for (let aug of augmentations) {
 				if (ns.purchaseAugmentation(aug.faction, aug.name)) {
-					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${ns.nFormat(aug.price, '0.000a')}`);
+					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${formatMoney(ns, aug.price)}`);
 				} else {
 					ns.tprint(`Could not purchase ${aug.name} from ${aug.faction}`);
 					return;

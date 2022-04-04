@@ -1,4 +1,4 @@
-import {getFactions} from '/utils.js';
+import {formatMoney, getFactions} from '/utils.js';
 
 /**
  *
@@ -21,8 +21,8 @@ export async function main(ns) {
 				const price = ns.getAugmentationPrice(augmentation);
 				const repReq = ns.getAugmentationRepReq(augmentation);
 				const prereq = ns.getAugmentationPrereq(augmentation);
-				await ns.write(file, `Price: ${ns.nFormat(price, '$0.000a')}\n`, 'a');
-				await ns.write(file, `Rep: ${ns.nFormat(repReq, '0.000a')}\n`, 'a');
+				await ns.write(file, `Price: ${formatMoney(ns, price)}\n`, 'a');
+				await ns.write(file, `Rep: ${formatNumber(ns, repReq)}\n`, 'a');
 				if (prereq.length > 0) await ns.write(file, `Prereq: ${prereq}\n`, 'a');
 			}
 		}

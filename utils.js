@@ -652,9 +652,9 @@ export function updateOverview(ns) {
 		const headers = [];
 		const values = [];
 		headers.push(`Income\u00A0`);
-		values.push(`${ns.nFormat(ns.getScriptIncome()[0], '$0.000a')}`);
+		values.push(`${formatMoney(ns, ns.getScriptIncome()[0])}`);
 		headers.push(`Karma`);
-		values.push(`${ns.nFormat(ns.heart.break(), '0.000a')}`);
+		values.push(`${formatNumber(ns, ns.heart.break())}`);
 		hook0.innerText = headers.join('\n');
 		hook1.innerText = values.join('\n');
 	} catch (err) {
@@ -1011,7 +1011,7 @@ export function getPortNumbers() {
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
 		case 1:
-			return {};
+			return {'home': 64};
 		case 2:
 			return undefined;
 		case 3:
@@ -1153,4 +1153,55 @@ export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
 		} else data[key] = val;
 	}
 	await writeToFile(ns, portNumber, data, mode);
+}
+
+// TODO: use custom formatting functions
+/**
+ *
+ * @param {NS} ns
+ * @param {number} n
+ * @return {string}
+ */
+export function formatNumber(ns, n) {
+	return isNaN(n) ? 'NaN' : ns.nFormat(n, '0.000a');
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} n
+ * @return {string}
+ */
+export function formatMoney(ns, n) {
+	return isNaN(n) ? 'NaN' : ns.nFormat(n, '$0.000a');
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} b
+ * @return {string}
+ */
+export function formatBinary(ns, b) {
+	return isNaN(b) ? 'NaN' : ns.nFormat(b, '0.00b');
+}
+
+/**
+ *
+ * @param {number} n
+ * @return {string}
+ */
+export function formatPercentage(n) {
+	return isNaN(n) ? 'NaN' : `${n.toFixed(2)}%`;
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {number} t
+ * @param {boolean} milliPrecision
+ * @return {string}
+ */
+export function formatTime(ns, t, milliPrecision = false) {
+	return isNaN(t) ? 'NaN' : ns.tFormat(t, milliPrecision);
 }

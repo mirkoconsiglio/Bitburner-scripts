@@ -1,3 +1,5 @@
+import {formatMoney, formatTime} from '/utils.js';
+
 /**
  *
  * @param {NS} ns
@@ -16,11 +18,11 @@ export async function main(ns) {
 		const sec = ns.getServerSecurityLevel(server);
 		ns.clearLog(server);
 		ns.print(`${server}:`);
-		ns.print(` $       : ${ns.nFormat(money, '$0.000a')} / ${ns.nFormat(maxMoney, '$0.000a')} (${(money / maxMoney * 100).toFixed(2)}%)`);
+		ns.print(` $       : ${formatMoney(ns, money)} / ${formatMoney(ns, maxMoney)} (${formatPercentage(money / maxMoney * 100)})`);
 		ns.print(` security: +${sec - minSec}`);
-		ns.print(` hack    : ${ns.getHackTime(server)} (t=${Math.ceil(ns.hackAnalyzeThreads(server, money))})`);
-		ns.print(` grow    : ${ns.getGrowTime(server)} (t=${Math.ceil(ns.growthAnalyze(server, maxMoney / money))})`);
-		ns.print(` weaken  : ${ns.getWeakenTime(server)} (t=${Math.ceil((sec - minSec) * 20)})`);
+		ns.print(` hack    : ${formatTime(ns, ns.getHackTime(server))} (t=${Math.ceil(ns.hackAnalyzeThreads(server, money))})`);
+		ns.print(` grow    : ${formatTime(ns, ns.getGrowTime(server))} (t=${Math.ceil(ns.growthAnalyze(server, maxMoney / money))})`);
+		ns.print(` weaken  : ${formatTime(ns, ns.getWeakenTime(server))} (t=${Math.ceil((sec - minSec) * 20)})`);
 		await ns.sleep(100);
 	}
 }

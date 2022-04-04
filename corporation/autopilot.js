@@ -1,5 +1,5 @@
 // Requires WarehouseAPI and OfficeAPI
-import {getCities} from '/utils.js';
+import {formatMoney, getCities} from '/utils.js';
 
 /**
  *
@@ -555,7 +555,7 @@ function getPositions(ns, division, city) {
 async function investmentOffer(ns, amount, round = 5) {
 	const corp = ns.corporation;
 	if (corp.getInvestmentOffer().round > round) return;
-	ns.print(`Waiting for investment offer of ${ns.nFormat(amount, '$0.000a')}`);
+	ns.print(`Waiting for investment offer of ${formatMoney(ns, amount)}`);
 	// Wait for investment
 	while (corp.getInvestmentOffer().funds < amount) {
 		// Pump in corp funds if we have hashes
@@ -592,7 +592,7 @@ async function makeProduct(ns, division, city, name, design = 0, marketing = 0) 
 	if (proposedVersion > currentBestVersion) {
 		await moneyForAmount(ns, design + marketing);
 		corp.makeProduct(division, city, name, design, marketing);
-		ns.print(`Started to make ${name} in ${division} (${city}) with ${ns.nFormat(design, '$0.000a')} for design and ${ns.nFormat(marketing, '$0.000a')} for marketing`);
+		ns.print(`Started to make ${name} in ${division} (${city}) with ${formatMoney(ns, design)} for design and ${formatMoney(ns, marketing)} for marketing`);
 	} else ns.print(`Already making/made ${name} in ${division} (${city})`);
 }
 

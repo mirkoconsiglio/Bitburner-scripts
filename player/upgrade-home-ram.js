@@ -1,3 +1,5 @@
+import {formatMoney} from '/utils.js';
+
 /**
  *
  * @param {NS} ns
@@ -5,7 +7,7 @@
  */
 export async function main(ns) {
 	const cost = ns.getUpgradeHomeRamCost();
-	if (await ns.prompt(`Upgrade home RAM for ${ns.nFormat(cost, '$0.000a')}?`)) {
+	if (await ns.prompt(`Upgrade home RAM for ${formatMoney(ns, cost)}?`)) {
 		if (ns.upgradeHomeRam()) ns.tprint(`Home RAM upgraded.`);
 		else ns.tprint(`Could not upgrade home RAM.`);
 	}

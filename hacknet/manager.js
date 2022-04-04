@@ -87,14 +87,14 @@ export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 2
 	if (shouldBuyNewNode) cost = newNodeCost;
 	// Prepare info about next purchase
 	let strPurchase = (shouldBuyNewNode ? `a new node "hacknet-node-${hn.numNodes()}"` :
-		`hacknet-node-${nodeToUpgrade} ${bestUpgrade.name} ${upgradedValue}`) + ` for ${ns.nFormat(cost, '$0.000a')}`;
-	let strPayoff = `production ${ns.nFormat((shouldBuyNewNode ? newNodePayoff : bestUpgradePayoff) * cost, '0.000a')}, payoff time: ${ns.tFormat(1000 * payoffTimeSeconds)}`;
+		`hacknet-node-${nodeToUpgrade} ${bestUpgrade.name} ${upgradedValue}`) + ` for ${formatMoney(cost)}`;
+	let strPayoff = `production ${formatNumber(ns, (shouldBuyNewNode ? newNodePayoff : bestUpgradePayoff) * cost)}, payoff time: ${formatTime(ns, 1000 * payoffTimeSeconds)}`;
 	if (cost > maxSpend) {
-		ns.print(`The next best purchase would be ${strPurchase} but the cost ${ns.nFormat(cost, '$0.000a')} exceeds the limit (${ns.nFormat(maxSpend, '$0.000a')})`);
+		ns.print(`The next best purchase would be ${strPurchase} but the cost ${formatMoney(ns, cost)} exceeds the limit (${formatMoney(ns, maxSpend)})`);
 		return 'Spending limit reached. Turning off Hacknet manager...'; // Overspending
 	}
 	if (payoffTimeSeconds > maxPayoffTimeSeconds) {
-		ns.print(`The next best purchase would be ${strPurchase} but the ${strPayoff} is worse than the limit (${ns.tFormat(1000 * maxPayoffTimeSeconds)})`);
+		ns.print(`The next best purchase would be ${strPurchase} but the ${strPayoff} is worse than the limit (${formatTime(ns, 1000 * maxPayoffTimeSeconds)})`);
 		return 'Max payoff time reached. Turning off Hacknet manager...'; // Won't pay itself off
 	}
 	const success = shouldBuyNewNode ? hn.purchaseNode() !== -1 : bestUpgrade.upgrade(nodeToUpgrade, 1);

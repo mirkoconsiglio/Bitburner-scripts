@@ -1,4 +1,4 @@
-import {getCities} from '/utils.js';
+import {formatMoney, getCities} from '/utils.js';
 
 const argsSchema = [
 	['trips-per-cycle', 1e4],
@@ -22,7 +22,7 @@ export async function main(ns) {
 	const tripsPerCycle = options['trips-per-cycle'];
 	const moneyThreshold = options['money-threshold'];
 	ns.print(`trips-per-cycle: ${tripsPerCycle}`);
-	ns.print(`money-threshold: ${ns.nFormat(moneyThreshold, '$0.000a')}`);
+	ns.print(`money-threshold: ${formatMoney(ns, moneyThreshold)}`);
 	const cities = getCities();
 	const citiesLength = cities.length;
 	let justStarted = true;
@@ -47,7 +47,7 @@ export async function main(ns) {
 				tripsPerLevel = cycles * tripsPerCycle * citiesLength;
 				tripsPerMs = Math.floor(tripsPerLevel / duration);
 				ns.print(`Level Up: Int ${currentInt}` + (justStarted ? ` partial ` : ` full `) +
-					`level in ${ns.tFormat(duration)} & ${ns.nFormat(tripsPerLevel, '0.000a')} travels`);
+					`level in ${formatTime(ns, duration)} & ${formatMoney(ns, tripsPerLevel)} travels`);
 				ns.print(`Approximately ${tripsPerMs} trips/ms`);
 				previousLevelTime = levelupTime;
 				previousInt = currentInt;

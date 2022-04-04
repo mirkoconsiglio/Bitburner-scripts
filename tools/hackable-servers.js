@@ -1,12 +1,11 @@
-import {getAccessibleServers, getOptimalHackable, targetCost} from '/utils.js';
+import {formatMoney, getAccessibleServers, getOptimalHackable, targetCost} from '/utils.js';
 
 const argsSchema = [
 	['cores', 1],
 	['verbose', false]
 ];
 
-// noinspection JSUnusedLocalSymbols
-export function autocomplete(data, args) {
+export function autocomplete(data) {
 	data.flags(argsSchema);
 	return [];
 }
@@ -22,12 +21,12 @@ export async function main(ns) {
 	const hackable = getOptimalHackable(ns, servers);
 	for (let [i, server] of hackable.entries()) {
 		const growth = ns.getServerGrowth(server);
-		const money = ns.nFormat(ns.getServerMaxMoney(server), '0.000a');
+		const money = formatMoney(ns, ns.getServerMaxMoney(server));
 		const minSec = ns.getServerMinSecurityLevel(server);
 		const cost = targetCost(ns, server, options.cores);
 		let string = `${i + 1}: Server: ${server}`;
 		if (options.verbose) string += `, Maximum Money: ${money}, Growth: ${growth}, Min Security: ${minSec}`;
-		for (let [j, c] of cost.entries()) string += `, Cost ${j + 1}: ${ns.nFormat(c, '0.000a')}`;
+		for (let [j, c] of cost.entries()) string += `, Cost ${j + 1}: ${formatNumber(ns, c)}`;
 		ns.tprintf(string);
 	}
 }
