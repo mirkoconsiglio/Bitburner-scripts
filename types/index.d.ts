@@ -7117,6 +7117,8 @@ interface InvestmentOffer {
  * @internal
  */
 interface UserInterfaceTheme {
+	[key: string]: string | undefined;
+
 	primarylight: string;
 	primary: string;
 	primarydark: string;
@@ -7150,8 +7152,6 @@ interface UserInterfaceTheme {
 	backgroundprimary: string;
 	backgroundsecondary: string;
 	button: string;
-
-	[key: string]: string | undefined;
 }
 
 /**
