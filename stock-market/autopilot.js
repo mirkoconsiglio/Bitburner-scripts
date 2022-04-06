@@ -293,16 +293,10 @@ function liquidate(ns) {
  */
 function tryGet4SApi(ns, playerStats, bitnodeMults, corpus) {
 	if (playerStats.has4SDataTixApi) return false; // Only return true if we just bought it
-	const cost4sData = bitnodeMults.FourSigmaMarketDataCost * 5e9;
 	const cost4sApi = bitnodeMults.FourSigmaMarketDataApiCost * 25e9;
-	const totalCost = (playerStats.has4SData ? 0 : cost4sData) + cost4sApi;
+	if (cost4sApi > corpus * 0.9) return false;
 	// Liquidate shares if it would allow us to afford 4S API data
-	if (totalCost > corpus * 0.9) return false;
-	if (playerStats.money < totalCost) liquidate(ns);
-	if (!playerStats.has4SData) {
-		if (ns.stock.purchase4SMarketData()) printBoth(ns, `Purchased 4SMarketData for ${formatMoney(ns, cost4sData)}`);
-		else ns.print(`ERROR attempting to purchase 4SMarketData`);
-	}
+	if (playerStats.money < cost4sApi) liquidate(ns);
 	if (ns.stock.purchase4SMarketDataTixApi()) {
 		printBoth(ns, `Purchased 4SMarketDataTixApi for ${formatMoney(ns, cost4sApi)}`);
 		return true;
@@ -472,7 +466,7 @@ async function updateForecast(ns, allStocks, has4s) {
 				`tLast⇄:${(stk.lastInversion + 1).toFixed(0).padStart(3)} Vol:${formatPercentage(stk.vol * 100)} ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)} ` +
 				`Spread:${formatPercentage(stk.spread_pct * 100)} ttProfit:${stk.blackoutWindow().toFixed(0).padStart(3)}`;
 			if (stk.owned()) stk.debugLog += ` Pos: ${formatMoney(ns, stk.ownedShares())} (${stk.ownedShares() === stk.maxShares ? 'max' :
-				formatPercentage((100 * stk.ownedShares() / stk.maxShares).toFixed(0))}) ${stk.sharesLong > 0 ? 'long ' : 'short'} (held ${stk.ticksHeld} ticks)`;
+				formatPercentage((100 * stk.ownedShares() / stk.maxShares))}) ${stk.sharesLong > 0 ? 'long ' : 'short'} (held ${stk.ticksHeld} ticks)`;
 			if (stk.possibleInversionDetected) stk.debugLog += ' ⇄⇄⇄';
 		}
 	}
@@ -517,7 +511,7 @@ function doBuy(ns, stk, sharesBought) {
 	}
 
 	ns.print(`INFO: ${long ? 'Bought ' : 'Shorted'} ${formatNumber(ns, sharesBought).padStart(5)}${stk.maxShares === sharesBought + stk.ownedShares() ? ' (max shares)' : ''} ` +
-		`${stk.sym.padEnd(5)} @ ${formatMoney(ns, price).padStart(9)} for ${formatMoney(ns, sharesBought * price).padStart(9)} (Spread:${formatPercentage(stk.spread_pct * 100)} ` +
+		`${stk.sym.padEnd(5)} @ ${formatMoney(ns, price).padStart(9)} for ${formatMoney(ns, sharesBought * price).padStart(9)} (Spread: ${formatPercentage(stk.spread_pct * 100)} ` +
 		`ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)}) Ticks to Profit: ${stk.timeToCoverTheSpread().toFixed(2)}`);
 	// The rest of this work is for troubleshooting / mock-mode purposes
 	if (price === 0) {
