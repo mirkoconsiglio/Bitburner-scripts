@@ -23,11 +23,10 @@ export async function main(ns) {
 	const options = ns.flags(argsSchema);
 	if (!options.all && !options.sleeve) throw new Error(`Need to specify --sleeve 'number' or --all`);
 	// Get university location
-	const city = getUniversityLocation(options.university);
+	const location = getUniversityLocation(options.university);
 	if (options.all) {
 		for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
 			if (!ns.sleeve.travel(i, location)) throw new Error(`Could not travel sleeve to correct location`);
-			if (city) ns.sleeve.travel(i, city);
 			await disableSleeveAutopilot(ns, i);
 			ns.sleeve.setToUniversityCourse(i, options.university, options.course);
 		}
