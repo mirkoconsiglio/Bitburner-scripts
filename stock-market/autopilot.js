@@ -37,7 +37,7 @@ const portNumber = getPortNumbers().stock;
 const argsSchema = [
 	['liquidate', false], // Stop any other running instances and sell all stocks
 	['mock', false], // If set to true, will "mock" buy/sell but not actually buy/sell anything
-	['disable-shorts', false], // If set to true, will "mock" buy/sell but not actually buy/sell anything
+	['disable-shorts', false], // If set to true, will disable shorting
 	['reserve', 0], // A fixed amount of money to not spend
 	['fracB', 0.4], // Fraction of assets to have as liquid before we consider buying more stock
 	['fracH', 0.2], // Fraction of assets to retain as cash in hand when buying
