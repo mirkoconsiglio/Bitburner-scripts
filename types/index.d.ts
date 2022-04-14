@@ -101,22 +101,44 @@ interface Player {
 /**
  * @public
  */
-interface RunningScript {
+export interface RunningScript {
+	/** Arguments the script was called with */
 	args: string[];
+	/** Filename of the script */
 	filename: string;
+	/**
+	 * Script logs as an array. The newest log entries are at the bottom.
+	 * Timestamps, if enabled, are placed inside `[brackets]` at the start of each line.
+	 **/
 	logs: string[];
+	/** Total amount of hacking experience earned from this script when offline */
 	offlineExpGained: number;
+	/** Total amount of money made by this script when offline */
 	offlineMoneyMade: number;
-	/** Offline running time of the script, in seconds **/
+	/** Number of seconds that the script has been running offline */
 	offlineRunningTime: number;
+	/** Total amount of hacking experience earned from this script when online */
 	onlineExpGained: number;
+	/** Total amount of money made by this script when online */
 	onlineMoneyMade: number;
-	/** Online running time of the script, in seconds **/
+	/** Number of seconds that this script has been running online */
 	onlineRunningTime: number;
+	/** Process ID. Must be an integer */
 	pid: number;
+	/** How much RAM this script uses for ONE thread */
 	ramUsage: number;
+	/** Hostname of the server on which this script runs */
 	server: string;
+	/** Number of threads that this script runs with */
 	threads: number;
+}
+
+/**
+ * @public
+ */
+export interface RecentScript extends RunningScript {
+	/** Timestamp of when the script was killed */
+	timeOfDeath: Date;
 }
 
 /**
@@ -2364,6 +2386,30 @@ export interface Singularity {
 	 * purchased. Throws an error if the specified program/exploit does not exist
 	 */
 	getDarkwebProgramCost(programName: string): number;
+
+	/**
+	 * b1t_flum3 into a different BN.
+	 * @remarks
+	 * RAM cost: 16 GB * 16/4/1
+	 *
+	 * @param nextBN - BN number to jump to
+	 * @param callbackScript - Name of the script to launch in the next BN.
+	 */
+	b1tflum3(nextBN: number, callbackScript?: string): void;
+
+	/**
+	 * Destroy the w0r1d_d43m0n and move on to the next BN.
+	 * @remarks
+	 * RAM cost: 32 GB * 16/4/1
+	 *
+	 * You must have the special augment installed and the required hacking level
+	 *   OR
+	 * Completed the final black op.
+	 *
+	 * @param nextBN - BN number to jump to
+	 * @param callbackScript - Name of the script to launch in the next BN.
+	 */
+	destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
 }
 
 /**
@@ -2618,7 +2664,7 @@ export interface Hacknet {
 	 * // NS1:
 	 * var upgradeName = "Sell for Corporation Funds";
 	 * if (hacknet.numHashes() > hacknet.hashCost(upgradeName)) {
-	 *    hacknet.spendHashes(upgName);
+	 *    hacknet.spendHashes(upgradeName);
 	 * }
 	 * ```
 	 * @example
@@ -2626,7 +2672,7 @@ export interface Hacknet {
 	 * // NS2:
 	 * const upgradeName = "Sell for Corporation Funds";
 	 * if (ns.hacknet.numHashes() > ns.hacknet.hashCost(upgradeName)) {
-	 *    ns.hacknet.spendHashes(upgName);
+	 *    ns.hacknet.spendHashes(upgradeName);
 	 * }
 	 * ```
 	 * @param upgName - Name of the upgrade of Hacknet Node.
@@ -3212,7 +3258,7 @@ export interface CodingContract {
 	 * Attempts to solve the Coding Contract with the provided solution.
 	 *
 	 * @param answer - Solution for the contract.
-	 * @param fn - Filename of the contract.
+	 * @param filename - Filename of the contract.
 	 * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
 	 * @param opts - Optional parameters for configuring function behavior.
 	 * @returns True if the solution was correct, false otherwise. If the returnReward option is configured, then the function will instead return a string. If the contract is successfully solved, the string will contain a description of the contract’s reward. Otherwise, it will be an empty string.
@@ -3227,7 +3273,7 @@ export interface CodingContract {
 	 * Returns a name describing the type of problem posed by the Coding Contract.
 	 * (e.g. Find Largest Prime Factor, Total Ways to Sum, etc.)
 	 *
-	 * @param fn - Filename of the contract.
+	 * @param filename - Filename of the contract.
 	 * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
 	 * @returns Name describing the type of problem posed by the Coding Contract.
 	 */
@@ -3240,7 +3286,7 @@ export interface CodingContract {
 	 *
 	 * Get the full text description for the problem posed by the Coding Contract.
 	 *
-	 * @param fn - Filename of the contract.
+	 * @param filename - Filename of the contract.
 	 * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
 	 * @returns Contract’s text description.
 	 */
@@ -3268,7 +3314,7 @@ export interface CodingContract {
 	 *
 	 * Get the number of tries remaining on the contract before it self-destructs.
 	 *
-	 * @param fn - Filename of the contract.
+	 * @param filename - Filename of the contract.
 	 * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
 	 * @returns How many attempts are remaining for the contract;
 	 */
@@ -3637,9 +3683,9 @@ export interface Sleeve {
 	 * @param sleeveNumber - Index of the sleeve to work for the faction.
 	 * @param factionName - Name of the faction to work for.
 	 * @param factionWorkType - Name of the action to perform for this faction.
-	 * @returns True if the sleeve started working on this faction, false otherwise.
+	 * @returns True if the sleeve started working on this faction, false otherwise, can also throw on errors
 	 */
-	setToFactionWork(sleeveNumber: number, factionName: string, factionWorkType: string): boolean;
+	setToFactionWork(sleeveNumber: number, factionName: string, factionWorkType: string): boolean | undefined;
 
 	/**
 	 * Set a sleeve to work for a company.
@@ -3761,6 +3807,18 @@ export interface Grafting {
 	 * @throws Will error if an invalid Augmentation name is provided.
 	 */
 	getAugmentationGraftTime(augName: string): number;
+
+	/**
+	 * Retrieves a list of Augmentations that can be grafted.
+	 * @remarks
+	 * RAM cost: 5 GB
+	 *
+	 * Note that this function returns a list of currently graftable Augmentations,
+	 * based off of the Augmentations that you already own.
+	 *
+	 * @returns An array of graftable Augmentations.
+	 */
+	getGraftableAugmentations(): string[];
 
 	/**
 	 * Begins grafting the named aug. You must be in New Tokyo to use this.
@@ -4324,7 +4382,7 @@ interface UserInterface {
  * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
  * <hr>
  */
-export interface NS extends Singularity {
+export interface NS {
 	/**
 	 * Namespace for hacknet functions.
 	 * @remarks RAM cost: 4 GB
@@ -4411,6 +4469,7 @@ export interface NS extends Singularity {
 	 * WARNING: Do not try to modify the args array. This will break the game.
 	 */
 	readonly args: (string | number | boolean)[];
+	enums: NSEnums;
 
 	/**
 	 * Steal a servers money.
@@ -4581,9 +4640,10 @@ export interface NS extends Singularity {
 	 * Returns the security increase that would occur if a hack with this many threads happened.
 	 *
 	 * @param threads - Amount of threads that will be used.
+	 * @param hostname - Hostname of the target server. The number of threads is limited to the number needed to hack the servers maximum amount of money.
 	 * @returns The security increase.
 	 */
-	hackAnalyzeSecurity(threads: number): number;
+	hackAnalyzeSecurity(threads: number, hostname?: string): number;
 
 	/**
 	 * Get the chance of successfully hacking a server.
@@ -4638,9 +4698,11 @@ export interface NS extends Singularity {
 	 * Returns the security increase that would occur if a grow with this many threads happened.
 	 *
 	 * @param threads - Amount of threads that will be used.
+	 * @param hostname - Optional. Hostname of the target server. The number of threads is limited to the number needed to hack the servers maximum amount of money.
+	 * @param cores - Optional. The number of cores of the server that would run grow.
 	 * @returns The security increase.
 	 */
-	growthAnalyzeSecurity(threads: number): number;
+	growthAnalyzeSecurity(threads: number, hostname?: string, cores?: number): number;
 
 	/**
 	 * Suspends the script for n milliseconds.
@@ -4668,7 +4730,7 @@ export interface NS extends Singularity {
 	 * ```
 	 * @returns
 	 */
-	sleep(millis: number): Promise<void>;
+	sleep(millis: number): Promise<true>;
 
 	/**
 	 * Suspends the script for n milliseconds. Doesn't block with concurrent calls.
@@ -4678,7 +4740,7 @@ export interface NS extends Singularity {
 	 * @param millis - Number of milliseconds to sleep.
 	 * @returns
 	 */
-	asleep(millis: number): Promise<void>;
+	asleep(millis: number): Promise<true>;
 
 	/**
 	 * Prints one or move values or variables to the script’s logs.
@@ -4806,6 +4868,27 @@ export interface NS extends Singularity {
 	 * @returns Returns an string array, where each line is an element in the array. The most recently logged line is at the end of the array.
 	 */
 	getScriptLogs(fn?: string, host?: string, ...args: any[]): string[];
+
+	/**
+	 * Get an array of recently killed scripts across all servers.
+	 * @remarks
+	 * RAM cost: 0.2 GB
+	 *
+	 * The most recently killed script is the first element in the array.
+	 * Note that there is a maximum number of recently killed scripts which are tracked.
+	 * This is configurable in the game's options as `Recently killed scripts size`.
+	 *
+	 * @example
+	 * ```ts
+	 * let recentScripts = ns.getRecentScripts();
+	 * let mostRecent = recentScripts.shift()
+	 * if (mostRecent)
+	 *   ns.tprint(mostRecent.logs.join('\n'))
+	 * ```
+	 *
+	 * @returns Array with information about previously killed scripts.
+	 */
+	getRecentScripts(): RecentScript[];
 
 	/**
 	 * Open the tail window of a script.
@@ -5053,8 +5136,7 @@ export interface NS extends Singularity {
 	 * PID stands for Process ID. The PID is a unique identifier for each script.
 	 * The PID will always be a positive integer.
 	 *
-	 * Running this function with a numThreads argument of 0 will return 0 without running the script.
-	 * However, running this function with a negative numThreads argument will cause a runtime error.
+	 * Running this function with 0 or a negative numThreads argument will cause a runtime error.
 	 *
 	 * @example
 	 * ```ts
@@ -6211,7 +6293,7 @@ export interface NS extends Singularity {
 	 * @param variant - Type of toast, must be one of success, info, warning, error. Defaults to success.
 	 * @param duration - Duration of toast in ms. Can also be `null` to create a persistent toast. Defaults to 2000
 	 */
-	toast(msg: any, variant?: string, duration?: number | null): void;
+	toast(msg: any, variant?: ToastVariantValues, duration?: number | null): void;
 
 	/**
 	 * Download a file from the internet.
@@ -6406,6 +6488,22 @@ export interface NS extends Singularity {
 	 * RAM cost: 0.2 GB
 	 */
 	getSharePower(): number;
+}
+
+/** @public */
+export enum ToastVariant {
+	SUCCESS = "success",
+	WARNING = "warning",
+	ERROR = "error",
+	INFO = "info",
+}
+
+/** @public */
+export type ToastVariantValues = `${ToastVariant}`;
+
+/** @public */
+export interface NSEnums {
+	toast: typeof ToastVariant;
 }
 
 /**
@@ -6720,8 +6818,9 @@ export interface WarehouseAPI {
 	 * Upgrade warehouse
 	 * @param divisionName - Name of the division
 	 * @param cityName - Name of the city
+	 * @param amt - amount of upgrades defaults to 1
 	 */
-	upgradeWarehouse(divisionName: string, cityName: string): void;
+	upgradeWarehouse(divisionName: string, cityName: string, amt?: number): void;
 
 	/**
 	 * Create a new product
@@ -6740,6 +6839,24 @@ export interface WarehouseAPI {
 	): void;
 
 	/**
+	 * Limit Material Production.
+	 * @param divisionName - Name of the division
+	 * @param cityName - Name of the city
+	 * @param materialName - Name of the material
+	 * @param qty - Amount to limit to
+	 */
+	limitMaterialProduction(divisionName: string, cityName: string, materialName: string, qty: number): void;
+
+	/**
+	 * Limit Product Production.
+	 * @param divisionName - Name of the division
+	 * @param cityName - Name of the city
+	 * @param productName - Name of the product
+	 * @param qty - Amount to limit to
+	 */
+	limitProductProduction(divisionName: string, cityName: string, productName: string, qty: number): void;
+
+	/**
 	 * Gets the cost to purchase a warehouse
 	 * @returns cost
 	 */
@@ -6747,9 +6864,12 @@ export interface WarehouseAPI {
 
 	/**
 	 * Gets the cost to upgrade a warehouse to the next level
+	 * @param divisionName - Name of the division
+	 * @param cityName - Name of the city
+	 * @param amt - amount of upgrades defaults to 1
 	 * @returns cost to upgrade
 	 */
-	getUpgradeWarehouseCost(adivisionName: any, acityName: any): number;
+	getUpgradeWarehouseCost(adivisionName: any, acityName: any, amt?: number): number;
 
 	/**
 	 * Check if you have a warehouse in city
@@ -6977,10 +7097,14 @@ interface Employee {
 interface Product {
 	/** Name of the product */
 	name: string;
-	/** Demand for the product */
-	dmd: number;
-	/** Competition for the product */
-	cmp: number;
+	/** Demand for the product, only present if "Market Research - Demand" unlocked */
+	dmd: number | undefined;
+	/** Competition for the product, only present if "Market Research - Competition" unlocked */
+	cmp: number | undefined;
+	/** Product Rating */
+	rat: number;
+	/** Product Properties. The data is \{qlt, per, dur, rel, aes, fea\} */
+	properties: { [key: string]: number };
 	/** Production cost */
 	pCost: number;
 	/** Sell cost, can be "MP+5" */
@@ -7004,10 +7128,16 @@ interface Material {
 	qty: number;
 	/** Quality of the material */
 	qlt: number;
+	/** Demand for the material, only present if "Market Research - Demand" unlocked */
+	dmd: number | undefined;
+	/** Competition for the material, only present if "Market Research - Competition" unlocked */
+	cmp: number | undefined;
 	/** Amount of material produced  */
 	prod: number;
-	/** Amount of material sold  */
+	/** Amount of material sold */
 	sell: number;
+	/** cost to buy material */
+	cost: number;
 }
 
 /**
@@ -7048,8 +7178,10 @@ interface Office {
 	maxMor: number;
 	/** Name of all the employees */
 	employees: string[];
-	/** Positions of the employees */
+	/** Production of the employees */
 	employeeProd: EmployeeJobs;
+	/** Positions of the employees */
+	employeeJobs: EmployeeJobs;
 }
 
 /**
@@ -7117,8 +7249,6 @@ interface InvestmentOffer {
  * @internal
  */
 interface UserInterfaceTheme {
-	[key: string]: string | undefined;
-
 	primarylight: string;
 	primary: string;
 	primarydark: string;
@@ -7152,6 +7282,8 @@ interface UserInterfaceTheme {
 	backgroundprimary: string;
 	backgroundsecondary: string;
 	button: string;
+
+	[key: string]: string | undefined;
 }
 
 /**

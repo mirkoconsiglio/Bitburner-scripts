@@ -1,4 +1,19 @@
-import {findPlaceToRun, getAccessibleServers, getFreeRam, getScripts, printBoth} from '/utils.js';
+import {
+	findPlaceToRun,
+	formatBinary,
+	formatTime,
+	getAccessibleServers,
+	getFreeRam,
+	getFreeRams,
+	getScripts,
+	printBoth
+} from '/utils.js';
+// TODO: collision detection
+// TODO: no waiting between groups of cycles
+// noinspection JSUnusedLocalSymbols
+export function autocomplete(data, args) {
+	return data.servers;
+}
 
 /**
  *
@@ -8,7 +23,6 @@ import {findPlaceToRun, getAccessibleServers, getFreeRam, getScripts, printBoth}
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const data = packageData(ns);
-
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const sec = ns.getServerSecurityLevel(data.target);
@@ -19,8 +33,9 @@ export async function main(ns) {
 			if (primed) ns.print(`${data.target} is primed`);
 			else continue;
 		}
-		let info = getInfo(ns, data);
+		const info = getInfo(ns, data);
 		if (info === 'EXIT') return;
+		else if (info === 'REPEAT') continue;
 		await hackTarget(ns, info, data);
 	}
 }
@@ -35,8 +50,8 @@ export async function main(ns) {
 async function hackTarget(ns, info, data) {
 	let c = 0;
 	while (c < info.cycleCount) {
-		if (info.cycleRAM < info.freeRAM) {
-			ns.print(`Running cycle ${c}.`);
+		if (info.cycleRAM < info.freeRam) {
+			ns.print(`Running cycle ${c}`);
 			if (info.hackThreads > 0) ns.exec(data.scripts.hack, data.host, info.hackThreads, data.target, info.hackDelay, c);
 			if (info.hWeakenThreads > 0) ns.exec(data.scripts.weaken, data.host, info.hWeakenThreads, data.target, info.hWeakenDelay, c);
 			if (info.growThreads > 0) ns.exec(data.scripts.grow, data.host, info.growThreads, data.target, info.growDelay, c);
@@ -56,25 +71,25 @@ async function hackTarget(ns, info, data) {
  * @returns {Promise<boolean>}
  */
 async function primeTarget(ns, sec, money, data) {
-	let growth = data.maxMoney / money;
-	let growThreads = Math.ceil(ns.growthAnalyze(data.target, Math.max(growth !== Infinity ? growth : 10, 1), data.cores));
-	let weakenThreads = Math.ceil((sec - data.minSec + growThreads * data.growSec) / data.weakenSec);
+	const growth = data.maxMoney / money;
+	const growThreads = Math.ceil(ns.growthAnalyze(data.target, Math.max(growth !== Infinity ? growth : 10, 1), data.cores));
+	const weakenThreads = Math.ceil((sec - data.minSec + growThreads * data.growSec) / data.weakenSec);
 
-	let weakenTime = ns.getWeakenTime(data.target);
+	const weakenTime = ns.getWeakenTime(data.target);
 
 	let grown = growThreads === 0;
 	let weakened = weakenThreads === 0;
 
-	let freeRAM = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
-	let primeRAM = data.growScriptRam * growThreads + data.weakenScriptRam * weakenThreads;
+	const freeRam = getFreeRam(ns, data.host);
+	const primeRam = data.growScriptRam * growThreads + data.weakenScriptRam * weakenThreads;
 
-	if (primeRAM > freeRAM) {
+	if (primeRam > freeRam) {
 		ns.print(`Not enough RAM on ${data.host} to prime ${data.target}`);
 		ns.print(`Priming RAM: ${formatBinary(ns, primeRam)}, available RAM: ${formatBinary(ns, freeRam)}`);
 		ns.print(`Finding other hosts to prime ${data.target}`);
 
-		let servers = getAccessibleServers(ns);
-		let freeRams = getFreeRam(ns, servers);
+		const servers = getAccessibleServers(ns);
+		const freeRams = getFreeRams(ns, servers);
 
 		let growFound = true;
 		if (!grown && growThreads > 0) growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, data.target);
@@ -108,58 +123,54 @@ async function primeTarget(ns, sec, money, data) {
  * @returns {Object}
  */
 function getInfo(ns, data) {
-	let hackTime = ns.getHackTime(data.target);
-	let growTime = ns.getGrowTime(data.target);
-	let weakenTime = ns.getWeakenTime(data.target);
+	const hackTime = ns.getHackTime(data.target);
+	const growTime = ns.getGrowTime(data.target);
+	const weakenTime = ns.getWeakenTime(data.target);
 
-	let hackThreads = Math.floor(ns.hackAnalyzeThreads(data.target, data.drainPercent * data.maxMoney)); // Number of threads to hack 50% of the max money
-	let hWeakenThreads = Math.ceil(hackThreads * data.hackSec / data.weakenSec); // Number of threads to weaken after hack
-	let growThreads = Math.ceil(ns.growthAnalyze(data.target, data.increasePercent, data.cores)); // Number of threads to grow back to max money
-	let gWeakenThreads = Math.ceil(growThreads * data.growSec / data.weakenSec); // Number of threads to weaken after grow
+	const hackThreads = Math.floor(ns.hackAnalyzeThreads(data.target, data.drainPercent * data.maxMoney)); // Number of threads to hack 50% of the max money
+	const hWeakenThreads = Math.ceil(hackThreads * data.hackSec / data.weakenSec); // Number of threads to weaken after hack
+	const growThreads = Math.ceil(ns.growthAnalyze(data.target, data.increasePercent, data.cores)); // Number of threads to grow back to max money
+	const gWeakenThreads = Math.ceil(growThreads * data.growSec / data.weakenSec); // Number of threads to weaken after grow
 
-	let freeRAM = ns.getServerMaxRam(data.host) - ns.getServerUsedRam(data.host);
+	const freeRam = getFreeRam(ns, data.host);
 	let cycleRAM = data.hackScriptRam * hackThreads + data.growScriptRam * growThreads + data.weakenScriptRam * (hWeakenThreads + gWeakenThreads); // Calculating how much RAM is used for a single run
-	let cycleCount = Math.floor(freeRAM / cycleRAM);
+	let cycleCount = Math.floor(freeRam / cycleRAM);
 	let cycleDelay = weakenTime / cycleCount;
 
 	if (cycleDelay < data.cycleDelayThresh) {
 		cycleRAM = (data.cycleDelayThresh / cycleDelay) * cycleRAM;
 		cycleDelay = data.cycleDelayThresh;
-		cycleCount = Math.floor(freeRAM / cycleRAM);
+		cycleCount = Math.floor(freeRam / cycleRAM);
 	}
-
-	if (cycleRAM > freeRAM) {
-		ns.print(`Not enough RAM on ${data.host} to hack ${data.target}.`);
-		ns.print(`Cycle RAM: ${cycleRAM}. available RAM: ${freeRam}.`);
+	if (cycleRAM > freeRam) {
+		ns.print(`Not enough RAM on ${data.host} to hack ${data.target}`);
+		ns.print(`Cycle RAM: ${cycleRAM}. available RAM: ${freeRam}`);
 		data.drainPercent *= freeRam / cycleRAM;
-		ns.print(`Reducing drain percent to ${formatPercentage(data.drainPercent * 100)}.`);
+		ns.print(`Reducing drain percent to ${formatPercentage(data.drainPercent * 100)}`);
 		if (data.drainPercent < 0.001) {
-			printBoth(ns, `Drain percent too low. Exiting daemon on ${data.host} targeting ${data.target}.`);
+			printBoth(ns, `Drain percent too low. Exiting daemon on ${data.host} targeting ${data.target}...`);
 			return 'EXIT';
 		}
-
-		return getInfo(ns, data);
+		return 'REPEAT';
 	}
-	ns.print(`Running ${cycleCount} cycles in ${formatTime(ns, cycleCount * cycleDelay / 1000)} seconds.`);
+	ns.print(`Running ${cycleCount} cycles in ${formatTime(ns, cycleCount * cycleDelay / 1000)} seconds`);
 
-	ns.print(`Running ${cycleCount} cycles in ${(cycleCount * cycleDelay / 1000).toFixed(2)} seconds.`);
+	const hackOffset = -0.25 * cycleDelay;
+	const hWeakenOffset = 0;
+	const growOffset = 0.25 * cycleDelay;
+	const gWeakenOffset = 0.5 * cycleDelay;
 
-	let hackOffset = -0.25 * cycleDelay;
-	let hWeakenOffset = 0;
-	let growOffset = 0.25 * cycleDelay;
-	let gWeakenOffset = 0.5 * cycleDelay;
-
-	let hackDelay = weakenTime - hackTime + hackOffset;
-	let hWeakenDelay = hWeakenOffset;
-	let growDelay = weakenTime - growTime + growOffset;
-	let gWeakenDelay = gWeakenOffset;
+	const hackDelay = weakenTime - hackTime + hackOffset;
+	const hWeakenDelay = hWeakenOffset;
+	const growDelay = weakenTime - growTime + growOffset;
+	const gWeakenDelay = gWeakenOffset;
 
 	return {
 		hackThreads,
 		hWeakenThreads,
 		growThreads,
 		gWeakenThreads,
-		freeRAM,
+		freeRam,
 		cycleRAM,
 		cycleCount,
 		cycleDelay,
@@ -213,15 +224,4 @@ function packageData(ns) {
 		growScriptRam,
 		weakenScriptRam
 	};
-}
-
-// noinspection JSUnusedGlobalSymbols
-/**
- *
- * @param {*} data
- * @returns {string[]}
- */
-export function autocomplete(data) {
-	// noinspection JSUnresolvedVariable
-	return data.servers;
 }
