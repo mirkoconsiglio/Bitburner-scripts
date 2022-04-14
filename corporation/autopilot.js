@@ -320,7 +320,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
  */
 function levelUpgrades(ns, percent) {
 	const corp = ns.corporation;
-	let cheapestCost = Number.MAX_SAFE_INTEGER;
+	let cheapestCost = Infinity;
 	let cheapestUpgrade;
 	for (const upgrade of getUpgrades()) {
 		const cost = corp.getUpgradeLevelCost(upgrade);
@@ -341,7 +341,7 @@ function getUpgrades() {
 	return [
 		'Smart Factories',
 		'Smart Storage',
-		'Dream Sense',
+		'DreamSense',
 		'Wilson Analytics',
 		'Nuoptimal Nootropic Injector Implants',
 		'Speech Processor Implants',
@@ -358,7 +358,7 @@ function getUpgrades() {
  * @returns {number}
  */
 function dividendsPercentage(ns) {
-	return 5 * Math.log(ns.corporation.getCorporation().revenue) / Math.log(1000);
+	return Math.max(0, Math.min(1, Math.log(ns.corporation.getCorporation().revenue) / (20 * Math.log(1000))));
 }
 
 /**
