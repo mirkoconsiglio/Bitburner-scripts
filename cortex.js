@@ -32,6 +32,7 @@ export async function main(ns) {
 	// Constants
 	const scripts = getScripts();
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
+	const bitnode8 = ns.getPlayer().bitNodeN === 8;
 	// Variables
 	let host = ns.getHostname();
 	let contractorOnline = true;
@@ -42,10 +43,10 @@ export async function main(ns) {
 	let wse = true;
 	let tix = true;
 	let gang = true;
-	let corp = true;
-	let bladeburner = true;
+	let corp = !bitnode8;
+	let bladeburner = !bitnode8;
 	let stock = true;
-	let hacknet = true;
+	let hacknet = !bitnode8;
 	let sleeve = true;
 	let stanek = true;
 	let backdoorWorldDaemon = true;
@@ -105,7 +106,8 @@ export async function main(ns) {
 		if (hasGangs && ns.gang.inGang() && gang && !ns.scriptRunning(scripts.gang, host) &&
 			enoughRam(ns, scripts.gang, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start gang manager?`)) {
-				ns.exec(scripts.gang, host);
+				if (!bitnode8) ns.exec(scripts.gang, host);
+				else ns.exec(scripts.gang, host, 1, '--disable-equipment-buying');
 				printBoth(ns, `Started gang manager`);
 			}
 			gang = false;
@@ -168,7 +170,8 @@ export async function main(ns) {
 		if (ns.getPlayer().hasTixApiAccess && stock && !ns.scriptRunning(scripts.stock, host) &&
 			enoughRam(ns, scripts.stock, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start stock market manager?`)) {
-				ns.exec(scripts.stock, host);
+				if (!bitnode8) ns.exec(scripts.stock, host);
+				else ns.exec(scripts.stock, host, 1, '--fracH', 0.001, '--fracB', 0.1);
 				printBoth(ns, `Started stock market manager`);
 			}
 			stock = false;
@@ -187,7 +190,8 @@ export async function main(ns) {
 			sleeve && !ns.scriptRunning(scripts.sleeve, host) &&
 			enoughRam(ns, scripts.sleeve, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start sleeve manager?`)) {
-				ns.exec(scripts.sleeve, host);
+				if (!bitnode8) ns.exec(scripts.sleeve, host);
+				else ns.exec(scripts.sleeve, host, 1, '--disable-augmentation-buying');
 				printBoth(ns, `Started sleeve manager`);
 			}
 			sleeve = false;
