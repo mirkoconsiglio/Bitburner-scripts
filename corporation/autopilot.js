@@ -358,7 +358,7 @@ function getUpgrades() {
  * @returns {number}
  */
 function dividendsPercentage(ns) {
-	return Math.max(0, Math.min(1, Math.log(ns.corporation.getCorporation().revenue) / (20 * Math.log(1000))));
+	return Math.max(0, Math.min(0.99, Math.log(ns.corporation.getCorporation().revenue) / (20 * Math.log(1000))));
 }
 
 /**
