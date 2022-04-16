@@ -9,6 +9,10 @@ export async function main(ns) {
 	contractor(ns);
 }
 
+// TODO: Total Ways to Sum II
+// TODO: Shortest Path in a Grid
+// TODO: Hamming Codes: int to bin
+// TODO: Hamming Codes: bin to int
 /**
  *
  * @param {NS} ns
@@ -40,6 +44,9 @@ export function contractor(ns) {
 				case 'Unique Paths in a Grid II':
 					solution = uniquePathsII(data);
 					break;
+				// case 'Shortest Path in a Grid':
+				// 	solution = shortestPath(data);
+				// 	break;
 				case 'Algorithmic Stock Trader I':
 					solution = stockTrader(1, data);
 					break;
@@ -61,6 +68,9 @@ export function contractor(ns) {
 				case 'Array Jumping Game':
 					solution = arrayJumpingGame(data);
 					break;
+				case 'Array Jumping Game II':
+					solution = arrayJumpingGameII(data);
+					break;
 				case 'Total Ways to Sum':
 					solution = totalWaysToSum(data);
 					break;
@@ -71,7 +81,8 @@ export function contractor(ns) {
 					solution = sanitizeParentheses(data);
 					break;
 				default:
-					printBoth(ns, `Found ${file} on ${server} of type: ${contract}.`)
+					ns.print(`Found ${file} on ${server} of type: ${contract}. This does not have a solver yet.`);
+					continue;
 			}
 			const result = ns.codingcontract.attempt(solution, file, server, {returnReward: true});
 			if (result) {
@@ -254,6 +265,10 @@ function uniquePathsII(grid) {
 	return gridSum[gridSum.length - 1][gridSum[0].length - 1];
 }
 
+function shortestPath(array) {
+
+}
+
 /**
  *
  * @param {number} maxTrades
@@ -357,16 +372,36 @@ function mergeOverlappingIntervals(array) {
  * @returns {number}
  */
 function arrayJumpingGame(array) {
-	const reachable = new Array(array.length).fill(0);
-	reachable[0] = 1;
+	const reachable = jumps(array);
+	return reachable.includes(Infinity) ? 0 : 1;
+}
+
+/**
+ *
+ * @param {number[]} array
+ * @returns {number}
+ */
+function arrayJumpingGameII(array) {
+	const reachable = jumps(array);
+	return reachable[reachable.length - 1] === Infinity ? 0 : reachable[reachable.length - 1];
+}
+
+/**
+ *
+ * @param {number[]} array
+ * @returns {number[]}
+ */
+function jumps(array) {
+	const reachable = new Array(array.length).fill(Infinity);
+	reachable[0] = 0;
 	for (let i = 0; i < array.length; i++) {
 		let num = array[i];
 		for (let j = 1; j <= num; j++) {
 			if (i + j === array.length) break;
-			reachable[i + j] = 1;
+			reachable[i + j] = Math.min(reachable[i + j], reachable[i] + 1);
 		}
 	}
-	return reachable.includes(0) ? 0 : 1;
+	return reachable;
 }
 
 /**
