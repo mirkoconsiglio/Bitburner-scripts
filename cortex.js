@@ -234,7 +234,10 @@ export async function main(ns) {
 						ns.exec(scripts.backdoor, host, 1, server);
 					}
 					backdoorWorldDaemon = false;
-				} else if (ns.exec(scripts.backdoor, host, 1, server) !== 0) ns.print(`Installing backdoor on ${server}`);
+				} else if (server !== 'w0r1d_d43m0n') {
+					ns.exec(scripts.backdoor, host, 1, server);
+					ns.print(`Installing backdoor on ${server}`);
+				}
 			}
 		}
 		// Spend Hashes
