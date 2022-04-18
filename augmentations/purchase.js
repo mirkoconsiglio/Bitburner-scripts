@@ -13,7 +13,7 @@ import {
 	isUsefulHacknet,
 	isUsefulPrograms
 } from '/augmentations/utils.js';
-import {getFactions, getScripts} from '/utils.js';
+import {formatMoney, getFactions, getScripts} from '/utils.js';
 
 const argsSchema = [
 	['hacking', false],

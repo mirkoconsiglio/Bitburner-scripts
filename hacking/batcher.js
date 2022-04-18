@@ -1,6 +1,7 @@
 import {
 	findPlaceToRun,
 	formatBinary,
+	formatPercentage,
 	formatTime,
 	getAccessibleServers,
 	getFreeRam,

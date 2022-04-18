@@ -1,4 +1,4 @@
-import {formatMoney, getCities} from '/utils.js';
+import {formatMoney, formatTime, getCities} from '/utils.js';
 
 const argsSchema = [
 	['trips-per-cycle', 1e4],
