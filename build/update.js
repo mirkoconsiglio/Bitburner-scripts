@@ -10,14 +10,13 @@ const http = require('https');
  */
 function getFilesRecursive(dir, arrayOfFiles) {
 	try {
-		let files = fs.readdirSync(dir);
+		const files = fs.readdirSync(dir);
 		arrayOfFiles = arrayOfFiles || [];
-		files.forEach(function (file) {
-			let subfile = path.join(dir, file);
-			if (fs.statSync(subfile).isDirectory()) {
-				arrayOfFiles = getFilesRecursive(subfile, arrayOfFiles);
-			} else {
-				arrayOfFiles.push(subfile);
+		files.forEach(file => {
+			const subfile = path.join(dir, file);
+			if (file !== 'test') {
+				if (fs.statSync(subfile).isDirectory()) arrayOfFiles = getFilesRecursive(subfile, arrayOfFiles);
+				else arrayOfFiles.push(subfile);
 			}
 		});
 		return arrayOfFiles.filter(file => (path.extname(file) === '.txt' || path.extname(file) === '.js'));
@@ -32,8 +31,8 @@ function getFilesRecursive(dir, arrayOfFiles) {
  * @returns {string[]}
  */
 function getFiles(dir = __dirname) {
-	let files = getFilesRecursive(`${dir}`);
-	let relativeFiles = [];
+	const files = getFilesRecursive(`${dir}`);
+	const relativeFiles = [];
 	files.forEach(file => relativeFiles.push(path.relative(dir, file).replace(/\\/g, '/')));
 	return relativeFiles;
 }
