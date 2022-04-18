@@ -15,7 +15,8 @@ import {
 	manageAndHack,
 	printBoth,
 	promptScriptRunning,
-	updateOverview
+	updateOverview,
+	updateReservedRam
 } from '/utils.js';
 
 /**
@@ -248,6 +249,8 @@ export async function main(ns) {
 		manageAndHack(ns);
 		// Update overview
 		updateOverview(ns);
+		// Update reserved RAM
+		await updateReservedRam(ns);
 		// Update every second
 		await ns.sleep(1000);
 	}

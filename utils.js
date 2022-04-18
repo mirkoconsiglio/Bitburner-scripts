@@ -1011,7 +1011,7 @@ export function getPortNumbers() {
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
 		case 1:
-			return {'home': 64};
+			return {'home': {'ram': 64, 'server': 'DEF', 'pid': 'DEF'}};
 		case 2:
 			return undefined;
 		case 3:
@@ -1204,4 +1204,19 @@ export function formatPercentage(n, round = 2) {
  */
 export function formatTime(ns, t, milliPrecision = false) {
 	return isNaN(t) ? 'NaN' : ns.tFormat(t, milliPrecision);
+}
+
+/**
+ *
+ * @param {NS} ns
+ */
+export async function updateReservedRam(ns) {
+	const portNumber = getPortNumbers().reservedRam;
+	const data = readFromFile(ns, portNumber);
+	const modifiedData = [];
+	Object.entries(data).forEach(([key, val]) => {
+		if (val.pid === 'DEF') modifiedData.push([key, val]); // Keep default data
+		else if (ns.ps(val.server).some(s => s.pid === val.pid)) modifiedData.push([key, val]);
+	});
+	await writeToFile(ns, portNumber, Object.fromEntries(modifiedData));
 }

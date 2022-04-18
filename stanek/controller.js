@@ -4,7 +4,6 @@ import {
 	formatNumber,
 	getAccessibleServers,
 	getFreeRam,
-	getManagerScripts,
 	getPortNumbers,
 	getScripts,
 	modifyFile,
@@ -27,6 +26,8 @@ export async function main(ns) {
 	const portNumbers = getPortNumbers();
 	const stanekPortNumber = portNumbers.stanek;
 	const reservedRamPortNumber = portNumbers.reservedRam;
+	const scriptHost = ns.getRunningScript().server;
+	const pid = ns.getRunningScript().pid;
 	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
@@ -50,7 +51,7 @@ export async function main(ns) {
 			continue;
 		}
 		// Reserve RAM on host for charging
-		await modifyFile(ns, reservedRamPortNumber, {[host]: ram});
+		await modifyFile(ns, reservedRamPortNumber, {[host]: {'ram': ram, 'server': scriptHost, 'pid': pid}});
 		// Wait for RAM to free up
 		while (getFreeRam(ns, host) < ram) {
 			ns.clearLog();
@@ -63,7 +64,13 @@ export async function main(ns) {
 		await charger(ns);
 		// Remove reserved RAM on host
 		const currentReservedRam = readFromFile(ns, reservedRamPortNumber)[host] ?? 0;
-		await modifyFile(ns, reservedRamPortNumber, {[host]: currentReservedRam - ram});
+		await modifyFile(ns, reservedRamPortNumber, {
+			[host]: {
+				'ram': currentReservedRam - ram,
+				'server': scriptHost,
+				'pid': pid
+			}
+		});
 		await ns.sleep(1000);
 	}
 }
@@ -75,14 +82,11 @@ export async function main(ns) {
  */
 function getBestHost(ns) {
 	const scripts = getScripts();
-	const managerScripts = getManagerScripts();
 	const portNumber = getPortNumbers().reservedRam;
 	const chargeRam = ns.getScriptRam(scripts.charge);
 	let bestHost, maxThreads = 0, maxRam = 0;
 	for (const host of getAccessibleServers(ns)) {
-		let managerScriptsRam = 0;
-		managerScripts.filter(s => ns.scriptRunning(s, host)).forEach(s => managerScriptsRam += ns.getScriptRam(s, host));
-		const maxRamAvailable = ns.getServerMaxRam(host) - managerScriptsRam - (readFromFile(ns, portNumber)[host] ?? 0);
+		const maxRamAvailable = ns.getServerMaxRam(host) - ns.getServerUsedRam(host) - (readFromFile(ns, portNumber)[host] ?? 0);
 		if (maxRamAvailable > maxRam) {
 			bestHost = host;
 			maxThreads = Math.floor(maxRamAvailable / chargeRam);
