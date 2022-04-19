@@ -826,7 +826,7 @@ export function getFreeRams(ns, servers, hackables, occupy = false) {
  */
 export function getFreeRam(ns, server) {
 	const data = readFromFile(ns, getPortNumbers().reservedRam);
-	return ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? 0);
+	return ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? {'ram': 0}).ram;
 }
 
 /**
