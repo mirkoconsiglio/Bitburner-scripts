@@ -134,8 +134,8 @@ export async function main(ns) {
 		}
 		// Bladeburner manager
 		const hasBladeburner = ns.getPlayer().bitNodeN === 7 || ns.getOwnedSourceFiles().some(s => s.n === 7);
-		const hasCombatStats = ns.getPlayer().strength === 100 && ns.getPlayer().defense === 100 &&
-			ns.getPlayer().dexterity === 100 && ns.getPlayer().agility === 100;
+		const hasCombatStats = ns.getPlayer().strength >= 100 && ns.getPlayer().defense >= 100 &&
+			ns.getPlayer().dexterity >= 100 && ns.getPlayer().agility >= 100;
 		if (hasBladeburner && hasCombatStats && !ns.getPlayer().inBladeburner && bladeburner &&
 			!ns.scriptRunning(scripts.bladeburner, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Join Bladeburner Division?`)) {
