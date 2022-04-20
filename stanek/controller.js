@@ -23,9 +23,8 @@ let ram = 0;
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const st = ns.stanek;
-	const portNumbers = getPortNumbers();
-	const stanekPortNumber = portNumbers.stanek;
-	const reservedRamPortNumber = portNumbers.reservedRam;
+	const stanekPortNumber = getPortNumbers().stanek;
+	const reservedRamPortNumber = getPortNumbers().reservedRam;
 	const scriptHost = ns.getRunningScript().server;
 	const pid = ns.getRunningScript().pid;
 	// noinspection InfiniteLoopJS
@@ -82,11 +81,10 @@ export async function main(ns) {
  */
 function getBestHost(ns) {
 	const scripts = getScripts();
-	const portNumber = getPortNumbers().reservedRam;
 	const chargeRam = ns.getScriptRam(scripts.charge);
 	let bestHost, maxThreads = 0, maxRam = 0;
 	for (const host of getAccessibleServers(ns)) {
-		const maxRamAvailable = ns.getServerMaxRam(host) - ns.getServerUsedRam(host) - (readFromFile(ns, portNumber)[host] ?? 0);
+		const maxRamAvailable = getFreeRam(ns, host);
 		if (maxRamAvailable > maxRam) {
 			bestHost = host;
 			maxThreads = Math.floor(maxRamAvailable / chargeRam);

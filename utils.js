@@ -1144,16 +1144,27 @@ export function readFromFile(ns, portNumber) {
  */
 export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
 	const data = readFromFile(ns, portNumber);
+	const updatedData = recursiveModify(data, dataToModify);
+	await writeToFile(ns, portNumber, updatedData, mode);
+}
+
+/**
+ *
+ * @param {Object<*>} data
+ * @param {Object<*>} dataToModify
+ * @returns {Object<*>}
+ */
+function recursiveModify(data, dataToModify) {
 	for (const [key, val] of Object.entries(dataToModify)) {
-		if (typeof val === 'object') {
+		if (typeof val === 'object' && data[key]) {
 			const _data = data[key];
-			const [_key, _val] = Object.entries(val)[0];
-			_data[_key] = _val;
+			recursiveModify(_data, val);
 			data[key] = _data;
 		} else data[key] = val;
 	}
-	await writeToFile(ns, portNumber, data, mode);
+	return data;
 }
+
 
 /**
  *
