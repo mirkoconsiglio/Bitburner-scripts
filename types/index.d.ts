@@ -3846,7 +3846,6 @@ interface SkillsFormulas {
    * @returns The calculated skill level.
    */
   calculateSkill(exp: number, skillMult?: number): number;
-
   /**
    * Calculate exp for skill level.
    * @param skill - target skill level
@@ -3867,7 +3866,6 @@ interface ReputationFormulas {
    * @returns The calculated faction reputation required.
    */
   calculateFavorToRep(favor: number): number;
-
   /**
    * Calculate the resulting faction favor of a total amount of reputation.
    * (Faction favor is gained whenever you install an Augmentation.)
@@ -3897,7 +3895,6 @@ interface HackingFormulas {
    * @returns The calculated hack chance.
    */
   hackChance(server: Server, player: Player): number;
-
   /**
    * Calculate hack exp for one thread.
    * @remarks
@@ -3907,7 +3904,6 @@ interface HackingFormulas {
    * @returns The calculated hack exp.
    */
   hackExp(server: Server, player: Player): number;
-
   /**
    * Calculate hack percent for one thread.
    * (Ex: 0.25 would steal 25% of the server's current value.)
@@ -3918,7 +3914,6 @@ interface HackingFormulas {
    * @returns The calculated hack percent.
    */
   hackPercent(server: Server, player: Player): number;
-
   /**
    * Calculate the percent a server would grow to.
    * (Ex: 3.0 would would grow the server to 300% of its current value.)
@@ -3929,7 +3924,6 @@ interface HackingFormulas {
    * @returns The calculated grow percent.
    */
   growPercent(server: Server, threads: number, player: Player, cores?: number): number;
-
   /**
    * Calculate hack time.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3937,7 +3931,6 @@ interface HackingFormulas {
    * @returns The calculated hack time.
    */
   hackTime(server: Server, player: Player): number;
-
   /**
    * Calculate grow time.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3945,7 +3938,6 @@ interface HackingFormulas {
    * @returns The calculated grow time.
    */
   growTime(server: Server, player: Player): number;
-
   /**
    * Calculate weaken time.
    * @param server - Server info from {@link NS.getServer | getServer}
@@ -3969,7 +3961,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated money gain rate.
    */
   moneyGainRate(level: number, ram: number, cores: number, mult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet node level.
    * @param startingLevel - starting level
@@ -3978,7 +3969,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet node ram.
    * @param startingRam - starting ram
@@ -3987,7 +3977,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet node cores.
    * @param startingCore - starting cores
@@ -3996,7 +3985,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
-
   /**
    * Calculate the cost of a hacknet node.
    * @param n - number of the hacknet node
@@ -4004,7 +3992,6 @@ interface HacknetNodesFormulas {
    * @returns The calculated cost.
    */
   hacknetNodeCost(n: number, mult: number): number;
-
   /**
    * All constants used by the game.
    * @returns An object with all hacknet node constants used by the game.
@@ -4027,7 +4014,6 @@ interface HacknetServersFormulas {
    * @returns The calculated hash gain rate.
    */
   hashGainRate(level: number, ramUsed: number, maxRam: number, cores: number, mult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server level.
    * @param startingLevel - starting level
@@ -4036,7 +4022,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server ram.
    * @param startingRam - starting ram
@@ -4045,7 +4030,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server cores.
    * @param startingCore - starting cores
@@ -4054,7 +4038,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
-
   /**
    * Calculate cost of upgrading hacknet server cache.
    * @param startingCache - starting cache level
@@ -4062,7 +4045,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   cacheUpgradeCost(startingCache: number, extraCache?: number): number;
-
   /**
    * Calculate hash cost of an upgrade.
    * @param upgName - name of the upgrade
@@ -4070,7 +4052,6 @@ interface HacknetServersFormulas {
    * @returns The calculated hash cost.
    */
   hashUpgradeCost(upgName: number, level: number): number;
-
   /**
    * Calculate the cost of a hacknet server.
    * @param n - number of the hacknet server
@@ -4078,7 +4059,6 @@ interface HacknetServersFormulas {
    * @returns The calculated cost.
    */
   hacknetServerCost(n: number, mult?: number): number;
-
   /**
    * All constants used by the game.
    * @returns An object with all hacknet server constants used by the game.
@@ -4097,7 +4077,6 @@ interface GangFormulas {
    * @returns The calculated wanted penalty.
    */
   wantedPenalty(gang: GangGenInfo): number;
-
   /**
    * Calculate respect gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -4106,7 +4085,6 @@ interface GangFormulas {
    * @returns The calculated respect gain.
    */
   respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
-
   /**
    * Calculate wanted gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -4115,7 +4093,6 @@ interface GangFormulas {
    * @returns The calculated wanted gain.
    */
   wantedLevelGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
-
   /**
    * Calculate money gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -4196,7 +4173,6 @@ interface Stanek {
    * @returns The width of the gift.
    */
   giftWidth(): number;
-
   /**
    * Stanek's Gift height.
    * @remarks
@@ -4252,7 +4228,6 @@ interface Stanek {
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
   canPlaceFragment(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
-
   /**
    * Place fragment on Stanek's Gift.
    * @remarks
@@ -4265,7 +4240,6 @@ interface Stanek {
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
   placeFragment(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
-
   /**
    * Get placed fragment at location.
    * @remarks
@@ -4287,6 +4261,16 @@ interface Stanek {
    * @returns The fragment at [rootX, rootY], if any.
    */
   removeFragment(rootX: number, rootY: number): boolean;
+
+  /**
+   * Accept Stanek's Gift by joining the Church of the Machine God
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @returns true if the player is a member of the church and has the gift installed,
+   * false otherwise.
+   */
+  acceptGift(): boolean;
 }
 
 /**
@@ -4476,7 +4460,6 @@ export interface NS {
    * WARNING: Do not try to modify the args array. This will break the game.
    */
   readonly args: (string | number | boolean)[];
-  enums: NSEnums;
 
   /**
    * Steal a servers money.
@@ -5659,7 +5642,6 @@ export interface NS {
    * @returns max ram (GB)
    */
   getServerMaxRam(host: string): number;
-
   /**
    * Get the used RAM on a server.
    * @remarks
@@ -5998,7 +5980,6 @@ export interface NS {
    * @returns The data popped off the queue if it was full.
    */
   writePort(port: number, data: string | number): Promise<any>;
-
   /**
    * Read data from a port.
    * @remarks
@@ -6267,26 +6248,7 @@ export interface NS {
    */
   tFormat(milliseconds: number, milliPrecision?: boolean): string;
 
-  /**
-   * Prompt the player with an input modal.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Prompts the player with a dialog box. If `options.type` is undefined or "boolean",
-   * the player is shown "Yes" and "No" prompts, which return true and false respectively.
-   * Passing a type of "text" will give the player a text field and a value of "select"
-   * will show a drop-down field. Choosing type "select" will require an array or object
-   * to be passed via the `options.choices` property.
-   * The script’s execution is halted until the player selects one of the options.
-   *
-   * @param txt - Text to appear in the prompt dialog box.
-   * @param options - Options to modify the prompt the player is shown.
-   * @returns True if the player click “Yes”; false if the player clicks “No”; or the value entered by the player.
-   */
-  prompt(
-      txt: string,
-      options?: { type?: "boolean" | "text" | "select" | undefined; choices?: string[] },
-  ): Promise<boolean | string>;
+  enums: NSEnums;
 
   /**
    * Open up a message box.
@@ -6495,6 +6457,27 @@ export interface NS {
    * RAM cost: 0.2 GB
    */
   getSharePower(): number;
+
+  /**
+   * Prompt the player with an input modal.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Prompts the player with a dialog box. If `options.type` is undefined or "boolean",
+   * the player is shown "Yes" and "No" prompts, which return true and false respectively.
+   * Passing a type of "text" will give the player a text field and a value of "select"
+   * will show a drop-down field. Choosing type "select" will require an array or object
+   * to be passed via the `options.choices` property.
+   * The script’s execution is halted until the player selects one of the options.
+   *
+   * @param txt - Text to appear in the prompt dialog box.
+   * @param options - Options to modify the prompt the player is shown.
+   * @returns True if the player click “Yes”; false if the player clicks “No”; or the value entered by the player.
+   */
+  prompt(
+      txt: string,
+      options?: { type?: "boolean" | "text" | "select" | undefined; choices?: string[] },
+  ): Promise<boolean | string>;
 }
 
 /** @public */
@@ -6529,7 +6512,6 @@ export interface OfficeAPI {
    * @returns A promise that is fulfilled when the assignment is complete.
    */
   assignJob(divisionName: string, cityName: string, employeeName: string, job: string): Promise<void>;
-
   /**
    * Hire an employee.
    * @param divisionName - Name of the division
@@ -6537,7 +6519,6 @@ export interface OfficeAPI {
    * @returns The newly hired employee, if any
    */
   hireEmployee(divisionName: string, cityName: string): Employee | undefined;
-
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
@@ -6545,7 +6526,6 @@ export interface OfficeAPI {
    * @param size - Amount of positions to open
    */
   upgradeOfficeSize(divisionName: string, cityName: string, size: number): void;
-
   /**
    * Throw a party for your employees
    * @param divisionName - Name of the division
@@ -6554,7 +6534,6 @@ export interface OfficeAPI {
    * @returns Amount of happiness increased.
    */
   throwParty(divisionName: string, cityName: string, costPerEmployee: number): Promise<number>;
-
   /**
    * Buy coffee for your employees
    * @param divisionName - Name of the division
@@ -6562,20 +6541,17 @@ export interface OfficeAPI {
    * @returns A promise that is fulfilled when the coffee is served.
    */
   buyCoffee(divisionName: string, cityName: string): Promise<void>;
-
   /**
    * Hire AdVert.
    * @param divisionName - Name of the division
    */
   hireAdVert(divisionName: string): void;
-
   /**
    * Purchase a research
    * @param divisionName - Name of the division
    * @param researchName - Name of the research
    */
   research(divisionName: string, researchName: string): void;
-
   /**
    * Get data about an office
    * @param divisionName - Name of the division
@@ -6583,7 +6559,6 @@ export interface OfficeAPI {
    * @returns Office data
    */
   getOffice(divisionName: string, cityName: string): Office;
-
   /**
    * Get data about an employee
    * @param divisionName - Name of the division
@@ -6592,21 +6567,18 @@ export interface OfficeAPI {
    * @returns Employee data
    */
   getEmployee(divisionName: string, cityName: string, employeeName: string): Employee;
-
   /**
    * Get the cost to Hire AdVert
    * @param divisionName - Name of the division
    * @returns Cost
    */
   getHireAdVertCost(divisionName: string): number;
-
   /**
    * Get the number of times you have Hired AdVert
    * @param divisionName - Name of the division
    * @returns Number of times you have Hired AdVert
    */
   getHireAdVertCount(adivisionName: string): number;
-
   /**
    * Get the cost to unlock research
    * @param divisionName - Name of the division
@@ -6614,7 +6586,6 @@ export interface OfficeAPI {
    * @returns cost
    */
   getResearchCost(divisionName: string, researchName: string): number;
-
   /**
    * Gets if you have unlocked a research
    * @param divisionName - Name of the division
@@ -6622,7 +6593,6 @@ export interface OfficeAPI {
    * @returns true is unlocked, false if not
    */
   hasResearched(divisionName: string, researchName: string): boolean;
-
   /**
    * Set the auto job assignment for a job
    * @param divisionName - Name of the division
@@ -6632,7 +6602,6 @@ export interface OfficeAPI {
    * @returns A promise that is fulfilled when the assignment is complete.
    */
   setAutoJobAssignment(divisionName: string, cityName: string, job: string, amount: number): Promise<boolean>;
-
   /**
    * Cost to Upgrade office size.
    * @param divisionName - Name of the division
@@ -6659,7 +6628,6 @@ export interface WarehouseAPI {
    * @param price - Price to sell, can be "MP"
    */
   sellMaterial(divisionName: string, cityName: string, materialName: string, amt: string, price: string): void;
-
   /**
    * Set product sell data.
    * @param divisionName - Name of the division
@@ -6677,14 +6645,12 @@ export interface WarehouseAPI {
       price: string,
       all: boolean,
   ): void;
-
   /**
    * Discontinue a product.
    * @param divisionName - Name of the division
    * @param productName - Name of the product
    */
   discontinueProduct(divisionName: string, productName: string): void;
-
   /**
    * Set smart supply
    * @param divisionName - Name of the division
@@ -6692,7 +6658,6 @@ export interface WarehouseAPI {
    * @param enabled - smart supply enabled
    */
   setSmartSupply(divisionName: string, cityName: string, enabled: boolean): void;
-
   /**
    * Set whether smart supply uses leftovers before buying
    * @param divisionName - Name of the division
@@ -6701,7 +6666,6 @@ export interface WarehouseAPI {
    * @param enabled - smart supply use leftovers enabled
    */
   setSmartSupplyUseLeftovers(divisionName: string, cityName: string, materialName: string, enabled: boolean): void;
-
   /**
    * Set material buy data
    * @param divisionName - Name of the division
@@ -6710,7 +6674,6 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   buyMaterial(divisionName: string, cityName: string, materialName: string, amt: number): void;
-
   /**
    * Set material to bulk buy
    * @param divisionName - Name of the division
@@ -6719,7 +6682,6 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   bulkPurchase(divisionName: string, cityName: string, materialName: string, amt: number): void;
-
   /**
    * Get warehouse data
    * @param divisionName - Name of the division
@@ -6727,7 +6689,6 @@ export interface WarehouseAPI {
    * @returns warehouse data
    */
   getWarehouse(divisionName: string, cityName: string): Warehouse;
-
   /**
    * Get product data
    * @param divisionName - Name of the division
@@ -6735,7 +6696,6 @@ export interface WarehouseAPI {
    * @returns product data
    */
   getProduct(divisionName: string, productName: string): Product;
-
   /**
    * Get material data
    * @param divisionName - Name of the division
@@ -6743,7 +6703,6 @@ export interface WarehouseAPI {
    * @returns material data
    */
   getMaterial(divisionName: string, cityName: string, materialName: string): Material;
-
   /**
    * Set market TA 1 for a material.
    * @param divisionName - Name of the division
@@ -6752,7 +6711,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setMaterialMarketTA1(divisionName: string, cityName: string, materialName: string, on: boolean): void;
-
   /**
    * Set market TA 2 for a material.
    * @param divisionName - Name of the division
@@ -6761,7 +6719,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setMaterialMarketTA2(divisionName: string, cityName: string, materialName: string, on: boolean): void;
-
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
@@ -6769,7 +6726,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
-
   /**
    * Set market TA 2 for a product.
    * @param divisionName - Name of the division
@@ -6777,7 +6733,6 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
-
   /**
    * Set material export data
    * @param sourceDivision - Source division
@@ -6795,7 +6750,6 @@ export interface WarehouseAPI {
       materialName: string,
       amt: number,
   ): void;
-
   /**
    * Cancel material export
    * @param sourceDivision - Source division
@@ -6813,14 +6767,12 @@ export interface WarehouseAPI {
       materialName: string,
       amt: number,
   ): void;
-
   /**
    * Purchase warehouse for a new city
    * @param divisionName - Name of the division
    * @param cityName - Name of the city
    */
   purchaseWarehouse(divisionName: string, cityName: string): void;
-
   /**
    * Upgrade warehouse
    * @param divisionName - Name of the division
@@ -6828,7 +6780,6 @@ export interface WarehouseAPI {
    * @param amt - amount of upgrades defaults to 1
    */
   upgradeWarehouse(divisionName: string, cityName: string, amt?: number): void;
-
   /**
    * Create a new product
    * @param divisionName - Name of the division
@@ -6844,7 +6795,6 @@ export interface WarehouseAPI {
       designInvest: number,
       marketingInvest: number,
   ): void;
-
   /**
    * Limit Material Production.
    * @param divisionName - Name of the division
@@ -6853,7 +6803,6 @@ export interface WarehouseAPI {
    * @param qty - Amount to limit to
    */
   limitMaterialProduction(divisionName: string, cityName: string, materialName: string, qty: number): void;
-
   /**
    * Limit Product Production.
    * @param divisionName - Name of the division
@@ -6862,13 +6811,11 @@ export interface WarehouseAPI {
    * @param qty - Amount to limit to
    */
   limitProductProduction(divisionName: string, cityName: string, productName: string, qty: number): void;
-
   /**
    * Gets the cost to purchase a warehouse
    * @returns cost
    */
   getPurchaseWarehouseCost(): number;
-
   /**
    * Gets the cost to upgrade a warehouse to the next level
    * @param divisionName - Name of the division
@@ -6877,7 +6824,6 @@ export interface WarehouseAPI {
    * @returns cost to upgrade
    */
   getUpgradeWarehouseCost(adivisionName: any, acityName: any, amt?: number): number;
-
   /**
    * Check if you have a warehouse in city
    * @returns true if warehouse is present, false if not
@@ -6897,54 +6843,46 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns true if created and false if not
    */
   createCorporation(corporationName: string, selfFund: boolean): boolean;
-
   /**
    * Check if you have a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns true if unlocked and false if not
    */
   hasUnlockUpgrade(upgradeName: string): boolean;
-
   /**
    * Gets the cost to unlock a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns cost of the upgrade
    */
   getUnlockUpgradeCost(upgradeName: string): number;
-
   /**
    * Get the level of a levelable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns the level of the upgrade
    */
   getUpgradeLevel(upgradeName: string): number;
-
   /**
    * Gets the cost to unlock the next level of a levelable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns cost of the upgrade
    */
   getUpgradeLevelCost(upgradeName: string): number;
-
   /**
    * Gets the cost to expand into a new industry
    * @param industryName - Name of the industry
    * @returns cost
    */
   getExpandIndustryCost(industryName: string): number;
-
   /**
    * Gets the cost to expand into a new city
    * @returns cost
    */
   getExpandCityCost(): number;
-
   /**
    * Get an offer for investment based on you companies current valuation
    * @returns An offer of investment
    */
   getInvestmentOffer(): InvestmentOffer;
-
   /**
    * Accept investment based on you companies current valuation
    * @remarks
@@ -6952,14 +6890,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns An offer of investment
    */
   acceptInvestmentOffer(): boolean;
-
   /**
    * Go public
    * @param numShares - number of shares you would like to issue for your IPO
    * @returns true if you successfully go public, false if not
    */
   goPublic(numShares: number): boolean;
-
   /**
    * Bribe a faction
    * @param factionName - Faction name
@@ -6968,66 +6904,56 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns True if successful, false if not
    */
   bribe(factionName: string, amountCash: number, amountShares: number): boolean;
-
   /**
    * Get corporation data
    * @returns Corporation data
    */
   getCorporation(): CorporationInfo;
-
   /**
    * Get division data
    * @param divisionName - Name of the division
    * @returns Division data
    */
   getDivision(divisionName: string): Division;
-
   /**
    * Expand to a new industry
    * @param industryType - Name of the industry
    * @param divisionName - Name of the division
    */
   expandIndustry(industryType: string, divisionName: string): void;
-
   /**
    * Expand to a new city
    * @param divisionName - Name of the division
    * @param cityName - Name of the city
    */
   expandCity(divisionName: string, cityName: string): void;
-
   /**
    * Unlock an upgrade
    * @param upgradeName - Name of the upgrade
    */
   unlockUpgrade(upgradeName: string): void;
-
   /**
    * Level an upgrade.
    * @param upgradeName - Name of the upgrade
    */
   levelUpgrade(upgradeName: string): void;
-
   /**
    * Issue dividends
    * @param percent - Percent of profit to issue as dividends.
    */
   issueDividends(percent: number): void;
-
   /**
    * Buyback Shares
    * @param amount - Amount of shares to buy back.
    *
    */
   buyBackShares(amount: number): void;
-
   /**
    * Sell Shares
    * @param amount -  Amount of shares to sell.
    *
    */
   sellShares(amount: number): void;
-
   /**
    * Get bonus time.
    *
@@ -7256,6 +7182,8 @@ interface InvestmentOffer {
  * @internal
  */
 interface UserInterfaceTheme {
+  [key: string]: string | undefined;
+
   primarylight: string;
   primary: string;
   primarydark: string;
@@ -7289,8 +7217,6 @@ interface UserInterfaceTheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
-
-  [key: string]: string | undefined;
 }
 
 /**
@@ -7320,6 +7246,5 @@ interface AutocompleteData {
   servers: string[];
   scripts: string[];
   txts: string[];
-
   flags(schema: [string, string | number | boolean | string[]][]): any;
 }
