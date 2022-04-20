@@ -9,10 +9,6 @@ export async function main(ns) {
 	contractor(ns);
 }
 
-// TODO: Total Ways to Sum II
-// TODO: Shortest Path in a Grid
-// TODO: Hamming Codes: int to bin
-// TODO: Hamming Codes: bin to int
 /**
  *
  * @param {NS} ns
@@ -44,9 +40,9 @@ export function contractor(ns) {
 				case 'Unique Paths in a Grid II':
 					solution = uniquePathsII(data);
 					break;
-				// case 'Shortest Path in a Grid':
-				// 	solution = shortestPath(data);
-				// 	break;
+				case 'Shortest Path in a Grid':
+					solution = shortestPath(data);
+					break;
 				case 'Algorithmic Stock Trader I':
 					solution = stockTrader(1, data);
 					break;
@@ -74,11 +70,20 @@ export function contractor(ns) {
 				case 'Total Ways to Sum':
 					solution = totalWaysToSum(data);
 					break;
+				case 'Total Ways to Sum II':
+					solution = totalWaysToSumII(data);
+					break;
 				case 'Find All Valid Math Expressions':
 					solution = validMathExpressions(data);
 					break;
 				case 'Sanitize Parentheses in Expression':
 					solution = sanitizeParentheses(data);
+					break;
+				case 'HammingCodes: Integer to encoded Binary':
+					solution = hammingEncode(data);
+					break;
+				case 'HammingCodes: Encoded Binary to Integer':
+					solution = hammingDecode(data);
 					break;
 				default:
 					ns.print(`Found ${file} on ${server} of type: ${contract}. This does not have a solver yet.`);
@@ -265,8 +270,62 @@ function uniquePathsII(grid) {
 	return gridSum[gridSum.length - 1][gridSum[0].length - 1];
 }
 
+/**
+ *
+ * @param {number[]} array
+ * @returns {string}
+ */
 function shortestPath(array) {
+	const dist = array.map(arr => new Array(arr.length).fill(Infinity));
+	const prev = array.map(arr => new Array(arr.length).fill(undefined));
+	const path = array.map(arr => new Array(arr.length).fill(undefined));
+	const queue = [];
+	array.forEach((arr, i) => arr.forEach((a, j) => {
+		if (a === 0) queue.push([i, j]);
+	}));
 
+	dist[0][0] = 0;
+	const height = array.length;
+	const length = array[height - 1].length;
+	const target = [height - 1, length - 1];
+	while (queue.length > 0) {
+		let u;
+		let d = Infinity;
+		let idx;
+		queue.forEach(([i, j], k) => {
+			if (dist[i][j] < d) {
+				u = [i, j];
+				d = dist[i][j];
+				idx = k;
+			}
+		});
+		if (JSON.stringify(u) === JSON.stringify(target)) {
+			let str = '';
+			let [a, b] = target;
+			if (prev[a][b] || (a === 0 && b === 0)) {
+				while (prev[a][b]) {
+					str = path[a][b] + str;
+					[a, b] = prev[a][b];
+				}
+			}
+			return str;
+		}
+		queue.splice(idx, 1);
+		if (u === undefined) continue;
+		const [a, b] = u;
+		for (const [s, i, j] of [['D', a + 1, b], ['U', a - 1, b], ['R', a, b + 1], ['L', a, b - 1]]) {
+			if (i < 0 || i >= height || j < 0 || j >= length) continue; // Index over edge
+			if (array[i][j] === 1) continue; // We've hit a wall;
+			if (!queue.some(([k, l]) => k === i && l === j)) continue; // Vertex not in queue
+			const alt = dist[a][b] + 1;
+			if (alt < dist[i][j]) {
+				dist[i][j] = alt;
+				prev[i][j] = u;
+				path[i][j] = s;
+			}
+		}
+	}
+	return '';
 }
 
 /**
@@ -411,10 +470,27 @@ function jumps(array) {
  */
 function totalWaysToSum(n) {
 	const table = [1];
-	for (let i = 0; i < n; i++) {
-		table.push(0);
-	}
+	table.length = n + 1;
+	table.fill(0, 1);
 	for (let i = 1; i < n; i++) {
+		for (let j = i; j <= n; j++) {
+			table[j] += table[j - i];
+		}
+	}
+	return table[n];
+}
+
+/**
+ *
+ * @param {[number, number[]]} data
+ * @returns {number}
+ */
+function totalWaysToSumII(data) {
+	const [n, digits] = data;
+	const table = [1];
+	table.length = n + 1;
+	table.fill(0, 1);
+	for (const i of digits) {
 		for (let j = i; j <= n; j++) {
 			table[j] += table[j - i];
 		}
@@ -503,4 +579,45 @@ function sanitizeParentheses(data) {
 		}
 	}
 	return [...valid];
+}
+
+/**
+ *
+ * @param {number} n
+ * @returns {string}
+ */
+function hammingEncode(n) {
+	const array = Array.from(n.toString(2));
+	const numberParityBits = Math.ceil(Math.log2(n));
+	const encodedArray = [];
+	encodedArray.length = numberParityBits + array.length;
+	for (let i = 0; i < encodedArray.length; i++) {
+		if ((i & (i - 1)) === 0) continue;
+		encodedArray[i] = array.shift();
+	}
+	for (let i = 0; i < numberParityBits - 1; i++) {
+		encodedArray[2 ** i] = (encodedArray.filter((b, k) => {
+			return b === '1' &&
+				(k.toString(2).padStart(numberParityBits - 1, '0'))[numberParityBits - i - 2] === '1';
+		}).length % 2).toString();
+	}
+	encodedArray[0] = (encodedArray.filter(b => b === '1').length % 2).toString();
+	return encodedArray.join('');
+}
+
+/**
+ *
+ * @param {string} bitstring
+ * @returns {string}
+ */
+function hammingDecode(bitstring) {
+	const array = Array.from(bitstring);
+	const error = array.reduce((a, b, i) => b === '1' ? a ^ i : a, 0);
+	if (error) array[error] = array[error] === '1' ? '0' : '1';
+	const decodedArray = [];
+	for (const [i, b] of array.entries()) {
+		if ((i & (i - 1)) === 0) continue;
+		decodedArray.push(b);
+	}
+	return parseInt(decodedArray.join(''), 2).toString();
 }
