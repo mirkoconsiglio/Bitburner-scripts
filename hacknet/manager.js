@@ -87,7 +87,7 @@ export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 2
 	if (shouldBuyNewNode) cost = newNodeCost;
 	// Prepare info about next purchase
 	let strPurchase = (shouldBuyNewNode ? `a new node "hacknet-node-${hn.numNodes()}"` :
-		`hacknet-node-${nodeToUpgrade} ${bestUpgrade.name} ${upgradedValue}`) + ` for ${formatMoney(cost)}`;
+		`hacknet-node-${nodeToUpgrade} ${bestUpgrade.name} ${upgradedValue}`) + ` for ${formatMoney(ns, cost)}`;
 	let strPayoff = `production ${formatNumber(ns, (shouldBuyNewNode ? newNodePayoff : bestUpgradePayoff) * cost)}, payoff time: ${formatTime(ns, 1000 * payoffTimeSeconds)}`;
 	if (cost > maxSpend) {
 		ns.print(`The next best purchase would be ${strPurchase} but the cost ${formatMoney(ns, cost)} exceeds the limit (${formatMoney(ns, maxSpend)})`);
