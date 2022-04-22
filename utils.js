@@ -826,7 +826,7 @@ export function getFreeRams(ns, servers, hackables, occupy = false) {
  */
 export function getFreeRam(ns, server) {
 	const data = readFromFile(ns, getPortNumbers().reservedRam);
-	return ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - (data[server] ?? {'ram': 0}).ram;
+	return ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - ((data[server] ?? {'ram': 0}).ram ?? 0);
 }
 
 /**
@@ -918,7 +918,6 @@ export function targetCost(ns, target, cores = 1, hackPercent = 0.5, freeRam = 2
 	return [averageMoneyPerRamPerTime, averageMoneyPerRam, averageMoneyPerTime];
 }
 
-// noinspection JSUnusedGlobalSymbols
 /**
  *
  * @param {NS} ns
