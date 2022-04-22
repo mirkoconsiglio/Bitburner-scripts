@@ -7183,7 +7183,6 @@ interface InvestmentOffer {
  */
 interface UserInterfaceTheme {
   [key: string]: string | undefined;
-
   primarylight: string;
   primary: string;
   primarydark: string;

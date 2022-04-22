@@ -10,10 +10,17 @@ import {
 	readFromFile
 } from '/utils.js';
 
+// Constants
+const stanekPortNumber = getPortNumbers().stanek;
+const reservedRamPortNumber = getPortNumbers().reservedRam;
+const hostSearchDelay = 3600;
+
 // Variables
 let host;
 let threads = 0;
 let ram = 0;
+let firstLoop = true;
+let time = Date.now();
 
 /**
  *
@@ -23,8 +30,6 @@ let ram = 0;
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const st = ns.stanek;
-	const stanekPortNumber = getPortNumbers().stanek;
-	const reservedRamPortNumber = getPortNumbers().reservedRam;
 	const scriptHost = ns.getRunningScript().server;
 	const pid = ns.getRunningScript().pid;
 	// noinspection InfiniteLoopJS
@@ -33,13 +38,7 @@ export async function main(ns) {
 		// Get Stanek data
 		const data = readFromFile(ns, stanekPortNumber);
 		// Get best host and the max RAM we can reserve for charging
-		const bestHost = getBestHost(ns);
-		if (bestHost.threads > threads) {
-			ns.stanek.clearGift(); // Reset charges
-			host = bestHost.host;
-			threads = bestHost.threads;
-			ram = bestHost.ram;
-		}
+		getBestHost(ns);
 		// Set up pattern
 		setupPattern(ns, getPatterns(st.giftWidth(), st.giftHeight())[data.pattern]);
 		// Get chargeable fragment info
@@ -62,7 +61,7 @@ export async function main(ns) {
 		// Charge Stanek
 		await charger(ns);
 		// Remove reserved RAM on host
-		const currentReservedRam = readFromFile(ns, reservedRamPortNumber)[host] ?? 0;
+		const currentReservedRam = (readFromFile(ns, reservedRamPortNumber)[host] ?? {'ram': 0}).ram ?? 0;
 		await modifyFile(ns, reservedRamPortNumber, {
 			[host]: {
 				'ram': currentReservedRam - ram,
@@ -77,7 +76,6 @@ export async function main(ns) {
 /**
  *
  * @param {NS} ns
- * @returns {[string, number, number]}
  */
 function getBestHost(ns) {
 	const scripts = getScripts();
@@ -91,7 +89,14 @@ function getBestHost(ns) {
 			maxRam = maxRamAvailable;
 		}
 	}
-	return {host: bestHost, threads: maxThreads, ram: maxRam};
+	if (firstLoop || (Date.now() >= time + hostSearchDelay && maxThreads > threads)) {
+		ns.stanek.clearGift(); // Reset charges
+		host = bestHost;
+		threads = maxThreads;
+		ram = maxRam;
+		firstLoop = false;
+		time = Date.now();
+	}
 }
 
 /**
@@ -102,7 +107,6 @@ function getBestHost(ns) {
 async function charger(ns) {
 	const st = ns.stanek;
 	const scripts = getScripts();
-	const stanekPortNumber = getPortNumbers().stanek;
 	// Charge fragments
 	while (true) {
 		// Get data
@@ -114,7 +118,6 @@ async function charger(ns) {
 		if (fragments.length === 0) return; // All fragments charged to full
 		// Charge each fragment one at a time
 		for (const fragment of fragments) {
-			if (getBestHost(ns)[1] > threads) return; // Reset Charging
 			statusUpdate(ns, fragments, data);
 			let availableRam = getFreeRam(ns, host);
 			const availableThreads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
