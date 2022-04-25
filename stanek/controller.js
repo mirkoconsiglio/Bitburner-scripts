@@ -9,7 +9,7 @@ import {
 	modifyFile,
 	readFromFile
 } from '/utils.js';
-
+// TODO: FIX STANEK
 // Constants
 const stanekPortNumber = getPortNumbers().stanek;
 const reservedRamPortNumber = getPortNumbers().reservedRam;
@@ -51,10 +51,10 @@ export async function main(ns) {
 		// Reserve RAM on host for charging
 		await modifyFile(ns, reservedRamPortNumber, {[host]: {'ram': ram, 'server': scriptHost, 'pid': pid}});
 		// Wait for RAM to free up
-		while (getFreeRam(ns, host) < ram) {
+		while (getFreeRam(ns, host) < 0) {
 			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up on ${host}: ` +
-				`${formatBinary(ns, getFreeRam(ns, host) * 1e9)} ` +
+				`${formatBinary(ns, (getFreeRam(ns, host) + ram) * 1e9)} ` +
 				`/ ${formatBinary(ns, ram * 1e9)}`);
 			await ns.sleep(1000);
 		}
@@ -119,7 +119,7 @@ async function charger(ns) {
 		// Charge each fragment one at a time
 		for (const fragment of fragments) {
 			statusUpdate(ns, fragments, data);
-			let availableRam = getFreeRam(ns, host);
+			let availableRam = getFreeRam(ns, host) + ram;
 			const availableThreads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
 			// Only charge if we will not be bringing down the highest
 			if (availableThreads < fragment.highestCharge * 0.99) {
