@@ -4298,7 +4298,6 @@ interface Infiltration {
    * @returns all locations that can be infiltrated.
    */
   getPossibleLocations(): string[];
-
   /**
    * Get all infiltrations with difficulty, location and rewards.
    * @remarks
@@ -6288,6 +6287,7 @@ export interface NS {
    * @returns The formatted time.
    */
   tFormat(milliseconds: number, milliPrecision?: boolean): string;
+
   enums: NSEnums;
 
   /**
