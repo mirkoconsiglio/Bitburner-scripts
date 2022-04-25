@@ -93,8 +93,8 @@ export function contractor(ns) {
 			if (result) {
 				printBoth(ns, `Solved ${file} on ${server} of type: ${contract}. ${result}.`);
 			} else {
-				printBoth(ns, `Could not solve ${file} on ${server} of type: ${contract}.`);
-				printBoth(ns, `Disabling contractor.`);
+				printBoth(ns, `Could not solve ${file} on ${server} of type: ${contract}...`);
+				printBoth(ns, `Disabling contractor...`);
 				return false;
 			}
 		}
@@ -588,19 +588,15 @@ function sanitizeParentheses(data) {
  */
 function hammingEncode(n) {
 	const array = Array.from(n.toString(2));
-	const numberParityBits = Math.ceil(Math.log2(n));
 	const encodedArray = [];
-	encodedArray.length = numberParityBits + array.length;
-	for (let i = 0; i < encodedArray.length; i++) {
-		if ((i & (i - 1)) === 0) continue;
-		encodedArray[i] = array.shift();
+	let i = 0;
+	while (array.length > 0) {
+		if ((i & (i - 1)) !== 0) encodedArray[i] = array.shift();
+		i++;
 	}
-	for (let i = 0; i < numberParityBits - 1; i++) {
-		encodedArray[2 ** i] = (encodedArray.filter((b, k) => {
-			return b === '1' &&
-				(k.toString(2).padStart(numberParityBits - 1, '0'))[numberParityBits - i - 2] === '1';
-		}).length % 2).toString();
-	}
+	const p = Math.ceil(Math.log2(encodedArray.length));
+	for (i = 0; i < p; i++) encodedArray[2 ** i] = (encodedArray.filter((b, k) => b === '1' &&
+		(k.toString(2).padStart(p, '0'))[p - i - 1] === '1').length % 2).toString();
 	encodedArray[0] = (encodedArray.filter(b => b === '1').length % 2).toString();
 	return encodedArray.join('');
 }
