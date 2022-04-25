@@ -4273,6 +4273,42 @@ interface Stanek {
   acceptGift(): boolean;
 }
 
+export interface InfiltrationReward {
+  tradeRep: number;
+  sellCash: number;
+  SoARep: number;
+}
+
+export interface InfiltrationLocation {
+  location: any;
+  reward: InfiltrationReward;
+  difficulty: number;
+}
+
+/**
+ * Infiltration API.
+ * @public
+ */
+interface Infiltration {
+  /**
+   * Get all locations that can be infiltrated.
+   * @remarks
+   * RAM cost: 5 GB
+   *
+   * @returns all locations that can be infiltrated.
+   */
+  getPossibleLocations(): string[];
+
+  /**
+   * Get all infiltrations with difficulty, location and rewards.
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * @returns Infiltration data for given location.
+   */
+  getInfiltration(location: string): InfiltrationLocation;
+}
+
 /**
  * User Interface API.
  * @public
@@ -4422,6 +4458,11 @@ export interface NS {
    * RAM cost: 0 GB
    */
   readonly stanek: Stanek;
+  /**
+   * Namespace for infiltration functions.
+   * RAM cost: 0 GB
+   */
+  readonly infiltration: Infiltration;
   /**
    * Namespace for corporation functions.
    * RAM cost: 0 GB
@@ -6247,7 +6288,6 @@ export interface NS {
    * @returns The formatted time.
    */
   tFormat(milliseconds: number, milliPrecision?: boolean): string;
-
   enums: NSEnums;
 
   /**
