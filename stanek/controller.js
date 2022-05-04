@@ -9,7 +9,7 @@ import {
 	modifyFile,
 	readFromFile
 } from '/utils.js';
-// TODO: FIX STANEK
+
 // Constants
 const stanekPortNumber = getPortNumbers().stanek;
 const reservedRamPortNumber = getPortNumbers().reservedRam;
@@ -51,10 +51,10 @@ export async function main(ns) {
 		// Reserve RAM on host for charging
 		await modifyFile(ns, reservedRamPortNumber, {[host]: {'ram': ram, 'server': scriptHost, 'pid': pid}});
 		// Wait for RAM to free up
-		while (getFreeRam(ns, host) < 0) {
+		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
 			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up on ${host}: ` +
-				`${formatBinary(ns, (getFreeRam(ns, host) + ram) * 1e9)} ` +
+				`${formatBinary(ns, (ns.getServerMaxRam(host) - ns.getServerUsedRam(host)) * 1e9)} ` +
 				`/ ${formatBinary(ns, ram * 1e9)}`);
 			await ns.sleep(1000);
 		}
@@ -82,7 +82,7 @@ function getBestHost(ns) {
 	const chargeRam = ns.getScriptRam(scripts.charge);
 	let bestHost, maxThreads = 0, maxRam = 0;
 	for (const host of getAccessibleServers(ns)) {
-		const maxRamAvailable = getFreeRam(ns, host);
+		const maxRamAvailable = getFreeRam(ns, host, true);
 		if (maxRamAvailable > maxRam) {
 			bestHost = host;
 			maxThreads = Math.floor(maxRamAvailable / chargeRam);
@@ -106,7 +106,8 @@ function getBestHost(ns) {
  */
 async function charger(ns) {
 	const st = ns.stanek;
-	const scripts = getScripts();
+	const script = getScripts().charge;
+	const scriptRam = ns.getScriptRam(script);
 	// Charge fragments
 	while (true) {
 		// Get data
@@ -118,9 +119,15 @@ async function charger(ns) {
 		if (fragments.length === 0) return; // All fragments charged to full
 		// Charge each fragment one at a time
 		for (const fragment of fragments) {
-			statusUpdate(ns, fragments, data);
-			let availableRam = getFreeRam(ns, host) + ram;
-			const availableThreads = Math.floor(availableRam / ns.getScriptRam(scripts.charge));
+			statusUpdate(ns, data);
+			const availableRam = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
+			const availableThreads = Math.floor(availableRam / scriptRam);
+			if (availableThreads <= 0) {
+				ns.print(`INFO: Not enough RAM available on ${host} to charge Stanek. ` +
+					`Waiting for RAM to free up.`);
+				await ns.sleep(1000);
+				continue;
+			}
 			// Only charge if we will not be bringing down the highest
 			if (availableThreads < fragment.highestCharge * 0.99) {
 				ns.print(`WARNING: The highest average charge of fragment ${fragment.id} is ${formatNumber(ns, fragment.highestCharge)}, ` +
@@ -130,7 +137,7 @@ async function charger(ns) {
 				await ns.sleep(1000);
 				continue;
 			}
-			const pid = ns.exec(scripts.charge, host, threads, fragment.x, fragment.y);
+			const pid = ns.exec(script, host, threads, fragment.x, fragment.y);
 			while (ns.isRunning(pid, host)) await ns.sleep(100);
 		}
 		await ns.sleep(100);
@@ -143,8 +150,9 @@ async function charger(ns) {
  * @param {Fragment[]} fragments
  * @param {Object} data
  */
-function statusUpdate(ns, fragments, data) {
+function statusUpdate(ns, data) {
 	ns.clearLog();
+	const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
 	let status = `Charging ${fragments.length} fragments to ${data.maxCharges}\n`;
 	for (const fragment of fragments) {
 		status += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +

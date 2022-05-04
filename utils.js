@@ -721,6 +721,7 @@ export function getServers(ns) {
  * @returns {boolean}
  */
 export function hackServer(ns, server) {
+	if (ns.getServerRequiredHackingLevel(server) > ns.getHackingLevel()) return false;
 	if (ns.hasRootAccess(server)) return true;
 	let portOpened = 0;
 	if (ns.fileExists('BruteSSH.exe', 'home')) {
@@ -743,8 +744,7 @@ export function hackServer(ns, server) {
 		ns.sqlinject(server);
 		portOpened++;
 	}
-	if (ns.getServerNumPortsRequired(server) <= portOpened
-		&& ns.getServerRequiredHackingLevel(server) <= ns.getHackingLevel()) {
+	if (ns.getServerNumPortsRequired(server) <= portOpened) {
 		ns.nuke(server);
 		return true;
 	}
@@ -824,10 +824,18 @@ export function getFreeRams(ns, servers, hackables, occupy = false) {
  * @param {string} server
  * @return {number}
  */
-export function getFreeRam(ns, server) {
+export function getFreeRam(ns, server, ignoreNonManagerScripts = false) {
 	const data = readFromFile(ns, getPortNumbers().reservedRam);
 	const reservedRam = (data[server] ?? {'ram': 0}).ram ?? 0;
-	return ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - reservedRam;
+	let freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - reservedRam;
+	if (ignoreNonManagerScripts) {
+		const managerScripts = getManagerScripts();
+		ns.ps(server).forEach(p => {
+			const script = p.filename;
+			if (!managerScripts.includes(script)) freeRam += ns.getScriptRam(script, server) * p.threads;
+		});
+	}
+	return freeRam;
 }
 
 /**
