@@ -189,7 +189,11 @@ async function doAction(ns, type, name) {
 	// Take into account bonus time
 	const actionTime = bb.getActionTime(type, name);
 	const bonusTime = bb.getBonusTime();
-	const time = bonusTime > 0 ? (bonusTime > actionTime ? actionTime / 5 : actionTime - 0.8 * bonusTime) : actionTime;
+	const time = bonusTime === 0
+		? actionTime                    // If we don't have bonus time
+		: bonusTime > actionTime
+			? actionTime / 5                // If we have more bonus time than action time
+			: actionTime - 0.8 * bonusTime; // If we have less bonus time than action time
 	// Wait until the action finishes
 	const started = bb.startAction(type, name);
 	if (started) {

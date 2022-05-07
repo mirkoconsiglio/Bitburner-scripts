@@ -38,9 +38,9 @@ hacking/batcher.js
 hacknet/hash-spender.js
 hacknet/manager.js
 player/create-programs.js
-player/exp.js
+player/hacking-farm.js
 player/gym.js
-player/intelligence.js
+player/intelligence-farm.js
 player/university.js
 player/upgrade-home-cores.js
 player/upgrade-home-ram.js
