@@ -9,7 +9,7 @@ import {
 	modifyFile,
 	readFromFile
 } from '/utils.js';
-
+// TODO: Crashing after some scripts ending during charging
 // Constants
 const stanekPortNumber = getPortNumbers().stanek;
 const reservedRamPortNumber = getPortNumbers().reservedRam;
@@ -138,7 +138,9 @@ async function charger(ns) {
 				continue;
 			}
 			const pid = ns.exec(script, host, threads, fragment.x, fragment.y);
-			while (ns.isRunning(pid, host)) await ns.sleep(100);
+			while (ns.isRunning(pid, host)) {
+				await ns.sleep(100);
+			}
 		}
 		await ns.sleep(100);
 	}
@@ -152,7 +154,7 @@ async function charger(ns) {
  */
 function statusUpdate(ns, data) {
 	ns.clearLog();
-	const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
+	const fragments = ns.stanek.activeFragments().filter(f => f.numCharge < data.maxCharges);
 	let status = `Charging ${fragments.length} fragments to ${data.maxCharges}\n`;
 	for (const fragment of fragments) {
 		status += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +

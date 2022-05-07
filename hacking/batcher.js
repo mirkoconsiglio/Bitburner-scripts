@@ -11,6 +11,7 @@ import {
 } from '/utils.js';
 // TODO: collision detection
 // TODO: no waiting between groups of cycles
+// TODO: optimise priming
 // noinspection JSUnusedLocalSymbols
 export function autocomplete(data, args) {
 	return data.servers;
@@ -76,6 +77,7 @@ async function primeTarget(ns, sec, money, data) {
 	const growThreads = Math.ceil(ns.growthAnalyze(data.target, Math.max(growth !== Infinity ? growth : 10, 1), data.cores));
 	const weakenThreads = Math.ceil((sec - data.minSec + growThreads * data.growSec) / data.weakenSec);
 
+	const growTime = ns.getGrowTime(data.target);
 	const weakenTime = ns.getWeakenTime(data.target);
 
 	let grown = growThreads === 0;
@@ -100,9 +102,10 @@ async function primeTarget(ns, sec, money, data) {
 		if (!weakened && weakenThreads > 0) weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, data.target);
 		if (weakenFound) weakened = true;
 
-		if (!growFound) await ns.sleep(1000);
-		else if (!weakenFound) await ns.sleep(1000);
-		else await ns.sleep(weakenTime + 1000);
+		let time = 0;
+		if (!growFound) time = Math.max(time, growTime);
+		if (!weakenFound) time = Math.max(time, weakenTime);
+		await ns.sleep(time + 1000);
 	} else {
 		if (!grown) {
 			ns.exec(data.scripts.grow, data.host, growThreads, data.target);
