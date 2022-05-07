@@ -1079,7 +1079,9 @@ export function defaultPortData(portNumber) {
  * @returns {Promise<void>}
  */
 export async function initData(ns) {
-	for (let i = 1; i <= 20; i++) await resetData(ns, i);
+	for (let i = 1; i <= 20; i++) {
+		if (!ns.fileExists(`/data/${i}.txt`)) await writeToFile(ns, i, defaultPortData(i));
+	}
 }
 
 /**
