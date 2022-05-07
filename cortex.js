@@ -81,13 +81,13 @@ export async function main(ns) {
 		}
 		// Upgrade home RAM
 		if (ns.getPlayer().money >= ns.getUpgradeHomeRamCost() && upgradeRam &&
-			!promptScriptRunning(ns, host) && homeRam < 2 ** 30) {
+			!promptScriptRunning(ns, host) && homeRam < 2 ** 30 && enoughRam(ns, scripts.upgradeHomeRam, host)) {
 			ns.exec(scripts.upgradeHomeRam, host);
 			upgradeRam = false;
 		}
 		// Upgrade home cores
 		if (ns.getPlayer().money >= ns.getUpgradeHomeCoresCost() && upgradeCores &&
-			!promptScriptRunning(ns, host) && homeCores < 8) {
+			!promptScriptRunning(ns, host) && homeCores < 8 && enoughRam(ns, scripts.upgradeHomeCores, host)) {
 			ns.exec(scripts.upgradeHomeCores, host);
 			upgradeCores = false;
 		}
@@ -228,7 +228,7 @@ export async function main(ns) {
 		for (const server of getAccessibleServers(ns)) {
 			if (!ns.getServer(server).backdoorInstalled &&
 				!ns.isRunning(scripts.backdoor, host, server) &&
-				server !== 'home') {
+				server !== 'home' && enoughRam(ns, scripts.backdoor, host)) {
 				if (server === 'w0r1d_d43m0n' && backdoorWorldDaemon) {
 					if (await ns.prompt(`Install backdoor on w0r1d_d43m0n and finish Bitnode?`)) {
 						ns.print(`Installing backdoor on ${server}`);
