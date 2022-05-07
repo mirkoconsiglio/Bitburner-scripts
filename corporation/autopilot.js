@@ -186,15 +186,6 @@ export async function part3(ns, cities, jobs, division, mainCity = 'Aevum') {
 	}
 	// Start making Tobacco v1
 	if (getLatestVersion(ns, division) === 0) await makeProduct(ns, division, mainCity, 'Tobacco v1', 1e9, 1e9);
-	// Get upgrades
-	let upgrades = [
-		{name: 'FocusWires', level: 20},
-		{name: 'Neural Accelerators', level: 20},
-		{name: 'Speech Processor Implants', level: 20},
-		{name: 'Nuoptimal Nootropic Injector Implants', level: 20},
-		{name: 'Wilson Analytics', level: 14}
-	];
-	await upgradeUpto(ns, upgrades);
 }
 
 /**
@@ -247,8 +238,7 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			if (!corp.hasResearched(division, upgrades.market2)) {
 				corp.research(division, upgrades.market2);
 				// Set Market TA II on for the current selling versions
-				corp.setProductMarketTA2(division, 'Tobacco v' + (version - 2), true);
-				corp.setProductMarketTA2(division, 'Tobacco v' + (version - 1), true);
+				for (const product of corp.getDivision(division).products) corp.setProductMarketTA2(division, product, true);
 			}
 		}
 		// Check research progress for Fulcrum
@@ -558,14 +548,19 @@ async function investmentOffer(ns, amount, round = 5) {
 	ns.print(`Waiting for investment offer of ${formatMoney(ns, amount)}`);
 	// Wait for investment
 	while (corp.getInvestmentOffer().funds < amount) {
+		if (corp.getInvestmentOffer().round > round) {
+			ns.print(`Already accepted investment offer at round ${corp.getInvestmentOffer().round}, ` +
+				`or it was manually accepted now.`);
+			return;
+		}
 		// Pump in corp funds if we have hashes
 		if (ns.hacknet.numHashes() >= ns.hacknet.hashCost('Sell for Corporation Funds')) {
 			ns.hacknet.spendHashes('Sell for Corporation Funds');
 			amount -= 1e9;
-			await ns.sleep(10000);
-		} else await ns.sleep(1000);
+		}
+		await ns.sleep(1000);
 	}
-	if (corp.getInvestmentOffer().round > round) return; // In case investment offer is accepted manually
+	ns.print(`Accepted investment offer of ${formatMoney(ns, corp.getInvestmentOffer().funds)}`);
 	corp.acceptInvestmentOffer();
 }
 
