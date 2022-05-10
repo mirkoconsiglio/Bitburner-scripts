@@ -24,9 +24,7 @@ exploits/edit-save-file.js
 exploits/n00dles.js
 exploits/prototype-tampering.js
 exploits/rainbow.js
-exploits/reality-alteration.js
 exploits/time-compression.js
-exploits/true-recursion.js
 exploits/unclickable.js
 exploits/undocumented-function-call.js
 factions/join-factions.js
