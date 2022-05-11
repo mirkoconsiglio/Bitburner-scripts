@@ -26,7 +26,7 @@ export async function main(ns) {
 	const options = ns.flags(argsSchema);
 	if (!options.all && !options.sleeve) throw new Error(`Need to specify --sleeve 'number' or --all`);
 	// Get gym location
-	const location = getGymLocation(gym);
+	const location = getGymLocation(options.gym);
 	// Get stat to train
 	if (!options.str && !options.def && !options.dex && !options.agi)
 		throw new Error(`Specify --str, --def, --dex or --agi for stat to train`);
