@@ -738,29 +738,33 @@ function decompressLZ(str) {
  * @returns {string}
  */
 function compressLZ(str) {
-	let cur_state = Array.from(Array(10), _ => Array(10)), new_state, tmp_state, encoded;
-	cur_state[0][1] = '';
+	// state [i][j] contains a backreference of offset i and length j
+	let cur_state = Array.from(Array(10), _ => Array(10)), new_state, tmp_state, result;
+	cur_state[0][1] = ''; // initial state is a literal of length 1
 	for (let i = 1; i < str.length; i++) {
 		new_state = Array.from(Array(10), _ => Array(10));
 		const c = str[i];
+		// handle literals
 		for (let len = 1; len <= 9; len++) {
 			const input = cur_state[0][len];
 			if (input === undefined) continue;
-			if (len < 9) set(new_state, 0, len + 1, input);
-			else set(new_state, 0, 1, input + '9' + str.substring(i - 9, i) + '0');
-			for (let offset = 1; offset <= Math.min(9, i); offset++) {
+			if (len < 9) set(new_state, 0, len + 1, input); // extend current literal
+			else set(new_state, 0, 1, input + '9' + str.substring(i - 9, i) + '0'); // start new literal
+			for (let offset = 1; offset <= Math.min(9, i); offset++) { // start new backreference
 				if (str[i - offset] === c) set(new_state, offset, 1, input + len + str.substring(i - len, i));
 			}
 		}
+		// handle backreferences
 		for (let offset = 1; offset <= 9; offset++) {
 			for (let len = 1; len <= 9; len++) {
 				const input = cur_state[offset][len];
 				if (input === undefined) continue;
 				if (str[i - offset] === c) {
-					if (len < 9) set(new_state, offset, len + 1, input);
-					else set(new_state, offset, 1, input + '9' + offset + '0');
+					if (len < 9) set(new_state, offset, len + 1, input); // extend current backreference
+					else set(new_state, offset, 1, input + '9' + offset + '0'); // start new backreference
 				}
-				set(new_state, 0, 1, input + len + offset);
+				set(new_state, 0, 1, input + len + offset); // start new literal
+				// end current backreference and start new backreference
 				for (let new_offset = 1; new_offset <= Math.min(9, i); new_offset++) {
 					if (str[i - new_offset] === c) set(new_state, new_offset, 1, input + len + offset + '0');
 				}
@@ -775,17 +779,17 @@ function compressLZ(str) {
 		if (input === undefined) continue;
 		input += len + str.substring(str.length - len, str.length);
 		// noinspection JSUnusedAssignment
-		if (encoded === undefined || input.length < encoded.length) encoded = input;
+		if (result === undefined || input.length < result.length) result = input;
 	}
 	for (let offset = 1; offset <= 9; offset++) {
 		for (let len = 1; len <= 9; len++) {
 			let input = cur_state[offset][len];
 			if (input === undefined) continue;
 			input += len + '' + offset;
-			if (encoded === undefined || input.length < encoded.length) encoded = input;
+			if (result === undefined || input.length < result.length) result = input;
 		}
 	}
-	return encoded ?? '';
+	return result ?? '';
 }
 
 /**
