@@ -106,7 +106,7 @@ export async function main(ns) {
 				}
 			}
 			// Switch to best city
-			if (city !== bestCity) {
+			if (bestCity && city !== bestCity) {
 				city = bestCity;
 				ns.print(`Switched to ${city}`);
 				bb.switchCity(city);
