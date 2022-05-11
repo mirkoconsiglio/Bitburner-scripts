@@ -85,6 +85,18 @@ export function contractor(ns) {
 				case 'HammingCodes: Encoded Binary to Integer':
 					solution = hammingDecode(data);
 					break;
+				case 'Proper 2-Coloring of a Graph':
+					solution = twoColoring(data);
+					break;
+				case 'Compression I: RLE Compression':
+					solution = runLengthEncoding(data);
+					break;
+				case 'Compression II: LZ Decompression':
+					solution = decompressLZ(data);
+					break;
+				case 'Compression III: LZ Compression':
+					solution = compressLZ(data);
+					break;
 				default:
 					ns.print(`Found ${file} on ${server} of type: ${contract}. This does not have a solver yet.`);
 					continue;
@@ -616,4 +628,173 @@ function hammingDecode(bitstring) {
 		decodedArray.push(b);
 	}
 	return parseInt(decodedArray.join(''), 2).toString();
+}
+
+/**
+ *
+ * @param {array} data
+ * @returns {number[]}
+ */
+function twoColoring(data) {
+	return isBipartite(adjacencyMatrix(...data));
+}
+
+/**
+ *
+ * @param {number} n
+ * @param {number[][]} e
+ * @returns {number[][]}
+ */
+function adjacencyMatrix(n, e) {
+	const G = Array.from(Array(n), _ => Array(n).fill(0));
+	for (const [i, j] of e) {
+		G[i][j] = 1;
+		G[j][i] = 1;
+	}
+	return G;
+}
+
+/**
+ *
+ * @param {number[][]} G
+ * @returns {number[]}
+ */
+function isBipartite(G) {
+	const n = G.length;
+	const colorArr = Array(n);
+	for (let i = 0; i < n; i++) if (!colorArr[i] && !isBipartiteUtil(G, n, i, colorArr)) return [];
+	return colorArr;
+}
+
+/**
+ *
+ * @param {number[][]} G
+ * @param {number} n
+ * @param {number} src
+ * @param {number[]} colorArr
+ * @returns {boolean}
+ */
+function isBipartiteUtil(G, n, src, colorArr) {
+	colorArr[src] = 0;
+	const q = [];
+	q.push(src);
+	while (q.length > 0) {
+		const u = q.shift();
+		if (G[u][u] === 1) return false;
+		for (let v = 0; v < n; v++) {
+			if (G[u][v] === 1 && colorArr[v] === undefined) {
+				colorArr[v] = 1 - colorArr[u];
+				q.push(v);
+			} else if (G[u][v] === 1 && colorArr[v] === colorArr[u]) return false;
+		}
+	}
+	return true;
+}
+
+/**
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+function runLengthEncoding(str) {
+	const encoding = [];
+	let count, previous, i;
+	for (count = 1, previous = str[0], i = 1; i < str.length; i++) {
+		if (str[i] !== previous || count === 9) {
+			encoding.push(count, previous);
+			count = 1;
+			previous = str[i];
+		} else count++;
+	}
+	encoding.push(count, previous);
+	return encoding.join('');
+}
+
+/**
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+function decompressLZ(str) {
+	let decoded = '', len, ref, pos, i = 0;
+	while (i < str.length) {
+		len = parseInt(str[i]);
+		ref = parseInt(str[++i]);
+		if (len === 0) continue;
+		if (isNaN(ref)) {
+			pos = i;
+			for (; i < len + pos; i++) decoded += str[i];
+		} else {
+			i++;
+			for (let j = 0; j < len; j++) decoded += decoded[decoded.length - ref];
+		}
+	}
+	return decoded;
+}
+
+/**
+ *
+ * @param {str} str
+ * @returns {string}
+ */
+function compressLZ(str) {
+	let cur_state = Array.from(Array(10), _ => Array(10)), new_state, tmp_state, encoded;
+	cur_state[0][1] = '';
+	for (let i = 1; i < str.length; i++) {
+		new_state = Array.from(Array(10), _ => Array(10));
+		const c = str[i];
+		for (let len = 1; len <= 9; len++) {
+			const input = cur_state[0][len];
+			if (input === undefined) continue;
+			if (len < 9) set(new_state, 0, len + 1, input);
+			else set(new_state, 0, 1, input + '9' + str.substring(i - 9, i) + '0');
+			for (let offset = 1; offset <= Math.min(9, i); offset++) {
+				if (str[i - offset] === c) set(new_state, offset, 1, input + len + str.substring(i - len, i));
+			}
+		}
+		for (let offset = 1; offset <= 9; offset++) {
+			for (let len = 1; len <= 9; len++) {
+				const input = cur_state[offset][len];
+				if (input === undefined) continue;
+				if (str[i - offset] === c) {
+					if (len < 9) set(new_state, offset, len + 1, input);
+					else set(new_state, offset, 1, input + '9' + offset + '0');
+				}
+				set(new_state, 0, 1, input + len + offset);
+				for (let new_offset = 1; new_offset <= Math.min(9, i); new_offset++) {
+					if (str[i - new_offset] === c) set(new_state, new_offset, 1, input + len + offset + '0');
+				}
+			}
+		}
+		tmp_state = new_state;
+		new_state = cur_state;
+		cur_state = tmp_state;
+	}
+	for (let len = 1; len <= 9; len++) {
+		let input = cur_state[0][len];
+		if (input === undefined) continue;
+		input += len + str.substring(str.length - len, str.length);
+		// noinspection JSUnusedAssignment
+		if (encoded === undefined || input.length < encoded.length) encoded = input;
+	}
+	for (let offset = 1; offset <= 9; offset++) {
+		for (let len = 1; len <= 9; len++) {
+			let input = cur_state[offset][len];
+			if (input === undefined) continue;
+			input += len + '' + offset;
+			if (encoded === undefined || input.length < encoded.length) encoded = input;
+		}
+	}
+	return encoded ?? '';
+}
+
+/**
+ *
+ * @param {string[][]} state
+ * @param {number} i
+ * @param {number} j
+ * @param {string} str
+ */
+function set(state, i, j, str) {
+	if (state[i][j] === undefined || str.length < state[i][j].length) state[i][j] = str;
 }
