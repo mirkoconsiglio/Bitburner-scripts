@@ -826,7 +826,7 @@ export function getFreeRams(ns, servers, hackables, occupy = false) {
  */
 export function getFreeRam(ns, server, ignoreNonManagerScripts = false) {
 	const data = readFromFile(ns, getPortNumbers().reservedRam);
-	const reservedRam = (data[server] ?? {'ram': 0}).ram ?? 0;
+	const reservedRam = (data[server] ?? [{'ram': 0}]).reduce((a, b) => a + b.ram, 0);
 	let freeRam = ns.getServerMaxRam(server) - ns.getServerUsedRam(server) - reservedRam;
 	if (ignoreNonManagerScripts) {
 		const managerScripts = getManagerScripts();
@@ -988,8 +988,8 @@ function getPromptScripts() {
  * @param {string} server
  * @returns {boolean}
  */
-export function enoughRam(ns, script, server = ns.getHostname()) {
-	return ns.getScriptRam(script, server) <= getFreeRam(ns, server);
+export function enoughRam(ns, script, server = ns.getHostname(), threads = 1) {
+	return ns.getScriptRam(script, server) * threads <= getFreeRam(ns, server);
 }
 
 /**
@@ -1019,7 +1019,7 @@ export function getPortNumbers() {
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
 		case 1:
-			return {'home': {'ram': 64, 'server': 'DEF', 'pid': 'DEF'}};
+			return {'home': [{'ram': 64, 'server': 'DEF', 'pid': 'DEF'}]};
 		case 2:
 			return undefined;
 		case 3:
@@ -1050,10 +1050,7 @@ export function defaultPortData(portNumber) {
 		case 12:
 			return undefined;
 		case 13:
-			return {
-				pattern: 'starter',
-				maxCharges: 50
-			};
+			return {pattern: 'starter', maxCharges: 50};
 		case 14:
 			return undefined;
 		case 15:
@@ -1166,7 +1163,7 @@ export async function modifyFile(ns, portNumber, dataToModify, mode = 'w') {
  */
 function recursiveModify(data, dataToModify) {
 	for (const [key, val] of Object.entries(dataToModify)) {
-		if (typeof val === 'object' && data[key]) {
+		if (typeof val === 'object' && !Array.isArray(val) && data[key]) {
 			const _data = data[key];
 			recursiveModify(_data, val);
 			data[key] = _data;
@@ -1175,6 +1172,50 @@ function recursiveModify(data, dataToModify) {
 	return data;
 }
 
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @param {ram} number
+ * @returns {Promise<void>}
+ */
+export async function reserveRam(ns, server, ram) {
+	const portNumber = getPortNumbers().reservedRam;
+	const data = readFromFile(ns, portNumber);
+	const updatedData = data[server];
+	updatedData.push({'ram': ram, 'server': ns.getRunningScript().server, 'pid': ns.getRunningScript().pid});
+	const dataToModify = {[server]: updatedData};
+	await modifyFile(ns, portNumber, dataToModify);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} server
+ * @returns {Promise<void>}
+ */
+export async function unreserveRam(ns, server) {
+	const portNumber = getPortNumbers().reservedRam;
+	const scriptHost = ns.getRunningScript().server;
+	const pid = ns.getRunningScript().pid;
+	const data = readFromFile(ns, portNumber);
+	const updatedData = data[server].filter(e => e.server !== scriptHost || e.pid !== pid);
+	const dataToModify = {[server]: updatedData};
+	await modifyFile(ns, portNumber, dataToModify);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @returns {Promise<void>}
+ */
+export async function updateReservedRam(ns) {
+	const portNumber = getPortNumbers().reservedRam;
+	const data = readFromFile(ns, portNumber);
+	const updatedData = {};
+	Object.entries(data).forEach(([k, v]) => updatedData[k] = v.filter(e => e.pid === 'DEF' || ns.ps(e.server).some(s => s.pid === e.pid)));
+	await writeToFile(ns, portNumber, updatedData);
+}
 
 /**
  *
@@ -1225,19 +1266,4 @@ export function formatPercentage(n, round = 2) {
  */
 export function formatTime(ns, t, milliPrecision = false) {
 	return isNaN(t) ? 'NaN' : ns.tFormat(t, milliPrecision);
-}
-
-/**
- *
- * @param {NS} ns
- */
-export async function updateReservedRam(ns) {
-	const portNumber = getPortNumbers().reservedRam;
-	const data = readFromFile(ns, portNumber);
-	const modifiedData = [];
-	Object.entries(data).forEach(([key, val]) => {
-		if (val.pid === 'DEF') modifiedData.push([key, val]); // Keep default data
-		else if (ns.ps(val.server).some(s => s.pid === val.pid)) modifiedData.push([key, val]);
-	});
-	await writeToFile(ns, portNumber, Object.fromEntries(modifiedData));
 }

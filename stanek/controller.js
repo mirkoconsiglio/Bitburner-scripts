@@ -6,13 +6,13 @@ import {
 	getFreeRam,
 	getPortNumbers,
 	getScripts,
-	modifyFile,
-	readFromFile
+	readFromFile,
+	reserveRam,
+	unreserveRam
 } from '/utils.js';
-// TODO: Crashing after some scripts ending during charging
+
 // Constants
-const stanekPortNumber = getPortNumbers().stanek;
-const reservedRamPortNumber = getPortNumbers().reservedRam;
+const portNumber = getPortNumbers().stanek;
 const hostSearchDelay = 3600;
 
 // Variables
@@ -30,13 +30,12 @@ let time = Date.now();
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const st = ns.stanek;
-	const scriptHost = ns.getRunningScript().server;
-	const pid = ns.getRunningScript().pid;
+	host = ns.getHostname();
 	// noinspection InfiniteLoopJS
 	while (true) {
 		ns.clearLog();
 		// Get Stanek data
-		const data = readFromFile(ns, stanekPortNumber);
+		const data = readFromFile(ns, portNumber);
 		// Get best host and the max RAM we can reserve for charging
 		getBestHost(ns);
 		// Set up pattern
@@ -49,7 +48,7 @@ export async function main(ns) {
 			continue;
 		}
 		// Reserve RAM on host for charging
-		await modifyFile(ns, reservedRamPortNumber, {[host]: {'ram': ram, 'server': scriptHost, 'pid': pid}});
+		await reserveRam(ns, host, ram);
 		// Wait for RAM to free up
 		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
 			ns.clearLog();
@@ -61,14 +60,8 @@ export async function main(ns) {
 		// Charge Stanek
 		await charger(ns);
 		// Remove reserved RAM on host
-		const currentReservedRam = (readFromFile(ns, reservedRamPortNumber)[host] ?? {'ram': 0}).ram ?? 0;
-		await modifyFile(ns, reservedRamPortNumber, {
-			[host]: {
-				'ram': currentReservedRam - ram,
-				'server': scriptHost,
-				'pid': pid
-			}
-		});
+		await unreserveRam(ns, host);
+		// Update every second
 		await ns.sleep(1000);
 	}
 }
@@ -111,7 +104,7 @@ async function charger(ns) {
 	// Charge fragments
 	while (true) {
 		// Get data
-		const data = readFromFile(ns, stanekPortNumber);
+		const data = readFromFile(ns, portNumber);
 		// Set up pattern
 		setupPattern(ns, getPatterns(st.giftWidth(), st.giftHeight())[data.pattern]);
 		// Get chargeable fragments
