@@ -8,14 +8,13 @@ import {copyScriptsToAll, findPlaceToRun, getAccessibleServers, getFreeRams, get
 export async function main(ns) {
 	await copyScriptsToAll(ns);
 	const threads = Number.MAX_SAFE_INTEGER;
-	const scripts = getScripts();
+	const script = getScripts().share;
 	let i = 0;
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const servers = getAccessibleServers(ns);
 		const freeRams = getFreeRams(ns, servers);
-		findPlaceToRun(ns, scripts.share, threads, freeRams, i);
-		i++;
+		findPlaceToRun(ns, script, threads, freeRams, i++);
 		await ns.sleep(1000);
 	}
 }

@@ -1,4 +1,4 @@
-import {formatMoney, getAccessibleServers, getOptimalHackable, targetCost} from '/utils.js';
+import {formatMoney, formatNumber, getAccessibleServers, getOptimalHackable, targetCost} from '/utils.js';
 
 const argsSchema = [
 	['cores', 1],

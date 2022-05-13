@@ -7,7 +7,12 @@ import {formatMoney} from '/utils.js';
  */
 export async function main(ns) {
 	const cost = ns.getPurchasedServerCost(Math.pow(2, ns.args[0]));
-	const maxServers = Math.floor(ns.getBitNodeMultipliers().PurchasedServerLimit * 25);
+	const purchasedServerLimit = ns.getBitNodeMultipliers().PurchasedServerLimit;
+	if (!purchasedServerLimit) {
+		ns.tprint(`Cannot purchase servers in this Bitnode...`);
+		return;
+	}
+	const maxServers = Math.floor(purchasedServerLimit * 25);
 	const costMax = cost * maxServers;
 	ns.tprint(`1 Server: ${formatMoney(ns, cost)}, ${maxServers} servers: ${formatMoney(ns, costMax)}`);
 }

@@ -9,8 +9,8 @@ export async function main(ns) {
 	const power = ns.args[0];
 	const targetRam = Math.pow(2, power);
 	for (let i = 0; i < ns.getPurchasedServerLimit(); i++) {
-		let server = 'pserv-' + i;
-		let cost = ns.getPurchasedServerCost(targetRam);
+		const server = 'pserv-' + i;
+		const cost = ns.getPurchasedServerCost(targetRam);
 		while (ns.getServerMoneyAvailable('home') < cost) {
 			await ns.sleep(1000);
 		}

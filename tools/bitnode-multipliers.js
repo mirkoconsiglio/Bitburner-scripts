@@ -4,8 +4,5 @@
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const mults = ns.getBitNodeMultipliers();
-	for (let [mult, val] of Object.entries(mults)) {
-		ns.tprint(`${mult}: ${val}`);
-	}
+	for (const [mult, val] of Object.entries(ns.getBitNodeMultipliers())) ns.tprint(`${mult}: ${val}`);
 }

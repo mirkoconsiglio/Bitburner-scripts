@@ -1254,7 +1254,7 @@ export function formatBinary(ns, b) {
  * @return {string}
  */
 export function formatPercentage(n, round = 2) {
-	return isNaN(n) ? 'NaN' : `${n.toFixed(round)}%`;
+	return isNaN(n) ? 'NaN%' : `${(n * 100).toFixed(round)}%`;
 }
 
 /**

@@ -150,7 +150,7 @@ function getInfo(ns, data) {
 		ns.print(`Not enough RAM on ${data.host} to hack ${data.target}`);
 		ns.print(`Cycle RAM: ${cycleRAM}. available RAM: ${freeRam}`);
 		data.drainPercent *= freeRam / cycleRAM;
-		ns.print(`Reducing drain percent to ${formatPercentage(data.drainPercent * 100)}`);
+		ns.print(`Reducing drain percent to ${formatPercentage(data.drainPercent)}`);
 		if (data.drainPercent < 0.001) {
 			printBoth(ns, `Drain percent too low. Exiting daemon on ${data.host} targeting ${data.target}...`);
 			return 'EXIT';

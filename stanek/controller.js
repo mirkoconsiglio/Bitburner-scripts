@@ -165,43 +165,60 @@ function statusUpdate(ns, data) {
 function getPatterns(width, height) {
 	const patterns = {};
 	switch (true) { // Sorted in descending order of size
+		case width >= 8 && height >= 7:
+			patterns.hacking = [
+				{'rootX': 0, 'rootY': 0, 'rotation': 1, 'fragmentID': 6, 'type': 4},
+				{'rootX': 4, 'rootY': 0, 'rotation': 1, 'fragmentID': 5, 'type': 3},
+				{'rootX': 2, 'rootY': 0, 'rotation': 0, 'fragmentID': 0, 'type': 6},
+				{'rootX': 1, 'rootY': 2, 'rotation': 0, 'fragmentID': 102, 'type': 18},
+				{'rootX': 3, 'rootY': 3, 'rotation': 0, 'fragmentID': 1, 'type': 6},
+				{'rootX': 0, 'rootY': 4, 'rotation': 0, 'fragmentID': 20, 'type': 12},
+				{'rootX': 1, 'rootY': 0, 'rotation': 1, 'fragmentID': 7, 'type': 5},
+				{'rootX': 3, 'rootY': 4, 'rotation': 2, 'fragmentID': 101, 'type': 18},
+				{'rootX': 2, 'rootY': 5, 'rotation': 0, 'fragmentID': 25, 'type': 14},
+				{'rootX': 5, 'rootY': 2, 'rotation': 1, 'fragmentID': 100, 'type': 18},
+				{'rootX': 5, 'rootY': 5, 'rotation': 0, 'fragmentID': 28, 'type': 16},
+				{'rootX': 0, 'rootY': 5, 'rotation': 0, 'fragmentID': 21, 'type': 13},
+				{'rootX': 6, 'rootY': 0, 'rotation': 3, 'fragmentID': 18, 'type': 11}
+			];
+			break;
 		case width >= 6 && height >= 5:
 			patterns.starter = [
-				{rootX: 0, rootY: 0, rotation: 0, fragmentID: 20, type: 12},
-				{rootX: 4, rootY: 0, rotation: 0, fragmentID: 21, type: 13},
-				{rootX: 3, rootY: 3, rotation: 0, fragmentID: 12, type: 8},
-				{rootX: 0, rootY: 3, rotation: 0, fragmentID: 14, type: 9},
-				{rootX: 3, rootY: 2, rotation: 0, fragmentID: 10, type: 7},
-				{rootX: 0, rootY: 2, rotation: 0, fragmentID: 16, type: 10},
-				{rootX: 0, rootY: 1, rotation: 0, fragmentID: 101, type: 18}
+				{'rootX': 0, 'rootY': 0, 'rotation': 0, 'fragmentID': 20, 'type': 12},
+				{'rootX': 4, 'rootY': 0, 'rotation': 0, 'fragmentID': 21, 'type': 13},
+				{'rootX': 3, 'rootY': 3, 'rotation': 0, 'fragmentID': 12, 'type': 8},
+				{'rootX': 0, 'rootY': 3, 'rotation': 0, 'fragmentID': 14, 'type': 9},
+				{'rootX': 3, 'rootY': 2, 'rotation': 0, 'fragmentID': 10, 'type': 7},
+				{'rootX': 0, 'rootY': 2, 'rotation': 0, 'fragmentID': 16, 'type': 10},
+				{'rootX': 0, 'rootY': 1, 'rotation': 0, 'fragmentID': 101, 'type': 18}
 			];
-			patterns.hack = [
-				{rootX: 0, rootY: 0, rotation: 1, fragmentID: 6, type: 4},
-				{rootX: 4, rootY: 0, rotation: 1, fragmentID: 5, type: 3},
-				{rootX: 2, rootY: 0, rotation: 0, fragmentID: 0, type: 6},
-				{rootX: 1, rootY: 2, rotation: 0, fragmentID: 102, type: 18},
-				{rootX: 3, rootY: 3, rotation: 0, fragmentID: 1, type: 6},
-				{rootX: 0, rootY: 4, rotation: 0, fragmentID: 20, type: 12},
-				{rootX: 1, rootY: 0, rotation: 1, fragmentID: 7, type: 5}
+			patterns.hacking = [
+				{'rootX': 0, 'rootY': 0, 'rotation': 1, 'fragmentID': 6, 'type': 4},
+				{'rootX': 4, 'rootY': 0, 'rotation': 1, 'fragmentID': 5, 'type': 3},
+				{'rootX': 2, 'rootY': 0, 'rotation': 0, 'fragmentID': 0, 'type': 6},
+				{'rootX': 1, 'rootY': 2, 'rotation': 0, 'fragmentID': 102, 'type': 18},
+				{'rootX': 3, 'rootY': 3, 'rotation': 0, 'fragmentID': 1, 'type': 6},
+				{'rootX': 0, 'rootY': 4, 'rotation': 0, 'fragmentID': 20, 'type': 12},
+				{'rootX': 1, 'rootY': 0, 'rotation': 1, 'fragmentID': 7, 'type': 5}
 			];
 			patterns.bladeburner = [
-				{rootX: 3, rootY: 0, rotation: 0, fragmentID: 30, type: 17},
-				{rootX: 3, rootY: 3, rotation: 0, fragmentID: 12, type: 8},
-				{rootX: 1, rootY: 0, rotation: 0, fragmentID: 10, type: 7},
-				{rootX: 2, rootY: 1, rotation: 2, fragmentID: 101, type: 18},
-				{rootX: 0, rootY: 0, rotation: 1, fragmentID: 16, type: 10},
-				{rootX: 2, rootY: 3, rotation: 2, fragmentID: 14, type: 9},
-				{rootX: 0, rootY: 2, rotation: 1, fragmentID: 18, type: 11}
+				{'rootX': 3, 'rootY': 0, 'rotation': 0, 'fragmentID': 30, 'type': 17},
+				{'rootX': 3, 'rootY': 3, 'rotation': 0, 'fragmentID': 12, 'type': 8},
+				{'rootX': 1, 'rootY': 0, 'rotation': 0, 'fragmentID': 10, 'type': 7},
+				{'rootX': 2, 'rootY': 1, 'rotation': 2, 'fragmentID': 101, 'type': 18},
+				{'rootX': 0, 'rootY': 0, 'rotation': 1, 'fragmentID': 16, 'type': 10},
+				{'rootX': 2, 'rootY': 3, 'rotation': 2, 'fragmentID': 14, 'type': 9},
+				{'rootX': 0, 'rootY': 2, 'rotation': 1, 'fragmentID': 18, 'type': 11}
 			];
 			break;
 		case width >= 3 && height >= 3:
 			patterns.starter = [
-				{rootX: 0, rootY: 1, rotation: 0, fragmentID: 7, type: 5},
-				{rootX: 0, rootY: 0, rotation: 0, fragmentID: 1, type: 6}
+				{'rootX': 0, 'rootY': 1, 'rotation': 0, 'fragmentID': 7, 'type': 5},
+				{'rootX': 0, 'rootY': 0, 'rotation': 0, 'fragmentID': 1, 'type': 6}
 			];
-			patterns.hack = [
-				{rootX: 0, rootY: 1, rotation: 0, fragmentID: 7, type: 5},
-				{rootX: 0, rootY: 0, rotation: 0, fragmentID: 1, type: 6}
+			patterns.hacking = [
+				{'rootX': 0, 'rootY': 1, 'rotation': 0, 'fragmentID': 7, 'type': 5},
+				{'rootX': 0, 'rootY': 0, 'rotation': 0, 'fragmentID': 1, 'type': 6}
 			];
 			break;
 		default:

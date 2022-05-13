@@ -190,7 +190,7 @@ export async function main(ns) {
 				let estEndOfCycleValue = numShares * purchasePrice * ((stk.absReturn() + 1) ** ticksBeforeCycleEnd - 1); // Expected difference in purchase price and value at next market cycle end
 				if (estEndOfCycleValue <= 2 * commission)
 					ns.print(`Despite attractive ER of ${formatMoney(ns, stk.absReturn())}, ${stk.sym} was not bought. Budget: ${formatMoney(ns, budget)} can only buy ${numShares} shares @ ${formatMoney(ns, purchasePrice)}. ` +
-						`Given an estimated ${marketCycleLength - estTick} ticks left in market cycle, less ${stk.timeToCoverTheSpread().toFixed(1)} ticks to cover the spread (${formatPercentage(stk.spread_pct * 100)}), ` +
+						`Given an estimated ${marketCycleLength - estTick} ticks left in market cycle, less ${stk.timeToCoverTheSpread().toFixed(1)} ticks to cover the spread (${formatPercentage(stk.spread_pct)}), ` +
 						`remaining ${ticksBeforeCycleEnd.toFixed(1)} ticks would only generate ${formatMoney(ns, estEndOfCycleValue)}, which is less than 2x commission (${formatMoney(ns, 2 * commission)})`);
 				else cash -= doBuy(ns, stk, numShares);
 			}
@@ -463,10 +463,10 @@ async function updateForecast(ns, allStocks, has4s) {
 			stk.debugLog = `${stk.sym.padEnd(5, ' ')} ${(stk.bullish() ? '+' : '-').repeat(signalStrength).padEnd(3)} ` +
 				`Prob:${(stk.prob * 100).toFixed(0).padStart(3)}% (t${probWindowLength.toFixed(0).padStart(2)}:${(stk.longTermForecast * 100).toFixed(0).padStart(3)}%, ` +
 				`t${Math.min(stk.priceHistory.length, nearTermForecastWindowLength).toFixed(0).padStart(2)}:${(stk.nearTermForecast * 100).toFixed(0).padStart(3)}%) ` +
-				`tLast⇄:${(stk.lastInversion + 1).toFixed(0).padStart(3)} Vol:${formatPercentage(stk.vol * 100)} ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)} ` +
-				`Spread:${formatPercentage(stk.spread_pct * 100)} ttProfit:${stk.blackoutWindow().toFixed(0).padStart(3)}`;
+				`tLast⇄:${(stk.lastInversion + 1).toFixed(0).padStart(3)} Vol:${formatPercentage(stk.vol)} ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)} ` +
+				`Spread:${formatPercentage(stk.spread_pct)} ttProfit:${stk.blackoutWindow().toFixed(0).padStart(3)}`;
 			if (stk.owned()) stk.debugLog += ` Pos: ${formatMoney(ns, stk.ownedShares())} (${stk.ownedShares() === stk.maxShares ? 'max' :
-				formatPercentage((100 * stk.ownedShares() / stk.maxShares))}) ${stk.sharesLong > 0 ? 'long ' : 'short'} (held ${stk.ticksHeld} ticks)`;
+				formatPercentage(stk.ownedShares() / stk.maxShares)}) ${stk.sharesLong > 0 ? 'long ' : 'short'} (held ${stk.ticksHeld} ticks)`;
 			if (stk.possibleInversionDetected) stk.debugLog += ' ⇄⇄⇄';
 		}
 	}
@@ -511,7 +511,7 @@ function doBuy(ns, stk, sharesBought) {
 	}
 
 	ns.print(`INFO: ${long ? 'Bought ' : 'Shorted'} ${formatNumber(ns, sharesBought).padStart(5)}${stk.maxShares === sharesBought + stk.ownedShares() ? ' (max shares)' : ''} ` +
-		`${stk.sym.padEnd(5)} @ ${formatMoney(ns, price).padStart(9)} for ${formatMoney(ns, sharesBought * price).padStart(9)} (Spread: ${formatPercentage(stk.spread_pct * 100)} ` +
+		`${stk.sym.padEnd(5)} @ ${formatMoney(ns, price).padStart(9)} for ${formatMoney(ns, sharesBought * price).padStart(9)} (Spread: ${formatPercentage(stk.spread_pct)} ` +
 		`ER:${formatMoney(ns, stk.expectedReturn()).padStart(8)}) Ticks to Profit: ${stk.timeToCoverTheSpread().toFixed(2)}`);
 	// The rest of this work is for troubleshooting / mock-mode purposes
 	if (price === 0) {
