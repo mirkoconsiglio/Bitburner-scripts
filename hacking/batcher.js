@@ -30,7 +30,7 @@ export async function main(ns) {
 		const sec = ns.getServerSecurityLevel(data.target);
 		const money = ns.getServerMoneyAvailable(data.target);
 		if (money < data.maxMoney || sec > data.minSec) {
-			ns.print(`Priming ${data.target} in ${formatTime(ns, ns.getWeakenTime(data.target))} seconds`);
+			ns.print(`Priming ${data.target} in ${formatTime(ns, ns.getWeakenTime(data.target))}`);
 			const primed = await primeTarget(ns, sec, money, data);
 			if (primed) ns.print(`${data.target} is primed`);
 			else continue;
@@ -157,7 +157,7 @@ function getInfo(ns, data) {
 		}
 		return 'REPEAT';
 	}
-	ns.print(`Running ${cycleCount} cycles in ${formatTime(ns, cycleCount * cycleDelay / 1000)} seconds`);
+	ns.print(`Running ${cycleCount} cycles in ${formatTime(ns, cycleCount * cycleDelay / 1000)}`);
 
 	const hackOffset = -0.25 * cycleDelay;
 	const hWeakenOffset = 0;
