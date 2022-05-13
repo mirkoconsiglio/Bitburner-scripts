@@ -553,6 +553,7 @@ async function investmentOffer(ns, amount, round = 5) {
 				`or it was manually accepted now.`);
 			return;
 		}
+		amount -= corp.getCorporation().revenue; // Take revenue into account
 		// Pump in corp funds if we have hashes
 		if (ns.hacknet.numHashes() >= ns.hacknet.hashCost('Sell for Corporation Funds')) {
 			ns.hacknet.spendHashes('Sell for Corporation Funds');
