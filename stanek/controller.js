@@ -162,7 +162,7 @@ function statusUpdate(ns, data) {
  * @param {number} height
  * @returns {Object<Object<number, number, number, number, number>[]>}
  */
-function getPatterns(width, height) {
+function getPatterns(width, height) { // Can be filled in using stanek/save.js
 	const patterns = {};
 	switch (true) { // Sorted in descending order of size
 		case width >= 8 && height >= 7:
@@ -211,6 +211,24 @@ function getPatterns(width, height) {
 				{'rootX': 0, 'rootY': 2, 'rotation': 1, 'fragmentID': 18, 'type': 11}
 			];
 			break;
+		case width >= 5 && height >= 5:
+			patterns.starter = [
+				{'rootX': 0, 'rootY': 0, 'rotation': 0, 'fragmentID': 1, 'type': 6},
+				{'rootX': 2, 'rootY': 0, 'rotation': 3, 'fragmentID': 12, 'type': 8},
+				{'rootX': 0, 'rootY': 3, 'rotation': 2, 'fragmentID': 16, 'type': 10},
+				{'rootX': 2, 'rootY': 3, 'rotation': 2, 'fragmentID': 10, 'type': 7},
+				{'rootX': 4, 'rootY': 0, 'rotation': 3, 'fragmentID': 6, 'type': 4},
+				{'rootX': 0, 'rootY': 2, 'rotation': 2, 'fragmentID': 14, 'type': 9}
+			];
+			patterns.hacking = [
+				{'rootX': 0, 'rootY': 2, 'rotation': 2, 'fragmentID': 1, 'type': 6},
+				{'rootX': 0, 'rootY': 3, 'rotation': 0, 'fragmentID': 7, 'type': 5},
+				{'rootX': 2, 'rootY': 1, 'rotation': 1, 'fragmentID': 102, 'type': 18},
+				{'rootX': 0, 'rootY': 0, 'rotation': 1, 'fragmentID': 21, 'type': 13},
+				{'rootX': 2, 'rootY': 0, 'rotation': 0, 'fragmentID': 5, 'type': 3},
+				{'rootX': 4, 'rootY': 1, 'rotation': 1, 'fragmentID': 6, 'type': 4}
+			];
+			break;
 		case width >= 3 && height >= 3:
 			patterns.starter = [
 				{'rootX': 0, 'rootY': 1, 'rotation': 0, 'fragmentID': 7, 'type': 5},
@@ -234,7 +252,7 @@ function getPatterns(width, height) {
  */
 function setupPattern(ns, pattern) {
 	const st = ns.stanek;
-	for (let fragment of pattern) {
+	for (const fragment of pattern) {
 		const x = fragment.rootX;
 		const y = fragment.rootY;
 		const rot = fragment.rotation;
