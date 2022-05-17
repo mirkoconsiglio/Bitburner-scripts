@@ -283,11 +283,9 @@ export async function autopilot(ns, cities, jobs, division, mainCity = 'Aevum') 
 			if (corp.getCorporation().shareSaleCooldown <= 0 &&
 				corp.getCorporation().sharePrice * 1e6 > ns.getPlayer().money) corp.sellShares(1e6);
 			// Buyback shares when we can
-			else if (corp.getCorporation().issuedShares > 0) {
-				if (ns.getPlayer().money > 2 * corp.getCorporation().issuedShares * corp.getCorporation().sharePrice * 1.1) {
-					corp.buyBackShares(corp.getCorporation().issuedShares);
-				}
-			}
+			else if (corp.getCorporation().issuedShares > 0 &&
+				ns.getPlayer().money > 2 * corp.getCorporation().issuedShares * corp.getCorporation().sharePrice)
+				corp.buyBackShares(corp.getCorporation().issuedShares);
 			// Check if we can unlock Shady Accounting
 			if (corp.getCorporation().funds >= corp.getUnlockUpgradeCost('Shady Accounting') &&
 				!corp.hasUnlockUpgrade('Shady Accounting')) corp.unlockUpgrade('Shady Accounting');
