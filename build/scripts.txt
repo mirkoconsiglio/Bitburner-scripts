@@ -74,3 +74,4 @@ tools/player.js
 tools/pserv-buyer.js
 tools/reputation.js
 tools/reset-port.js
+tools/copy-all-scripts.js
