@@ -63,7 +63,7 @@ export async function main(ns) {
 		// Purchase only useful programs
 		if (ns.getPlayer().tor) {
 			for (const program of getUsefulPrograms()) {
-				if (!ns.fileExists(program.name) && ns.getPlayer().hacking >= program.level && ns.purchaseProgram(program.name))
+				if (!ns.fileExists(program.name, 'home') && ns.getPlayer().hacking >= program.level && ns.purchaseProgram(program.name))
 					printBoth(ns, `Purchased ${program.name}`);
 			}
 		}
