@@ -2884,7 +2884,7 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Returns the number of seconds it takes to complete the specified action
+   * Returns the number of milliseconds it takes to complete the specified action
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
@@ -2892,15 +2892,26 @@ export interface Bladeburner {
    */
   getActionTime(type: string, name: string): number;
 
-  /**
-   * Get estimate success chance of an action.
-   * @remarks
-   * RAM cost: 4 GB
-   *
-   * Returns the estimated success chance for the specified action.
-   * This chance is returned as a decimal value, NOT a percentage
-   * (e.g. if you have an estimated success chance of 80%, then this function will return 0.80, NOT 80).
-   *
+	/**
+	 * Get the time elapsed on current action.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 *
+	 * Returns the number of milliseconds already spent on the current action.
+	 *
+	 * @returns Number of milliseconds already spent on the current action.
+	 */
+	getActionCurrentTime(): number;
+
+	/**
+	 * Get estimate success chance of an action.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 *
+	 * Returns the estimated success chance for the specified action.
+	 * This chance is returned as a decimal value, NOT a percentage
+	 * (e.g. if you have an estimated success chance of 80%, then this function will return 0.80, NOT 80).
+	 *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
    * @returns Estimated success chance for the specified action.
@@ -3789,6 +3800,20 @@ export interface Sleeve {
    * @returns True if the aug was purchased and installed on the sleeve, false otherwise.
    */
   purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
+
+	/**
+	 * Set a sleeve to perform bladeburner actions.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 *
+	 * Return a boolean indicating whether or not the sleeve started working out.
+	 *
+	 * @param sleeveNumber - Index of the sleeve to workout at the gym.
+	 * @param action - Name of the action to be performed.
+	 * @param contract - Name of the contract if applicable.
+	 * @returns True if the sleeve started working out, false otherwise.
+	 */
+	setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
 }
 
 /**
@@ -6550,8 +6575,8 @@ export interface NS {
    * @returns True if the player click “Yes”; false if the player clicks “No”; or the value entered by the player.
    */
   prompt(
-      txt: string,
-      options?: { type?: "boolean" | "text" | "select" | undefined; choices?: string[] },
+	  txt: string,
+	  options?: { type?: "boolean" | "text" | "select" | undefined; choices?: string[] },
   ): Promise<boolean | string>;
 }
 
@@ -6713,12 +6738,12 @@ export interface WarehouseAPI {
    * @param all - Sell in all city
    */
   sellProduct(
-      divisionName: string,
-      cityName: string,
-      productName: string,
-      amt: string,
-      price: string,
-      all: boolean,
+	  divisionName: string,
+	  cityName: string,
+	  productName: string,
+	  amt: string,
+	  price: string,
+	  all: boolean,
   ): void;
   /**
    * Discontinue a product.
@@ -6818,12 +6843,12 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to export.
    */
   exportMaterial(
-      sourceDivision: string,
-      sourceCity: string,
-      targetDivision: string,
-      targetCity: string,
-      materialName: string,
-      amt: number,
+	  sourceDivision: string,
+	  sourceCity: string,
+	  targetDivision: string,
+	  targetCity: string,
+	  materialName: string,
+	  amt: number,
   ): void;
   /**
    * Cancel material export
@@ -6835,12 +6860,12 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to export.
    */
   cancelExportMaterial(
-      sourceDivision: string,
-      sourceCity: string,
-      targetDivision: string,
-      targetCity: string,
-      materialName: string,
-      amt: number,
+	  sourceDivision: string,
+	  sourceCity: string,
+	  targetDivision: string,
+	  targetCity: string,
+	  materialName: string,
+	  amt: number,
   ): void;
   /**
    * Purchase warehouse for a new city
@@ -6864,11 +6889,11 @@ export interface WarehouseAPI {
    * @param marketingInvest - Amount to invest for the marketing of the product.
    */
   makeProduct(
-      divisionName: string,
-      cityName: string,
-      productName: string,
-      designInvest: number,
-      marketingInvest: number,
+	  divisionName: string,
+	  cityName: string,
+	  productName: string,
+	  designInvest: number,
+	  marketingInvest: number,
   ): void;
   /**
    * Limit Material Production.
