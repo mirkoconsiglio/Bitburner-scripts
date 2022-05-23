@@ -41,6 +41,8 @@ export async function main(ns) {
 	let upgradeCores = true;
 	let homeRam = ns.getServer('home').maxRam;
 	let homeCores = ns.getServer('home').cpuCores;
+	let tor = !bitnode8;
+	let programs = !bitnode8;
 	let wse = true;
 	let tix = true;
 	let gang = true;
@@ -49,7 +51,7 @@ export async function main(ns) {
 	let stock = true;
 	let hacknet = !bitnode8;
 	let sleeve = true;
-	let stanek = true;
+	let stanek = !bitnode8;
 	let backdoorWorldDaemon = true;
 	let factions = [];
 	// noinspection InfiniteLoopJS
@@ -59,9 +61,9 @@ export async function main(ns) {
 		// Contract solver (disables itself if any solution was incorrect)
 		if (contractorOnline) contractorOnline = contractor(ns);
 		// Purchase TOR
-		if (!ns.getPlayer().tor && ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
+		if (tor && !ns.getPlayer().tor && ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
-		if (ns.getPlayer().tor) {
+		if (programs && ns.getPlayer().tor) {
 			for (const program of getUsefulPrograms()) {
 				if (!ns.fileExists(program.name, 'home') && ns.getPlayer().hacking >= program.level && ns.purchaseProgram(program.name))
 					printBoth(ns, `Purchased ${program.name}`);
