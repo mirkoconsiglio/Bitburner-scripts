@@ -716,17 +716,18 @@ function runLengthEncoding(str) {
  * @returns {string}
  */
 function decompressLZ(str) {
-	let decoded = '', len, ref, pos, i = 0;
+	let decoded = '', type = 0, len, ref, pos, i = 0, j;
 	while (i < str.length) {
+		if (i > 0) type ^= 1;
 		len = parseInt(str[i]);
 		ref = parseInt(str[++i]);
 		if (len === 0) continue;
-		if (isNaN(ref)) {
+		if (!isNaN(ref) && type === 1) {
+			i++;
+			for (j = 0; j < len; j++) decoded += decoded[decoded.length - ref];
+		} else {
 			pos = i;
 			for (; i < len + pos; i++) decoded += str[i];
-		} else {
-			i++;
-			for (let j = 0; j < len; j++) decoded += decoded[decoded.length - ref];
 		}
 	}
 	return decoded;
