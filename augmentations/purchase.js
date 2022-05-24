@@ -111,13 +111,14 @@ export async function main(ns) {
 			else if (a.price > b.price) return -1;
 			else return ns.getAugmentationPrereq(b.name).length - ns.getAugmentationPrereq(a.name).length;
 		});
+		// TODO: take into account multiple prereqs
 		// Fit in augs before their prereqs
 		const tempAugs = [];
 		const coveredIndices = [];
 		for (let [i, aug] of augmentations.entries()) {
 			if (coveredIndices.includes(i)) continue;
-			let prereq = ns.getAugmentationPrereq(aug.name);
-			if (prereq.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq[0]);
+			let prereqs = ns.getAugmentationPrereq(aug.name);
+			if (prereqs.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqs[0]);
 			tempAugs.push(aug);
 		}
 		// Deep copy augmentations

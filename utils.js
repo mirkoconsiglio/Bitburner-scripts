@@ -450,7 +450,8 @@ function getOrganisations() {
 		'Travel Agency': {general: true},
 		'World Stock Exchange': {general: true},
 		'Bladeburners': {location: 'Sector-12', faction: 'Bladeburners'},
-		'Church of the Machine God': {location: 'Chongqing', faction: 'Church of the Machine God'}
+		'Church of the Machine God': {location: 'Chongqing', faction: 'Church of the Machine God'},
+		'Shadows of Anarchy': {faction: 'Shadows of Anarchy'}
 	};
 }
 
@@ -944,7 +945,7 @@ export function altTargetCost(ns, server) { // Doesn't use Formulas
  *
  * @returns {Object<string, number>[]}
  */
-export function getUsefulPrograms() {
+export function getCracks() {
 	return [
 		{name: 'BruteSSH.exe', level: 50},
 		{name: 'FTPCrack.exe', level: 100},
@@ -952,6 +953,14 @@ export function getUsefulPrograms() {
 		{name: 'HTTPWorm.exe', level: 400},
 		{name: 'SQLInject.exe', level: 800}
 	];
+}
+
+/**
+ *
+ * @returns {string[]}
+ */
+export function getUsefulPrograms() {
+	return ['ServerProfiler.exe', 'AutoLink.exe', 'DeepscanV1.exe', 'DeepscanV2.exe'];
 }
 
 /**
@@ -998,6 +1007,7 @@ export function enoughRam(ns, script, server = ns.getHostname(), threads = 1) {
  */
 export function getPortNumbers() {
 	return {
+		bitnode: 0,
 		reservedRam: 1,
 		gang: 2,
 		corp: 3,
@@ -1018,6 +1028,8 @@ export function getPortNumbers() {
  */
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
+		case 0:
+			return {bitnodeN: 1};
 		case 1:
 			return {'home': [{'ram': 64, 'server': 'DEF', 'pid': 'DEF'}]};
 		case 2:
@@ -1076,9 +1088,11 @@ export function defaultPortData(portNumber) {
  * @returns {Promise<void>}
  */
 export async function initData(ns) {
-	for (let i = 1; i <= 20; i++) {
-		if (!ns.fileExists(`/data/${i}.txt`)) await writeToFile(ns, i, defaultPortData(i));
-	}
+	const bitnodeData = readFromFile(ns, 0);
+	for (let i = 1; i <= 20; i++)
+		if (ns.getPlayer().bitNodeN !== bitnodeData.bitNodeN || !ns.fileExists(`/data/${i}.txt`))
+			await writeToFile(ns, i, defaultPortData(i));
+	await writeToFile(ns, 0, {bitnodeN: ns.getPlayer().bitNodeN});
 }
 
 /**

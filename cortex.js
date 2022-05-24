@@ -8,9 +8,9 @@ import {
 	deployBatchers,
 	enoughRam,
 	getAccessibleServers,
+	getCracks,
 	getGangs,
 	getScripts,
-	getUsefulPrograms,
 	initData,
 	manageAndHack,
 	printBoth,
@@ -64,7 +64,7 @@ export async function main(ns) {
 		if (tor && !ns.getPlayer().tor && ns.purchaseTor()) printBoth(ns, `Purchased TOR router`);
 		// Purchase only useful programs
 		if (programs && ns.getPlayer().tor) {
-			for (const program of getUsefulPrograms()) {
+			for (const program of getCracks()) {
 				if (!ns.fileExists(program.name, 'home') && ns.getPlayer().hacking >= program.level && ns.purchaseProgram(program.name))
 					printBoth(ns, `Purchased ${program.name}`);
 			}
