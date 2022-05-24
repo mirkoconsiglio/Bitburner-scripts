@@ -41,6 +41,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Core V3 Upgrade ---
 hacking_mult: 1.1
@@ -51,6 +52,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -116,6 +119,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Core V3 Upgrade ---
 hacking_mult: 1.1
@@ -126,6 +130,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -177,6 +183,7 @@ dexterity_mult: 1.3
 Price: $115.000m
 Rep: 27.500k
 Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
 
 --- Synfibril Muscle ---
 strength_mult: 1.3
@@ -203,6 +210,7 @@ defense_mult: 1.18
 Price: $120.000m
 Rep: 35.000k
 Prereq: Combat Rib II
+Prereq: Combat Rib I
 
 --- Nanofiber Weave ---
 strength_mult: 1.2
@@ -247,6 +255,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- PC Direct-Neural Interface ---
 hacking_mult: 1.08
@@ -355,6 +364,7 @@ dexterity_mult: 1.3
 Price: $115.000m
 Rep: 27.500k
 Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
 
 --- Combat Rib I ---
 strength_mult: 1.1
@@ -375,6 +385,7 @@ defense_mult: 1.18
 Price: $120.000m
 Rep: 35.000k
 Prereq: Combat Rib II
+Prereq: Combat Rib I
 
 --- Nanofiber Weave ---
 strength_mult: 1.2
@@ -410,6 +421,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- PC Direct-Neural Interface ---
 hacking_mult: 1.08
@@ -509,6 +521,7 @@ dexterity_mult: 1.3
 Price: $115.000m
 Rep: 27.500k
 Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
 
 --- Synthetic Heart ---
 strength_mult: 1.5
@@ -541,6 +554,7 @@ defense_mult: 1.18
 Price: $120.000m
 Rep: 35.000k
 Prereq: Combat Rib II
+Prereq: Combat Rib I
 
 --- Bionic Spine ---
 strength_mult: 1.15
@@ -564,6 +578,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Speech Enhancement ---
 charisma_mult: 1.1
@@ -680,6 +695,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Neural Accelerator ---
 hacking_mult: 1.1
@@ -695,6 +711,7 @@ hacking_money_mult: 1.15
 Price: $550.000m
 Rep: 50.000k
 Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
 
 --- Cranial Signal Processors - Gen IV ---
 hacking_speed_mult: 1.02
@@ -703,6 +720,8 @@ hacking_grow_mult: 1.25
 Price: $1.100b
 Rep: 125.000k
 Prereq: Cranial Signal Processors - Gen III
+Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
 
 --- Cranial Signal Processors - Gen V ---
 hacking_mult: 1.3
@@ -711,6 +730,9 @@ hacking_grow_mult: 1.75
 Price: $2.250b
 Rep: 250.000k
 Prereq: Cranial Signal Processors - Gen IV
+Prereq: Cranial Signal Processors - Gen III
+Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
 
 --- Neurotrainer II ---
 hacking_exp_mult: 1.15
@@ -868,6 +890,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Core V3 Upgrade ---
 hacking_mult: 1.1
@@ -878,6 +901,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -937,6 +962,12 @@ hacking_mult: 1.08
 Price: $250.000m
 Rep: 15.000k
 
+--- Cranial Signal Processors - Gen I ---
+hacking_mult: 1.05
+hacking_speed_mult: 1.01
+Price: $70.000m
+Rep: 10.000k
+
 --- Cranial Signal Processors - Gen II ---
 hacking_mult: 1.07
 hacking_chance_mult: 1.05
@@ -952,6 +983,7 @@ hacking_money_mult: 1.15
 Price: $550.000m
 Rep: 50.000k
 Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
 
 --- Neurotrainer II ---
 hacking_exp_mult: 1.15
@@ -1020,6 +1052,7 @@ hacking_money_mult: 1.15
 Price: $550.000m
 Rep: 50.000k
 Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
 
 --- Cranial Signal Processors - Gen IV ---
 hacking_speed_mult: 1.02
@@ -1028,6 +1061,8 @@ hacking_grow_mult: 1.25
 Price: $1.100b
 Rep: 125.000k
 Prereq: Cranial Signal Processors - Gen III
+Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
 
 --- The Black Hand ---
 hacking_mult: 1.1
@@ -1041,10 +1076,43 @@ Rep: 100.000k
 
 ----- Slum Snakes -----
 
+--- HemoRecirculator ---
+strength_mult: 1.08
+defense_mult: 1.08
+dexterity_mult: 1.08
+agility_mult: 1.08
+Price: $45.000m
+Rep: 10.000k
+
 --- Augmented Targeting I ---
 dexterity_mult: 1.1
 Price: $15.000m
 Rep: 5.000k
+
+--- Augmented Targeting II ---
+dexterity_mult: 1.2
+Price: $42.500m
+Rep: 8.750k
+Prereq: Augmented Targeting I
+
+--- Augmented Targeting III ---
+dexterity_mult: 1.3
+Price: $115.000m
+Rep: 27.500k
+Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
+
+--- Synthetic Heart ---
+strength_mult: 1.5
+agility_mult: 1.5
+Price: $2.875b
+Rep: 750.000k
+
+--- Synfibril Muscle ---
+strength_mult: 1.3
+defense_mult: 1.3
+Price: $1.125b
+Rep: 437.500k
 
 --- Combat Rib I ---
 strength_mult: 1.1
@@ -1052,11 +1120,300 @@ defense_mult: 1.1
 Price: $23.750m
 Rep: 7.500k
 
+--- Combat Rib II ---
+strength_mult: 1.14
+defense_mult: 1.14
+Price: $65.000m
+Rep: 18.750k
+Prereq: Combat Rib I
+
+--- Combat Rib III ---
+strength_mult: 1.18
+defense_mult: 1.18
+Price: $120.000m
+Rep: 35.000k
+Prereq: Combat Rib II
+Prereq: Combat Rib I
+
+--- Nanofiber Weave ---
+strength_mult: 1.2
+defense_mult: 1.2
+Price: $125.000m
+Rep: 37.500k
+
+--- NEMEAN Subdermal Weave ---
+defense_mult: 2.2
+Price: $3.250b
+Rep: 875.000k
+
 --- Wired Reflexes ---
 dexterity_mult: 1.05
 agility_mult: 1.05
 Price: $2.500m
 Rep: 1.250k
+
+--- Graphene Bone Lacings ---
+strength_mult: 1.7
+defense_mult: 1.7
+Price: $4.250b
+Rep: 1.125m
+
+--- Bionic Spine ---
+strength_mult: 1.15
+defense_mult: 1.15
+dexterity_mult: 1.15
+agility_mult: 1.15
+Price: $125.000m
+Rep: 45.000k
+
+--- Graphene Bionic Spine Upgrade ---
+strength_mult: 1.6
+defense_mult: 1.6
+dexterity_mult: 1.6
+agility_mult: 1.6
+Price: $6.000b
+Rep: 1.625m
+Prereq: Bionic Spine
+
+--- Bionic Legs ---
+agility_mult: 1.6
+Price: $375.000m
+Rep: 150.000k
+
+--- Graphene Bionic Legs Upgrade ---
+agility_mult: 2.5
+Price: $4.500b
+Rep: 750.000k
+Prereq: Bionic Legs
+
+--- Speech Processor Implant ---
+charisma_mult: 1.2
+Price: $50.000m
+Rep: 7.500k
+
+--- Enhanced Social Interaction Implant ---
+charisma_mult: 1.6
+charisma_exp_mult: 1.6
+Price: $1.375b
+Rep: 375.000k
+
+--- BitWire ---
+hacking_mult: 1.05
+Price: $10.000m
+Rep: 3.750k
+
+--- Artificial Bio-neural Network Implant ---
+hacking_mult: 1.12
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.15
+Price: $3.000b
+Rep: 275.000k
+
+--- Artificial Synaptic Potentiation ---
+hacking_exp_mult: 1.05
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+Price: $80.000m
+Rep: 6.250k
+
+--- Enhanced Myelin Sheathing ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.1
+hacking_speed_mult: 1.03
+Price: $1.375b
+Rep: 100.000k
+
+--- Synaptic Enhancement Implant ---
+hacking_speed_mult: 1.03
+Price: $7.500m
+Rep: 2.000k
+
+--- DataJack ---
+hacking_money_mult: 1.25
+Price: $450.000m
+Rep: 112.500k
+
+--- Embedded Netburner Module ---
+hacking_mult: 1.08
+Price: $250.000m
+Rep: 15.000k
+
+--- Embedded Netburner Module Core Implant ---
+hacking_mult: 1.07
+hacking_exp_mult: 1.07
+hacking_chance_mult: 1.03
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+Price: $2.500b
+Rep: 175.000k
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Core V2 Upgrade ---
+hacking_mult: 1.08
+hacking_exp_mult: 1.15
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.3
+Price: $4.500b
+Rep: 1.000m
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Core V3 Upgrade ---
+hacking_mult: 1.1
+hacking_exp_mult: 1.25
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.05
+hacking_money_mult: 1.4
+Price: $7.500b
+Rep: 1.750m
+Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Analyze Engine ---
+hacking_speed_mult: 1.1
+Price: $6.000b
+Rep: 625.000k
+Prereq: Embedded Netburner Module
+
+--- Embedded Netburner Module Direct Memory Access Upgrade ---
+hacking_chance_mult: 1.2
+hacking_money_mult: 1.4
+Price: $7.000b
+Rep: 1.000m
+Prereq: Embedded Netburner Module
+
+--- Neuralstimulator ---
+hacking_exp_mult: 1.12
+hacking_chance_mult: 1.1
+hacking_speed_mult: 1.02
+Price: $3.000b
+Rep: 50.000k
+
+--- Cranial Signal Processors - Gen I ---
+hacking_mult: 1.05
+hacking_speed_mult: 1.01
+Price: $70.000m
+Rep: 10.000k
+
+--- Cranial Signal Processors - Gen II ---
+hacking_mult: 1.07
+hacking_chance_mult: 1.05
+hacking_speed_mult: 1.02
+Price: $125.000m
+Rep: 18.750k
+Prereq: Cranial Signal Processors - Gen I
+
+--- Cranial Signal Processors - Gen III ---
+hacking_mult: 1.09
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.15
+Price: $550.000m
+Rep: 50.000k
+Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
+
+--- Cranial Signal Processors - Gen IV ---
+hacking_speed_mult: 1.02
+hacking_money_mult: 1.2
+hacking_grow_mult: 1.25
+Price: $1.100b
+Rep: 125.000k
+Prereq: Cranial Signal Processors - Gen III
+Prereq: Cranial Signal Processors - Gen II
+Prereq: Cranial Signal Processors - Gen I
+
+--- Nuoptimal Nootropic Injector Implant ---
+company_rep_mult: 1.2
+Price: $20.000m
+Rep: 5.000k
+
+--- Speech Enhancement ---
+charisma_mult: 1.1
+company_rep_mult: 1.1
+Price: $12.500m
+Rep: 2.500k
+
+--- FocusWire ---
+hacking_exp_mult: 1.05
+strength_exp_mult: 1.05
+defense_exp_mult: 1.05
+dexterity_exp_mult: 1.05
+agility_exp_mult: 1.05
+charisma_exp_mult: 1.05
+company_rep_mult: 1.1
+work_money_mult: 1.2
+Price: $900.000m
+Rep: 75.000k
+
+--- PC Direct-Neural Interface ---
+hacking_mult: 1.08
+company_rep_mult: 1.3
+Price: $3.750b
+Rep: 375.000k
+
+--- PC Direct-Neural Interface Optimization Submodule ---
+hacking_mult: 1.1
+company_rep_mult: 1.75
+Price: $4.500b
+Rep: 500.000k
+Prereq: PC Direct-Neural Interface
+
+--- ADR-V1 Pheromone Gene ---
+company_rep_mult: 1.1
+faction_rep_mult: 1.1
+Price: $17.500m
+Rep: 3.750k
+
+--- ADR-V2 Pheromone Gene ---
+company_rep_mult: 1.2
+faction_rep_mult: 1.2
+Price: $550.000m
+Rep: 62.500k
+
+--- The Shadow's Simulacrum ---
+company_rep_mult: 1.15
+faction_rep_mult: 1.15
+Price: $400.000m
+Rep: 37.500k
+
+--- Neurotrainer I ---
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+Price: $4.000m
+Rep: 1.000k
+
+--- Neurotrainer II ---
+hacking_exp_mult: 1.15
+strength_exp_mult: 1.15
+defense_exp_mult: 1.15
+dexterity_exp_mult: 1.15
+agility_exp_mult: 1.15
+charisma_exp_mult: 1.15
+Price: $45.000m
+Rep: 10.000k
+
+--- Neurotrainer III ---
+hacking_exp_mult: 1.2
+strength_exp_mult: 1.2
+defense_exp_mult: 1.2
+dexterity_exp_mult: 1.2
+agility_exp_mult: 1.2
+charisma_exp_mult: 1.2
+Price: $130.000m
+Rep: 25.000k
+
+--- HyperSight Corneal Implant ---
+dexterity_mult: 1.4
+hacking_speed_mult: 1.03
+hacking_money_mult: 1.1
+Price: $2.750b
+Rep: 150.000k
 
 --- LuminCloaking-V1 Skin Implant ---
 agility_mult: 1.05
@@ -1078,6 +1435,22 @@ dexterity_exp_mult: 1.15
 crime_money_mult: 1.25
 Price: $75.000m
 Rep: 22.500k
+
+--- Power Recirculation Core ---
+hacking_mult: 1.05
+strength_mult: 1.05
+defense_mult: 1.05
+dexterity_mult: 1.05
+agility_mult: 1.05
+charisma_mult: 1.05
+hacking_exp_mult: 1.1
+strength_exp_mult: 1.1
+defense_exp_mult: 1.1
+dexterity_exp_mult: 1.1
+agility_exp_mult: 1.1
+charisma_exp_mult: 1.1
+Price: $180.000m
+Rep: 25.000k
 
 
 ----- Tetrads -----
@@ -1130,8 +1503,14 @@ Rep: 62.500k
 ----- Speakers for the Dead -----
 
 --- Unstable Circadian Modulator ---
-charisma_mult: 1.5
-charisma_exp_mult: 2
+strength_mult: 1.25
+defense_mult: 1.25
+dexterity_mult: 1.25
+agility_mult: 1.25
+strength_exp_mult: 2
+defense_exp_mult: 2
+dexterity_exp_mult: 2
+agility_exp_mult: 2
 Price: $5.000b
 Rep: 362.500k
 
@@ -1220,6 +1599,7 @@ dexterity_mult: 1.3
 Price: $115.000m
 Rep: 27.500k
 Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
 
 --- Combat Rib I ---
 strength_mult: 1.1
@@ -1240,6 +1620,7 @@ defense_mult: 1.18
 Price: $120.000m
 Rep: 35.000k
 Prereq: Combat Rib II
+Prereq: Combat Rib I
 
 --- Nanofiber Weave ---
 strength_mult: 1.2
@@ -1309,6 +1690,7 @@ dexterity_mult: 1.3
 Price: $115.000m
 Rep: 27.500k
 Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
 
 --- Combat Rib I ---
 strength_mult: 1.1
@@ -1329,6 +1711,7 @@ defense_mult: 1.18
 Price: $120.000m
 Rep: 35.000k
 Prereq: Combat Rib II
+Prereq: Combat Rib I
 
 --- Nanofiber Weave ---
 strength_mult: 1.2
@@ -1771,6 +2154,7 @@ hacking_money_mult: 1.3
 Price: $4.500b
 Rep: 1.000m
 Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Core V3 Upgrade ---
 hacking_mult: 1.1
@@ -1781,6 +2165,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -1856,6 +2242,7 @@ dexterity_mult: 1.3
 Price: $115.000m
 Rep: 27.500k
 Prereq: Augmented Targeting II
+Prereq: Augmented Targeting I
 
 --- Synthetic Heart ---
 strength_mult: 1.5
@@ -1875,6 +2262,7 @@ defense_mult: 1.18
 Price: $120.000m
 Rep: 35.000k
 Prereq: Combat Rib II
+Prereq: Combat Rib I
 
 --- NEMEAN Subdermal Weave ---
 defense_mult: 2.2
@@ -1896,6 +2284,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -1948,6 +2338,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -1996,6 +2388,8 @@ hacking_money_mult: 1.4
 Price: $7.500b
 Rep: 1.750m
 Prereq: Embedded Netburner Module Core V2 Upgrade
+Prereq: Embedded Netburner Module Core Implant
+Prereq: Embedded Netburner Module
 
 --- Embedded Netburner Module Analyze Engine ---
 hacking_speed_mult: 1.1
@@ -2237,3 +2631,52 @@ hacknet_node_level_cost_mult: 0.9523809523809523
 Price: $0.000
 Rep: 100.000m
 Prereq: Stanek's Gift - Awakening
+Prereq: Stanek's Gift - Genesis
+
+
+----- Shadows of Anarchy -----
+
+--- SoA - phyzical WKS harmonizer ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Might of Ares ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Wisdom of Athena ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Chaos of Dionysus ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Beauty of Aphrodite ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Trickery of Hermes ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Flood of Poseidon ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Hunt of Artemis ---
+Special
+Price: $1.000m
+Rep: 10.000k
+
+--- SoA - Knowledge of Apollo ---
+Special
+Price: $1.000m
+Rep: 10.000k
