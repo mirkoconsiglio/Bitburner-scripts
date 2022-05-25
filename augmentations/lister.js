@@ -26,6 +26,5 @@ export async function main(ns) {
 				if (prereqs.length > 0) for (const prereq of prereqs) await ns.write(file, `Prereq: ${prereq}\n`, 'a');
 			}
 		}
-		await ns.sleep(1);
 	}
 }
