@@ -243,15 +243,19 @@ function minPathSum(data) {
  */
 function uniquePathsI(data) {
 	const [m, n] = data;
-
 	const f = [];
 	const x = factorial(f, m + n - 2);
 	const y = factorial(f, m - 1);
 	const z = factorial(f, n - 1);
-
 	return x / (y * z);
 }
 
+/**
+ *
+ * @param {number[]} f
+ * @param {number} n
+ * @returns {number}
+ */
 function factorial(f, n) {
 	if (n === 0 || n === 1) return 1;
 	if (f[n] > 0) return f[n];
@@ -636,59 +640,40 @@ function hammingDecode(bitstring) {
  * @returns {number[]}
  */
 function twoColoring(data) {
-	return isBipartite(adjacencyMatrix(...data));
-}
-
-/**
- *
- * @param {number} n
- * @param {number[][]} e
- * @returns {number[][]}
- */
-function adjacencyMatrix(n, e) {
-	const G = Array.from(Array(n), _ => Array(n).fill(0));
-	for (const [i, j] of e) {
-		G[i][j] = 1;
-		G[j][i] = 1;
-	}
-	return G;
-}
-
-/**
- *
- * @param {number[][]} G
- * @returns {number[]}
- */
-function isBipartite(G) {
-	const n = G.length;
-	const colorArr = Array(n);
-	for (let i = 0; i < n; i++) if (!colorArr[i] && !isBipartiteUtil(G, n, i, colorArr)) return [];
-	return colorArr;
-}
-
-/**
- *
- * @param {number[][]} G
- * @param {number} n
- * @param {number} src
- * @param {number[]} colorArr
- * @returns {boolean}
- */
-function isBipartiteUtil(G, n, src, colorArr) {
-	colorArr[src] = 0;
-	const q = [];
-	q.push(src);
-	while (q.length > 0) {
-		const u = q.shift();
-		if (G[u][u] === 1) return false;
-		for (let v = 0; v < n; v++) {
-			if (G[u][v] === 1 && colorArr[v] === undefined) {
-				colorArr[v] = 1 - colorArr[u];
-				q.push(v);
-			} else if (G[u][v] === 1 && colorArr[v] === colorArr[u]) return false;
+	// Set up array to hold colors
+	const coloring = Array(data[0]).fill(undefined);
+	// Keep looping on undefined vertices if graph is disconnected
+	while (coloring.some(e => e === undefined)) {
+		// Color a vertex in the graph
+		const initialVertex = coloring.findIndex(e => e === undefined);
+		coloring[initialVertex] = 0;
+		const frontier = [initialVertex];
+		// Propagate the coloring throughout the component containing v greedily
+		while (frontier.length > 0) {
+			const v = frontier.pop();
+			for (const u of neighbourhood(v)) {
+				if (coloring[u] === undefined) {
+					coloring[u] = coloring[v] ^ 1; // Set the color of u to the opposite of the color of v
+					frontier.push(u); // Check u next
+				}
+				// Assert that u and v do not have the same color if they are already colored
+				else if (coloring[u] === coloring[v]) return '[]';
+			}
 		}
 	}
-	return true;
+	return coloring;
+}
+
+/**
+ *
+ * @param {array} data
+ * @param {number} vertex
+ * @returns {number[]}
+ */
+function neighbourhood(data, vertex) {
+	const adjLeft = data[1].filter(([a, _]) => a === vertex).map(([_, b]) => b);
+	const adjRight = data[1].filter(([_, b]) => b === vertex).map(([a, _]) => a);
+	return adjLeft.concat(adjRight);
 }
 
 /**
