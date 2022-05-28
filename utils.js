@@ -1196,7 +1196,7 @@ function recursiveModify(data, dataToModify) {
 export async function reserveRam(ns, server, ram) {
 	const portNumber = getPortNumbers().reservedRam;
 	const data = readFromFile(ns, portNumber);
-	const updatedData = data[server];
+	const updatedData = data[server] ?? [];
 	updatedData.push({'ram': ram, 'server': ns.getRunningScript().server, 'pid': ns.getRunningScript().pid});
 	const dataToModify = {[server]: updatedData};
 	await modifyFile(ns, portNumber, dataToModify);

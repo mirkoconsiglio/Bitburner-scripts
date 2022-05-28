@@ -41,7 +41,7 @@ export async function main(ns) {
 		// Set up pattern
 		setupPattern(ns, getPatterns(st.giftWidth(), st.giftHeight())[data.pattern]);
 		// Get chargeable fragment info
-		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
+		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges && f.limit === 1);
 		if (fragments.length === 0) {
 			ns.print(`INFO: All fragments are fully charged`);
 			await ns.sleep(1000);
@@ -108,7 +108,7 @@ async function charger(ns) {
 		// Set up pattern
 		setupPattern(ns, getPatterns(st.giftWidth(), st.giftHeight())[data.pattern]);
 		// Get chargeable fragments
-		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges);
+		const fragments = st.activeFragments().filter(f => f.numCharge < data.maxCharges && f.limit === 1);
 		if (fragments.length === 0) return; // All fragments charged to full
 		// Charge each fragment one at a time
 		for (const fragment of fragments) {
@@ -147,7 +147,7 @@ async function charger(ns) {
  */
 function statusUpdate(ns, data) {
 	ns.clearLog();
-	const fragments = ns.stanek.activeFragments().filter(f => f.numCharge < data.maxCharges);
+	const fragments = ns.stanek.activeFragments().filter(f => f.numCharge < data.maxCharges && f.limit === 1);
 	let status = `Charging ${fragments.length} fragments to ${data.maxCharges}\n`;
 	for (const fragment of fragments) {
 		status += `Fragment ${String(fragment.id).padStart(2)} at [${fragment.x}, ${fragment.y}], ` +
