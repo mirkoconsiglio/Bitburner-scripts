@@ -64,13 +64,13 @@ export async function main(ns) {
 	// Get all useful and purchasable augmentations
 	let augmentations = [];
 	for (const faction of getFactions()) {
-		for (const aug of ns.getAugmentationsFromFaction(faction)) {
+		for (const aug of ns.singularity.getAugmentationsFromFaction(faction)) {
 			if (isUseful(ns, criteria, aug) && isPurchasable(ns, faction, aug, augmentations)) {
 				augmentations.push(
 					{
 						faction: faction,
 						name: aug,
-						price: ns.getAugmentationPrice(aug)
+						price: ns.singularity.getAugmentationPrice(aug)
 					}
 				);
 			}
@@ -109,16 +109,15 @@ export async function main(ns) {
 		augmentations.sort((a, b) => {
 			if (b.price > a.price) return 1;
 			else if (a.price > b.price) return -1;
-			else return ns.getAugmentationPrereq(b.name).length - ns.getAugmentationPrereq(a.name).length;
+			else return ns.singularity.getAugmentationPrereq(b.name).length - ns.singularity.getAugmentationPrereq(a.name).length;
 		});
-		// TODO: take into account multiple prereqs
 		// Fit in augs before their prereqs
 		const tempAugs = [];
 		const coveredIndices = [];
-		for (let [i, aug] of augmentations.entries()) {
+		for (const [i, aug] of augmentations.entries()) {
 			if (coveredIndices.includes(i)) continue;
-			let prereqs = ns.getAugmentationPrereq(aug.name);
-			if (prereqs.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqs[0]);
+			const prereqs = ns.singularity.getAugmentationPrereq(aug.name);
+			if (prereqs.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqs);
 			tempAugs.push(aug);
 		}
 		// Deep copy augmentations
@@ -126,14 +125,14 @@ export async function main(ns) {
 		// Calculate price of augs
 		let stringAugs = '';
 		let totalPrice = 0;
-		for (let [i, aug] of augmentations.entries()) {
-			let updatedAugPrice = aug.price * inc ** i;
+		for (const [i, aug] of augmentations.entries()) { // TODO: fix bug with prompt text not showing
+			const updatedAugPrice = aug.price * inc ** i;
 			stringAugs += `${aug.name}: ${formatMoney(ns, aug.price)} (${formatMoney(ns, updatedAugPrice)}). `;
 			totalPrice += updatedAugPrice;
 		}
 		// Prompt user for buying augmentations
 		if (await ns.prompt(`${stringAugs}Buy augmentations for ${formatMoney(ns, totalPrice)}?`)) {
-			for (let aug of augmentations) {
+			for (const aug of augmentations) {
 				if (ns.purchaseAugmentation(aug.faction, aug.name)) {
 					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${formatMoney(ns, aug.price)}`);
 				} else {
@@ -159,17 +158,17 @@ export async function main(ns) {
 			}
 		}
 		let counter = 0;
-		while (ns.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) {
+		while (ns.singularity.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) {
 			counter++;
 		}
 		ns.tprint(`Purchased ${counter} levels of NeuroFlux Governor`);
 	}
 	// Check if The Red Pill is available
 	if (ns.getPlayer().factions.includes('Daedalus') &&
-		ns.getFactionRep('Daedalus') >= 2.5e6 &&
-		!ns.getOwnedAugmentations(true).includes('The Red Pill')) {
+		ns.singularity.getFactionRep('Daedalus') >= 2.5e6 &&
+		!ns.singularity.getOwnedAugmentations(true).includes('The Red Pill')) {
 		if (await ns.prompt(`Purchase The Red Pill?`)) {
-			if (ns.purchaseAugmentation('Daedalus', 'The Red Pill')) ns.tprint(`Purchased The Red Pill`);
+			if (ns.singularity.purchaseAugmentation('Daedalus', 'The Red Pill')) ns.tprint(`Purchased The Red Pill`);
 			else {
 				ns.tprint(`Could not purchase The Red Pill`);
 				return;
@@ -178,7 +177,7 @@ export async function main(ns) {
 	}
 	// Ask to install augmentations
 	if (options.install && await ns.prompt('Install augmentations?')) {
-		ns.installAugmentations('cortex.js');
+		ns.singularity.installAugmentations('cortex.js');
 	}
 }
 
@@ -190,13 +189,16 @@ export async function main(ns) {
  * @param {number[]} coveredIndices
  * @param {string[]} prereq
  */
-function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq) {
-	let index = augmentations.findIndex(aug => aug.name === prereq);
-	if (index >= 0) { // Fit in aug before their prereq
-		coveredIndices.push(index);
-		let prereq = ns.getAugmentationPrereq(augmentations[index].name);
-		if (prereq.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq[0]);
-		tempAugs.push(augmentations[index]);
+function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqs) {
+	while (prereqs.length > 0) {
+		const prereq = prereqs.shift();
+		const index = augmentations.findIndex(aug => aug.name === prereq);
+		if (index >= 0) { // Fit in aug before their prereq
+			coveredIndices.push(index);
+			const prereqsOfPrereq = ns.getAugmentationPrereq(augmentations[index].name);
+			if (prereqsOfPrereq.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqsOfPrereq);
+			tempAugs.push(augmentations[index]);
+		}
 	}
 }
 
@@ -209,12 +211,12 @@ function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereq) {
  * @returns {boolean}
  */
 function isPurchasable(ns, faction, name, augmentations) {
-	let facRep = ns.getFactionRep(faction);
-	let price = ns.getAugmentationPrice(name);
-	let repReq = ns.getAugmentationRepReq(name);
+	let facRep = ns.singularity.getFactionRep(faction);
+	let price = ns.singularity.getAugmentationPrice(name);
+	let repReq = ns.singularity.getAugmentationRepReq(name);
 	return !(facRep < repReq || // Faction reputation prerequisite
 		ns.getServerMoneyAvailable('home') < price || // Check if it is able to be bought
 		augmentations.some(aug => aug.name === name) || // Check to see if it can be bought from another faction
-		ns.getOwnedAugmentations(true).includes(name) // Check if already bought
+		ns.singularity.getOwnedAugmentations(true).includes(name) // Check if already bought
 	);
 }
