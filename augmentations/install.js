@@ -6,5 +6,5 @@ import {getScripts} from '/utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	if (await ns.prompt('Install augmentations?')) ns.installAugmentations(getScripts().cortex);
+	if (await ns.prompt('Install augmentations?')) ns.singularity.installAugmentations(getScripts().cortex);
 }

@@ -1,7 +1,7 @@
 import {
 	findPlaceToRun,
-	formatBinary,
 	formatPercentage,
+	formatRam,
 	formatTime,
 	getAccessibleServers,
 	getFreeRam,
@@ -88,7 +88,7 @@ async function primeTarget(ns, sec, money, data) {
 
 	if (primeRam > freeRam) {
 		ns.print(`Not enough RAM on ${data.host} to prime ${data.target}`);
-		ns.print(`Priming RAM: ${formatBinary(ns, primeRam)}, available RAM: ${formatBinary(ns, freeRam)}`);
+		ns.print(`Priming RAM: ${formatRam(ns, primeRam)}, available RAM: ${formatRam(ns, freeRam)}`);
 		ns.print(`Finding other hosts to prime ${data.target}`);
 
 		const servers = getAccessibleServers(ns);
@@ -115,7 +115,7 @@ async function primeTarget(ns, sec, money, data) {
 			ns.exec(data.scripts.weaken, data.host, weakenThreads, data.target);
 			weakened = true;
 		}
-		await ns.sleep(weakenTime + 1000);
+		await ns.sleep(Math.max(growTime, weakenTime) + 1000);
 	}
 	return grown && weakened;
 }

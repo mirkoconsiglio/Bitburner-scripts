@@ -1,4 +1,4 @@
-import {formatBinary, formatMoney, formatPercentage, formatTime} from '/utils.js';
+import {formatMoney, formatPercentage, formatRam, formatTime} from '/utils.js';
 
 export function autocomplete(data) {
 	return data.servers;
@@ -20,7 +20,7 @@ export async function main(ns) {
 
 	ns.tprint(`
 ${server}:
-    RAM        : ${formatBinary(ns, usedRam * 1e9)} / ${formatBinary(ns, maxRam * 1e9)} (${formatPercentage(usedRam / maxRam)})
+    RAM        : ${formatRam(ns, usedRam)} / ${formatRam(ns, maxRam)} (${formatPercentage(usedRam / maxRam)})
     $          : ${formatMoney(ns, money)} / ${formatMoney(ns, maxMoney)} (${formatPercentage(money / maxMoney)})
     security   : ${sec.toFixed(2)} (min: ${minSec.toFixed(2)})
     growth     : ${ns.getServerGrowth(server)}

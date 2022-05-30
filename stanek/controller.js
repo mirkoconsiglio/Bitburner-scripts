@@ -1,7 +1,7 @@
 import {getFragment} from '/stanek/utils.js';
 import {
-	formatBinary,
 	formatNumber,
+	formatRam,
 	getAccessibleServers,
 	getFreeRam,
 	getPortNumbers,
@@ -53,8 +53,7 @@ export async function main(ns) {
 		while (ns.getServerMaxRam(host) - ns.getServerUsedRam(host) < ram) {
 			ns.clearLog();
 			ns.print(`INFO: Waiting for RAM to free up on ${host}: ` +
-				`${formatBinary(ns, (ns.getServerMaxRam(host) - ns.getServerUsedRam(host)) * 1e9)} ` +
-				`/ ${formatBinary(ns, ram * 1e9)}`);
+				`${formatRam(ns, ns.getServerMaxRam(host) - ns.getServerUsedRam(host))} ${formatRam(ns, ram)}`);
 			await ns.sleep(1000);
 		}
 		// Charge Stanek
@@ -123,9 +122,9 @@ async function charger(ns) {
 			}
 			// Only charge if we will not be bringing down the highest
 			if (availableThreads < fragment.highestCharge * 0.99) {
-				ns.print(`WARNING: The highest average charge of fragment ${fragment.id} is ${formatNumber(ns, fragment.highestCharge)}, ` +
-					`indicating that it has been charged while there was ${formatBinary(ns, 2 * fragment.highestCharge * 1e9)} or more free RAM on home, ` +
-					`but currently there is only ${formatBinary(ns, availableRam * 1e9)} available, which would reduce the average charge and lower your stats. ` +
+				ns.print(`WARNING: The highest charge of fragment ${fragment.id} is ${formatNumber(ns, fragment.highestCharge)}, ` +
+					`indicating that it has been charged while there was ${formatRam(ns, scriptRam * fragment.highestCharge)} or more free RAM on home, ` +
+					`but currently there is only ${formatRam(ns, availableRam)} available, which would reduce the average charge and lower your stats. ` +
 					`This update will be skipped, and you should free up RAM on home to resume charging.`);
 				await ns.sleep(1000);
 				continue;

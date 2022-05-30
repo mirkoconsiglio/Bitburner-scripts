@@ -5,9 +5,9 @@ import {
 	formatPercentage,
 	formatTime,
 	getPortNumbers,
+	modifyFile,
 	printBoth,
-	symbolToServer,
-	writeToFile
+	symbolToServer
 } from '/utils.js';
 
 let disableShorts = false;
@@ -56,8 +56,7 @@ const argsSchema = [
 	['pre-4s-minimum-hold-time', 10] // A recently bought position must be held for this long before selling, to avoid rash decisions due to noise after a fresh market cycle. (Default 10)
 ];
 
-// noinspection JSUnusedLocalSymbols
-export function autocomplete(data, args) {
+export function autocomplete(data) {
 	data.flags(argsSchema);
 	return [];
 }
@@ -92,45 +91,37 @@ export async function main(ns) {
 	let corpus = 0;
 	let myStocks = [];
 	let allStocks = [];
-
 	if (!ns.getPlayer().hasTixApiAccess) { // You cannot use the autopilot until you have API access
 		return printBoth(ns, `ERROR: You have to buy WSE account and TIX API access before you can run this script`);
 	}
-
 	if (options.liquidate) { // If given the "liquidate" command, try to kill the version of ourselves trading in stocks
 		ns.ps().filter(p => p.filename === ns.getScriptName() && !p.args.includes('--l') &&
 			!p.args.includes('--liquidate')).forEach(p => ns.kill(p.pid));
 	}
-
 	if (!disableShorts && ns.getPlayer().bitNodeN !== 8 && !ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
 		ns.print(`INFO: Shorting stocks has been disabled (you have not yet unlocked access to shorting)`);
 		disableShorts = true;
 	}
-
+	// Initialise all stocks
 	allStocks = initAllStocks(ns);
-
 	if (options.liquidate) {
 		liquidate(ns); // Sell all stocks
 		return;
 	}
-
 	// Assume Bitnode mults are 1 if user doesn't have this API access yet
 	const bitnodeMults = ns.getPlayer().bitNodeN === 5 || ns.getOwnedSourceFiles().includes(s => s.n === 5) ?
 		ns.getBitNodeMultipliers() : {FourSigmaMarketDataCost: 1, FourSigmaMarketDataApiCost: 1};
-
 	let hudElement = null;
 	if (!disableHud) {
 		hudElement = initializeHud();
 		ns.atExit(() => hudElement.parentElement.parentElement.parentElement.removeChild(hudElement.parentElement.parentElement));
 	}
-
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const playerStats = ns.getPlayer();
 		const pre4s = !playerStats.has4SDataTixApi;
 		corpus = await refresh(ns, playerStats, allStocks, myStocks);
-		if (pre4s && !mock && tryGet4SApi(ns, playerStats, bitnodeMults, corpus))
-			continue; // Start the loop over if we just bought 4S API access
+		if (pre4s && !mock && tryGet4SApi(ns, playerStats, bitnodeMults, corpus)) continue; // Start the loop over if we just bought 4S API access
 		// Be more conservative with our decisions if we don't have 4S data
 		const thresholdToBuy = pre4s ? options['pre-4s-buy-threshold-return'] : options['buy-threshold'];
 		const thresholdToSell = pre4s ? options['pre-4s-sell-threshold-return'] : options['sell-threshold'];
@@ -141,7 +132,6 @@ export async function main(ns) {
 			await ns.sleep(sleepInterval);
 			continue;
 		}
-
 		// Sell shares which are forecasted to underperform (worse than some expected return threshold)
 		let sales = 0;
 		for (let stk of myStocks) {
@@ -156,7 +146,6 @@ export async function main(ns) {
 			}
 		}
 		if (sales > 0) continue; // If we sold anything, loop immediately (no need to sleep) and refresh stats immediately before making purchasing decisions.
-
 		let cash = playerStats.money - options['reserve'];
 		let liquidity = cash / corpus;
 		// If we haven't gone above a certain liquidity threshold, don't attempt to buy more stock
@@ -177,7 +166,6 @@ export async function main(ns) {
 				if (stk.ownedShares() === stk.maxShares || stk.absReturn() <= thresholdToBuy || (disableShorts && stk.bearish())) continue;
 				// If pre-4s, do not purchase any stock whose last inversion was too recent, or whose probability is too close to 0.5
 				if (pre4s && (stk.lastInversion < minTickHistory || Math.abs(stk.prob - 0.5) < pre4sBuyThresholdProbability)) continue;
-
 				// Enforce diversification - don't hold more than x% of our portfolio as a single stock (as corpus increases, this naturally stops being a limiter)
 				budget = Math.min(budget, (1 - fracH) * corpus * diversification - stk.positionValue());
 				let purchasePrice = stk.bullish() ? stk.ask_price : stk.bid_price; // Depends on whether we will be buying a long or short position
@@ -480,10 +468,13 @@ async function updateForecast(ns, allStocks, has4s) {
 	const long = [];
 	const short = [];
 	allStocks.forEach(stk => {
-		if (stk.sharesLong > 0) long.push(symbolToServer(stk.sym));
-		if (stk.sharesShort > 0) short.push(symbolToServer(stk.sym));
+		const symbol = symbolToServer(stk.sym);
+		if (symbol) {
+			if (stk.sharesLong > 0) long.push(symbol);
+			if (stk.sharesShort > 0) short.push(symbol);
+		}
 	});
-	await writeToFile(ns, portNumber, {long: long, short: short});
+	await modifyFile(ns, portNumber, {long: long, short: short});
 }
 
 /**

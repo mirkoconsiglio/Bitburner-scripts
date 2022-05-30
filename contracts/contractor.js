@@ -174,33 +174,25 @@ function spiralizeMatrix(matrix) {
 	let list = [];
 	while (list.length < rows * cols) {
 		if (maxrow >= minrow) {
-			for (col; col <= maxcol; col++) {
-				list.push(matrix[row][col]);
-			}
+			for (col; col <= maxcol; col++) list.push(matrix[row][col]);
 			minrow++;
 			row++;
 			col--;
 		}
 		if (maxcol >= mincol) {
-			for (row; row <= maxrow; row++) {
-				list.push(matrix[row][col]);
-			}
+			for (row; row <= maxrow; row++) list.push(matrix[row][col]);
 			maxcol--;
 			col--;
 			row--;
 		}
 		if (minrow <= maxrow) {
-			for (col; col >= mincol; col--) {
-				list.push(matrix[row][col]);
-			}
+			for (col; col >= mincol; col--) list.push(matrix[row][col]);
 			maxrow--;
 			col++;
 			row--;
 		}
 		if (mincol <= maxcol) {
-			for (row; row >= minrow; row--) {
-				list.push(matrix[row][col]);
-			}
+			for (row; row >= minrow; row--) list.push(matrix[row][col]);
 			mincol++;
 			row++;
 			col++;
@@ -651,7 +643,7 @@ function twoColoring(data) {
 		// Propagate the coloring throughout the component containing v greedily
 		while (frontier.length > 0) {
 			const v = frontier.pop();
-			for (const u of neighbourhood(v)) {
+			for (const u of neighbourhood(data, v)) {
 				if (coloring[u] === undefined) {
 					coloring[u] = coloring[v] ^ 1; // Set the color of u to the opposite of the color of v
 					frontier.push(u); // Check u next

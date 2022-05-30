@@ -1257,8 +1257,8 @@ export function formatMoney(ns, n) {
  * @param {number} b
  * @return {string}
  */
-export function formatBinary(ns, b) {
-	return isNaN(b) ? 'NaN' : ns.nFormat(b, '0.00b');
+export function formatRam(ns, b) {
+	return isNaN(b) ? 'NaN' : ns.nFormat(b * 1e9, '0.00b');
 }
 
 /**
