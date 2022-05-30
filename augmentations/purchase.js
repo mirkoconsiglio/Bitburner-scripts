@@ -11,7 +11,9 @@ import {
 	isUsefulHacking,
 	isUsefulHackingSkill,
 	isUsefulHacknet,
-	isUsefulPrograms
+	isUsefulInfiltration,
+	isUsefulPrograms,
+	isZeroCost
 } from '/augmentations/utils.js';
 import {formatMoney, getFactions, getScripts} from '/utils.js';
 
@@ -26,6 +28,7 @@ const argsSchema = [
 	['bladeburner', false],
 	['focus', false],
 	['hacking-skill', false],
+	['infiltration', false],
 	['all', false],
 	['install', false]
 ];
@@ -55,27 +58,8 @@ export async function main(ns) {
 	if (options.faction || options.all) criteria.push(isUsefulFaction);
 	if (options.bladeburner || options.all) criteria.push(isUsefulBladeburner);
 	if (options.focus || options.all) criteria.push(isUsefulFocus);
+	if (options.infiltration || options.all) criteria.push(isUsefulInfiltration);
 	if (options['hacking-skill'] || options.all) criteria.push(isUsefulHackingSkill);
-	// Augmentation price increase
-	const sf11Level = ns.getOwnedSourceFiles().find(s => s.n === 11)?.lvl;
-	let mult = 0;
-	if (sf11Level) for (let i = 0; i < sf11Level; i++) mult += 4 / Math.pow(2, i);
-	const inc = 1.9 * (1 - mult / 100);
-	// Get all useful and purchasable augmentations
-	let augmentations = [];
-	for (const faction of getFactions()) {
-		for (const aug of ns.singularity.getAugmentationsFromFaction(faction)) {
-			if (isUseful(ns, criteria, aug) && isPurchasable(ns, faction, aug, augmentations)) {
-				augmentations.push(
-					{
-						faction: faction,
-						name: aug,
-						price: ns.singularity.getAugmentationPrice(aug)
-					}
-				);
-			}
-		}
-	}
 	// Sell stocks before buying augmentations
 	if (ns.getPlayer().hasTixApiAccess) { // Check if player has TIX API
 		// Check if player has any stocks
@@ -100,6 +84,57 @@ export async function main(ns) {
 				// Sell all hashes
 				ns.hacknet.spendHashes('Sell for Money');
 				await ns.sleep(1);
+			}
+		}
+	}
+	// Purchase augmentations
+	const purchased = await purchaseAugmentations(ns, criteria);
+	if (!purchased) return;
+	// Prompt user for purchasing NeuroFlux Governor
+	if (await ns.prompt(`Purchase NeuroFlux Governor levels?`)) {
+		let highestRepFaction;
+		let highestRep = 0;
+		for (let faction of getFactions()) {
+			// Cannot buy NFG from gangs
+			if (ns.gang.inGang() && ns.gang.getGangInformation().faction === faction) continue;
+			// Cannot buy NFG from Bladeburners
+			if (faction === 'Bladeburners') continue;
+			// Cannot buy NFG from Church of the Machine God
+			if (faction === 'Church of the Machine God') continue;
+			// Take highest reputation faction
+			if (ns.getFactionRep(faction) > highestRep) {
+				highestRep = ns.getFactionRep(faction);
+				highestRepFaction = faction;
+			}
+		}
+		let counter = 0;
+		while (ns.singularity.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) counter++;
+		ns.tprint(`Purchased ${counter} levels of NeuroFlux Governor`);
+	}
+	// Purchase zero-cost augmentations
+	await purchaseAugmentations(ns, [isZeroCost]);
+	// Ask to install augmentations
+	if (options.install && await ns.prompt('Install augmentations?')) ns.singularity.installAugmentations('cortex.js');
+}
+
+async function purchaseAugmentations(ns, criteria) {
+	// Augmentation price increase
+	const sf11Level = ns.getOwnedSourceFiles().find(s => s.n === 11)?.lvl;
+	let mult = 0;
+	if (sf11Level) for (let i = 0; i < sf11Level; i++) mult += 4 / Math.pow(2, i);
+	const inc = 1.9 * (1 - mult / 100);
+	// Get all useful and purchasable augmentations
+	let augmentations = [];
+	for (const faction of getFactions()) {
+		for (const aug of ns.singularity.getAugmentationsFromFaction(faction)) {
+			if (isUseful(ns, criteria, aug) && isPurchasable(ns, faction, aug, augmentations)) {
+				augmentations.push(
+					{
+						faction: faction,
+						name: aug,
+						price: ns.singularity.getAugmentationPrice(aug)
+					}
+				);
 			}
 		}
 	}
@@ -137,48 +172,12 @@ export async function main(ns) {
 					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${formatMoney(ns, aug.price)}`);
 				} else {
 					ns.tprint(`Could not purchase ${aug.name} from ${aug.faction}`);
-					return;
+					return false;
 				}
 			}
 		}
 	}
-	// Prompt user for purchasing NeuroFlux Governor
-	if (await ns.prompt(`Purchase NeuroFlux Governor levels?`)) {
-		let highestRepFaction;
-		let highestRep = 0;
-		for (let faction of getFactions()) {
-			// Cannot buy NFG from gangs
-			if (ns.gang.inGang() && ns.gang.getGangInformation().faction === faction) continue;
-			// Cannot buy NFG from Bladeburners
-			if (faction === 'Bladeburners') continue;
-			// Take highest reputation faction
-			if (ns.getFactionRep(faction) > highestRep) {
-				highestRep = ns.getFactionRep(faction);
-				highestRepFaction = faction;
-			}
-		}
-		let counter = 0;
-		while (ns.singularity.purchaseAugmentation(highestRepFaction, 'NeuroFlux Governor')) {
-			counter++;
-		}
-		ns.tprint(`Purchased ${counter} levels of NeuroFlux Governor`);
-	}
-	// Check if The Red Pill is available
-	if (ns.getPlayer().factions.includes('Daedalus') &&
-		ns.singularity.getFactionRep('Daedalus') >= 2.5e6 &&
-		!ns.singularity.getOwnedAugmentations(true).includes('The Red Pill')) {
-		if (await ns.prompt(`Purchase The Red Pill?`)) {
-			if (ns.singularity.purchaseAugmentation('Daedalus', 'The Red Pill')) ns.tprint(`Purchased The Red Pill`);
-			else {
-				ns.tprint(`Could not purchase The Red Pill`);
-				return;
-			}
-		}
-	}
-	// Ask to install augmentations
-	if (options.install && await ns.prompt('Install augmentations?')) {
-		ns.singularity.installAugmentations('cortex.js');
-	}
+	return true;
 }
 
 /**

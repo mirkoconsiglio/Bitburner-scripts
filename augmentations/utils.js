@@ -20,9 +20,8 @@ export function isUsefulPrograms(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulFaction(ns, name) {
-	const stats = ns.getAugmentationStats(name);
-	return ignore(name) &&
-		stats.faction_rep_mult; // Useful faction augmentations
+	const stats = ns.singularity.getAugmentationStats(name);
+	return ignore(name) && stats.faction_rep_mult; // Useful faction augmentations
 }
 
 /**
@@ -47,7 +46,7 @@ export function isUsefulFocus(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulHacking(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful hacking augmentations
 			stats.hacking_mult ||
@@ -66,7 +65,7 @@ export function isUsefulHacking(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulHackingSkill(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful hacking skill augmentations
 			stats.hacking_mult ||
@@ -81,7 +80,7 @@ export function isUsefulHackingSkill(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulCombat(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful combat augmentations
 			stats.agility_exp_mult ||
@@ -102,7 +101,7 @@ export function isUsefulCombat(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulCrime(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful crime augmentations
 			stats.crime_money_mult ||
@@ -117,7 +116,7 @@ export function isUsefulCrime(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulCompany(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful company augmentations
 			stats.charisma_exp_mult ||
@@ -134,7 +133,7 @@ export function isUsefulCompany(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulHacknet(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful hacknet augmentations
 			stats.hacknet_node_core_cost_mult ||
@@ -152,7 +151,7 @@ export function isUsefulHacknet(ns, name) {
  * @returns {boolean}
  */
 export function isUsefulBladeburner(ns, name) {
-	const stats = ns.getAugmentationStats(name);
+	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful bladeburner augmentations
 			stats.bladeburner_analysis_mult ||
@@ -160,6 +159,26 @@ export function isUsefulBladeburner(ns, name) {
 			stats.bladeburner_stamina_gain_mult ||
 			stats.bladeburner_success_chance_mult
 		);
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
+export function isUsefulInfiltration(ns, name) {
+	return ignore(name) && name.includes('SoA');
+}
+
+/**
+ *
+ * @param {NS} ns
+ * @param {string} name
+ * @returns {boolean}
+ */
+export function isZeroCost(ns, name) {
+	if (ns.singularity.getAugmentationPrice(name) === 0) return true;
 }
 
 /**
