@@ -149,7 +149,7 @@ async function purchaseAugmentations(ns, criteria) {
 		// Fit in augs before their prereqs
 		const tempAugs = [];
 		const coveredIndices = [];
-		for (const [i, aug] of augmentations.entries()) {
+		for (const [i, aug] of augmentations.entries()) { // TODO: fix multiple prereqs getting slotted
 			if (coveredIndices.includes(i)) continue;
 			const prereqs = ns.singularity.getAugmentationPrereq(aug.name);
 			if (prereqs.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqs);
