@@ -778,7 +778,7 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
 		const ram = freeRams[0].freeRam;
 		if (ram < scriptRam) freeRams.shift();
 		else if (ram < scriptRam * remainingThreads) { // Put as many threads as we can
-			let threadsForThisHost = Math.floor(ram / scriptRam);
+			const threadsForThisHost = Math.floor(ram / scriptRam);
 			ns.exec(script, host, threadsForThisHost, ...scriptArgs);
 			remainingThreads -= threadsForThisHost;
 			freeRams.shift();
@@ -796,10 +796,9 @@ export function findPlaceToRun(ns, script, threads, freeRams, ...scriptArgs) {
  * @param {NS} ns
  * @param {string[]} servers
  * @param {string[]} hackables
- * @param {boolean} occupy
  * @returns {Object<string, number>[] | [Object<string, number>[], string[]]}
  */
-export function getFreeRams(ns, servers, hackables, occupy = false) {
+export function getFreeRams(ns, servers, hackables) {
 	const scripts = getScripts();
 	const freeRams = [];
 	const unhackables = [];
@@ -807,7 +806,7 @@ export function getFreeRams(ns, servers, hackables, occupy = false) {
 		if (hackables && ns.scriptRunning(scripts.batcher, server)) { // Check if we have a batcher running on this server
 			const process = ns.ps(server).find(s => s.filename === scripts.batcher); // Find the process of the batcher
 			unhackables.push(process.args[0]); // Don't hack the target of the batcher
-			if (!occupy) continue; // Check if we want to run scripts on the host
+			continue; // Don't run scripts on the host
 		}
 		const freeRam = getFreeRam(ns, server);
 		if (freeRam > 0) freeRams.push({host: server, freeRam: freeRam});
@@ -816,7 +815,8 @@ export function getFreeRams(ns, servers, hackables, occupy = false) {
 	if (hackables) {
 		const filteredHackables = hackables.filter(hackable => !unhackables.includes(hackable));
 		return [sortedFreeRams, filteredHackables];
-	} else return sortedFreeRams;
+	}
+	return sortedFreeRams;
 }
 
 /**

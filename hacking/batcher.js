@@ -90,22 +90,20 @@ async function primeTarget(ns, sec, money, data) {
 		ns.print(`Not enough RAM on ${data.host} to prime ${data.target}`);
 		ns.print(`Priming RAM: ${formatRam(ns, primeRam)}, available RAM: ${formatRam(ns, freeRam)}`);
 		ns.print(`Finding other hosts to prime ${data.target}`);
-
-		const servers = getAccessibleServers(ns);
-		const freeRams = getFreeRams(ns, servers);
-
+		// Check for RAM to grow server
+		let servers = getAccessibleServers(ns);
+		let freeRams = getFreeRams(ns, servers);
 		let growFound = true;
 		if (!grown && growThreads > 0) growFound = findPlaceToRun(ns, data.scripts.grow, growThreads, freeRams, data.target);
 		if (growFound) grown = true;
-
+		// Check for RAM to weaken server
+		servers = getAccessibleServers(ns);
+		freeRams = getFreeRams(ns, servers);
 		let weakenFound = true;
 		if (!weakened && weakenThreads > 0) weakenFound = findPlaceToRun(ns, data.scripts.weaken, weakenThreads, freeRams, data.target);
 		if (weakenFound) weakened = true;
-
-		let time = 0;
-		if (!growFound) time = Math.max(time, growTime);
-		if (!weakenFound) time = Math.max(time, weakenTime);
-		await ns.sleep(time + 1000);
+		// Wait until the scripts finish
+		await ns.sleep(Math.max(growTime, weakenTime) + 1000);
 	} else {
 		if (!grown) {
 			ns.exec(data.scripts.grow, data.host, growThreads, data.target);
