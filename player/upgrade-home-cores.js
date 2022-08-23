@@ -6,9 +6,9 @@ import {formatMoney} from '/utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const cost = ns.getUpgradeHomeCoresCost();
+	const cost = ns.singularity.getUpgradeHomeCoresCost();
 	if (await ns.prompt(`Upgrade home Cores for ${formatMoney(ns, cost)}?`)) {
-		if (ns.upgradeHomeCores()) ns.tprint(`Home cores upgraded.`);
+		if (ns.singularity.upgradeHomeCores()) ns.tprint(`Home cores upgraded.`);
 		else ns.tprint(`Could not upgrade home cores.`);
 	}
 }

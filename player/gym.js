@@ -30,7 +30,7 @@ export async function main(ns) {
 	const options = ns.flags(argsSchema);
 	level = options.level;
 	gym = options.gym;
-	if (!ns.travelToCity(getGymLocation(gym))) throw new Error(`Could not travel to correct location`);
+	if (!ns.singularity.travelToCity(getGymLocation(gym))) throw new Error(`Could not travel to correct location`);
 	if (options.str || options.all) await workOutStr(ns);
 	if (options.def || options.all) await workOutDef(ns);
 	if (options.dex || options.all) await workOutDex(ns);
@@ -43,12 +43,12 @@ export async function main(ns) {
  * @return {Promise<void>}
  */
 async function workOutStr(ns) {
-	ns.gymWorkout(gym, 'str');
-	while (ns.getPlayer().strength < level) {
-		if (ns.getPlayer().className !== 'training your strength at a gym') break;
+	ns.singularity.gymWorkout(gym, 'str');
+	while (ns.getPlayer().skills.strength < level) {
+		if (ns.singularity.getCurrentWork()?.classType !== 'GYMSTRENGTH') break;
 		await ns.sleep(1000);
 	}
-	ns.stopAction();
+	ns.singularity.stopAction();
 }
 
 /**
@@ -57,12 +57,12 @@ async function workOutStr(ns) {
  * @return {Promise<void>}
  */
 async function workOutDef(ns) {
-	ns.gymWorkout(gym, 'def');
+	ns.singularity.gymWorkout(gym, 'def');
 	while (ns.getPlayer().defense < level) {
-		if (ns.getPlayer().className !== 'training your defense at a gym') break;
+		if (ns.singularity.getCurrentWork()?.classType !== 'GYMDEFENSE') break;
 		await ns.sleep(1000);
 	}
-	ns.stopAction();
+	ns.singularity.stopAction();
 }
 
 /**
@@ -71,12 +71,12 @@ async function workOutDef(ns) {
  * @return {Promise<void>}
  */
 async function workOutDex(ns) {
-	ns.gymWorkout(gym, 'dex');
+	ns.singularity.gymWorkout(gym, 'dex');
 	while (ns.getPlayer().dexterity < level) {
-		if (ns.getPlayer().className !== 'training your dexterity at a gym') break;
+		if (ns.singularity.getCurrentWork()?.classType !== 'GYMDEXTERITY') break;
 		await ns.sleep(1000);
 	}
-	ns.stopAction();
+	ns.singularity.stopAction();
 }
 
 /**
@@ -85,10 +85,10 @@ async function workOutDex(ns) {
  * @return {Promise<void>}
  */
 async function workOutAgi(ns) {
-	ns.gymWorkout(gym, 'agi');
-	while (ns.getPlayer().agility < level) {
-		if (ns.getPlayer().className !== 'training your agility at a gym') break;
+	ns.singularity.gymWorkout(gym, 'agi');
+	while (ns.getPlayer().skills.agility < level) {
+		if (ns.singularity.getCurrentWork()?.classType !== 'GYMAGILITY') break;
 		await ns.sleep(1000);
 	}
-	ns.stopAction();
+	ns.singularity.stopAction();
 }

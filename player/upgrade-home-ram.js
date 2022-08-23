@@ -6,9 +6,9 @@ import {formatMoney} from '/utils.js';
  * @returns {Promise<void>}
  */
 export async function main(ns) {
-	const cost = ns.getUpgradeHomeRamCost();
+	const cost = ns.singularity.getUpgradeHomeRamCost();
 	if (await ns.prompt(`Upgrade home RAM for ${formatMoney(ns, cost)}?`)) {
-		if (ns.upgradeHomeRam()) ns.tprint(`Home RAM upgraded.`);
+		if (ns.singularity.upgradeHomeRam()) ns.tprint(`Home RAM upgraded.`);
 		else ns.tprint(`Could not upgrade home RAM.`);
 	}
 }

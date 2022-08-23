@@ -22,6 +22,6 @@ export async function main(ns) {
 		}
 		ns.tprint(`Buying server: ${server}, target RAM: ${targetRam}`);
 		ns.purchaseServer(server, targetRam);
-		await ns.scp(scriptsToCopy(), 'home', server);
+		await ns.scp(scriptsToCopy(), server, 'home');
 	}
 }

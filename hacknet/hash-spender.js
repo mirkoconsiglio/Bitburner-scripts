@@ -20,7 +20,7 @@ export function autocomplete(data, args) {
  */
 export async function main(ns) {
 	ns.disableLog('ALL');
-	if (!ns.getPlayer().bitNodeN === 9 && !ns.getOwnedSourceFiles().some(s => s.n === 9)) throw new Error(`Script requires Hacknet servers to be unlocked`);
+	if (!ns.getPlayer().bitNodeN === 9 && !ns.singularity.getOwnedSourceFiles().some(s => s.n === 9)) throw new Error(`Script requires Hacknet servers to be unlocked`);
 	const options = ns.flags(argsSchema);
 	const upgrade = options.upgrade;
 	const target = options.target;

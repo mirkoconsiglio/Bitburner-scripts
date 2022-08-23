@@ -43,7 +43,7 @@ export async function main(ns) {
  */
 export function upgradeHacknet(ns, maxSpend = Infinity, maxPayoffTimeSeconds = 21600 /* 6 hours */) {
 	const hn = ns.hacknet;
-	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
+	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.singularity.getOwnedSourceFiles().some(s => s.n === 9);
 	const form = haveHacknetServers ? ns.formulas.hacknetServers : ns.formulas.hacknetNodes;
 	const currentHacknetMult = ns.getPlayer().hacknet_node_money_mult;
 	// Find the best upgrade we can make to an existing node
@@ -150,7 +150,7 @@ export function getUpgrades(ns) {
  */
 function productionMult(ns, type, level) {
 	const hn = ns.hacknet;
-	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9);
+	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.singularity.getOwnedSourceFiles().some(s => s.n === 9);
 	const form = haveHacknetServers ? ns.formulas.hacknetServers.hashGainRate : ns.formulas.hacknetNodes.moneyGainRate;
 	let curLevel;
 	let nextLevel;

@@ -11,7 +11,7 @@ export async function main(ns) {
 	const scripts = getScripts();
 	const target = 'joesguns';
 	const level = ns.getServerRequiredHackingLevel(target);
-	while (ns.getPlayer().hacking < level) {
+	while (ns.getPlayer().skills.hacking < level) {
 		await ns.sleep(1000);
 	}
 	let i = 0;

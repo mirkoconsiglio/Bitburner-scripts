@@ -14,11 +14,11 @@ export async function main(ns) {
 		const worktype = await ns.prompt(`Type of Work?`, {type: 'select', choices: getFactionWorktypes(faction)});
 		const rep = Number(await ns.prompt(`Work until how much reputation? (Leave empty to work indefinitely)`, {type: 'text'}));
 		if (!rep) {
-			ns.workForFaction(faction, worktype, ns.isFocused());
+			ns.singularity.workForFaction(faction, worktype, ns.singularity.isFocused());
 			break;
 		}
-		while (ns.getFactionRep(faction) < rep) {
-			ns.workForFaction(faction, worktype, ns.isFocused());
+		while (ns.singularity.getFactionRep(faction) < rep) {
+			ns.singularity.workForFaction(faction, worktype, ns.singularity.isFocused());
 			await ns.sleep(1000);
 		}
 	}

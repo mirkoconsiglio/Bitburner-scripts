@@ -10,7 +10,7 @@ import {getCities, promptScriptRunning} from '/utils.js';
 export async function main(ns) {
 	ns.disableLog('ALL');
 	const bb = ns.bladeburner;
-	if (ns.getPlayer().bitNodeN !== 7 && !ns.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) throw new Error(`This script requires the Bladeburner API`);
+	if (ns.getPlayer().bitNodeN !== 7 && !ns.singularity.getOwnedSourceFiles().some(s => s.n === 7 && s.lvl >= 1)) throw new Error(`This script requires the Bladeburner API`);
 	if (!bb.joinBladeburnerDivision()) throw new Error(`Must be able to join Bladeburner division`);
 	// Minimum chance for switching actions
 	const minChance = 1 / 3;
@@ -56,7 +56,8 @@ export async function main(ns) {
 			points = bb.getSkillPoints();
 		}
 		// Train combat to get 100 in all combat stats
-		if (player.strength < 100 || player.defense < 100 || player.dexterity < 100 || player.agility < 100) {
+		if (player.skills.strength < 100 || player.skills.defense < 100 ||
+			player.skills.dexterity < 100 || player.skills.agility < 100) {
 			await doAction(ns, 'General', 'Training');
 			continue;
 		}
@@ -433,8 +434,8 @@ export function bestOpForImprovingAccuracy(ns) {
  */
 function calculateEff(ns) {
 	const player = ns.getPlayer();
-	return (0.04 * Math.pow(player.hacking, 0.3) +
-			0.04 * Math.pow(player.intelligence, 0.9) +
-			0.02 * Math.pow(player.charisma, 0.3)) *
-		player.bladeburner_analysis_mult;
+	return (0.04 * Math.pow(player.skills.hacking, 0.3) +
+			0.04 * Math.pow(player.skills.intelligence, 0.9) +
+			0.02 * Math.pow(player.skills.charisma, 0.3)) *
+		player.mults.bladeburner_analysis;
 }

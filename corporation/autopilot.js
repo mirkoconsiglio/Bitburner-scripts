@@ -8,7 +8,7 @@ import {formatMoney, getCities} from '/utils.js';
  */
 export async function main(ns) {
 	ns.disableLog('ALL');
-	const unlocked = ns.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3);
+	const unlocked = ns.singularity.getOwnedSourceFiles().some(s => s.n === 3 && s.lvl === 3);
 	if (!unlocked && !ns.corporation.hasUnlockUpgrade('Warehouse API')) throw new Error(`This script requires the Warehouse API`);
 	if (!unlocked && !ns.corporation.hasUnlockUpgrade('Office API')) throw new Error(`This script requires the Office API`);
 	// Set up

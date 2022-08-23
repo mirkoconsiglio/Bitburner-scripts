@@ -91,14 +91,14 @@ export async function main(ns) {
 	let corpus = 0;
 	let myStocks = [];
 	let allStocks = [];
-	if (!ns.getPlayer().hasTixApiAccess) { // You cannot use the autopilot until you have API access
+	if (!ns.stock.hasTIXAPIAccess()) { // You cannot use the autopilot until you have API access
 		return printBoth(ns, `ERROR: You have to buy WSE account and TIX API access before you can run this script`);
 	}
 	if (options.liquidate) { // If given the "liquidate" command, try to kill the version of ourselves trading in stocks
 		ns.ps().filter(p => p.filename === ns.getScriptName() && !p.args.includes('--l') &&
 			!p.args.includes('--liquidate')).forEach(p => ns.kill(p.pid));
 	}
-	if (!disableShorts && ns.getPlayer().bitNodeN !== 8 && !ns.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
+	if (!disableShorts && ns.getPlayer().bitNodeN !== 8 && !ns.singularity.getOwnedSourceFiles().some(s => s.n === 8 && s.lvl > 1)) {
 		ns.print(`INFO: Shorting stocks has been disabled (you have not yet unlocked access to shorting)`);
 		disableShorts = true;
 	}
@@ -109,7 +109,7 @@ export async function main(ns) {
 		return;
 	}
 	// Assume Bitnode mults are 1 if user doesn't have this API access yet
-	const bitnodeMults = ns.getPlayer().bitNodeN === 5 || ns.getOwnedSourceFiles().includes(s => s.n === 5) ?
+	const bitnodeMults = ns.getPlayer().bitNodeN === 5 || ns.singularity.getOwnedSourceFiles().includes(s => s.n === 5) ?
 		ns.getBitNodeMultipliers() : {FourSigmaMarketDataCost: 1, FourSigmaMarketDataApiCost: 1};
 	let hudElement = null;
 	if (!disableHud) {
@@ -119,7 +119,7 @@ export async function main(ns) {
 	// noinspection InfiniteLoopJS
 	while (true) {
 		const playerStats = ns.getPlayer();
-		const pre4s = !playerStats.has4SDataTixApi;
+		const pre4s = !ns.stock.has4SDataTIXAPI();
 		corpus = await refresh(ns, playerStats, allStocks, myStocks);
 		if (pre4s && !mock && tryGet4SApi(ns, playerStats, bitnodeMults, corpus)) continue; // Start the loop over if we just bought 4S API access
 		// Be more conservative with our decisions if we don't have 4S data
@@ -264,7 +264,7 @@ function liquidate(ns) {
 		totalStocks++;
 		totalSharesLong += sharesLong;
 		totalSharesShort += sharesShort;
-		if (sharesLong > 0) totalRevenue += ns.stock.sell(sym, sharesLong) * sharesLong - commission;
+		if (sharesLong > 0) totalRevenue += ns.stock.sellStock(sym, sharesLong) * sharesLong - commission;
 		if (sharesShort > 0) totalRevenue += (2 * avgShortCost - ns.stock.sellShort(sym, sharesShort)) * sharesShort - commission;
 	}
 	printBoth(ns, `Sold ${formatNumber(ns, totalSharesLong)} long shares and ${formatNumber(ns, totalSharesShort)} short shares ` +
@@ -280,7 +280,7 @@ function liquidate(ns) {
  * @returns {boolean}
  */
 function tryGet4SApi(ns, playerStats, bitnodeMults, corpus) {
-	if (playerStats.has4SDataTixApi) return false; // Only return true if we just bought it
+	if (ns.stock.has4SDataTIXAPI()) return false; // Only return true if we just bought it
 	const cost4sApi = bitnodeMults.FourSigmaMarketDataApiCost * 25e9;
 	if (cost4sApi > corpus * 0.9) return false;
 	// Liquidate shares if it would allow us to afford 4S API data
@@ -290,7 +290,7 @@ function tryGet4SApi(ns, playerStats, bitnodeMults, corpus) {
 		return true;
 	} else {
 		ns.print(`ERROR attempting to purchase 4SMarketDataTixApi`);
-		if (playerStats.bitNodeN !== 5 || !ns.getOwnedSourceFiles().some(s => s.n === 5)) { // If we do not have access to Bitnode multipliers, assume the cost is double and try again later
+		if (playerStats.bitNodeN !== 5 || !ns.singularity.getOwnedSourceFiles().some(s => s.n === 5)) { // If we do not have access to Bitnode multipliers, assume the cost is double and try again later
 			ns.print('INFO: Bitnode mults are not available (SF5) - assuming everything is twice as expensive in the current Bitnode');
 			bitnodeMults.FourSigmaMarketDataCost *= 2;
 			bitnodeMults.FourSigmaMarketDataApiCost *= 2;
@@ -331,7 +331,7 @@ const purchaseOrder = (a, b) => (Math.ceil(a.timeToCoverTheSpread()) - Math.ceil
  * @returns {Promise<number>}
  */
 async function refresh(ns, playerStats, allStocks, myStocks) {
-	const has4s = playerStats.has4SDataTixApi;
+	const has4s = ns.stock.has4SDataTIXAPI();
 	let corpus = playerStats.money;
 	const dictAskPrices = getStockInfoDict(ns, ns.stock.getAskPrice);
 	const dictBidPrices = getStockInfoDict(ns, ns.stock.getBidPrice);
@@ -493,7 +493,7 @@ function doBuy(ns, stk, sharesBought) {
 	let expectedPrice = long ? stk.ask_price : stk.bid_price; // Depends on whether we will be buying a long or short position
 	let price;
 	try {
-		price = mock ? expectedPrice : long ? ns.stock.buy(stk.sym, sharesBought) : ns.stock.short(stk.sym, sharesBought);
+		price = mock ? expectedPrice : long ? ns.stock.buyStock(stk.sym, sharesBought) : ns.stock.buyShort(stk.sym, sharesBought);
 	} catch (err) {
 		if (long) throw err;
 		printBoth(ns, `WARNING: Failed to short ${stk.sym} (Shorts not available?). Disabling shorts...`);
@@ -531,7 +531,7 @@ function doSellAll(ns, stk) {
 		printBoth(ns, `ERROR: Somehow ended up both ${stk.sharesShort} short and ${stk.sharesLong} long on ${stk.sym}`);
 	let expectedPrice = long ? stk.bid_price : stk.ask_price; // Depends on whether we will be selling a long or short position
 	let sharesSold = long ? stk.sharesLong : stk.sharesShort;
-	let price = mock ? expectedPrice : long ? ns.stock.sell(stk.sym, sharesSold) : ns.stock.sellShort(stk.sym, sharesSold);
+	let price = mock ? expectedPrice : long ? ns.stock.sellStock(stk.sym, sharesSold) : ns.stock.sellShort(stk.sym, sharesSold);
 	const profit = (long ? stk.sharesLong * (price - stk.boughtPrice) : stk.sharesShort * (stk.boughtPriceShort - price)) - 2 * commission;
 	ns.print(`${profit > 0 ? 'SUCCESS' : 'WARNING'}: Sold all ${formatMoney(ns, sharesSold).padStart(5)} ${stk.sym.padEnd(5)} ${long ? ' long' : 'short'} positions ` +
 		`@ ${formatMoney(ns, price).padStart(9)} for a ` + (profit > 0 ? `PROFIT of ${formatMoney(ns, profit).padStart(9)}` : ` LOSS of ${formatMoney(ns, -profit).padStart(9)}`) + ` after ${stk.ticksHeld} ticks`);

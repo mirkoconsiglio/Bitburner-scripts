@@ -8,7 +8,7 @@ import {getUsefulPrograms} from '/utils.js';
 export async function main(ns) {
 	for (const program of getUsefulPrograms()) {
 		while (!ns.fileExists(program, 'home')) {
-			ns.createProgram(program, ns.isFocused());
+			ns.singularity.createProgram(program, ns.singularity.isFocused());
 			await ns.sleep(1000);
 		}
 		ns.tprint(`${program} created`);

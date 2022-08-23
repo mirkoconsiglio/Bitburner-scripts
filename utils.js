@@ -14,7 +14,7 @@ export function printBoth(ns, str) {
  * @returns {Promise<void>}
  */
 export async function copyScriptsToAll(ns) {
-	for (let server of getServers(ns)) if (server !== 'home') await ns.scp(scriptsToCopy(), 'home', server);
+	for (let server of getServers(ns)) if (server !== 'home') await ns.scp(scriptsToCopy(), server, 'home');
 }
 
 /**
@@ -653,7 +653,7 @@ export function updateOverview(ns) {
 		const headers = [];
 		const values = [];
 		headers.push(`Income\u00A0`);
-		values.push(`${formatMoney(ns, ns.getScriptIncome()[0])}`);
+		values.push(`${formatMoney(ns, ns.getTotalScriptIncome()[0])}`);
 		headers.push(`Karma`);
 		values.push(`${formatNumber(ns, ns.heart.break())}`);
 		hook0.innerText = headers.join('\n');

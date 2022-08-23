@@ -28,7 +28,7 @@ export async function main(ns) {
 	level = options.level;
 	course = options.course;
 	university = options.university;
-	ns.travelToCity(getUniversityLocation(university));
+	ns.singularity.travelToCity(getUniversityLocation(university));
 	if (options.course === 'Computer Science' ||
 		options.course === 'Data Structures' ||
 		options.course === 'Networks' ||
@@ -44,12 +44,12 @@ export async function main(ns) {
  * @return {Promise<void>}
  */
 async function studyHack(ns) {
-	ns.universityCourse(university, course);
-	while (ns.getPlayer().hacking < level) {
-		if (ns.getPlayer().workType !== 'Studying or Taking a class at university') break;
+	ns.singularity.universityCourse(university, course);
+	while (ns.getPlayer().skills.hacking < level) {
+		if (ns.singularity.getCurrentWork()?.classType !== options.course.replace(/\s+/g, '')) break;
 		await ns.sleep(1000);
 	}
-	ns.stopAction();
+	ns.singularity.stopAction();
 }
 
 /**
@@ -58,10 +58,10 @@ async function studyHack(ns) {
  * @return {Promise<void>}
  */
 async function studyCha(ns) {
-	ns.universityCourse(university, course);
-	while (ns.getPlayer().charisma < level) {
-		if (ns.getPlayer().workType !== 'Studying or Taking a class at university') break;
+	ns.singularity.universityCourse(university, course);
+	while (ns.getPlayer().skills.charisma < level) {
+		if (ns.getPlayer().workType !== options.course.replace(/\s+/g, '')) break;
 		await ns.sleep(1000);
 	}
-	ns.stopAction();
+	ns.singularity.stopAction();
 }

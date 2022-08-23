@@ -17,7 +17,7 @@ export function autocomplete(data, options) {
 	data.flags(argsSchema);
 	return [];
 }
-
+// TODO: Add Bladeburner Actions
 /**
  *
  * @param {NS} ns
@@ -27,7 +27,7 @@ export async function main(ns) {
 	ns.disableLog('ALL');
 	const options = ns.flags(argsSchema);
 	const disableAugmentationBuying = options['disable-augmentation-buying'];
-	const works = ['Security', 'Field', 'Hacking'];
+	const works = ['SECURITY', 'FIELD', 'HACKING'];
 	const jobs = getJobs();
 	const numSleeves = ns.sleeve.getNumSleeves();
 	const usefulCombat = Array.from({length: numSleeves}, _ => false);
@@ -53,39 +53,38 @@ export async function main(ns) {
 					ns.sleeve.purchaseSleeveAug(i, aug.name);
 			});
 			// Assign tasks
-			const player = ns.getPlayer();
-			const factionName = player.currentWorkFactionName;
-			const companyName = player.companyName;
+			const factionName = ns.singularity.getCurrentWork()?.factionName;
+			const companyName = ns.singularity.getCurrentWork()?.companyName;
 			// Free sleeve copies player working for faction
-			if (freeSleeves.includes(i) && player.isWorking && player.workType === 'Working for Faction' &&
+			if (freeSleeves.includes(i) && ns.singularity.getCurrentWork()?.type === 'FACTION' &&
 				!sameSleeveWork(ns, factionName)) {
-				if (data[i].autopilot && ns.sleeve.getTask(i).task !== 'Faction' || !works.includes(ns.sleeve.getTask(i).factionWorkType)) {
+				if (data[i].autopilot && ns.sleeve.getTask(i).type !== 'FACTION' ||
+					!works.includes(ns.sleeve.getTask(i).factionWorkType)) {
 					let j = 0;
 					while (!ns.sleeve.setToFactionWork(i, factionName, works[j])) j++;
 					freeSleeves.splice(freeSleeves.findIndex(s => s === i), 1);
 				}
 			}
 			// Free sleeve copies player working for company
-			else if (freeSleeves.includes(i) && player.isWorking && player.workType === 'Working for Company' &&
+			else if (freeSleeves.includes(i) && ns.singularity.getCurrentWork()?.type === 'COMPANY' &&
 				!sameSleeveWork(ns, companyName)) {
-				if (data[i].autopilot && ns.sleeve.getTask(i).task !== 'Company') {
+				if (data[i].autopilot && ns.sleeve.getTask(i).type !== 'Company') {
 					ns.sleeve.setToCompanyWork(i, companyName);
 					freeSleeves.splice(freeSleeves.findIndex(s => s === i), 1);
 				}
 			}
 			// Crime
 			else if (!sleeveOtherWork(ns, i, factionName, companyName)) {
-				const crime = ns.sleeve.getSleeveStats(i).strength < 50 ? 'Mug' : 'Homicide';
-				if (data[i].autopilot && ns.sleeve.getTask(i).crime !== crime) ns.sleeve.setToCommitCrime(i, crime);
+				if (data[i].autopilot && ns.sleeve.getTask(i).type !== 'CRIME') ns.sleeve.setToCommitCrime(i, 'Homicide');
 			}
 			// Make relevant augmentations purchasable for sleeves
 			const task = ns.sleeve.getTask(i);
-			if (task.task === 'Faction') {
+			if (task?.type === 'FACTION') {
 				ns.print(`Sleeve ${i}: Working for ${task.location}`);
 				usefulFaction[i] = true;
-				if (task.factionWorkType === 'Security' || task.factionWorkType === 'Field') usefulCombat[i] = true;
-				if (task.factionWorkType === 'Hacking' || task.factionWorkType === 'Field') usefulHacking[i] = true;
-			} else if (task.task === 'Company') {
+				if (task.factionWorkType === 'SECURITY' || task.factionWorkType === 'FIELD') usefulCombat[i] = true;
+				if (task.factionWorkType === 'HACKING' || task.factionWorkType === 'FIELD') usefulHacking[i] = true;
+			} else if (task?.task === 'COMPANY') {
 				usefulCompany[i] = true;
 				ns.print(`Sleeve ${i}: Working for ${task.location}`);
 				for (const [company, job] of Object.entries(player.jobs)) {
@@ -95,7 +94,7 @@ export async function main(ns) {
 						if (foundJob.combat) usefulCombat[i] = true;
 					}
 				}
-			} else if (task.task === 'Crime') ns.print(`Sleeve ${i}: ${task.crime}`);
+			} else if (task.type === 'CRIME') ns.print(`Sleeve ${i}: ${task.type}`);
 		}
 		await ns.sleep(1000);
 	}

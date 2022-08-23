@@ -10,11 +10,11 @@ export async function main(ns) {
 	const route = routeFinder(ns, server);
 	if (route && hackServer(ns, server)) {
 		for (let serv of route) {
-			ns.connect(serv);
+			ns.singularity.connect(serv);
 		}
-		await ns.installBackdoor();
+		await ns.singularity.installBackdoor();
 		for (let serv of route.reverse()) {
-			ns.connect(serv);
+			ns.singularity.connect(serv);
 		}
 	}
 }

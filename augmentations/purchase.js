@@ -61,7 +61,7 @@ export async function main(ns) {
 	if (options.infiltration || options.all) criteria.push(isUsefulInfiltration);
 	if (options['hacking-skill'] || options.all) criteria.push(isUsefulHackingSkill);
 	// Sell stocks before buying augmentations
-	if (ns.getPlayer().hasTixApiAccess) { // Check if player has TIX API
+	if (ns.stock.hasTIXAPIAccess()) { // Check if player has TIX API
 		// Check if player has any stocks
 		let stocks = false;
 		for (let sym of ns.stock.getSymbols()) {
@@ -75,7 +75,7 @@ export async function main(ns) {
 		if (stocks && await ns.prompt(`Do you want to sell all shares?`)) ns.exec(scripts.stock, 'home', 1, '--liquidate');
 	}
 	// Sell hashes before buying augmentations
-	if (ns.getPlayer().bitNodeN === 9 || ns.getOwnedSourceFiles().some(s => s.n === 9)) { // Check if player has hacknet servers
+	if (ns.getPlayer().bitNodeN === 9 || ns.singularity.getOwnedSourceFiles().some(s => s.n === 9)) { // Check if player has hacknet servers
 		// Check if player has any hashes
 		if (ns.hacknet.numHashes() > 0 && await ns.prompt(`Do you want to sell all hashes?`)) {
 			// Kill hacknet manager
@@ -102,8 +102,8 @@ export async function main(ns) {
 			// Cannot buy NFG from Church of the Machine God
 			if (faction === 'Church of the Machine God') continue;
 			// Take highest reputation faction
-			if (ns.getFactionRep(faction) > highestRep) {
-				highestRep = ns.getFactionRep(faction);
+			if (ns.singularity.getFactionRep(faction) > highestRep) {
+				highestRep = ns.singularity.getFactionRep(faction);
 				highestRepFaction = faction;
 			}
 		}
@@ -119,7 +119,7 @@ export async function main(ns) {
 
 async function purchaseAugmentations(ns, criteria) {
 	// Augmentation price increase
-	const sf11Level = ns.getOwnedSourceFiles().find(s => s.n === 11)?.lvl;
+	const sf11Level = ns.singularity.getOwnedSourceFiles().find(s => s.n === 11)?.lvl;
 	let mult = 0;
 	if (sf11Level) for (let i = 0; i < sf11Level; i++) mult += 4 / Math.pow(2, i);
 	const inc = 1.9 * (1 - mult / 100);
@@ -168,7 +168,7 @@ async function purchaseAugmentations(ns, criteria) {
 		// Prompt user for buying augmentations
 		if (await ns.prompt(`${stringAugs}Buy augmentations for ${formatMoney(ns, totalPrice)}?`)) {
 			for (const aug of augmentations) {
-				if (ns.purchaseAugmentation(aug.faction, aug.name)) {
+				if (ns.singularity.purchaseAugmentation(aug.faction, aug.name)) {
 					ns.tprint(`Purchased ${aug.name} from ${aug.faction} for ${formatMoney(ns, aug.price)}`);
 				} else {
 					ns.tprint(`Could not purchase ${aug.name} from ${aug.faction}`);
@@ -194,7 +194,7 @@ function recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqs) {
 		const index = augmentations.findIndex(aug => aug.name === prereq);
 		if (index >= 0) { // Fit in aug before their prereq
 			coveredIndices.push(index);
-			const prereqsOfPrereq = ns.getAugmentationPrereq(augmentations[index].name);
+			const prereqsOfPrereq = ns.singularity.getAugmentationPrereq(augmentations[index].name);
 			if (prereqsOfPrereq.length > 0) recursiveFit(ns, augmentations, tempAugs, coveredIndices, prereqsOfPrereq);
 			tempAugs.push(augmentations[index]);
 		}

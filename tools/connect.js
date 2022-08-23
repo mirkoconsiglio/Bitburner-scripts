@@ -12,5 +12,5 @@ export function autocomplete(data) {
 export async function main(ns) {
 	const server = ns.args[0];
 	const route = routeFinder(ns, server);
-	if (route) for (const serv of route) ns.connect(serv);
+	if (route) for (const serv of route) ns.singularity.connect(serv);
 }

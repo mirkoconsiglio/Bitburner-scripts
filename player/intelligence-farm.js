@@ -26,7 +26,7 @@ export async function main(ns) {
 	const cities = getCities();
 	const citiesLength = cities.length;
 	let justStarted = true;
-	let previousInt = ns.getPlayer().intelligence;
+	let previousInt = ns.getPlayer().skills.intelligence;
 	let currentInt = previousInt;
 	let previousLevelTime = Date.now();
 	let levelupTime;
@@ -37,11 +37,11 @@ export async function main(ns) {
 	// noinspection InfiniteLoopJS
 	while (true) {
 		while (ns.getPlayer().money > moneyThreshold) {
-			for (let i = 0; i < tripsPerCycle; i++) cities.forEach(city => ns.travelToCity(city));
+			for (let i = 0; i < tripsPerCycle; i++) cities.forEach(city => ns.singularity.travelToCity(city));
 			await ns.sleep(1);
 			cycles++;
-			if (previousInt !== ns.getPlayer().intelligence) {
-				currentInt = ns.getPlayer().intelligence;
+			if (previousInt !== ns.getPlayer().skills.intelligence) {
+				currentInt = ns.getPlayer().skills.intelligence;
 				levelupTime = Date.now();
 				duration = levelupTime - previousLevelTime;
 				tripsPerLevel = cycles * tripsPerCycle * citiesLength;

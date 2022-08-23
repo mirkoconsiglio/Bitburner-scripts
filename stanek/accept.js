@@ -12,7 +12,7 @@ export async function main(ns) {
  * @param {NS} ns
  */
 export function acceptStanek(ns) {
-	ns.travelToCity('Chongqing');
-	ns.goToLocation('Church of the Machine God');
+	ns.singularity.travelToCity('Chongqing');
+	ns.singularity.goToLocation('Church of the Machine God');
 	[...eval('document').getElementsByTagName('*')].find(e => e.innerText === 'Accept Stanek\'s Gift').click();
 }
