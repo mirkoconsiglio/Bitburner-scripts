@@ -74,27 +74,29 @@ export async function main(ns) {
 				}
 			}
 			// Crime
-			else if (!sleeveOtherWork(ns, i, factionName, companyName)) {
-				if (data[i].autopilot && ns.sleeve.getTask(i).type !== 'CRIME') ns.sleeve.setToCommitCrime(i, 'Homicide');
+			else if (!sleeveDoingFactionWork(ns, i, factionName) && !sleeveDoingCompanyWork(ns, i, companyName)) {
+				if (data[i].autopilot && ns.sleeve.getTask(i)?.type !== 'CRIME') ns.sleeve.setToCommitCrime(i, 'Homicide');
 			}
 			// Make relevant augmentations purchasable for sleeves
 			const task = ns.sleeve.getTask(i);
 			if (task?.type === 'FACTION') {
-				ns.print(`Sleeve ${i}: Working for ${task.location}`);
+				ns.print(`Sleeve ${i}: Working for ${task.factionName}`);
 				usefulFaction[i] = true;
 				if (task.factionWorkType === 'SECURITY' || task.factionWorkType === 'FIELD') usefulCombat[i] = true;
 				if (task.factionWorkType === 'HACKING' || task.factionWorkType === 'FIELD') usefulHacking[i] = true;
-			} else if (task?.task === 'COMPANY') {
+			} else if (task?.type === 'COMPANY') {
 				usefulCompany[i] = true;
-				ns.print(`Sleeve ${i}: Working for ${task.location}`);
-				for (const [company, job] of Object.entries(player.jobs)) {
-					if (company === player.company) {
+				ns.print(`Sleeve ${i}: Working for ${task.companyName}`);
+				for (const [company, job] of Object.entries(ns.getPlayer().jobs)) {
+					if (company === ns.singularity.getCurrentWork().companyName) {
 						const foundJob = Object.values(jobs).find(val => val.name === job);
 						if (foundJob.hacking) usefulHacking[i] = true;
 						if (foundJob.combat) usefulCombat[i] = true;
 					}
 				}
-			} else if (task.type === 'CRIME') ns.print(`Sleeve ${i}: ${task.type}`);
+			} else if (task?.type === 'CRIME') ns.print(`Sleeve ${i}: ${task.type}`);
+			else if (task?.type === 'BLADEBURNER') ns.print(`Sleeve ${i}: ${task.type}`);
+			else ns.print(`Sleeve ${i}: IDLE`);
 		}
 		await ns.sleep(1000);
 	}
@@ -107,7 +109,9 @@ export async function main(ns) {
  * @return {boolean}
  */
 function sameSleeveWork(ns, organization) {
-	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) if (ns.sleeve.getTask(i).location === organization) return true;
+	for (let i = 0; i < ns.sleeve.getNumSleeves(); i++)
+		if (ns.sleeve.getTask(i)?.factionName === organization || ns.sleeve.getTask(i)?.companyName === organization)
+			return true;
 	return false;
 }
 
@@ -116,14 +120,21 @@ function sameSleeveWork(ns, organization) {
  * @param {NS} ns
  * @param {number} sleeveNumber
  * @param {string} factionName
- * @param {string} companyName
  * @return {boolean}
  */
-function sleeveOtherWork(ns, sleeveNumber, factionName, companyName) {
-	const location = ns.sleeve.getTask(sleeveNumber).location;
-	if (location === '') return false;
-	return location === factionName || location === companyName;
+function sleeveDoingFactionWork(ns, sleeveNumber, factionName) {
+	return !!(factionName && ns.sleeve.getTask(sleeveNumber)?.factionName === factionName);
+}
 
+/**
+ *
+ * @param {NS} ns
+ * @param {number} sleeveNumber
+ * @param {string} factionName
+ * @return {boolean}
+ */
+function sleeveDoingCompanyWork(ns, sleeveNumber, companyName) {
+	return !!(companyName && ns.sleeve.getTask(sleeveNumber)?.companyName === companyName);
 }
 
 /**
