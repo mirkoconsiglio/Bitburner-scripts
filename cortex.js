@@ -123,7 +123,7 @@ export async function main(ns) {
 			const name = await ns.prompt(`Create a Corporation? (Leave empty if no)`, {'type': 'text'});
 			if (name !== '') {
 				const corp = eval('ns.corporation'); // Cheating here because using 1 TiB of RAM to start a corporation is overkill
-				corp.createCorporation(name);
+				corp.createCorporation(name, false);
 				printBoth(ns, `Started a corporation: ${name}`);
 			} else corp = false;
 		}
@@ -202,7 +202,7 @@ export async function main(ns) {
 		}
 		// Stanek Manager
 		const hasStanek = ns.getPlayer().bitNodeN === 13 || ns.singularity.getOwnedSourceFiles().some(s => s.n === 13);
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
+		if (hasStanek && ns.singularity.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) === -1 &&
 			ns.getPlayer().money >= 200e3 && stanek && !ns.scriptRunning(scripts.stanek, host) &&
 			!promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Accept Stanek's Gift?`)) {
@@ -210,7 +210,7 @@ export async function main(ns) {
 				printBoth(ns, `Accepted Stanek's Gift`);
 			} else stanek = false;
 		}
-		if (hasStanek && ns.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
+		if (hasStanek && ns.singularity.getOwnedAugmentations().findIndex(e => e.includes('Stanek\'s Gift')) !== -1 &&
 			!ns.scriptRunning(scripts.stanek, host) && stanek &&
 			enoughRam(ns, scripts.stanek, host) && !promptScriptRunning(ns, host)) {
 			if (await ns.prompt(`Start Stanek's Gift manager?`)) {

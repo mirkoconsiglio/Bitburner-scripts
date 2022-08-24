@@ -8,7 +8,7 @@ import {getServers, printBoth} from '/utils.js';
 export async function main(ns) {
 	contractor(ns);
 }
-
+// TODO: Encryption I and II
 /**
  *
  * @param {NS} ns
@@ -79,7 +79,7 @@ export function contractor(ns) {
 				case 'Sanitize Parentheses in Expression':
 					solution = sanitizeParentheses(data);
 					break;
-				case 'HammingCodes: Integer to encoded Binary':
+				case 'HammingCodes: Integer to Encoded Binary':
 					solution = hammingEncode(data);
 					break;
 				case 'HammingCodes: Encoded Binary to Integer':
