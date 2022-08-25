@@ -8,7 +8,7 @@ import {getServers, printBoth} from '/utils.js';
 export async function main(ns) {
 	contractor(ns);
 }
-// TODO: Encryption I and II
+// TODO: Command to enable contractor
 /**
  *
  * @param {NS} ns
@@ -96,6 +96,12 @@ export function contractor(ns) {
 					break;
 				case 'Compression III: LZ Compression':
 					solution = compressLZ(data);
+					break;
+				case 'Encryption I: Caesar Cipher':
+					solution = caesar(data);
+					break;
+				case 'Encryption II: Vigenère Cipher':
+					solution = vigenere(data);
 					break;
 				default:
 					ns.print(`Found ${file} on ${server} of type: ${contract}. This does not have a solver yet.`);
@@ -779,4 +785,36 @@ function compressLZ(str) {
  */
 function set(state, i, j, str) {
 	if (state[i][j] === undefined || str.length < state[i][j].length) state[i][j] = str;
+}
+
+/**
+ *
+ * @param {[string, number]} data
+ * @returns {string}
+ */
+function caesar(data) {
+	const [str, k] = data;
+	let result = '';
+	for (let i = 0; i < str.length; i++) {
+		const charCode = str.charCodeAt(i);
+		if (charCode === 32) result += ' ';
+		else result += String.fromCharCode((charCode - 65 + (26 - k)) % 26 + 65);
+	}
+	return result;
+}
+
+/**
+ *
+ * @param {[string, string]} data
+ * @returns {string}
+ */
+function vigenere(data) {
+	const [str, key] = data;
+	let result = '';
+	for (let i = 0; i < str.length; i++) {
+		const charCode = str.charCodeAt(i) - 65;
+		const keyCode = key.charCodeAt(i % key.length) - 65;
+		result += String.fromCharCode((charCode + keyCode) % 26 + 65);
+	}
+	return result;
 }
