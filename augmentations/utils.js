@@ -21,7 +21,7 @@ export function isUsefulPrograms(ns, name) {
  */
 export function isUsefulFaction(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
-	return ignore(name) && stats.mults.faction_rep; // Useful faction augmentations
+	return ignore(name) && stats.faction_rep; // Useful faction augmentations
 }
 
 /**
@@ -49,12 +49,12 @@ export function isUsefulHacking(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful hacking augmentations
-			stats.mults.hacking ||
-			stats.mults.hacking_exp ||
-			stats.mults.hacking_chance ||
-			stats.mults.hacking_speed ||
-			stats.mults.hacking_money ||
-			stats.mults.hacking_grow
+			stats.hacking ||
+			stats.hacking_exp ||
+			stats.hacking_chance ||
+			stats.hacking_speed ||
+			stats.hacking_money ||
+			stats.hacking_grow
 		);
 }
 
@@ -68,8 +68,8 @@ export function isUsefulHackingSkill(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful hacking skill augmentations
-			stats.mults.hacking ||
-			stats.mults.hacking_exp
+			stats.hacking ||
+			stats.hacking_exp
 		);
 }
 
@@ -83,14 +83,14 @@ export function isUsefulCombat(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful combat augmentations
-			stats.mults.agility_exp ||
-			stats.mults.agility ||
-			stats.mults.defense_exp ||
-			stats.mults.defense ||
-			stats.mults.dexterity_exp ||
-			stats.mults.dexterity ||
-			stats.mults.strength_exp ||
-			stats.mults.strength
+			stats.agility_exp ||
+			stats.agility ||
+			stats.defense_exp ||
+			stats.defense ||
+			stats.dexterity_exp ||
+			stats.dexterity ||
+			stats.strength_exp ||
+			stats.strength
 		);
 }
 
@@ -104,8 +104,8 @@ export function isUsefulCrime(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful crime augmentations
-			stats.mults.crime_money ||
-			stats.mults.crime_success
+			stats.crime_money ||
+			stats.crime_success
 		);
 }
 
@@ -119,10 +119,10 @@ export function isUsefulCompany(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful company augmentations
-			stats.mults.charisma_exp ||
-			stats.mults.charisma ||
-			stats.mults.company_rep ||
-			stats.mults.work_money
+			stats.charisma_exp ||
+			stats.charisma ||
+			stats.company_rep ||
+			stats.work_money
 		);
 }
 
@@ -136,11 +136,11 @@ export function isUsefulHacknet(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful hacknet augmentations
-			stats.mults.hacknet_node_core_cost ||
-			stats.mults.hacknet_node_level_cost ||
-			stats.mults.hacknet_node_money ||
-			stats.mults.hacknet_node_purchase_cost ||
-			stats.mults.hacknet_node_ram_cost
+			stats.hacknet_node_core_cost ||
+			stats.hacknet_node_level_cost ||
+			stats.hacknet_node_money ||
+			stats.hacknet_node_purchase_cost ||
+			stats.hacknet_node_ram_cost
 		);
 }
 
@@ -154,10 +154,10 @@ export function isUsefulBladeburner(ns, name) {
 	const stats = ns.singularity.getAugmentationStats(name);
 	return ignore(name) &&
 		( 	// Useful bladeburner augmentations
-			stats.mults.bladeburner_analysis ||
-			stats.mults.bladeburner_max_stamina ||
-			stats.mults.bladeburner_stamina_gain ||
-			stats.mults.bladeburner_success_chance
+			stats.bladeburner_analysis ||
+			stats.bladeburner_max_stamina ||
+			stats.bladeburner_stamina_gain ||
+			stats.bladeburner_success_chance
 		);
 }
 
