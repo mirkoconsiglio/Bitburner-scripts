@@ -11,6 +11,8 @@ build/scripts.txt
 build/update.js
 company/work.js
 contracts/contractor.js
+contracts/enable-contractor.js
+contracts/disable-contractor.js
 corporation/autopilot.js
 crime/automate.js
 daemons/charge.js
