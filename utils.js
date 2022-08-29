@@ -1007,7 +1007,7 @@ export function enoughRam(ns, script, server = ns.getHostname(), threads = 1) {
  */
 export function getPortNumbers() {
 	return {
-		bitnode: 0,
+		general: 0,
 		reservedRam: 1,
 		gang: 2,
 		corp: 3,
@@ -1029,7 +1029,7 @@ export function getPortNumbers() {
 export function defaultPortData(portNumber) {
 	switch (portNumber) {
 		case 0:
-			return {bitnodeN: 1};
+			return {bitnodeN: 1, contractor: true};
 		case 1:
 			return {'home': [{'ram': 64, 'server': 'DEF', 'pid': 'DEF'}]};
 		case 2:

@@ -8,7 +8,7 @@ import {getServers, printBoth} from '/utils.js';
 export async function main(ns) {
 	contractor(ns);
 }
-// TODO: Command to enable contractor
+
 /**
  *
  * @param {NS} ns

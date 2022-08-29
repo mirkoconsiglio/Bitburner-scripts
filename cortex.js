@@ -10,11 +10,13 @@ import {
 	getAccessibleServers,
 	getCracks,
 	getGangs,
+	getPortNumbers,
 	getScripts,
 	initData,
 	manageAndHack,
 	printBoth,
 	promptScriptRunning,
+	readFromFile,
 	updateOverview,
 	updateReservedRam
 } from '/utils.js';
@@ -34,6 +36,7 @@ export async function main(ns) {
 	const scripts = getScripts();
 	const haveHacknetServers = ns.getPlayer().bitNodeN === 9 || ns.singularity.getOwnedSourceFiles().some(s => s.n === 9);
 	const bitnode8 = ns.getPlayer().bitNodeN === 8;
+	const generalPort = getPortNumbers().general;
 	// Variables
 	let host = ns.getHostname();
 	let contractorOnline = true;
@@ -56,6 +59,7 @@ export async function main(ns) {
 	let factions = [];
 	// noinspection InfiniteLoopJS
 	while (true) {
+		contractorOnline = readFromFile(ns, generalPort).contractor;
 		// Heal player
 		if (ns.getPlayer().hp.current < ns.getPlayer().hp.max) ns.singularity.hospitalize();
 		// Contract solver (disables itself if any solution was incorrect)
@@ -254,6 +258,8 @@ export async function main(ns) {
 		updateOverview(ns);
 		// Update reserved RAM
 		await updateReservedRam(ns);
+		// Update file data
+		await modifyFile(ns, generalPort, {contractor: contractorOnline});
 		// Update every second
 		await ns.sleep(1000);
 	}
