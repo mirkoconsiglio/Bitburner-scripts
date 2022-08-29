@@ -43,7 +43,7 @@ export async function main(ns) {
  * @return {Promise<void>}
  */
 async function workOutStr(ns) {
-	ns.singularity.gymWorkout(gym, 'str');
+	ns.singularity.gymWorkout(gym, 'str', ns.singularity.isFocused());
 	while (ns.getPlayer().skills.strength < level) {
 		if (ns.singularity.getCurrentWork()?.classType !== 'GYMSTRENGTH') break;
 		await ns.sleep(1000);
@@ -57,7 +57,7 @@ async function workOutStr(ns) {
  * @return {Promise<void>}
  */
 async function workOutDef(ns) {
-	ns.singularity.gymWorkout(gym, 'def');
+	ns.singularity.gymWorkout(gym, 'def', ns.singularity.isFocused());
 	while (ns.getPlayer().defense < level) {
 		if (ns.singularity.getCurrentWork()?.classType !== 'GYMDEFENSE') break;
 		await ns.sleep(1000);
@@ -71,7 +71,7 @@ async function workOutDef(ns) {
  * @return {Promise<void>}
  */
 async function workOutDex(ns) {
-	ns.singularity.gymWorkout(gym, 'dex');
+	ns.singularity.gymWorkout(gym, 'dex', ns.singularity.isFocused());
 	while (ns.getPlayer().dexterity < level) {
 		if (ns.singularity.getCurrentWork()?.classType !== 'GYMDEXTERITY') break;
 		await ns.sleep(1000);
@@ -85,7 +85,7 @@ async function workOutDex(ns) {
  * @return {Promise<void>}
  */
 async function workOutAgi(ns) {
-	ns.singularity.gymWorkout(gym, 'agi');
+	ns.singularity.gymWorkout(gym, 'agi', ns.singularity.isFocused());
 	while (ns.getPlayer().skills.agility < level) {
 		if (ns.singularity.getCurrentWork()?.classType !== 'GYMAGILITY') break;
 		await ns.sleep(1000);

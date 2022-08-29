@@ -21,7 +21,7 @@ let threads = 0;
 let ram = 0;
 let firstLoop = true;
 let time = Date.now();
-
+// TODO: Stanek is still crashing everything, not sure why but I need to find a fix
 /**
  *
  * @param {NS} ns

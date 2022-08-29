@@ -44,7 +44,7 @@ export async function main(ns) {
  * @return {Promise<void>}
  */
 async function studyHack(ns) {
-	ns.singularity.universityCourse(university, course);
+	ns.singularity.universityCourse(university, course, ns.singularity.isFocused());
 	while (ns.getPlayer().skills.hacking < level) {
 		if (ns.singularity.getCurrentWork()?.classType !== options.course.replace(/\s+/g, '')) break;
 		await ns.sleep(1000);
@@ -58,7 +58,7 @@ async function studyHack(ns) {
  * @return {Promise<void>}
  */
 async function studyCha(ns) {
-	ns.singularity.universityCourse(university, course);
+	ns.singularity.universityCourse(university, course, ns.singularity.isFocused());
 	while (ns.getPlayer().skills.charisma < level) {
 		if (ns.getPlayer().workType !== options.course.replace(/\s+/g, '')) break;
 		await ns.sleep(1000);
